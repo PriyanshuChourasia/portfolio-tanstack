@@ -1,15 +1,15 @@
 [
-  { "id": "javascript", "icon": "javascript", "left": "104%", "top": "-2%" },
-  { "id": "copilot", "label": "CP", "left": "90%", "top": "92%" },
-  { "id": "claude", "label": "CL", "left": "66%", "top": "-8%" },
+  { "id": "javascript", "icon": "javascript", "left": "92%", "top": "6%" },
+  { "id": "copilot", "label": "CP", "left": "86%", "top": "92%" },
+  { "id": "claude", "label": "CL", "left": "50%", "top": "0%" },
   { "id": "langgraph", "label": "LG", "left": "112%", "top": "60%" },
-  { "id": "langscreen", "label": "LS", "left": "66%", "top": "108%" },
-  { "id": "docker", "icon": "docker", "left": "-4%", "top": "94%" },
-  { "id": "openai", "icon": "openai", "left": "92%", "top": "2%" },
-  { "id": "github", "icon": "github", "left": "0%", "top": "0%" },
-  { "id": "nodedotjs", "icon": "nodedotjs", "left": "-4%", "top": "92%" },
-  { "id": "react", "icon": "react", "left": "8%", "top": "48%" },
-  { "id": "typescript", "icon": "typescript", "left": "96%", "top": "58%" },
-  { "id": "next", "icon": "next", "left": "50%", "top": "-6%" },
-  { "id": "tailwind", "icon": "tailwind", "left": "50%", "top": "106%" }
+  { "id": "langscreen", "label": "LS", "left": "50%", "top": "108%" },
+  { "id": "docker", "icon": "docker", "left": "6%", "top": "90%" },
+  { "id": "openai", "icon": "openai", "left": "88%", "top": "18%" },
+  { "id": "github", "icon": "github", "left": "12%", "top": "18%" },
+  { "id": "nodedotjs", "icon": "nodedotjs", "left": "8%", "top": "78%" },
+  { "id": "react", "icon": "react", "left": "18%", "top": "44%" },
+  { "id": "typescript", "icon": "typescript", "left": "82%", "top": "52%" },
+  { "id": "next", "icon": "next", "left": "50%", "top": "10%" },
+  { "id": "tailwind", "icon": "tailwind", "left": "88%", "top": "104%" }
 ]

@@ -20,7 +20,7 @@ export function Navbar() {
     { label: 'Home', id: 'home', icon: Home },
     { label: 'About', id: 'about', icon: FileText },
     { label: 'Experience', id: 'experience', icon: Briefcase },
-    { label: 'Articles', id: 'articles', icon: BookOpen },
+    { label: 'Blog', id: 'articles', icon: BookOpen },
     { label: 'Projects', id: 'projects', icon: FolderKanban },
     { label: 'Contact', id: 'contact', icon: Mail },
   ]

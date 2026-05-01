@@ -72,6 +72,36 @@ export function Hero() {
       duration: 3.8 + Math.random() * 1.2,
       delay: Math.random() * 1.5,
       iconComponent: ICONS[(b as any).icon],
+      iconClass:
+        (b as any).id === 'javascript'
+          ? 'text-amber-100'
+          : (b as any).id === 'docker'
+            ? 'text-sky-100'
+            : (b as any).id === 'openai'
+              ? 'text-emerald-100'
+              : (b as any).id === 'github'
+                ? 'text-slate-100'
+                : (b as any).id === 'nodedotjs'
+                  ? 'text-lime-100'
+                  : (b as any).id === 'react'
+                    ? 'text-cyan-100'
+                    : (b as any).id === 'typescript'
+                      ? 'text-blue-100'
+                      : (b as any).id === 'next'
+                        ? 'text-slate-100'
+                        : (b as any).id === 'tailwind'
+                          ? 'text-cyan-100'
+                          : 'text-fuchsia-100',
+      labelClass:
+        (b as any).id === 'copilot'
+          ? 'text-fuchsia-100'
+          : (b as any).id === 'claude'
+            ? 'text-violet-100'
+            : (b as any).id === 'langgraph'
+              ? 'text-amber-100'
+              : (b as any).id === 'langscreen'
+                ? 'text-sky-100'
+                : 'text-white',
     }))
   }, [])
 
@@ -190,7 +220,13 @@ export function Hero() {
                   onHoverEnd={() => setHoveredBadgeId(null)}
                   className="absolute z-0 flex h-14 w-14 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-white/8 bg-slate-800/85 text-white shadow-lg backdrop-blur sm:h-16 sm:w-16"
                 >
-                  {Component ? <Component className="h-7 w-7" /> : <span className="text-xs font-semibold">{(b as any).label}</span>}
+                  {Component ? (
+                    <Component className={`h-7 w-7 ${b.iconClass}`} />
+                  ) : (
+                    <span className={`text-xs font-semibold ${b.labelClass}`}>
+                      {(b as any).label}
+                    </span>
+                  )}
                 </motion.div>
               )
             })}

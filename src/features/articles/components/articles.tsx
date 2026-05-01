@@ -29,7 +29,7 @@ export default function Articles() {
           className="text-center mb-10 md:mb-20"
         >
           <h2 className="text-3xl md:text-5xl font-bold">
-            Featured <span className="text-cyan-500">Articles</span>
+            Featured <span className="text-cyan-500">Blogs</span>
           </h2>
         </motion.div>
 
@@ -117,7 +117,7 @@ export default function Articles() {
               whileTap={{ scale: 0.95 }}
               className="w-full rounded-full bg-linear-to-r from-blue-600 to-cyan-600 px-8 py-3 font-semibold text-white transition-shadow hover:shadow-2xl hover:shadow-blue-500/50 sm:w-auto"
             >
-              Read All Articles
+              Read All Blogs
             </motion.button>
           </a>
         </motion.div>

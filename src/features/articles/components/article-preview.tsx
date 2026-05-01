@@ -19,16 +19,16 @@ export default function ArticlePreviewSection() {
           <div className="grid gap-6 lg:grid-cols-[0.95fr_1.05fr] lg:items-start xl:gap-10">
             <div className="space-y-6">
               <div className="inline-flex items-center rounded-full border border-cyan-400/20 bg-cyan-400/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.3em] text-cyan-300">
-                Articles
+                Blog
               </div>
 
               <div className="space-y-4">
                 <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white">
-                  See my articles
+                  See my blogs
                 </h2>
                 <p className="max-w-xl text-sm leading-7 text-slate-300 md:text-base">
                   Short reads and notes on design, development, and the thinking behind the work. It is a compact
-                  preview, so it stays lighter than the full article grid below.
+                  preview, so it stays lighter than the full blog grid below.
                 </p>
               </div>
 

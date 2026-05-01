@@ -3,6 +3,8 @@
 import { Link } from '@tanstack/react-router'
 import { motion } from 'framer-motion'
 import blogData from '@/data/blog-data.json'
+import BlogCommentsSection from './blog-comments-section'
+
 
 export function BlogPostDetailPage({ postId }: { postId: number }) {
   const post = blogData.posts.find((item) => item.id === postId)
@@ -11,8 +13,8 @@ export function BlogPostDetailPage({ postId }: { postId: number }) {
     return (
       <main className="min-h-screen bg-slate-950 px-4 py-2 text-white sm:px-6 sm:py-4">
         <div className="mx-auto max-w-3xl rounded-3xl border border-white/10 bg-white/5 p-6 backdrop-blur-xl sm:rounded-[28px] sm:p-8">
-          <p className="text-sm uppercase tracking-[0.3em] text-cyan-300">Article not found</p>
-          <h1 className="mt-4 text-2xl font-bold sm:text-3xl">This article does not exist.</h1>
+          <p className="text-sm uppercase tracking-[0.3em] text-cyan-300">Blog not found</p>
+          <h1 className="mt-4 text-2xl font-bold sm:text-3xl">This blog does not exist.</h1>
           <Link
             to="/"
             className="mt-8 inline-flex w-full items-center justify-center rounded-full border border-cyan-400/20 bg-cyan-400/10 px-5 py-3 text-sm font-semibold text-cyan-200 sm:w-auto"
@@ -102,7 +104,7 @@ export function BlogPostDetailPage({ postId }: { postId: number }) {
 
             <aside className="space-y-4">
               <div className="rounded-2xl border border-white/10 bg-white/5 p-6">
-                <p className="text-xs uppercase tracking-[0.3em] text-cyan-300">Article details</p>
+                <p className="text-xs uppercase tracking-[0.3em] text-cyan-300">Blog details</p>
                 <div className="mt-4 space-y-3 text-sm text-slate-300">
                   <p>
                     <span className="text-slate-500">Author:</span> {post.author}
@@ -118,6 +120,8 @@ export function BlogPostDetailPage({ postId }: { postId: number }) {
 
             </aside>
           </div>
+
+          <BlogCommentsSection />
         </div>
       </div>
     </motion.main>
