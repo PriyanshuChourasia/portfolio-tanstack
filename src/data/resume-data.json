@@ -1,0 +1,64 @@
+{
+  "experience": [
+    {
+      "period": "2013 - Present",
+      "title": "Art Director",
+      "company": "Facebook Inc.",
+      "desc": "Collaborate with creative and development teams on the execution of ideas."
+    },
+    {
+      "period": "2011 - 2012",
+      "title": "Front-end Developer",
+      "company": "Google Inc.",
+      "desc": "Monitored technical aspects of the front-end development for several projects."
+    },
+    {
+      "period": "2009 - 2010",
+      "title": "Senior Developer",
+      "company": "Abc Agency",
+      "desc": "Optimize website performance and implement new features using modern technologies."
+    }
+  ],
+  "education": [
+    {
+      "period": "2006 - 2008",
+      "title": "Art University",
+      "company": "New York",
+      "desc": "Bachelor's Degree in Computer Science ABC Technical Institute, Jefferson, Missouri"
+    },
+    {
+      "period": "2005 - 2006",
+      "title": "Programming Course",
+      "company": "Paris",
+      "desc": "Completed comprehensive training in modern web development and software engineering principles."
+    }
+  ],
+  "designSkills": [
+    { "name": "Web Design", "value": 90 },
+    { "name": "Write Music", "value": 75 },
+    { "name": "Photoshop", "value": 85 },
+    { "name": "Graphic Design", "value": 65 }
+  ],
+  "codingSkills": [
+    { "name": "WordPress", "value": 90 },
+    { "name": "PHP / MYSQL", "value": 75 },
+    { "name": "Angular / JavaScript", "value": 85 },
+    { "name": "HTML / CSS", "value": 95 }
+  ],
+  "languages": [
+    { "name": "English", "level": 9 },
+    { "name": "German", "level": 6 },
+    { "name": "Italian", "level": 4 },
+    { "name": "French", "level": 7 }
+  ],
+  "knowledge": [
+    "Website hosting",
+    "iOS and android apps",
+    "Create logo design",
+    "Design for print",
+    "Modern and mobile-ready",
+    "Advertising services include",
+    "Graphics and animations",
+    "Search engine marketing"
+  ]
+}

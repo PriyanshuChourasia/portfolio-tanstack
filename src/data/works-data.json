@@ -1,0 +1,53 @@
+{
+  "categories": ["All", "Web Dev", "Mobile Dev", "Full Stack", "Frontend", "Backend"],
+  "items": [
+    {
+      "title": "E-Commerce Platform",
+      "category": "Full Stack",
+      "image": "/images/work1.png",
+      "icon": "ImageIcon",
+      "description": "A comprehensive e-commerce platform built with React and Node.js featuring product catalog, shopping cart, payment integration, and admin dashboard for inventory management.",
+      "link": "#"
+    },
+    {
+      "title": "Mobile Banking App",
+      "category": "Mobile Dev",
+      "image": "/images/work2.png",
+      "icon": "ImageIcon",
+      "description": "Cross-platform banking application with secure authentication, transaction history, fund transfers, and real-time notifications using React Native and Firebase.",
+      "link": "#"
+    },
+    {
+      "title": "Real-time Chat System",
+      "category": "Backend",
+      "image": "/images/work3.png",
+      "icon": "Music",
+      "description": "High-performance real-time messaging system with WebSocket support, message encryption, user presence tracking, and scalable backend architecture using Node.js and Redis.",
+      "link": "#"
+    },
+    {
+      "title": "React Dashboard",
+      "category": "Frontend",
+      "image": "/images/work4.jpg",
+      "icon": "ImageIcon",
+      "description": "Interactive analytics dashboard with real-time data visualization, customizable widgets, and responsive design. Built with React, TypeScript, and Chart.js.",
+      "link": "#"
+    },
+    {
+      "title": "Cloud Management System",
+      "category": "Web Dev",
+      "image": "/images/work5.png",
+      "icon": "ImageIcon",
+      "description": "Enterprise cloud resource management platform with automated deployment, monitoring, and scaling capabilities. Built with React, Express, and cloud APIs.",
+      "link": "#"
+    },
+    {
+      "title": "iOS Social App",
+      "category": "Mobile Dev",
+      "image": "/images/work6.jpg",
+      "icon": "ImageIcon",
+      "description": "Native iOS social networking application featuring user profiles, feed management, photo sharing, and real-time notifications using Swift and Firebase.",
+      "link": "#"
+    }
+  ]
+}

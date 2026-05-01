@@ -1,0 +1,76 @@
+{
+  "services": [
+    {
+      "title": "Web Development",
+      "desc": "Modern and mobile-ready website that will help you reach all of your marketing.",
+      "icon": "Code"
+    },
+    {
+      "title": "Music Writing",
+      "desc": "Composing and producing original music for various media and commercial projects.",
+      "icon": "Music"
+    },
+    {
+      "title": "Game Development",
+      "desc": "Creating engaging and interactive gaming experiences for multiple platforms.",
+      "icon": "Gamepad2"
+    },
+    {
+      "title": "Advertising",
+      "desc": "Develop effective advertising campaigns that capture attention and drive results.",
+      "icon": "Megaphone"
+    }
+  ],
+  "pricing": [
+    {
+      "title": "Basic",
+      "price": "22",
+      "icon": "Gauge",
+      "features": [
+        { "name": "Web Development", "included": true },
+        { "name": "Advetising", "included": true },
+        { "name": "Game Development", "included": true },
+        { "name": "Music Writing", "included": false },
+        { "name": "Photography", "included": false, "isNew": true }
+      ]
+    },
+    {
+      "title": "Pro",
+      "price": "48",
+      "icon": "Gauge",
+      "features": [
+        { "name": "Web Development", "included": true },
+        { "name": "Advetising", "included": true },
+        { "name": "Game Development", "included": true },
+        { "name": "Music Writing", "included": true },
+        { "name": "Photography", "included": true, "isNew": true }
+      ]
+    }
+  ],
+  "funFacts": [
+    { "value": "80", "label": "Albumes Listened", "icon": "Music" },
+    { "value": "15", "label": "Awards Won", "icon": "Trophy" },
+    { "value": "1 000", "label": "Cups of coffee", "icon": "Coffee" },
+    { "value": "10", "label": "Countries Visited", "icon": "Flag" }
+  ],
+  "testimonials": [
+    {
+      "quote": "Working with Ryan was a pleasure. Great web designer, quick communicator, and always delivers high-quality work.",
+      "author": "Helen Floyd",
+      "role": "Art Director",
+      "avatar": "/images/professional-woman-portrait.png"
+    },
+    {
+      "quote": "Ryan is an amazing developer. He understood our requirements perfectly and delivered exceptional results on time.",
+      "author": "Paul Trueman",
+      "role": "Creative Director",
+      "avatar": "/images/professional-man-portrait.png"
+    }
+  ],
+  "clients": [
+    { "name": "Google", "logo": "/images/google-logo.png" },
+    { "name": "Envato", "logo": "/images/envato-logo.png" },
+    { "name": "Themeforest", "logo": "/images/themeforest-logo.jpg" },
+    { "name": "Videohive", "logo": "/images/videohive-logo.jpg" }
+  ]
+}
