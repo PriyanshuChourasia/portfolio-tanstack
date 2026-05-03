@@ -1,4 +1,4 @@
-﻿  
+﻿
 
 import { Navbar } from '@/components/Navbar'
 import { Hero } from '@/components/Carousal'
@@ -15,8 +15,8 @@ export default function Home() {
       <Navbar />
       <Hero />
       <AboutSection />
-      <ArticlePreviewSection />
       <ResumeSection />
+      <ArticlePreviewSection />
       <Projects />
       <Articles />
       <ContactSection />

@@ -1,5 +1,5 @@
 /* eslint-disable react/no-unescaped-entities */
-  
+
 
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion'
 import { useRef } from 'react'
@@ -60,7 +60,7 @@ export function ResumeSection() {
       ref={containerRef}
       className="relative min-h-screen w-full overflow-hidden bg-slate-950 py-32"
     >
-      
+
       <motion.div
         aria-hidden
         className="absolute inset-0 pointer-events-none overflow-hidden"
@@ -107,7 +107,7 @@ export function ResumeSection() {
       <div className="relative z-10 w-full mx-auto px-6">
         <motion.div style={{ y: titleY, opacity: titleOpacity }} className="text-center mb-20">
           <h2 className="text-4xl md:text-5xl font-bold">
-            My <span className="text-cyan-500">Resume</span>
+            Career <span className="text-cyan-500">Overview</span>
           </h2>
           <p className="text-slate-400 text-lg max-w-2xl mx-auto mt-4">
             Experience, education, and the skills I use to ship products.

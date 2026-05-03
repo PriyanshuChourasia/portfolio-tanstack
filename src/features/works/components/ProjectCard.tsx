@@ -6,6 +6,7 @@ import worksData from '@/data/works-data.json'
 interface WorkCardData {
   id: number
   title: string
+  client?: string,
   category: string
   description: string
   image: string
@@ -15,6 +16,7 @@ interface WorkCardData {
 const cards: WorkCardData[] = worksData.items.slice(0, 4).map((item, index) => ({
   id: index + 1,
   title: item.title,
+  client: item.client,
   category: item.category,
   description: item.description,
   image: item.image,
@@ -67,9 +69,12 @@ const Card = ({ i, card, progress, range, targetScale }: CardProps) => {
               </div>
 
               <div className="space-y-4">
-                <h2 className="text-2xl font-bold leading-tight text-white drop-shadow-[0_1px_10px_rgba(0,0,0,0.22)] sm:text-3xl">
+                <h1 className="text-2xl font-bold leading-tight text-white drop-shadow-[0_1px_10px_rgba(0,0,0,0.22)] sm:text-3xl">
                   {card.title}
-                </h2>
+                </h1>
+                <h4 className="text-lg font-bold leading-tight text-white drop-shadow-[0_1px_10px_rgba(0,0,0,0.22)] sm:text-lg">
+                  {card.client}
+                </h4>
                 <p className="text-sm leading-7 text-slate-300 sm:text-[15px]">
                   {card.description}
                 </p>

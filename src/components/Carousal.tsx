@@ -1,4 +1,4 @@
-  
+
 
 import { motion, useMotionValue, useScroll, useSpring, useTransform } from 'framer-motion'
 import { type MouseEvent, useMemo, useRef, useState } from 'react'
@@ -12,7 +12,7 @@ import {
   SiGithub,
   SiOpenai,
   SiDocker,
- 
+
 } from 'react-icons/si'
 import badgesData from '../data/carousel-data.json'
 
@@ -53,7 +53,7 @@ export function Hero() {
   const ICONS: Record<string, any> = {
     javascript: SiJavascript,
     docker: SiDocker,
-   
+
     openai: SiOpenai,
     github: SiGithub,
     nodedotjs: SiNodedotjs,
@@ -112,7 +112,7 @@ export function Hero() {
       className="relative min-h-screen w-full overflow-hidden bg-slate-950 flex items-center"
     >
       <div className="relative z-10 max-w-7xl mx-auto w-full px-6 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-     
+
         <motion.div
           style={{ y: textY }}
           initial={{ opacity: 0, x: -50 }}
@@ -134,7 +134,7 @@ export function Hero() {
             transition={{ delay: 0.4 }}
           >
             <h1 className="text-5xl lg:text-6xl font-bold mb-4 leading-tight">
-              Hi I&apos;m{  }
+              Hi I&apos;m{" "}
               <span className="bg-linear-to-r from-blue-500 to-cyan-500 bg-clip-text text-transparent">
                 Priyanshu
               </span>
@@ -144,7 +144,7 @@ export function Hero() {
 
             <p className="text-slate-400 text-lg leading-relaxed max-w-xl">
               A Full-Stack Developer with a specialization in backend development and implementing
-              design-driven frontend solutions.
+              design-driven frontend solutions, with a professional end to end development project and a wise use of AI tools <span className='font-bold'>.</span>
             </p>
           </motion.div>
 
@@ -205,11 +205,11 @@ export function Hero() {
                     isHovered
                       ? { x: 0, y: 0, rotate: 0, scale: 1.12 }
                       : {
-                          x: [0, b.roamX, 0, -b.roamX, 0],
-                          y: [0, b.roamY, 0, -b.roamY, 0],
-                          rotate: [0, b.rot, 0, -b.rot, 0],
-                          scale: [1, 1.06, 1.02, 1.05, 1],
-                        }
+                        x: [0, b.roamX, 0, -b.roamX, 0],
+                        y: [0, b.roamY, 0, -b.roamY, 0],
+                        rotate: [0, b.rot, 0, -b.rot, 0],
+                        scale: [1, 1.06, 1.02, 1.05, 1],
+                      }
                   }
                   transition={
                     isHovered

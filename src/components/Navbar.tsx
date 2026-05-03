@@ -1,9 +1,29 @@
-  
+
 
 import { Link } from '@tanstack/react-router'
 import { motion, useScroll, useTransform } from 'framer-motion'
-import { Briefcase, FileText, FolderKanban, Home, Mail, BookOpen } from 'lucide-react'
+import { Briefcase, FileText, FolderKanban, Home, Mail, BookOpen, Twitter } from 'lucide-react'
 import { useEffect, useState } from 'react'
+import { FaLinkedin } from "react-icons/fa";
+import { FaGithub } from "react-icons/fa6";
+
+const socialLink = [
+  {
+    "name": "Github",
+    "url": "https://github.com/PriyanshuChourasia",
+    "icon": <FaGithub size={22} />
+  },
+  {
+    "name": "LinkedIn",
+    "url": "https://www.linkedin.com/in/priyanshu-chourasia-17833120a/",
+    "icon": <FaLinkedin size={22} />
+  },
+  {
+    "name": "Twitter",
+    "url": "https://x.com/CoderPriye",
+    "icon": <Twitter size={22} />
+  }
+]
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false)
@@ -20,7 +40,7 @@ export function Navbar() {
     { label: 'Home', id: 'home', icon: Home },
     { label: 'About', id: 'about', icon: FileText },
     { label: 'Experience', id: 'experience', icon: Briefcase },
-    { label: 'Blog', id: 'articles', icon: BookOpen },
+    { label: 'My Blog', id: 'articles', icon: BookOpen },
     { label: 'Projects', id: 'projects', icon: FolderKanban },
     { label: 'Contact', id: 'contact', icon: Mail },
   ]
@@ -44,11 +64,10 @@ export function Navbar() {
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.5 }}
-        className={`fixed top-0 w-full z-50 transition-all duration-300 ${
-          scrolled
-            ? 'bg-slate-950/95 backdrop-blur-md border-b border-slate-800 opacity-0 pointer-events-none'
-            : 'bg-transparent'
-        }`}
+        className={`fixed top-0 w-full z-50 transition-all duration-300 ${scrolled
+          ? 'bg-slate-950/95 backdrop-blur-md border-b border-slate-800 opacity-0 pointer-events-none'
+          : 'bg-transparent'
+          }`}
       >
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
@@ -58,7 +77,7 @@ export function Navbar() {
                 whileHover={{ scale: 1.05 }}
                 className="text-xl font-bold bg-linear-to-r from-blue-500 to-cyan-500 bg-clip-text text-transparent"
               >
-                BAS
+                CodyMitra
               </motion.div>
             </Link>
 
@@ -77,15 +96,32 @@ export function Navbar() {
               ))}
             </div>
 
-            {/* Contact Button */}
+            <div className='flex  items-center gap-4'>
+              {
+                socialLink.map((link) => (
+                  <motion.a
+                    key={link.name}
+                    href={link.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    whileHover={{ scale: 1.05 }}
+                    className="text-slate-400 hover:text-cyan-500 transition-colors"
+                  >
+                    {link.icon}
+                  </motion.a>
+                ))
+              }
+            </div>
+
+            {/* 
+            Contact Button
             <motion.a
-              href="#contact"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               className="hidden md:block px-6 py-2 rounded-full bg-linear-to-r from-blue-600 to-cyan-600 text-white text-sm font-medium hover:shadow-lg hover:shadow-blue-500/50 transition-shadow"
             >
               Get in Touch
-            </motion.a>
+            </motion.a> */}
 
             {/* Mobile Menu Button */}
             <motion.button className="md:hidden p-2">
