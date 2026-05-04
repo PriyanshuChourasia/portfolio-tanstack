@@ -3,15 +3,21 @@
     {
       "id": 1,
       "date": "08 AUG 2020",
-      "author": "Sarah Rose",
-      "title": "Welcome to Jekyll!",
-      "category": "Video, Music",
+      "author": "Priyanshu Chourasia",
+      "title": "Welcome to MultiThreading!",
+      "category": "Operating System, Threading, Process",
       "image": "/images/blog1.png",
-      "desc": "Forget short term results. You need a long term strategy that works for you...",
-      "content": "<p>You'll find this post in your _posts directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run jekyll serve, which launches a web server and auto-regenerates your site when a file is updated.</p>\n\n<p>To add new posts, simply add a file in the _posts directory that follows the convention YYYY-MM-DD-name-of-post.ext and includes the necessary front matter. Take a look at the source for this post to get an idea about how it works.</p>\n\n<p>Jekyll also offers powerful support for code snippets:</p>",
+      "desc": "This is the Part-I of multi-threading journey of mine....",
+      "intro": "Concurrency vs Parallelism",
+      "content": "<p><b class=\"text-lg font-bold\">Context Switching</b>. Keep context of this word we are going to understand threading concepts. Your OS is not some magical place, It's a kitchen where cooks numbers defines the process or resources being used.</p> </br> <p class=\"py-4\">Like your kitchen consist of single chef or multi chef and your system defines as single core or multi core</p> </br> <image src=\"/images/osprocess.png\" />",
       "codeSnippet": "def print_hi(name)\n  puts \"Hi, #{name}\"\nend\nprint_hi('Tom')\n#=> prints 'Hi, Tom' to STDOUT.",
       "footer": "<p>Check out the <a href=\"#\" className=\"text-primary\">Jekyll docs</a> for more info on how to get the most out of Jekyll. File all bugs/feature requests at <a href=\"#\" className=\"text-primary\">Jekyll's GitHub repo</a>. If you have questions, you can ask them on <a href=\"#\" className=\"text-primary\">Jekyll Talk</a>.</p>",
-      "tags": ["Jekyll"]
+      "tags": [
+        "OS",
+        "Process",
+        "Thread",
+        "Concurrency"
+      ]
     },
     {
       "id": 2,
@@ -21,9 +27,13 @@
       "category": "Design, Photo",
       "image": "/images/blog2.jpg",
       "desc": "The path of a programmer is filled with continuous learning and discovery...",
+      "intro": "The path of a programmer is filled with continuous learning and discovery...",
       "content": "<p>Continuous learning is essential in the tech industry. Every day brings new technologies, frameworks, and best practices to discover and master.</p>",
       "codeSnippet": "const learn = () => {\n  console.log('Keep learning!');\n};",
-      "tags": ["Learning", "Development"]
+      "tags": [
+        "Learning",
+        "Development"
+      ]
     },
     {
       "id": 3,
@@ -33,9 +43,13 @@
       "category": "Inspiration",
       "image": "/images/blog3.png",
       "desc": "Good design is about making things simple and intuitive...",
+      "intro": "",
       "content": "<p>Great design combines aesthetics with functionality. It's about creating experiences that users love.</p>",
       "codeSnippet": "// Good design principles\nconst design = {\n  form: 'follows function',\n  simplicity: true\n};",
-      "tags": ["Design", "UX"]
+      "tags": [
+        "Design",
+        "UX"
+      ]
     },
     {
       "id": 4,
@@ -45,9 +59,13 @@
       "category": "Technology",
       "image": "/images/blog1.png",
       "desc": "Learn the best practices for modern web development and clean code...",
+      "intro": "",
       "content": "<p>Writing clean, maintainable code is crucial for long-term project success. Follow established patterns and best practices.</p>",
       "codeSnippet": "// Best practices\n- Write clean code\n- Document your work\n- Test thoroughly",
-      "tags": ["Development", "Best Practices"]
+      "tags": [
+        "Development",
+        "Best Practices"
+      ]
     }
   ]
 }

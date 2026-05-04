@@ -1,4 +1,4 @@
-   
+
 
 import { Link } from '@tanstack/react-router'
 import { motion } from 'framer-motion'
@@ -33,16 +33,16 @@ export function BlogPostDetailPage({ postId }: { postId: number }) {
       className="min-h-screen bg-slate-950 px-4 py-4 text-white sm:px-6 sm:py-4"
     >
       <div className="mx-auto max-w-6xl space-y-6 sm:space-y-8">
-      
+
 
         <div className="overflow-hidden rounded-3xl border border-white/10 bg-linear-to-br from-slate-900/90 via-slate-900/75 to-cyan-950/35 shadow-2xl shadow-cyan-950/20 backdrop-blur-xl sm:rounded-4xl">
           <Link
-          to="/"
-          className="inline-flex items-center gap-2 py-5  px-6 text-sm font-semibold text-cyan-300 transition-colors hover:text-cyan-200"
-        >
-          <span aria-hidden="true">←</span>
-          Back to home
-        </Link>
+            to="/"
+            className="inline-flex items-center gap-2 py-5  px-6 text-sm font-semibold text-cyan-300 transition-colors hover:text-cyan-200"
+          >
+            <span aria-hidden="true">←</span>
+            Back to home
+          </Link>
           <div className="grid gap-0 lg:grid-cols-[1.1fr_0.9fr]">
             <div className="p-5 sm:p-8 md:p-12 lg:p-14">
               <div className="flex flex-wrap items-center gap-3 text-[11px] uppercase tracking-[0.3em] text-cyan-300">
@@ -53,12 +53,12 @@ export function BlogPostDetailPage({ postId }: { postId: number }) {
                 <span>{post.author}</span>
               </div>
 
-              <h1 className="mt-5 text-3xl font-bold leading-tight sm:mt-6 sm:text-4xl md:text-6xl">
+              <h1 className="mt-5 text-3xl font-bold leading-tight sm:mt-6 sm:text-3xl md:text-6xl">
                 {post.title}
               </h1>
 
-              <p className="mt-5 max-w-2xl text-base leading-7 text-slate-300 sm:mt-6 sm:text-lg sm:leading-8">
-                {post.desc}
+              <p className="mt-5 max-w-2xl text-base leading-7 text-slate-300 sm:mt-6 sm:text-base sm:leading-8">
+                {post?.intro}
               </p>
 
               <div className="mt-6 flex flex-wrap gap-2 sm:mt-8">
@@ -114,6 +114,9 @@ export function BlogPostDetailPage({ postId }: { postId: number }) {
                   </p>
                   <p>
                     <span className="text-slate-500">Published:</span> {post.date}
+                  </p>
+                  <p>
+                    <span className="text-slate-500">Description:</span> {post.desc}
                   </p>
                 </div>
               </div>
