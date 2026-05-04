@@ -2,7 +2,7 @@
   "posts": [
     {
       "id": 1,
-      "date": "08 AUG 2020",
+      "date": "08 AUG 2026",
       "author": "Priyanshu Chourasia",
       "title": "Welcome to MultiThreading!",
       "category": "Operating System, Threading, Process",
@@ -21,11 +21,11 @@
     },
     {
       "id": 2,
-      "date": "15 SEP 2020",
+      "date": "04 May 2026",
       "author": "Admin",
-      "title": "Two Before No In Nature",
-      "category": "Design, Photo",
-      "image": "/images/blog2.jpg",
+      "title": "Journey of GIT",
+      "category": "File System, Github, Git",
+      "image": "/images/gitimage.png",
       "desc": "The path of a programmer is filled with continuous learning and discovery...",
       "intro": "The path of a programmer is filled with continuous learning and discovery...",
       "content": "<p>Continuous learning is essential in the tech industry. Every day brings new technologies, frameworks, and best practices to discover and master.</p>",
