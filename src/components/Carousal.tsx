@@ -1,6 +1,10 @@
-
-
-import { motion, useMotionValue, useScroll, useSpring, useTransform } from 'framer-motion'
+import {
+  motion,
+  useMotionValue,
+  useScroll,
+  useSpring,
+  useTransform,
+} from 'framer-motion'
 import { type MouseEvent, useMemo, useRef, useState } from 'react'
 import {
   SiJavascript,
@@ -12,7 +16,6 @@ import {
   SiGithub,
   SiOpenai,
   SiDocker,
-
 } from 'react-icons/si'
 import badgesData from '../data/carousel-data.json'
 
@@ -64,14 +67,26 @@ export function Hero() {
   }
 
   const badges = useMemo(() => {
-    return badgeDefs.map((b) => ({
+    return badgeDefs.map((b, index) => ({
       ...b,
-      roamX: Math.floor(Math.random() * 23) - 11,
-      roamY: Math.floor(Math.random() * 23) - 11,
-      rot: Math.floor(Math.random() * 11) - 5,
-      duration: 3.8 + Math.random() * 1.2,
-      delay: Math.random() * 1.5,
       iconComponent: ICONS[(b as any).icon],
+      floatX: [
+        0,
+        (index % 2 === 0 ? 1 : -1) * (9 + (index % 4)),
+        0,
+        (index % 3 === 0 ? -1 : 1) * (8 + (index % 3)),
+        0,
+      ],
+      floatY: [
+        0,
+        (index % 2 === 0 ? -1 : 1) * (9 + (index % 3)),
+        0,
+        (index % 4 === 0 ? 1 : -1) * (8 + (index % 2)),
+        0,
+      ],
+      floatRotate: [0, 4, 0, -4, 0],
+      floatDuration: 3 + (index % 4) * 0.4,
+      floatDelay: index * 0.15,
       iconClass:
         (b as any).id === 'javascript'
           ? 'text-amber-100'
@@ -112,7 +127,6 @@ export function Hero() {
       className="relative min-h-screen w-full overflow-hidden bg-slate-950 flex items-center"
     >
       <div className="relative z-10 max-w-7xl mx-auto w-full px-6 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-
         <motion.div
           style={{ y: textY }}
           initial={{ opacity: 0, x: -50 }}
@@ -134,7 +148,7 @@ export function Hero() {
             transition={{ delay: 0.4 }}
           >
             <h1 className="text-5xl lg:text-6xl font-bold mb-4 leading-tight">
-              Hi I&apos;m{" "}
+              Hi I&apos;m{' '}
               <span className="bg-linear-to-r from-blue-500 to-cyan-500 bg-clip-text text-transparent">
                 Priyanshu
               </span>
@@ -143,8 +157,10 @@ export function Hero() {
             </h1>
 
             <p className="text-slate-400 text-lg leading-relaxed max-w-xl">
-              A Full-Stack Developer with a specialization in backend development and implementing
-              design-driven frontend solutions, with a professional end to end development project and a wise use of AI tools <span className='font-bold'>.</span>
+              A Full-Stack Developer with a specialization in backend
+              development and implementing design-driven frontend solutions,
+              with a professional end to end development project and a wise use
+              of AI tools <span className="font-bold">.</span>
             </p>
           </motion.div>
 
@@ -194,36 +210,62 @@ export function Hero() {
               className="absolute inset-0 rounded-4xl border border-cyan-400/15 bg-linear-to-br from-cyan-500/10 via-slate-900/40 to-blue-950/25 shadow-none"
             />
 
-            {badges.map((b) => {
+            {badges.map((b, index) => {
               const Component = (b as any).iconComponent
               const isHovered = hoveredBadgeId === b.id
+              const hoverBg = (b as any).hoverBg ?? 'rgba(34, 211, 238, 0.2)'
+              const hoverBorder = (b as any).hoverBorder ?? '#22d3ee'
+              const hoverGlow =
+                (b as any).hoverGlow ?? 'rgba(34, 211, 238, 0.45)'
+              const hoverIconColor = (b as any).hoverIconColor ?? '#67e8f9'
               return (
                 <motion.div
                   key={b.id}
-                  style={{ left: b.left, top: b.top }}
+                  style={{
+                    left: b.left,
+                    top: b.top,
+                  }}
                   animate={
                     isHovered
-                      ? { x: 0, y: 0, rotate: 0, scale: 1.12 }
+                      ? { scale: 1.1 }
                       : {
-                        x: [0, b.roamX, 0, -b.roamX, 0],
-                        y: [0, b.roamY, 0, -b.roamY, 0],
-                        rotate: [0, b.rot, 0, -b.rot, 0],
-                        scale: [1, 1.06, 1.02, 1.05, 1],
-                      }
+                          x: (b as any).floatX,
+                          y: (b as any).floatY,
+                          rotate: (b as any).floatRotate,
+                          scale: [1, 1.02, 1],
+                        }
                   }
                   transition={
                     isHovered
-                      ? { duration: 0.12 }
-                      : { duration: b.duration, repeat: Infinity, ease: 'easeInOut', delay: b.delay }
+                      ? { duration: 0.03, ease: 'linear' }
+                      : {
+                          duration: (b as any).floatDuration,
+                          repeat: Infinity,
+                          ease: 'easeInOut',
+                          delay: (b as any).floatDelay,
+                        }
                   }
                   onHoverStart={() => setHoveredBadgeId(b.id)}
                   onHoverEnd={() => setHoveredBadgeId(null)}
                   className="absolute z-0 flex h-14 w-14 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-white/8 bg-slate-800/85 text-white shadow-lg backdrop-blur sm:h-16 sm:w-16"
+                  whileHover={{
+                    backgroundColor: hoverBg,
+                    borderColor: hoverBorder,
+                    boxShadow: `0 0 28px ${hoverGlow}`,
+                    scale: 1.08,
+                    transition: { duration: 0.04, ease: 'linear' },
+                  }}
                 >
                   {Component ? (
-                    <Component className={`h-7 w-7 ${b.iconClass}`} />
+                    <Component
+                      className={`h-7 w-7 ${b.iconClass}`}
+                      style={{ color: isHovered ? hoverIconColor : undefined }}
+                    />
                   ) : (
-                    <span className={`text-xs font-semibold ${b.labelClass}`}>
+                    <span
+                      className={`text-xs font-semibold ${b.labelClass}`}
+                      style={{ color: isHovered ? hoverIconColor : undefined }}
+                    >
                       {(b as any).label}
                     </span>
                   )}

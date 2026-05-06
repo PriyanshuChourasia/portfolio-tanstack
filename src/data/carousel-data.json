@@ -1,15 +1,132 @@
 [
-  { "id": "javascript", "icon": "javascript", "left": "92%", "top": "6%" },
-  { "id": "copilot", "label": "CP", "left": "86%", "top": "92%" },
-  { "id": "claude", "label": "CL", "left": "50%", "top": "0%" },
-  { "id": "langgraph", "label": "LG", "left": "112%", "top": "60%" },
-  { "id": "langscreen", "label": "LS", "left": "50%", "top": "108%" },
-  { "id": "docker", "icon": "docker", "left": "6%", "top": "90%" },
-  { "id": "openai", "icon": "openai", "left": "88%", "top": "18%" },
-  { "id": "github", "icon": "github", "left": "12%", "top": "18%" },
-  { "id": "nodedotjs", "icon": "nodedotjs", "left": "8%", "top": "78%" },
-  { "id": "react", "icon": "react", "left": "18%", "top": "44%" },
-  { "id": "typescript", "icon": "typescript", "left": "82%", "top": "52%" },
-  { "id": "next", "icon": "next", "left": "50%", "top": "10%" },
-  { "id": "tailwind", "icon": "tailwind", "left": "88%", "top": "104%" }
+  {
+    "id": "javascript",
+    "icon": "javascript",
+    "left": "110%",
+    "top": "-7%",
+    "hoverBg": "rgba(245, 158, 11, 0.24)",
+    "hoverBorder": "#f59e0b",
+    "hoverGlow": "rgba(245, 158, 11, 0.52)",
+    "hoverIconColor": "#fbbf24"
+  },
+  {
+    "id": "copilot",
+    "label": "CP",
+    "left": "95%",
+    "top": "97%",
+    "hoverBg": "rgba(217, 70, 239, 0.24)",
+    "hoverBorder": "#d946ef",
+    "hoverGlow": "rgba(217, 70, 239, 0.5)",
+    "hoverIconColor": "#e879f9"
+  },
+  {
+    "id": "claude",
+    "label": "CL",
+    "left": "68%",
+    "top": "-13%",
+    "hoverBg": "rgba(168, 85, 247, 0.24)",
+    "hoverBorder": "#a855f7",
+    "hoverGlow": "rgba(168, 85, 247, 0.5)",
+    "hoverIconColor": "#c084fc"
+  },
+  {
+    "id": "langgraph",
+    "label": "LG",
+    "left": "118%",
+    "top": "62%",
+    "hoverBg": "rgba(251, 191, 36, 0.24)",
+    "hoverBorder": "#fbbf24",
+    "hoverGlow": "rgba(251, 191, 36, 0.5)",
+    "hoverIconColor": "#fcd34d"
+  },
+  {
+    "id": "langscreen",
+    "label": "LS",
+    "left": "68%",
+    "top": "114%",
+    "hoverBg": "rgba(14, 165, 233, 0.24)",
+    "hoverBorder": "#0ea5e9",
+    "hoverGlow": "rgba(14, 165, 233, 0.5)",
+    "hoverIconColor": "#38bdf8"
+  },
+  {
+    "id": "docker",
+    "icon": "docker",
+    "left": "-14%",
+    "top": "78%",
+    "hoverBg": "rgba(14, 165, 233, 0.24)",
+    "hoverBorder": "#0ea5e9",
+    "hoverGlow": "rgba(14, 165, 233, 0.5)",
+    "hoverIconColor": "#38bdf8"
+  },
+  {
+    "id": "openai",
+    "icon": "openai",
+    "left": "97%",
+    "top": "-3%",
+    "hoverBg": "rgba(16, 185, 129, 0.24)",
+    "hoverBorder": "#10b981",
+    "hoverGlow": "rgba(16, 185, 129, 0.5)",
+    "hoverIconColor": "#34d399"
+  },
+  {
+    "id": "github",
+    "icon": "github",
+    "left": "-5%",
+    "top": "-5%",
+    "hoverBg": "rgba(148, 163, 184, 0.24)",
+    "hoverBorder": "#94a3b8",
+    "hoverGlow": "rgba(148, 163, 184, 0.48)",
+    "hoverIconColor": "#cbd5e1"
+  },
+  {
+    "id": "nodedotjs",
+    "icon": "nodedotjs",
+    "left": "-6%",
+    "top": "100%",
+    "hoverBg": "rgba(132, 204, 22, 0.24)",
+    "hoverBorder": "#84cc16",
+    "hoverGlow": "rgba(132, 204, 22, 0.5)",
+    "hoverIconColor": "#a3e635"
+  },
+  {
+    "id": "react",
+    "icon": "react",
+    "left": "4%",
+    "top": "48%",
+    "hoverBg": "rgba(34, 211, 238, 0.24)",
+    "hoverBorder": "#22d3ee",
+    "hoverGlow": "rgba(34, 211, 238, 0.5)",
+    "hoverIconColor": "#67e8f9"
+  },
+  {
+    "id": "typescript",
+    "icon": "typescript",
+    "left": "101%",
+    "top": "59%",
+    "hoverBg": "rgba(59, 130, 246, 0.24)",
+    "hoverBorder": "#3b82f6",
+    "hoverGlow": "rgba(59, 130, 246, 0.5)",
+    "hoverIconColor": "#60a5fa"
+  },
+  {
+    "id": "next",
+    "icon": "next",
+    "left": "50%",
+    "top": "-12%",
+    "hoverBg": "rgba(226, 232, 240, 0.22)",
+    "hoverBorder": "#e2e8f0",
+    "hoverGlow": "rgba(226, 232, 240, 0.45)",
+    "hoverIconColor": "#f1f5f9"
+  },
+  {
+    "id": "tailwind",
+    "icon": "tailwind",
+    "left": "50%",
+    "top": "112%",
+    "hoverBg": "rgba(6, 182, 212, 0.24)",
+    "hoverBorder": "#06b6d4",
+    "hoverGlow": "rgba(6, 182, 212, 0.5)",
+    "hoverIconColor": "#22d3ee"
+  }
 ]

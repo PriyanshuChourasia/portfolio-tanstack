@@ -11,15 +11,16 @@ export function SkillsIllustrationBackground({
   personSrc,
   progress,
 }: SkillsIllustrationBackgroundProps) {
-  const personX = useTransform(progress, [0, 1], [-400, -40])
+  // Make person and computer images come much closer on scroll
+  const personX = useTransform(progress, [0, 1], [-40, -10])
   const personY = useTransform(progress, [0, 1], [80, 20])
   const personRotate = useTransform(progress, [0, 1], [-4, 0])
-  const personOpacity = useTransform(progress, [0, 0.3], [0, 0.7])
+  const personOpacity = useTransform(progress, [0, 0.3], [0, 0.4])
 
-  const computerX = useTransform(progress, [0, 1], [400, 40])
+  const computerX = useTransform(progress, [0, 1], [40, 10])
   const computerY = useTransform(progress, [0, 1], [60, 10])
   const computerRotate = useTransform(progress, [0, 1], [3, 0])
-  const computerOpacity = useTransform(progress, [0, 0.25], [0, 0.7])
+  const computerOpacity = useTransform(progress, [0, 0.25], [0, 0.5])
 
   if (!computerSrc && !personSrc) return null
 

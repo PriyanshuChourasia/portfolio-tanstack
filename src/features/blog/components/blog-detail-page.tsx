@@ -1,10 +1,7 @@
-
-
 import { Link } from '@tanstack/react-router'
 import { motion } from 'framer-motion'
 import blogData from '@/data/blog-data.json'
 import BlogCommentsSection from './blog-comments-section'
-
 
 export function BlogPostDetailPage({ postId }: { postId: number }) {
   const post = blogData.posts.find((item) => item.id === postId)
@@ -13,8 +10,12 @@ export function BlogPostDetailPage({ postId }: { postId: number }) {
     return (
       <main className="min-h-screen bg-slate-950 px-4 py-2 text-white sm:px-6 sm:py-4">
         <div className="mx-auto max-w-3xl rounded-3xl border border-white/10 bg-white/5 p-6 backdrop-blur-xl sm:rounded-[28px] sm:p-8">
-          <p className="text-sm uppercase tracking-[0.3em] text-cyan-300">Blog not found</p>
-          <h1 className="mt-4 text-2xl font-bold sm:text-3xl">This blog does not exist.</h1>
+          <p className="text-sm uppercase tracking-[0.3em] text-cyan-300">
+            Blog not found
+          </p>
+          <h1 className="mt-4 text-2xl font-bold sm:text-3xl">
+            This blog does not exist.
+          </h1>
           <Link
             to="/"
             className="mt-8 inline-flex w-full items-center justify-center rounded-full border border-cyan-400/20 bg-cyan-400/10 px-5 py-3 text-sm font-semibold text-cyan-200 sm:w-auto"
@@ -33,8 +34,6 @@ export function BlogPostDetailPage({ postId }: { postId: number }) {
       className="min-h-screen bg-slate-950 px-4 py-4 text-white sm:px-6 sm:py-4"
     >
       <div className="mx-auto max-w-6xl space-y-6 sm:space-y-8">
-
-
         <div className="overflow-hidden rounded-3xl border border-white/10 bg-linear-to-br from-slate-900/90 via-slate-900/75 to-cyan-950/35 shadow-2xl shadow-cyan-950/20 backdrop-blur-xl sm:rounded-4xl">
           <Link
             to="/"
@@ -74,7 +73,7 @@ export function BlogPostDetailPage({ postId }: { postId: number }) {
             </div>
 
             <div className="border-t border-white/10 bg-black/10 p-3 sm:p-4 lg:border-l lg:border-t-0 lg:p-6">
-              <div className="h-64 overflow-hidden rounded-2xl border border-white/10 bg-slate-900 sm:h-80 sm:rounded-3xl lg:h-full">
+              <div className="h-64 overflow-hidden rounded-2xl border border-white/10 bg-slate-900 sm:h-80 sm:rounded-3xl lg:h-[420px] xl:h-[480px]">
                 <img
                   src={post.image}
                   alt={post.title}
@@ -84,16 +83,14 @@ export function BlogPostDetailPage({ postId }: { postId: number }) {
             </div>
           </div>
 
-          <div className="grid gap-6 border-t border-white/10 px-4 py-8 sm:px-6 sm:py-10 md:px-12 lg:grid-cols-[1.25fr_0.75fr] lg:px-14">
-            <article className="space-y-5 text-slate-300 sm:space-y-6">
+          <div className=" border-t border-white/10 px-4 py-8 sm:px-6 sm:py-10 md:px-12  lg:px-14">
+            <article className="space-y-5 text-slate-300 sm:space-y-6 [&_img]:mt-6 [&_img]:h-[320px] [&_img]:w-full [&_img]:rounded-2xl [&_img]:border [&_img]:border-white/10 [&_img]:bg-slate-900/60 [&_img]:object-contain sm:[&_img]:h-[380px] lg:[&_img]:h-[440px]">
               <div dangerouslySetInnerHTML={{ __html: post.content }} />
-
               {post.codeSnippet ? (
                 <pre className="overflow-x-auto rounded-2xl border border-cyan-400/20 bg-slate-950/80 p-4 text-xs leading-6 text-cyan-100 whitespace-pre-wrap sm:p-6 sm:text-sm sm:leading-7">
                   {post.codeSnippet}
                 </pre>
               ) : null}
-
               {post.footer ? (
                 <div
                   className="text-sm leading-7 text-slate-400"
@@ -101,27 +98,6 @@ export function BlogPostDetailPage({ postId }: { postId: number }) {
                 />
               ) : null}
             </article>
-
-            <aside className="space-y-4">
-              <div className="rounded-2xl border border-white/10 bg-white/5 p-6">
-                <p className="text-xs uppercase tracking-[0.3em] text-cyan-300">Blog details</p>
-                <div className="mt-4 space-y-3 text-sm text-slate-300">
-                  <p>
-                    <span className="text-slate-500">Author:</span> {post.author}
-                  </p>
-                  <p>
-                    <span className="text-slate-500">Category:</span> {post.category}
-                  </p>
-                  <p>
-                    <span className="text-slate-500">Published:</span> {post.date}
-                  </p>
-                  <p>
-                    <span className="text-slate-500">Description:</span> {post.desc}
-                  </p>
-                </div>
-              </div>
-
-            </aside>
           </div>
 
           <BlogCommentsSection />

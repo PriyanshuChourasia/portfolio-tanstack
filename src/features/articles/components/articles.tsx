@@ -1,5 +1,3 @@
-  
-
 import { Link } from '@tanstack/react-router'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { useRef } from 'react'
@@ -21,7 +19,7 @@ export default function Articles() {
     <section
       id="articles"
       ref={sectionRef}
-      className="relative min-h-screen w-full overflow-hidden bg-slate-950 py-16 md:py-24 lg:py-32"
+      className="relative min-h-screen w-full overflow-hidden bg-slate-950 py-16 md:py-16 lg:py-16"
     >
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6">
         <motion.div
@@ -33,19 +31,18 @@ export default function Articles() {
           </h2>
         </motion.div>
 
-        
         <div className="mx-auto grid max-w-6xl grid-cols-1 gap-5 md:grid-cols-2 md:gap-6 lg:grid-cols-3 lg:gap-8">
           {articles.map((article, index) => {
             const cardY = useTransform(
               scrollYProgress,
               [0, 0.5, 1],
-              [48 + index * 10, 0, -24]
+              [48 + index * 10, 0, -24],
             )
 
             const cardOpacity = useTransform(
               scrollYProgress,
               [0, 0.3, 0.7, 1],
-              [0, 1, 1, 0.5]
+              [0, 1, 1, 0.5],
             )
 
             return (
@@ -54,12 +51,8 @@ export default function Articles() {
                 style={{ y: cardY, opacity: cardOpacity }}
                 className="group relative h-full overflow-hidden rounded-3xl"
               >
-             
-                <div
-                  className="absolute inset-0 bg-linear-to-br from-cyan-500/10 via-slate-900/80 to-blue-950/80 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                />
+                <div className="absolute inset-0 bg-linear-to-br from-cyan-500/10 via-slate-900/80 to-blue-950/80 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
-          
                 <div className="absolute inset-0 border border-white/10 group-hover:border-cyan-400/40 rounded-2xl transition-colors duration-300" />
 
                 <div className="relative flex h-full flex-col bg-slate-950/70 p-5 backdrop-blur-xl sm:p-6 lg:p-8">

@@ -1,23 +1,48 @@
-
 import { motion } from 'framer-motion'
 import { Mail, Linkedin, Github, Twitter } from 'lucide-react'
 
 export default function ContactSection() {
   const socialLinks = [
-    { icon: Mail, label: 'Email', href: 'mailto:priyanshu@gmail.com', color: 'from-red-500 to-pink-500' },
-    { icon: Linkedin, label: 'LinkedIn', href: '#', color: 'from-blue-500 to-cyan-500' },
-    { icon: Github, label: 'GitHub', href: '#', color: 'from-gray-500 to-slate-600' },
-    { icon: Twitter, label: 'Twitter', href: '#', color: 'from-cyan-500 to-blue-500' },
+    {
+      icon: Mail,
+      label: 'Email',
+      href: 'mailto:priyanshu@gmail.com',
+      color: 'from-red-500 to-pink-500',
+    },
+    {
+      icon: Linkedin,
+      label: 'LinkedIn',
+      href: '#',
+      color: 'from-blue-500 to-cyan-500',
+    },
+    {
+      icon: Github,
+      label: 'GitHub',
+      href: '#',
+      color: 'from-gray-500 to-slate-600',
+    },
+    {
+      icon: Twitter,
+      label: 'Twitter',
+      href: '#',
+      color: 'from-cyan-500 to-blue-500',
+    },
   ]
 
   return (
     <section
       id="contact"
-      className="relative min-h-screen w-full overflow-hidden bg-slate-950 flex items-center justify-center py-32"
+      className="relative min-h-screen w-full overflow-hidden bg-slate-950 flex items-center justify-center py-16"
     >
       <motion.div
         className="absolute inset-0"
-        animate={{ background: ['rgba(0,0,0,0)', 'rgba(59,130,246,0.1)', 'rgba(0,0,0,0)'] }}
+        animate={{
+          background: [
+            'rgba(0,0,0,0)',
+            'rgba(59,130,246,0.1)',
+            'rgba(0,0,0,0)',
+          ],
+        }}
         transition={{ duration: 8, repeat: Infinity }}
       >
         <motion.div
@@ -39,11 +64,13 @@ export default function ContactSection() {
           transition={{ duration: 0.8 }}
         >
           <h2 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">
-            Feel free to reach out to me if you&apos;re looking for a developer, have a query, or simply want to connect:
+            Feel free to reach out to me if you&apos;re looking for a developer,
+            have a query, or simply want to connect:
           </h2>
 
           <p className="text-xl text-slate-400 mb-12">
-            I&apos;m always interested in hearing about new projects and opportunities.
+            I&apos;m always interested in hearing about new projects and
+            opportunities.
           </p>
         </motion.div>
 

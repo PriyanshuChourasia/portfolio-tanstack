@@ -1,6 +1,5 @@
 /* eslint-disable react/no-unescaped-entities */
 
-
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion'
 import { useRef } from 'react'
 import resumeData from '@/data/resume-data.json'
@@ -26,12 +25,24 @@ export function ResumeSection() {
     offset: ['start end', 'start start'],
   })
 
-  const smoothProgress = useSpring(scrollYProgress, { stiffness: 70, damping: 24, mass: 0.25 })
-  const smoothSkillsProgress = useSpring(skillsScrollYProgress, { stiffness: 90, damping: 26, mass: 0.25 })
+  const smoothProgress = useSpring(scrollYProgress, {
+    stiffness: 70,
+    damping: 24,
+    mass: 0.25,
+  })
+  const smoothSkillsProgress = useSpring(skillsScrollYProgress, {
+    stiffness: 90,
+    damping: 26,
+    mass: 0.25,
+  })
 
   const titleY = useTransform(smoothProgress, [0, 0.3], [80, 0])
   const titleOpacity = useTransform(smoothProgress, [0, 0.2], [0, 1])
-  const bgOpacity = useTransform(smoothProgress, [0, 0.15, 0.85, 1], [0, 1, 1, 0])
+  const bgOpacity = useTransform(
+    smoothProgress,
+    [0, 0.15, 0.85, 1],
+    [0, 1, 1, 0],
+  )
 
   const deepY1 = useTransform(smoothProgress, [0, 1], [220, -220])
   const deepX1 = useTransform(smoothProgress, [0, 1], [-60, 60])
@@ -60,7 +71,6 @@ export function ResumeSection() {
       ref={containerRef}
       className="relative min-h-screen w-full overflow-hidden bg-slate-950 py-32"
     >
-
       <motion.div
         aria-hidden
         className="absolute inset-0 pointer-events-none overflow-hidden"
@@ -105,7 +115,10 @@ export function ResumeSection() {
       </motion.div>
 
       <div className="relative z-10 w-full mx-auto px-6">
-        <motion.div style={{ y: titleY, opacity: titleOpacity }} className="text-center mb-20">
+        <motion.div
+          style={{ y: titleY, opacity: titleOpacity }}
+          className="text-center mb-20"
+        >
           <h2 className="text-4xl md:text-5xl font-bold">
             Career <span className="text-cyan-500">Overview</span>
           </h2>
@@ -134,7 +147,6 @@ export function ResumeSection() {
           </motion.div>
         </div>
 
-        {/* Skills heading (match other sections) */}
         <motion.div
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -147,8 +159,7 @@ export function ResumeSection() {
           </h2>
         </motion.div>
 
-        {/* Background parallax images for Skills */}
-        <div className="absolute top-50 left-0 right-0 h-200 pointer-events-none overflow-hidden">
+        <div className="absolute top-50 left-0 right-0 h-180 pointer-events-none overflow-hidden">
           <SkillsIllustrationBackground
             computerSrc={skillsComputerImageSrc}
             personSrc={skillsPersonImageSrc}
@@ -158,7 +169,6 @@ export function ResumeSection() {
 
         <div ref={skillsRef} className="relative z-10 max-w-6xl mx-auto">
           <div className="grid grid-cols-1 gap-12">
-            {/* Design Skills + Languages Panel */}
             <motion.div
               initial={{ opacity: 0, x: -80 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -167,17 +177,24 @@ export function ResumeSection() {
               className="space-y-12"
             >
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-                <DesignSkillsPanel designSkills={designSkills} progress={smoothSkillsProgress} />
-                <LanguagesPanel languages={languages} progress={smoothSkillsProgress} />
+                <DesignSkillsPanel
+                  designSkills={designSkills}
+                  progress={smoothSkillsProgress}
+                />
+                <LanguagesPanel
+                  languages={languages}
+                  progress={smoothSkillsProgress}
+                />
               </div>
 
-              {/* Coding Skills Panel */}
-              <CodingSkillsPanel codingSkills={codingSkills} progress={smoothSkillsProgress} />
+              <CodingSkillsPanel
+                codingSkills={codingSkills}
+                progress={smoothSkillsProgress}
+              />
             </motion.div>
           </div>
         </div>
 
-        {/* Knowledge Section */}
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
