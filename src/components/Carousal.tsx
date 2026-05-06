@@ -210,7 +210,7 @@ export function Hero() {
               className="absolute inset-0 rounded-4xl border border-cyan-400/15 bg-linear-to-br from-cyan-500/10 via-slate-900/40 to-blue-950/25 shadow-none"
             />
 
-            {badges.map((b, index) => {
+            {badges.map((b) => {
               const Component = (b as any).iconComponent
               const isHovered = hoveredBadgeId === b.id
               const hoverBg = (b as any).hoverBg ?? 'rgba(34, 211, 238, 0.2)'
