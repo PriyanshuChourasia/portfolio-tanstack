@@ -26,13 +26,15 @@
       "title": "Journey of GIT",
       "category": "File System, Github, Git",
       "image": "/images/gitimage.png",
-      "desc": "The path of a programmer is filled with continuous learning and discovery...",
-      "intro": "The path of a programmer is filled with continuous learning and discovery...",
-      "content": "<p>Continuous learning is essential in the tech industry. Every day brings new technologies, frameworks, and best practices to discover and master.</p>",
+      "desc": "Today the path of programmer is filled with continuous learning of tools and concepts...",
+      "intro": "Today the path of programmer is filled with continuous learning of tools and concepts, here we come at a stop of Git...",
+      "content": "<p><b class=\"font-bold\">DVCS</b> a term for Distributed Version Control System, yeah we will go a little further into definition of this term, but before that understand version control and why we need it. </br> Maintaining versions of any document means having its copy of changes. Think about some painting before giving it a finishing look with colors or just keeping it to sketch the painter has gone through the changes of the drawing like</p></br> <ol><li>First he drew the sketch with basic shapes</li><li>Then added details and textures</li><li>Finally, applied the finishing touches</li></ol> </br> <p>but during the whole process he never starts again from another day, he start from where he left the drawing, means he always have a continuous workflow or we can say version of it's painting. Like this also we have changes in our codebase, the history of code.</p> ",
       "codeSnippet": "const learn = () => {\n  console.log('Keep learning!');\n};",
       "tags": [
         "Learning",
-        "Development"
+        "Git",
+        "GitHub",
+        "File System"
       ]
     },
     {
