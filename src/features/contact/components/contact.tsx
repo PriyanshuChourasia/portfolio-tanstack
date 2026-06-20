@@ -1,105 +1,69 @@
 import { motion } from 'framer-motion'
-import { Mail, Linkedin, Github, Twitter } from 'lucide-react'
+import { Mail, Twitter } from 'lucide-react'
+import { FaGithub } from 'react-icons/fa6'
+import { FaLinkedin } from 'react-icons/fa'
 
 const socialLinks = [
-  { icon: Mail, label: 'Email', href: 'mailto:priaynshuchourasia916@gmail.com', color: 'from-red-500 to-pink-500' },
-  { icon: Linkedin, label: 'LinkedIn', href: 'https://www.linkedin.com/in/priyanshu-chourasia-17833120a/', color: 'from-blue-500 to-cyan-500' },
-  { icon: Github, label: 'GitHub', href: 'https://github.com/PriyanshuChourasia', color: 'from-gray-500 to-slate-600' },
-  { icon: Twitter, label: 'Twitter', href: 'https://x.com/CoderPriye', color: 'from-cyan-500 to-blue-500' },
+  { label: 'Email', href: 'mailto:priaynshuchourasia916@gmail.com', icon: Mail },
+  { label: 'GitHub', href: 'https://github.com/PriyanshuChourasia', icon: FaGithub },
+  { label: 'LinkedIn', href: 'https://www.linkedin.com/in/priyanshu-chourasia-17833120a/', icon: FaLinkedin },
+  { label: 'Twitter', href: 'https://x.com/CoderPriye', icon: Twitter },
 ]
 
 export default function ContactSection() {
   return (
-    <section
-      id="contact"
-      className="relative min-h-screen w-full overflow-hidden bg-white dark:bg-slate-950 flex items-center justify-center py-16"
-    >
-      {/* Animated background blobs */}
-      <motion.div className="absolute inset-0 pointer-events-none">
-        <motion.div
-          animate={{ x: [0, 80, 0], y: [0, -40, 0] }}
-          transition={{ duration: 14, repeat: Infinity, ease: 'easeInOut' }}
-          className="absolute top-1/4 left-1/4 w-80 h-80 bg-blue-200/40 dark:bg-blue-600/20 rounded-full blur-3xl"
-        />
-        <motion.div
-          animate={{ x: [0, -80, 0], y: [0, 40, 0] }}
-          transition={{ duration: 18, repeat: Infinity, ease: 'easeInOut' }}
-          className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-purple-200/40 dark:bg-purple-600/20 rounded-full blur-3xl"
-        />
-        <motion.div
-          animate={{ x: [0, 40, 0], y: [0, 60, 0] }}
-          transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
-          className="absolute top-1/2 right-1/3 w-64 h-64 bg-cyan-200/30 dark:bg-cyan-600/10 rounded-full blur-3xl"
-        />
-      </motion.div>
-
-      <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 text-center">
-        <motion.div initial={{ opacity: 0, y: 50 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
-          <span className="inline-block mb-6 px-4 py-2 rounded-full border border-cyan-400/30 bg-cyan-50 dark:bg-cyan-400/10 text-xs font-semibold uppercase tracking-widest text-cyan-600 dark:text-cyan-300">
-            Get in Touch
-          </span>
-
-          <h2 className="text-4xl md:text-5xl font-bold mb-6 leading-tight text-slate-900 dark:text-white">
-            Feel free to reach out — whether you&apos;re looking for a developer, have a query,
-            or simply want to connect.
-          </h2>
-
-          <p className="text-lg text-slate-500 dark:text-slate-400 mb-12">
-            I&apos;m always open to hearing about new projects and opportunities.
-          </p>
-        </motion.div>
+    <section id="contact" className="py-20">
+      <div className="max-w-2xl mx-auto px-6">
+        <hr className="border-slate-200 dark:border-slate-800 mb-12" />
 
         <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          className="mb-12"
-        >
-          <motion.a
-            href="mailto:priaynshuchourasia916@gmail.com"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="inline-flex items-center gap-3 px-8 py-4 rounded-full bg-linear-to-r from-blue-600 to-cyan-600 text-white font-semibold text-lg hover:shadow-2xl hover:shadow-blue-500/40 transition-shadow"
-          >
-            <Mail className="w-5 h-5" />
-            priaynshuchourasia916@gmail.com
-          </motion.a>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.4 }}
-          className="flex items-center justify-center gap-5 flex-wrap"
+          transition={{ duration: 0.5 }}
+          viewport={{ once: true }}
+          className="space-y-8"
         >
-          {socialLinks.map((social, index) => {
-            const Icon = social.icon
-            return (
-              <motion.a
-                key={index}
-                href={social.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                whileHover={{ scale: 1.2, y: -4 }}
-                whileTap={{ scale: 0.9 }}
-                className={`p-3 rounded-full bg-linear-to-br ${social.color} text-white shadow-lg hover:shadow-xl transition-shadow`}
-                title={social.label}
-              >
-                <Icon className="w-5 h-5" />
-              </motion.a>
-            )
-          })}
-        </motion.div>
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-3">
+              Get in touch
+            </p>
+            <a
+              href="mailto:priaynshuchourasia916@gmail.com"
+              className="text-xl font-semibold text-slate-900 dark:text-white hover:text-slate-500 dark:hover:text-slate-400 transition-colors"
+            >
+              priaynshuchourasia916@gmail.com
+            </a>
+          </div>
 
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          transition={{ duration: 0.8, delay: 0.6 }}
-          className="mt-20 pt-8 border-t border-slate-200 dark:border-slate-800"
-        >
-          <p className="text-sm text-slate-400 dark:text-slate-500">
-            © Priyanshu Chourasia 2025. All rights reserved.
-          </p>
+          <div className="flex items-center gap-5">
+            {socialLinks.map((link) => {
+              const Icon = link.icon
+              return (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  target={link.href.startsWith('mailto') ? undefined : '_blank'}
+                  rel="noopener noreferrer"
+                  aria-label={link.label}
+                  className="text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"
+                >
+                  <Icon size={20} />
+                </a>
+              )
+            })}
+          </div>
+
+          <div className="flex items-center justify-between pt-8 border-t border-slate-200 dark:border-slate-800">
+            <p className="text-sm text-slate-400 dark:text-slate-500">
+              © Priyanshu Chourasia 2025
+            </p>
+            <a
+              href="#home"
+              className="text-sm text-slate-400 dark:text-slate-500 hover:text-slate-900 dark:hover:text-white transition-colors"
+            >
+              Back to Top ↑
+            </a>
+          </div>
         </motion.div>
       </div>
     </section>

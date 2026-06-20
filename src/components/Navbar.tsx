@@ -1,202 +1,81 @@
 import { Link } from '@tanstack/react-router'
-import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion'
-import { Briefcase, FileText, FolderKanban, Home, Mail, BookOpen, Menu, X } from 'lucide-react'
-import { useEffect, useState } from 'react'
-import { FaLinkedin } from 'react-icons/fa'
-import { FaGithub } from 'react-icons/fa6'
-import { Twitter } from 'lucide-react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { Menu, X } from 'lucide-react'
+import { useState } from 'react'
 import { ThemeToggle } from './ThemeToggle'
 
-const socialLinks = [
-  { name: 'Github', url: 'https://github.com/PriyanshuChourasia', icon: <FaGithub size={20} /> },
-  { name: 'LinkedIn', url: 'https://www.linkedin.com/in/priyanshu-chourasia-17833120a/', icon: <FaLinkedin size={20} /> },
-  { name: 'Twitter', url: 'https://x.com/CoderPriye', icon: <Twitter size={20} /> },
-]
-
 const navItems = [
-  { label: 'Home', id: 'home', icon: Home },
-  { label: 'About', id: 'about', icon: FileText },
-  { label: 'Experience', id: 'experience', icon: Briefcase },
-  { label: 'My Blog', id: 'articles', icon: BookOpen },
-  { label: 'Projects', id: 'projects', icon: FolderKanban },
-  { label: 'Contact', id: 'contact', icon: Mail },
+  { label: 'Home', href: '#home' },
+  { label: 'Employment', href: '#experience' },
+  { label: 'Projects', href: '#projects' },
+  { label: 'Writing', href: '#articles' },
+  { label: 'Contact', href: '#contact' },
 ]
 
 export function Navbar() {
-  const [scrolled, setScrolled] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
-
-  useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 50)
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
-
-  // Close mobile menu on nav click
-  const handleNavClick = () => setMobileOpen(false)
-
-  const { scrollY } = useScroll()
-  const yStart = 80
-  const yEnd = 900
-  const menuYOffset = useTransform(scrollY, [yStart, yEnd], [0, 120])
-  const menuOpacity = useTransform(scrollY, [yStart - 40, yStart], [0, 1])
 
   return (
     <>
-      {/* Desktop top nav */}
-      <motion.nav
-        initial={{ y: -100 }}
-        animate={{ y: 0 }}
-        transition={{ duration: 0.5 }}
-        className={`fixed top-0 w-full z-50 transition-all duration-300 ${
-          scrolled
-            ? 'opacity-0 pointer-events-none'
-            : 'bg-transparent'
-        }`}
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
-          <div className="flex items-center justify-between">
-            {/* Logo */}
-            <Link to="/">
-              <motion.div
-                whileHover={{ scale: 1.05 }}
-                className="text-xl font-bold bg-linear-to-r from-blue-500 to-cyan-500 bg-clip-text text-transparent"
+      <nav className="fixed top-0 w-full z-50 bg-white/90 dark:bg-slate-950/90 backdrop-blur-sm border-b border-slate-200/60 dark:border-slate-800/60">
+        <div className="max-w-5xl mx-auto px-6 h-14 flex items-center justify-between">
+          <Link
+            to="/"
+            className="text-sm font-semibold text-slate-900 dark:text-white hover:opacity-60 transition-opacity"
+          >
+            Priyanshu Chourasia
+          </Link>
+
+          <div className="hidden md:flex items-center gap-8">
+            {navItems.map((item) => (
+              <a
+                key={item.label}
+                href={item.href}
+                className="text-sm text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"
               >
-                CodyMitra
-              </motion.div>
-            </Link>
+                {item.label}
+              </a>
+            ))}
+          </div>
 
-            {/* Desktop nav links */}
-            <div className="hidden md:flex items-center gap-8">
-              {navItems.map((item) => (
-                <motion.a
-                  key={item.id}
-                  href={`#${item.id}`}
-                  whileHover={{ color: '#06b6d4' }}
-                  className="text-sm text-slate-600 dark:text-slate-400 hover:text-cyan-500 dark:hover:text-cyan-500 transition-colors relative group"
-                >
-                  {item.label}
-                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-linear-to-r from-blue-500 to-cyan-500 group-hover:w-full transition-all duration-300" />
-                </motion.a>
-              ))}
-            </div>
-
-            {/* Right side: social + theme toggle + hamburger */}
-            <div className="flex items-center gap-3">
-              <div className="hidden sm:flex items-center gap-3">
-                {socialLinks.map((link) => (
-                  <motion.a
-                    key={link.name}
-                    href={link.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    whileHover={{ scale: 1.1 }}
-                    className="text-slate-500 dark:text-slate-400 hover:text-cyan-500 transition-colors"
-                  >
-                    {link.icon}
-                  </motion.a>
-                ))}
-              </div>
-
-              <ThemeToggle />
-
-              {/* Hamburger — mobile only */}
-              <motion.button
-                whileTap={{ scale: 0.9 }}
-                onClick={() => setMobileOpen((o) => !o)}
-                className="md:hidden flex items-center justify-center w-10 h-10 rounded-full border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300"
-                aria-label="Toggle mobile menu"
-              >
-                <AnimatePresence mode="wait" initial={false}>
-                  {mobileOpen ? (
-                    <motion.span key="x" initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }} transition={{ duration: 0.15 }}>
-                      <X size={18} />
-                    </motion.span>
-                  ) : (
-                    <motion.span key="menu" initial={{ rotate: 90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: -90, opacity: 0 }} transition={{ duration: 0.15 }}>
-                      <Menu size={18} />
-                    </motion.span>
-                  )}
-                </AnimatePresence>
-              </motion.button>
-            </div>
+          <div className="flex items-center gap-3">
+            <ThemeToggle />
+            <button
+              onClick={() => setMobileOpen((o) => !o)}
+              aria-label="Toggle menu"
+              className="md:hidden text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"
+            >
+              {mobileOpen ? <X size={20} /> : <Menu size={20} />}
+            </button>
           </div>
         </div>
-      </motion.nav>
+      </nav>
 
-      {/* Mobile slide-down menu */}
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -20 }}
+            key="mobile-menu"
+            initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.2 }}
-            className="fixed top-16 left-0 right-0 z-40 md:hidden bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-slate-200 dark:border-slate-700 shadow-xl"
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.15 }}
+            className="fixed top-14 left-0 right-0 z-40 md:hidden bg-white dark:bg-slate-950 border-b border-slate-200 dark:border-slate-800"
           >
-            <div className="max-w-7xl mx-auto px-4 py-4 flex flex-col gap-1">
-              {navItems.map((item) => {
-                const Icon = item.icon
-                return (
-                  <a
-                    key={item.id}
-                    href={`#${item.id}`}
-                    onClick={handleNavClick}
-                    className="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-700 dark:text-slate-300 hover:bg-cyan-50 dark:hover:bg-slate-800 hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors text-sm font-medium"
-                  >
-                    <Icon size={16} />
-                    {item.label}
-                  </a>
-                )
-              })}
-              <div className="flex items-center gap-4 px-4 pt-3 mt-1 border-t border-slate-200 dark:border-slate-700">
-                {socialLinks.map((link) => (
-                  <a
-                    key={link.name}
-                    href={link.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-slate-500 dark:text-slate-400 hover:text-cyan-500 transition-colors"
-                  >
-                    {link.icon}
-                  </a>
-                ))}
-              </div>
+            <div className="max-w-5xl mx-auto px-6 py-4 flex flex-col gap-4">
+              {navItems.map((item) => (
+                <a
+                  key={item.label}
+                  href={item.href}
+                  onClick={() => setMobileOpen(false)}
+                  className="text-sm text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"
+                >
+                  {item.label}
+                </a>
+              ))}
             </div>
           </motion.div>
         )}
       </AnimatePresence>
-
-      {/* Desktop floating sidebar icon nav (appears after scroll) */}
-      <motion.div
-        style={{ y: menuYOffset, opacity: menuOpacity }}
-        className="fixed right-6 top-1/2 -translate-y-1/2 z-40 hidden lg:flex flex-col gap-4 pointer-events-auto"
-      >
-        {navItems.map((item) => {
-          const Icon = item.icon
-          return (
-            <motion.div
-              key={item.id}
-              whileHover={{ x: -8, scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="relative group"
-            >
-              <motion.a
-                href={`#${item.id}`}
-                aria-label={item.label}
-                title={item.label}
-                className="relative flex items-center justify-center w-11 h-11 rounded-full border border-cyan-500/30 bg-white/80 dark:bg-slate-900/80 text-cyan-600 dark:text-cyan-300 hover:text-cyan-500 hover:border-cyan-500/70 shadow-lg transition-all"
-              >
-                <Icon size={18} strokeWidth={1.75} />
-              </motion.a>
-              {/* Tooltip */}
-              <span className="absolute right-14 top-1/2 -translate-y-1/2 px-2 py-1 rounded-md bg-slate-900 dark:bg-slate-700 text-white text-xs whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-                {item.label}
-              </span>
-            </motion.div>
-          )
-        })}
-      </motion.div>
     </>
   )
 }

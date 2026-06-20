@@ -1,46 +1,60 @@
 import { Link } from '@tanstack/react-router'
 import { motion } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
-import { ParallaxCards } from './ProjectCard'
+import worksData from '@/data/works-data.json'
 
 export function Projects() {
+  const projects = worksData.items.slice(0, 4)
+
   return (
-    <section id="projects" className="relative w-full bg-slate-50 dark:bg-slate-950">
-      {/* Section heading */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-16 pb-4 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          viewport={{ once: true }}
-        >
-          <h2 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white">
-            Featured <span className="text-cyan-500">Projects</span>
+    <section id="projects" className="py-20">
+      <div className="max-w-2xl mx-auto px-6">
+
+        <div className="flex items-center justify-between mb-5">
+          <h2 className="text-xs font-semibold uppercase tracking-widest text-slate-400 dark:text-slate-500">
+            Projects
           </h2>
-          <p className="mt-2 text-slate-500 dark:text-slate-400 text-sm">
-            Scroll through to explore recent work
-          </p>
-        </motion.div>
+          <span className="text-xs text-slate-400 dark:text-slate-500">Featured</span>
+        </div>
+
+        <hr className="border-slate-200 dark:border-slate-800" />
 
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
-          transition={{ duration: 0.5, delay: 0.15 }}
+          transition={{ duration: 0.4 }}
           viewport={{ once: true }}
         >
-          <Link
-            to="/projects"
-            className="inline-flex items-center gap-2 rounded-full border border-slate-300 dark:border-slate-700 px-5 py-2 text-sm font-semibold text-slate-600 dark:text-slate-300 hover:border-cyan-400 hover:text-cyan-600 dark:hover:border-cyan-500 dark:hover:text-cyan-400 transition-colors"
-          >
-            All projects
-            <ArrowRight size={14} />
-          </Link>
+          {projects.map((project, i) => (
+            <div key={i}>
+              <div className="flex items-start justify-between py-5 gap-4">
+                <div>
+                  <p className="text-base font-semibold text-slate-900 dark:text-white">
+                    {project.title}
+                  </p>
+                  <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">
+                    {project.client}
+                  </p>
+                </div>
+                <span className="text-xs text-slate-400 dark:text-slate-500 shrink-0 mt-1">
+                  {project.category}
+                </span>
+              </div>
+              {i < projects.length - 1 && (
+                <hr className="border-slate-100 dark:border-slate-800/50" />
+              )}
+            </div>
+          ))}
         </motion.div>
-      </div>
 
-      {/* Parallax card stack */}
-      <div className="w-full py-4 sm:py-6 md:py-8">
-        <ParallaxCards />
+        <hr className="border-slate-200 dark:border-slate-800 mb-5" />
+
+        <Link
+          to="/projects"
+          className="inline-flex items-center gap-1.5 text-sm text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"
+        >
+          All Projects <ArrowRight size={13} />
+        </Link>
       </div>
     </section>
   )
