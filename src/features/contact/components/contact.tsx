@@ -1,76 +1,51 @@
 import { motion } from 'framer-motion'
 import { Mail, Linkedin, Github, Twitter } from 'lucide-react'
 
-export default function ContactSection() {
-  const socialLinks = [
-    {
-      icon: Mail,
-      label: 'Email',
-      href: 'mailto:priyanshu@gmail.com',
-      color: 'from-red-500 to-pink-500',
-    },
-    {
-      icon: Linkedin,
-      label: 'LinkedIn',
-      href: '#',
-      color: 'from-blue-500 to-cyan-500',
-    },
-    {
-      icon: Github,
-      label: 'GitHub',
-      href: '#',
-      color: 'from-gray-500 to-slate-600',
-    },
-    {
-      icon: Twitter,
-      label: 'Twitter',
-      href: '#',
-      color: 'from-cyan-500 to-blue-500',
-    },
-  ]
+const socialLinks = [
+  { icon: Mail, label: 'Email', href: 'mailto:primesystechnologies@gmail.com', color: 'from-red-500 to-pink-500' },
+  { icon: Linkedin, label: 'LinkedIn', href: 'https://www.linkedin.com/in/priyanshu-chourasia-17833120a/', color: 'from-blue-500 to-cyan-500' },
+  { icon: Github, label: 'GitHub', href: 'https://github.com/PriyanshuChourasia', color: 'from-gray-500 to-slate-600' },
+  { icon: Twitter, label: 'Twitter', href: 'https://x.com/CoderPriye', color: 'from-cyan-500 to-blue-500' },
+]
 
+export default function ContactSection() {
   return (
     <section
       id="contact"
-      className="relative min-h-screen w-full overflow-hidden bg-slate-950 flex items-center justify-center py-16"
+      className="relative min-h-screen w-full overflow-hidden bg-white dark:bg-slate-950 flex items-center justify-center py-16"
     >
-      <motion.div
-        className="absolute inset-0"
-        animate={{
-          background: [
-            'rgba(0,0,0,0)',
-            'rgba(59,130,246,0.1)',
-            'rgba(0,0,0,0)',
-          ],
-        }}
-        transition={{ duration: 8, repeat: Infinity }}
-      >
+      {/* Animated background blobs */}
+      <motion.div className="absolute inset-0 pointer-events-none">
         <motion.div
-          animate={{ x: [0, 100, 0], y: [0, -50, 0] }}
-          transition={{ duration: 12, repeat: Infinity }}
-          className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-600/30 rounded-full blur-3xl opacity-40"
+          animate={{ x: [0, 80, 0], y: [0, -40, 0] }}
+          transition={{ duration: 14, repeat: Infinity, ease: 'easeInOut' }}
+          className="absolute top-1/4 left-1/4 w-80 h-80 bg-blue-200/40 dark:bg-blue-600/20 rounded-full blur-3xl"
         />
         <motion.div
-          animate={{ x: [0, -100, 0], y: [0, 50, 0] }}
-          transition={{ duration: 15, repeat: Infinity }}
-          className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-600/30 rounded-full blur-3xl opacity-40"
+          animate={{ x: [0, -80, 0], y: [0, 40, 0] }}
+          transition={{ duration: 18, repeat: Infinity, ease: 'easeInOut' }}
+          className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-purple-200/40 dark:bg-purple-600/20 rounded-full blur-3xl"
+        />
+        <motion.div
+          animate={{ x: [0, 40, 0], y: [0, 60, 0] }}
+          transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
+          className="absolute top-1/2 right-1/3 w-64 h-64 bg-cyan-200/30 dark:bg-cyan-600/10 rounded-full blur-3xl"
         />
       </motion.div>
 
-      <div className="relative z-10 max-w-3xl mx-auto px-6 text-center">
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-        >
-          <h2 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">
-            Feel free to reach out to me if you&apos;re looking for a developer,
-            have a query, or simply want to connect:
+      <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 text-center">
+        <motion.div initial={{ opacity: 0, y: 50 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
+          <span className="inline-block mb-6 px-4 py-2 rounded-full border border-cyan-400/30 bg-cyan-50 dark:bg-cyan-400/10 text-xs font-semibold uppercase tracking-widest text-cyan-600 dark:text-cyan-300">
+            Get in Touch
+          </span>
+
+          <h2 className="text-4xl md:text-5xl font-bold mb-6 leading-tight text-slate-900 dark:text-white">
+            Feel free to reach out — whether you&apos;re looking for a developer, have a query,
+            or simply want to connect.
           </h2>
 
-          <p className="text-xl text-slate-400 mb-12">
-            I&apos;m always interested in hearing about new projects and
-            opportunities.
+          <p className="text-lg text-slate-500 dark:text-slate-400 mb-12">
+            I&apos;m always open to hearing about new projects and opportunities.
           </p>
         </motion.div>
 
@@ -78,16 +53,16 @@ export default function ContactSection() {
           initial={{ opacity: 0, scale: 0.8 }}
           whileInView={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="mb-16"
+          className="mb-12"
         >
           <motion.a
-            href="mailto:priyanshu@gmail.com"
+            href="mailto:primesystechnologies@gmail.com"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="inline-flex items-center gap-3 px-8 py-4 rounded-full bg-linear-to-r from-blue-600 to-cyan-600 text-white font-semibold text-lg hover:shadow-2xl hover:shadow-blue-500/50 transition-shadow"
+            className="inline-flex items-center gap-3 px-8 py-4 rounded-full bg-linear-to-r from-blue-600 to-cyan-600 text-white font-semibold text-lg hover:shadow-2xl hover:shadow-blue-500/40 transition-shadow"
           >
-            <Mail className="w-6 h-6" />
-            priyanshu@gmail.com
+            <Mail className="w-5 h-5" />
+            primesystechnologies@gmail.com
           </motion.a>
         </motion.div>
 
@@ -95,7 +70,7 @@ export default function ContactSection() {
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.4 }}
-          className="flex items-center justify-center gap-6 flex-wrap"
+          className="flex items-center justify-center gap-5 flex-wrap"
         >
           {socialLinks.map((social, index) => {
             const Icon = social.icon
@@ -103,12 +78,14 @@ export default function ContactSection() {
               <motion.a
                 key={index}
                 href={social.href}
-                whileHover={{ scale: 1.2, y: -5 }}
+                target="_blank"
+                rel="noopener noreferrer"
+                whileHover={{ scale: 1.2, y: -4 }}
                 whileTap={{ scale: 0.9 }}
-                className={`p-3 rounded-full bg-linear-to-br ${social.color} text-white hover:shadow-lg transition-shadow`}
+                className={`p-3 rounded-full bg-linear-to-br ${social.color} text-white shadow-lg hover:shadow-xl transition-shadow`}
                 title={social.label}
               >
-                <Icon className="w-6 h-6" />
+                <Icon className="w-5 h-5" />
               </motion.a>
             )
           })}
@@ -118,9 +95,9 @@ export default function ContactSection() {
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           transition={{ duration: 0.8, delay: 0.6 }}
-          className="mt-20 pt-8 border-t border-slate-800"
+          className="mt-20 pt-8 border-t border-slate-200 dark:border-slate-800"
         >
-          <p className="text-sm text-slate-500">
+          <p className="text-sm text-slate-400 dark:text-slate-500">
             © Priyanshu Chourasia 2025. All rights reserved.
           </p>
         </motion.div>
