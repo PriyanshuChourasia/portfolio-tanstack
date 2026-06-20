@@ -25,17 +25,18 @@ This is a personal portfolio SPA built with TanStack Router (file-based routing)
 
 ### Entry point
 
-`src/main.tsx` bootstraps the app: creates the TanStack Router with the generated `routeTree`, wraps it with `TanStackQueryProvider`, and mounts to `#app`.
+`src/main.tsx` bootstraps the app: creates the TanStack Router with the generated `routeTree`, wraps it with `TanStackQueryProvider` and `ThemeProvider`, and mounts to `#app`. The router context carries the `queryClient` instance.
 
-`src/routes/__root.tsx` is the root layout — it renders `<Outlet />` plus TanStack devtools (Router + Query) in a unified panel. The router context carries the `queryClient` instance.
+`src/routes/__root.tsx` is the root layout — it renders `<Outlet />` plus TanStack devtools (Router + Query) in a unified panel.
 
 ### Routing
 
-Routes live in `src/routes/` and are auto-generated into `src/routeTree.gen.ts` by the Vite plugin — **never edit `routeTree.gen.ts` directly**. Adding a new file in `src/routes/` registers a new route automatically.
+Routes live in `src/routes/` and are auto-generated into `src/routeTree.gen.ts` by the Vite plugin (`autoCodeSplitting: true` is on) — **never edit `routeTree.gen.ts` directly**. Adding a new file in `src/routes/` registers a new route automatically.
 
 Current routes:
 - `/` → `PortfolioLayout` → `HomePage` (the single-page scrollable portfolio)
 - `/blog/$id` → `BlogPostDetailPage` (individual blog post)
+- `/projects/` → `ProjectsPage` (full projects listing)
 - `/projects/$id` → `ProjectDetailPage` (individual project detail)
 
 ### Feature structure
@@ -72,6 +73,9 @@ There is also `src/features/works/data.ts` (demo scroll-stack data, separate fro
 - `Navbar.tsx` — fixed top nav that fades out on scroll, floating side icon nav appears
 - `Carousal.tsx` — Hero carousel section
 - `ScrollStack.tsx` — scroll-driven stacking card effect
+- `ThreeScene.tsx` — Three.js animated particle-network background; accepts `isDark: boolean` to swap particle/line colors
+- `ThemeProvider.tsx` — wraps `next-themes` `ThemeProvider`; `defaultTheme="dark"`, `enableSystem={false}`
+- `ThemeToggle.tsx` — button to toggle light/dark mode
 - `sidebar-drawer.tsx`, `Sidebarnav.tsx` — sidebar navigation
 - `media-lightbox.tsx` — image lightbox
 - `ui/` — shadcn/ui primitives (do not hand-edit these; use the CLI to regenerate)
@@ -82,7 +86,30 @@ There is also `src/features/works/data.ts` (demo scroll-stack data, separate fro
 
 ### Styling
 
-TailwindCSS v4 via `@tailwindcss/vite` plugin. Global styles in `src/styles.css`. The main background is `bg-slate-950` with `text-white`. The `cn()` utility in `src/lib/utils.ts` merges Tailwind classes (`clsx` + `tailwind-merge`).
+TailwindCSS v4 via `@tailwindcss/vite` plugin. Global styles and custom CSS variables in `src/styles.css`. The `cn()` utility in `src/lib/utils.ts` merges Tailwind classes (`clsx` + `tailwind-merge`).
+
+**Theme system:** `next-themes` manages dark/light switching via a `.dark` class on `<html>`. The default is dark. CSS custom properties in `styles.css` define both `:root` (light) and `.dark` token sets using `oklch()`, plus a custom `@theme inline` block with the portfolio-specific design tokens (`--primary: #00d4ff`, `--card: #1a2332`, etc.). Body background is a CSS gradient, not a Tailwind utility class.
+
+**Custom utility classes** defined in `styles.css` (use these for consistent styling):
+- `section-heading` — uppercase cyan label with text-shadow glow
+- `body-text`, `body-text-primary`, `description-text` — text hierarchy classes
+- `label-text`, `value-text` — for metadata/value pairs
+- `gradient-text`, `header-green-accent` — cyan-to-green gradient text
+- `gradient-primary`, `gradient-accent` — background gradients
+- `glow-sm`, `glow-md`, `glow-lg` — cyan box-shadow glow intensities
+- `card-shadow`, `card-shadow-hover` — card elevation shadows
+- `hover-lift`, `card-hover-lift` — spring-eased upward hover transforms
+- `star-border-card` — animated glowing border card
+- `custom-scrollbar` — styled scrollbar (apply to overflow containers)
+- `floating-shape` — CSS-animated background blob
+- `animate-pulse-glow`, `animate-glow-border`, `animate-gradient-text`, `animate-shimmer`, `animate-fade-in-out`, `animate-parallax-1/2` — named keyframe animations
+
+### Animation libraries
+
+- **Framer Motion** — component-level enter/exit animations and scroll-triggered reveals
+- **GSAP** — imperative timeline animations (used in scroll-driven effects)
+- **Lenis** (`lenis` + `@studio-freight/lenis`) — smooth scroll; initialized at the layout level
+- **Three.js** — `ThreeScene` particle-network hero background
 
 ### Integrations
 

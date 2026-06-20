@@ -2,7 +2,7 @@ import { motion } from 'framer-motion'
 import { Mail, Linkedin, Github, Twitter } from 'lucide-react'
 
 const socialLinks = [
-  { icon: Mail, label: 'Email', href: 'mailto:primesystechnologies@gmail.com', color: 'from-red-500 to-pink-500' },
+  { icon: Mail, label: 'Email', href: 'mailto:priaynshuchourasia916@gmail.com', color: 'from-red-500 to-pink-500' },
   { icon: Linkedin, label: 'LinkedIn', href: 'https://www.linkedin.com/in/priyanshu-chourasia-17833120a/', color: 'from-blue-500 to-cyan-500' },
   { icon: Github, label: 'GitHub', href: 'https://github.com/PriyanshuChourasia', color: 'from-gray-500 to-slate-600' },
   { icon: Twitter, label: 'Twitter', href: 'https://x.com/CoderPriye', color: 'from-cyan-500 to-blue-500' },
@@ -56,13 +56,13 @@ export default function ContactSection() {
           className="mb-12"
         >
           <motion.a
-            href="mailto:primesystechnologies@gmail.com"
+            href="mailto:priaynshuchourasia916@gmail.com"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             className="inline-flex items-center gap-3 px-8 py-4 rounded-full bg-linear-to-r from-blue-600 to-cyan-600 text-white font-semibold text-lg hover:shadow-2xl hover:shadow-blue-500/40 transition-shadow"
           >
             <Mail className="w-5 h-5" />
-            primesystechnologies@gmail.com
+            priaynshuchourasia916@gmail.com
           </motion.a>
         </motion.div>
 
