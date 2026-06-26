@@ -55,10 +55,15 @@ export function BlogPostDetailPage({ postId }: { postId: number }) {
               className="w-full h-full object-cover opacity-60 dark:opacity-40"
             />
           ) : (
-            /* Blog logo placeholder */
+            /* Unique gradient placeholder based on post ID */
             <div className="flex h-full w-full items-center justify-center">
               <div className="flex flex-col items-center gap-3">
-                <p className="text-xs font-semibold uppercase tracking-[0.3em] text-cyan-400/60"></p>
+                <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-white/15 bg-white/5 text-white/40">
+                  <BookOpen className="h-7 w-7" />
+                </div>
+                <p className="text-xs font-semibold uppercase tracking-[0.3em] text-white/40">
+                  {post.category}
+                </p>
               </div>
             </div>
           )}

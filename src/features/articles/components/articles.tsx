@@ -50,7 +50,17 @@ export default function Articles() {
                 style={{ y: cardY, opacity: cardOpacity }}
                 className="group relative h-full overflow-hidden rounded-3xl border border-slate-200 dark:border-white/10 bg-white dark:bg-slate-900/70 hover:border-cyan-400/50 dark:hover:border-cyan-400/40 transition-colors backdrop-blur-xl"
               >
-                <div className="absolute inset-0 bg-linear-to-br from-cyan-50/60 via-transparent to-transparent dark:from-cyan-500/10 dark:via-slate-900/80 dark:to-blue-950/80 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <div className="absolute inset-0 overflow-hidden">
+                  {article.image ? (
+                    <img
+                      src={article.image}
+                      alt=""
+                      aria-hidden="true"
+                      className="h-full w-full object-cover opacity-0 group-hover:opacity-20 dark:group-hover:opacity-30 transition-opacity duration-500 scale-105 group-hover:scale-100"
+                    />
+                  ) : null}
+                  <div className="absolute inset-0 bg-linear-to-br from-white/90 via-white/95 to-white/90 dark:from-slate-900/95 dark:via-slate-900/90 dark:to-slate-900/95 group-hover:from-white/70 group-hover:via-white/80 group-hover:to-white/70 dark:group-hover:from-slate-900/70 dark:group-hover:via-slate-900/65 dark:group-hover:to-slate-900/70 transition-all duration-500" />
+                </div>
 
                 <div className="relative flex h-full flex-col p-5 sm:p-6 lg:p-8">
                   <motion.div

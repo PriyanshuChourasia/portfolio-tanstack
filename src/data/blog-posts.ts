@@ -110,7 +110,7 @@ export function addBlogPost(draft: BlogPostDraft) {
     author: draft.author.trim() || 'Admin',
     title: draft.title.trim(),
     category: draft.category.trim() || 'General',
-    image: draft.image.trim() || '/images/blog1.png',
+    image: draft.image.trim() || '',
     desc: draft.desc.trim(),
     intro: draft.intro.trim(),
     content: draft.content.trim(),

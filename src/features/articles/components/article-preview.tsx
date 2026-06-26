@@ -52,6 +52,7 @@ export default function ArticlePreviewSection() {
                       placeholderLabel="Blog cover"
                       showPlaceholder={true}
                       compact
+                      seed={post.id}
                       className="transition-transform duration-500 group-hover:scale-105"
                     />
                   </div>
