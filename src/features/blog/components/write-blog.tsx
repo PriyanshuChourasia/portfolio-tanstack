@@ -1,5 +1,6 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { addBlogPost, type BlogPostDraft } from '@/data/blog-posts'
+import { ImageUp, X } from 'lucide-react'
 
 export function BlogWritePage() {
   const initialDraft: BlogPostDraft = {
@@ -69,12 +70,34 @@ export function BlogWritePage() {
   const [blocks, setBlocks] = useState<ContentBlock[]>([
     { id: createBlockId(), type: 'text', value: '' },
   ])
+  const [coverImagePreview, setCoverImagePreview] = useState<string>('')
+  const coverInputRef = useRef<HTMLInputElement>(null)
 
   const updateField = (field: keyof BlogPostDraft, value: string) => {
     setDraft((current) => ({
       ...current,
       [field]: value,
     }))
+  }
+
+  const handleCoverImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
+    if (!file) return
+    const reader = new FileReader()
+    reader.onload = (e) => {
+      const dataUrl = e.target?.result as string
+      setCoverImagePreview(dataUrl)
+      updateField('image', dataUrl)
+    }
+    reader.readAsDataURL(file)
+  }
+
+  const clearCoverImage = () => {
+    setCoverImagePreview('')
+    updateField('image', '')
+    if (coverInputRef.current) {
+      coverInputRef.current.value = ''
+    }
   }
 
   const updateBlock = (blockId: string, nextValue: Partial<ContentBlock>) => {
@@ -135,7 +158,48 @@ export function BlogWritePage() {
     setSavedPostId(post.id)
     setDraft(initialDraft)
     setBlocks([{ id: createBlockId(), type: 'text', value: '' }])
+    setCoverImagePreview('')
   }
+
+  /* ─── Helper: image upload button rendered inside content blocks ─── */
+  function ImageBlockUploader({ blockId, updateBlock: onUpdateBlock }: { blockId: string; updateBlock: typeof updateBlock }) {
+    const inputRef = useRef<HTMLInputElement>(null)
+
+    const handleFile = (event: React.ChangeEvent<HTMLInputElement>) => {
+      const file = event.target.files?.[0]
+      if (!file) return
+      const reader = new FileReader()
+      reader.onload = (e) => {
+        const dataUrl = e.target?.result as string
+        onUpdateBlock(blockId, { src: dataUrl })
+      }
+      reader.readAsDataURL(file)
+    }
+
+    return (
+      <>
+        <input
+          ref={inputRef}
+          type="file"
+          accept="image/png,image/jpeg,image/webp,image/gif"
+          onChange={handleFile}
+          className="hidden"
+        />
+        <button
+          type="button"
+          onClick={() => inputRef.current?.click()}
+          className="flex w-full items-center justify-center gap-3 rounded-2xl border-2 border-dashed border-slate-300 dark:border-white/15 bg-slate-50 dark:bg-slate-950/40 px-4 py-6 text-slate-500 dark:text-slate-400 hover:border-cyan-400/50 hover:text-cyan-600 dark:hover:text-cyan-300 transition-colors"
+        >
+          <ImageUp size={22} />
+          <div className="text-left">
+            <p className="text-sm font-semibold">Upload image</p>
+            <p className="text-xs mt-0.5">PNG, JPG, WebP, or GIF</p>
+          </div>
+        </button>
+      </>
+    )
+  }
+
   return (
     <>
       <main className="min-h-screen bg-slate-50 dark:bg-slate-950 px-4 py-6 text-slate-900 dark:text-white sm:px-6 sm:py-8">
@@ -201,18 +265,45 @@ export function BlogWritePage() {
 
                   <label className="space-y-2 text-sm text-slate-600 dark:text-slate-300">
                     <span>
-                      Cover image URL{' '}
+                      Cover image{' '}
                       <span className="text-slate-500">(optional)</span>
                     </span>
                     <input
-                      type="text"
-                      value={draft.image}
-                      onChange={(event) =>
-                        updateField('image', event.target.value)
-                      }
-                      placeholder="Leave empty to show a placeholder"
-                      className="w-full rounded-2xl border border-slate-300 dark:border-white/15 bg-white dark:bg-slate-950/80 px-4 py-3 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:border-cyan-400/40 focus:outline-none"
+                      ref={coverInputRef}
+                      type="file"
+                      accept="image/png,image/jpeg,image/webp,image/gif"
+                      onChange={handleCoverImageUpload}
+                      className="hidden"
                     />
+                    {coverImagePreview ? (
+                      <div className="relative w-full rounded-2xl overflow-hidden border border-slate-300 dark:border-white/15 bg-slate-100 dark:bg-slate-950/80">
+                        <img
+                          src={coverImagePreview}
+                          alt="Cover preview"
+                          className="w-full h-40 object-cover"
+                        />
+                        <button
+                          type="button"
+                          onClick={clearCoverImage}
+                          className="absolute top-2 right-2 p-1.5 rounded-full bg-black/50 text-white hover:bg-black/70 transition-colors"
+                          aria-label="Remove cover image"
+                        >
+                          <X size={14} />
+                        </button>
+                      </div>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={() => coverInputRef.current?.click()}
+                        className="flex w-full items-center justify-center gap-3 rounded-2xl border-2 border-dashed border-slate-300 dark:border-white/15 bg-slate-50 dark:bg-slate-950/40 px-4 py-8 text-slate-500 dark:text-slate-400 hover:border-cyan-400/50 hover:text-cyan-600 dark:hover:text-cyan-300 transition-colors"
+                      >
+                        <ImageUp size={24} />
+                        <div className="text-left">
+                          <p className="text-sm font-semibold">Upload cover image</p>
+                          <p className="text-xs mt-0.5">PNG, JPG, WebP, or GIF</p>
+                        </div>
+                      </button>
+                    )}
                   </label>
                 </div>
 
@@ -305,18 +396,33 @@ export function BlogWritePage() {
                           />
                         ) : (
                           <div className="space-y-3">
-                            <div className="grid gap-3 sm:grid-cols-2">
-                              <input
-                                type="text"
-                                value={block.src}
-                                onChange={(event) =>
-                                  updateBlock(block.id, {
-                                    src: event.target.value,
-                                  })
-                                }
-                                placeholder="Image URL"
-                                className="w-full rounded-2xl border border-slate-300 dark:border-white/15 bg-white dark:bg-slate-950/80 px-4 py-3 text-sm text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:border-cyan-400/40 focus:outline-none"
+                            {block.src ? (
+                              <div className="relative w-full rounded-2xl overflow-hidden border border-slate-300 dark:border-white/15 bg-slate-100 dark:bg-slate-950/80">
+                                <img
+                                  src={block.src}
+                                  alt={block.alt || 'Uploaded image'}
+                                  className="w-full h-36 object-cover"
+                                />
+                                <button
+                                  type="button"
+                                  onClick={() =>
+                                    updateBlock(block.id, {
+                                      src: '',
+                                    })
+                                  }
+                                  className="absolute top-2 right-2 p-1.5 rounded-full bg-black/50 text-white hover:bg-black/70 transition-colors"
+                                  aria-label="Remove image"
+                                >
+                                  <X size={14} />
+                                </button>
+                              </div>
+                            ) : (
+                              <ImageBlockUploader
+                                blockId={block.id}
+                                updateBlock={updateBlock}
                               />
+                            )}
+                            <div className="grid gap-3 sm:grid-cols-2">
                               <input
                                 type="text"
                                 value={block.alt}
@@ -336,7 +442,7 @@ export function BlogWritePage() {
                                   caption: event.target.value,
                                 })
                               }
-                              rows={3}
+                              rows={2}
                               placeholder="Optional caption"
                               className="w-full rounded-2xl border border-slate-300 dark:border-white/15 bg-white dark:bg-slate-950/80 px-4 py-3 text-sm text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:border-cyan-400/40 focus:outline-none"
                             />
@@ -402,10 +508,8 @@ export function BlogWritePage() {
                 </label>
 
                 <div className="rounded-2xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 px-4 py-3 text-sm leading-6 text-slate-600 dark:text-slate-300">
-                  Leave the cover image empty if you want the blog card and
-                  detail page to use a placeholder instead. Add image blocks on
-                  the left side to place multiple images throughout the blog
-                  body.
+                  Upload a cover image or leave empty for a placeholder.
+                  Add images to content blocks for inline placement throughout the blog body.
                 </div>
 
                 {savedPostId ? (

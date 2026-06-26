@@ -66,7 +66,7 @@ export function BlogPostDetailPage({ postId }: { postId: number }) {
         </div>
 
         {/* Content wrapper */}
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 -mt-10 relative z-10 pb-16">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 -mt-10 relative z-10 pb-16">
           {/* Header card */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
