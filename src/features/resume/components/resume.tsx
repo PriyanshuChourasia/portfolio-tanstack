@@ -110,8 +110,8 @@ export function ResumeSection() {
           style={{ x: deepX1, y: midY, rotate: midRotate }}
         />
 
-        <div className="absolute inset-x-0 top-0 h-24 bg-slate-950" />
-        <div className="absolute inset-x-0 bottom-0 h-24 bg-slate-950" />
+        <div className="absolute inset-x-0 top-0 h-24 bg-white dark:bg-slate-950" />
+        <div className="absolute inset-x-0 bottom-0 h-24 bg-white dark:bg-slate-950" />
       </motion.div>
 
       <div className="relative z-10 w-full mx-auto px-6">

@@ -60,13 +60,13 @@ export function SidebarDrawer({ isOpen, onClose, activeTab = 'ABOUT', onTabChang
 
       <div
         className={cn(
-          "fixed top-0 left-0 h-full w-[280px] sm:w-[300px] bg-gradient-to-b from-[#1a2332] to-[#141b27] z-[70] transition-transform duration-300 transform overflow-y-auto custom-scrollbar border-r border-[#2a3f5f]",
+          "fixed top-0 left-0 h-full w-[280px] sm:w-[300px] bg-white dark:bg-gradient-to-b dark:from-[#1a2332] dark:to-[#141b27] z-[70] transition-transform duration-300 transform overflow-y-auto custom-scrollbar border-r border-slate-200 dark:border-[#2a3f5f]",
           isOpen ? "translate-x-0" : "-translate-x-full",
         )}
       >
         <button
           onClick={onClose}
-          className="md:hidden absolute top-4 right-4 w-10 h-10 bg-gradient-to-br from-[#1a2332] to-[#141b27] flex items-center justify-center hover:text-[#00d4ff] transition-all rounded-md border border-[#2a3f5f] hover:border-[#00d4ff]/50 shadow-lg z-50 text-muted-foreground"
+          className="md:hidden absolute top-4 right-4 w-10 h-10 bg-white dark:bg-gradient-to-br dark:from-[#1a2332] dark:to-[#141b27] flex items-center justify-center hover:text-cyan-500 transition-all rounded-md border border-slate-200 dark:border-[#2a3f5f] hover:border-cyan-500/50 shadow-lg z-50 text-slate-500 dark:text-muted-foreground"
           aria-label="Close menu"
         >
           <X className="w-5 h-5" />
@@ -100,9 +100,9 @@ export function SidebarDrawer({ isOpen, onClose, activeTab = 'ABOUT', onTabChang
             <input
               type="text"
               placeholder="Search ..."
-              className="w-full bg-[#0f1419]/50 border-b border-[#2a3f5f] py-3 pr-8 text-xs sm:text-sm italic text-foreground placeholder-muted-foreground/50 focus:border-[#00d4ff] outline-none transition-colors"
+              className="w-full bg-slate-100 dark:bg-[#0f1419]/50 border-b border-slate-200 dark:border-[#2a3f5f] py-3 pr-8 text-xs sm:text-sm italic text-slate-700 dark:text-foreground placeholder-slate-400 dark:placeholder-muted-foreground/50 focus:border-cyan-500 outline-none transition-colors"
             />
-            <Search className="absolute right-0 top-1/2 -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-muted-foreground group-hover:text-[#00d4ff] transition-colors" />
+            <Search className="absolute right-0 top-1/2 -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-slate-400 dark:text-muted-foreground group-hover:text-cyan-500 transition-colors" />
           </div>
 
           <section className="space-y-4 sm:space-y-6">
@@ -115,7 +115,7 @@ export function SidebarDrawer({ isOpen, onClose, activeTab = 'ABOUT', onTabChang
               {latestPosts.map((post, i) => (
                 <li
                   key={i}
-                  className="text-xs sm:text-xs text-muted-foreground hover:text-[#00d4ff] cursor-pointer transition-all border-b border-[#2a3f5f] pb-2 sm:pb-3 last:border-0 hover:pl-1"
+                  className="text-xs sm:text-xs text-slate-500 dark:text-muted-foreground hover:text-cyan-500 cursor-pointer transition-all border-b border-slate-200 dark:border-[#2a3f5f] pb-2 sm:pb-3 last:border-0 hover:pl-1"
                 >
                   {post}
                 </li>
@@ -136,7 +136,7 @@ export function SidebarDrawer({ isOpen, onClose, activeTab = 'ABOUT', onTabChang
                   className="flex justify-between items-center text-xs sm:text-xs text-muted-foreground hover:text-[#00d4ff] cursor-pointer transition-all border-b border-[#2a3f5f] pb-2 sm:pb-3 last:border-0 hover:pl-1"
                 >
                   <span>{cat.name}</span>
-                  <span className="text-[10px] text-muted-foreground/60 bg-[#0f1419]/50 px-2 py-1 rounded">({cat.count})</span>
+                  <span className="text-[10px] text-slate-400/60 dark:text-muted-foreground/60 bg-slate-100 dark:bg-[#0f1419]/50 px-2 py-1 rounded">({cat.count})</span>
                 </li>
               ))}
             </ul>
@@ -155,7 +155,7 @@ export function SidebarDrawer({ isOpen, onClose, activeTab = 'ABOUT', onTabChang
                   className="flex justify-between items-center text-xs sm:text-xs text-muted-foreground hover:text-[#00d4ff] cursor-pointer transition-all border-b border-[#2a3f5f] pb-2 sm:pb-3 last:border-0 hover:pl-1"
                 >
                   <span>{tag.name}</span>
-                  <span className="text-[10px] text-muted-foreground/60 bg-[#0f1419]/50 px-2 py-1 rounded">({tag.count})</span>
+                  <span className="text-[10px] text-slate-400/60 dark:text-muted-foreground/60 bg-slate-100 dark:bg-[#0f1419]/50 px-2 py-1 rounded">({tag.count})</span>
                 </li>
               ))}
             </ul>

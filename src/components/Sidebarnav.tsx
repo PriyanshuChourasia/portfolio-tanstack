@@ -19,7 +19,7 @@ export function SidebarNav({ activeTab, onTabChange, onMenuToggle }: SidebarNavP
 
   return (
     <>
-      <nav className="hidden md:absolute md:-left-25 md:top-1/2 md:-translate-y-1/2 md:z-50 md:flex flex-col gap-0 bg-linear-to-b from-card to-[#141b27] rounded-lg shadow-2xl overflow-hidden w-20 border border-border hover:border-primary/30 transition-all">
+      <nav className="hidden md:absolute md:-left-25 md:top-1/2 md:-translate-y-1/2 md:z-50 md:flex flex-col gap-0 bg-white dark:bg-gradient-to-b dark:from-slate-800 dark:to-slate-900 rounded-lg shadow-2xl overflow-hidden w-20 border border-slate-200 dark:border-border hover:border-primary/30 transition-all">
    
         <button
           onClick={onMenuToggle}

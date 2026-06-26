@@ -46,9 +46,9 @@ export function AboutContent() {
           {services.map((service: any, i: number) => (
             <div
               key={i}
-              className="group relative flex flex-col items-start p-4 sm:p-6 border border-border hover:border-primary/50 rounded-lg transition-all duration-300 hover:bg-[#1a2332]/30 hover-lift star-border-card"
+              className="group relative flex flex-col items-start p-4 sm:p-6 border border-border hover:border-primary/50 rounded-lg transition-all duration-300 hover:bg-slate-100 dark:hover:bg-slate-800/40 hover-lift star-border-card"
             >
-                <div className="w-12 sm:w-14 h-12 sm:h-14 rounded-full bg-linear-to-r from-[#00d4ff] to-[#0ea5e9] flex items-center justify-center text-[#0f1419] mb-4 sm:mb-6 shadow-lg group-hover:shadow-[0_0_20px_rgba(0,212,255,0.4)]">
+                <div className="w-12 sm:w-14 h-12 sm:h-14 rounded-full bg-linear-to-r from-cyan-500 to-blue-500 flex items-center justify-center text-white dark:text-slate-900 mb-4 sm:mb-6 shadow-lg group-hover:shadow-[0_0_20px_rgba(0,212,255,0.4)]">
                 <service.icon className="w-6 sm:w-7 h-6 sm:h-7" />
               </div>
               <h3 className="uppercase text-xs sm:text-sm tracking-wider mb-3 sm:mb-4 text-foreground">{service.title}</h3>
@@ -68,7 +68,7 @@ export function AboutContent() {
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
           {pricing.map((plan: any, i: number) => (
-            <div key={i} className="border border-border hover:border-primary/50 rounded-lg p-4 sm:p-6 md:p-8 bg-linear-to-br from-[#1a2332] to-[#141b27] transition-all hover-lift">
+            <div key={i} className="border border-border hover:border-primary/50 rounded-lg p-4 sm:p-6 md:p-8 bg-white dark:bg-linear-to-br dark:from-slate-800 dark:to-slate-900 transition-all hover-lift">
               <div className="flex items-center justify-center mb-4 sm:mb-6">
                 <plan.icon className="w-10 sm:w-12 h-10 sm:h-12 text-[#00d4ff]" />
               </div>
@@ -81,11 +81,11 @@ export function AboutContent() {
               <ul className="space-y-3 sm:space-y-4">
                 {plan.features.map((feature: any, j: number) => (
                   <li key={j} className="flex items-center gap-2 sm:gap-3">
-                    <span className="text-[#00d4ff]">•</span>
+                    <span className="text-cyan-500">•</span>
                     <span className={`text-xs sm:text-sm ${feature.included ? "text-foreground/80" : "text-muted-foreground/50 line-through"}`}>
                       {feature.name}
                     </span>
-                    {feature.isNew && <span className="bg-gradient-to-r from-[#00d4ff] to-[#0ea5e9] text-[#0f1419] text-[10px] sm:text-xs px-2 py-1 rounded font-semibold">new</span>}
+                    {feature.isNew && <span className="bg-linear-to-r from-cyan-500 to-blue-500 text-white dark:text-slate-900 text-[10px] sm:text-xs px-2 py-1 rounded font-semibold">new</span>}
                   </li>
                 ))}
               </ul>
@@ -104,7 +104,7 @@ export function AboutContent() {
         </h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 divide-x divide-border md:divide-x">
           {funFacts.map((fact: any, i: number) => (
-            <div key={i} className="text-center py-4 sm:py-6 md:py-12 px-2 sm:px-4 hover:bg-[#1a2332]/50 transition-colors rounded">
+            <div key={i} className="text-center py-4 sm:py-6 md:py-12 px-2 sm:px-4 hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-colors rounded">
               <div className="flex items-center justify-center mb-2 sm:mb-3 md:mb-6">
                 <fact.icon className="w-5 sm:w-6 md:w-8 h-5 sm:h-6 md:h-8 text-[#00d4ff]" />
               </div>
@@ -127,7 +127,7 @@ export function AboutContent() {
           {clients.map((client: any, i: number) => (
             <div
               key={i}
-              className="flex items-center justify-center p-4 sm:p-6 border border-border hover:border-primary/50 rounded-lg transition-all hover:bg-[#1a2332]/30 group hover-lift"
+              className="flex items-center justify-center p-4 sm:p-6 border border-border hover:border-primary/50 rounded-lg transition-all hover:bg-slate-100 dark:hover:bg-slate-800/30 group hover-lift"
             >
               <img
                 src={client.logo || "/placeholder.svg"}

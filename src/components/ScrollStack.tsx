@@ -40,7 +40,7 @@ const StackCard = ({ children }: any) => {
         style={{ scale }}
         className="sticky top-[15vh] h-80 w-full max-w-3xl mx-auto
                    p-8 rounded-[30px]
-                   backdrop-blur-xl bg-white/10 border border-white/20 shadow-2xl"
+                   backdrop-blur-xl bg-white/80 dark:bg-white/10 border border-slate-200 dark:border-white/20 shadow-2xl"
       >
         {children}
       </motion.div>
