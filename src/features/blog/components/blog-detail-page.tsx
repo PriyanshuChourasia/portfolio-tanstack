@@ -1,10 +1,11 @@
 import { Link } from '@tanstack/react-router'
 import { motion } from 'framer-motion'
-import blogData from '@/data/blog-data.json'
+import { BlogArtwork } from '@/components/blog-artwork'
+import { getBlogPosts } from '@/data/blog-posts'
 import BlogCommentsSection from './blog-comments-section'
 
 export function BlogPostDetailPage({ postId }: { postId: number }) {
-  const post = blogData.posts.find((item) => item.id === postId)
+  const post = getBlogPosts().find((item) => item.id === postId)
 
   if (!post) {
     return (
@@ -73,18 +74,18 @@ export function BlogPostDetailPage({ postId }: { postId: number }) {
             </div>
 
             <div className="border-t border-white/10 bg-black/10 p-3 sm:p-4 lg:border-l lg:border-t-0 lg:p-6">
-              <div className="h-64 overflow-hidden rounded-2xl border border-white/10 bg-slate-900 sm:h-80 sm:rounded-3xl lg:h-[420px] xl:h-[480px]">
-                <img
+              <div className="h-64 overflow-hidden rounded-2xl border border-white/10 bg-slate-900 sm:h-80 sm:rounded-3xl lg:h-105 xl:h-120">
+                <BlogArtwork
                   src={post.image}
                   alt={post.title}
-                  className="h-full w-full object-cover"
+                  placeholderLabel="Blog cover"
                 />
               </div>
             </div>
           </div>
 
           <div className=" border-t border-white/10 px-4 py-8 sm:px-6 sm:py-10 md:px-12  lg:px-14">
-            <article className="space-y-5 text-slate-300 sm:space-y-6 [&_img]:mt-6 [&_img]:h-[320px] [&_img]:w-full [&_img]:rounded-2xl [&_img]:border [&_img]:border-white/10 [&_img]:bg-slate-900/60 [&_img]:object-contain sm:[&_img]:h-[380px] lg:[&_img]:h-[440px]">
+            <article className="space-y-5 text-slate-300 sm:space-y-6 [&_img]:mt-6 [&_img]:h-80 [&_img]:w-full [&_img]:rounded-2xl [&_img]:border [&_img]:border-white/10 [&_img]:bg-slate-900/60 [&_img]:object-contain sm:[&_img]:h-95 lg:[&_img]:h-110">
               <div dangerouslySetInnerHTML={{ __html: post.content }} />
               {post.codeSnippet ? (
                 <pre className="overflow-x-auto rounded-2xl border border-cyan-400/20 bg-slate-950/80 p-4 text-xs leading-6 text-cyan-100 whitespace-pre-wrap sm:p-6 sm:text-sm sm:leading-7">

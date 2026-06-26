@@ -1,7 +1,7 @@
 import { Link } from '@tanstack/react-router'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { useRef } from 'react'
-import blogData from '@/data/blog-data.json'
+import { getBlogPosts } from '@/data/blog-posts'
 
 export default function Articles() {
   const sectionRef = useRef<HTMLDivElement>(null)
@@ -10,7 +10,7 @@ export default function Articles() {
     offset: ['start center', 'end center'],
   })
 
-  const articles = blogData.posts
+  const articles = getBlogPosts()
 
   const titleY = useTransform(scrollYProgress, [0, 0.3], [100, 0])
   const titleOpacity = useTransform(scrollYProgress, [0, 0.2], [0, 1])

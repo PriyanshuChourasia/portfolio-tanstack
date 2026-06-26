@@ -1,10 +1,9 @@
-  
-
 import { Link } from '@tanstack/react-router'
 import { motion } from 'framer-motion'
-import blogData from '@/data/blog-data.json'
+import { BlogArtwork } from '@/components/blog-artwork'
+import { getBlogPosts } from '@/data/blog-posts'
 
-const previewPosts = blogData.posts.slice(0, 3)
+const previewPosts = getBlogPosts().slice(0, 3)
 
 export default function ArticlePreviewSection() {
   return (
@@ -27,8 +26,9 @@ export default function ArticlePreviewSection() {
                   See my blogs
                 </h2>
                 <p className="max-w-xl text-sm leading-7 text-slate-300 md:text-base">
-                  Short reads and notes on design, development, and the thinking behind the work. It is a compact
-                  preview, so it stays lighter than the full blog grid below.
+                  Short reads and notes on design, development, and the thinking
+                  behind the work. It is a compact preview, so it stays lighter
+                  than the full blog grid below.
                 </p>
               </div>
 
@@ -51,10 +51,11 @@ export default function ArticlePreviewSection() {
                   className="group flex flex-col gap-4 rounded-3xl border border-white/10 bg-white/5 p-4 transition-colors hover:border-cyan-400/30 hover:bg-white/10 sm:flex-row sm:items-center"
                 >
                   <div className="h-40 w-full shrink-0 overflow-hidden rounded-2xl border border-white/10 bg-slate-900 sm:h-20 sm:w-20">
-                    <img
+                    <BlogArtwork
                       src={post.image}
                       alt={post.title}
-                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      placeholderLabel="Blog cover"
+                      className="transition-transform duration-500 group-hover:scale-105"
                     />
                   </div>
 
