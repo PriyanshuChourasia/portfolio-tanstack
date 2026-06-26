@@ -17,11 +17,11 @@ export function Navbar() {
 
   return (
     <>
-      <nav className="fixed top-0 w-full z-50 bg-white/90 dark:bg-slate-950/90 backdrop-blur-sm border-b border-slate-200/60 dark:border-slate-800/60">
-        <div className="max-w-5xl mx-auto px-6 h-14 flex items-center justify-between">
+      <nav className="fixed top-0 w-full z-50 bg-white/90 dark:bg-[#111111]/90 backdrop-blur-sm border-b border-gray-100 dark:border-white/8">
+        <div className="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
           <Link
             to="/"
-            className="text-sm font-semibold text-slate-900 dark:text-white hover:opacity-60 transition-opacity"
+            className="text-sm font-semibold text-gray-900 dark:text-gray-100 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
           >
             Priyanshu Chourasia
           </Link>
@@ -31,7 +31,7 @@ export function Navbar() {
               <a
                 key={item.label}
                 href={item.href}
-                className="text-sm text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"
+                className="text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors"
               >
                 {item.label}
               </a>
@@ -43,7 +43,7 @@ export function Navbar() {
             <button
               onClick={() => setMobileOpen((o) => !o)}
               aria-label="Toggle menu"
-              className="md:hidden text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"
+              className="md:hidden text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors"
             >
               {mobileOpen ? <X size={20} /> : <Menu size={20} />}
             </button>
@@ -59,7 +59,7 @@ export function Navbar() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.15 }}
-            className="fixed top-14 left-0 right-0 z-40 md:hidden bg-white dark:bg-slate-950 border-b border-slate-200 dark:border-slate-800"
+            className="fixed top-14 left-0 right-0 z-40 md:hidden bg-[#f0fdf4] dark:bg-[#0a0f0d] border-b border-emerald-100 dark:border-[#1a2e22]"
           >
             <div className="max-w-5xl mx-auto px-6 py-4 flex flex-col gap-4">
               {navItems.map((item) => (
@@ -67,7 +67,7 @@ export function Navbar() {
                   key={item.label}
                   href={item.href}
                   onClick={() => setMobileOpen(false)}
-                  className="text-sm text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"
+                  className="text-sm text-emerald-700/70 dark:text-emerald-200/50 hover:text-emerald-900 dark:hover:text-emerald-400 transition-colors"
                 >
                   {item.label}
                 </a>

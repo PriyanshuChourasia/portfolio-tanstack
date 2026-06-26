@@ -9,15 +9,14 @@ export function ResumeSection() {
     <section id="experience" className="py-20">
       <div className="max-w-2xl mx-auto px-6">
 
-        {/* Section header row */}
         <div className="flex items-center justify-between mb-5">
-          <h2 className="text-xs font-semibold uppercase tracking-widest text-slate-400 dark:text-slate-500">
+          <h2 className="text-xs font-semibold uppercase tracking-widest text-emerald-600 dark:text-emerald-500">
             Employment
           </h2>
-          <span className="text-xs text-slate-400 dark:text-slate-500">Featured</span>
+          <span className="text-xs text-emerald-600/50 dark:text-emerald-500/50">Featured</span>
         </div>
 
-        <hr className="border-slate-200 dark:border-slate-800" />
+        <hr className="border-emerald-100 dark:border-[#1a2e22]" />
 
         <motion.div
           initial={{ opacity: 0 }}
@@ -29,29 +28,29 @@ export function ResumeSection() {
             <div key={i}>
               <div className="flex items-start justify-between py-5 gap-4">
                 <div>
-                  <p className="text-base font-semibold text-slate-900 dark:text-white">
+                  <p className="text-base font-semibold text-emerald-950 dark:text-emerald-50">
                     {exp.company}
                   </p>
-                  <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">
+                  <p className="text-sm text-emerald-700/60 dark:text-emerald-300/50 mt-0.5">
                     {exp.title}
                   </p>
                 </div>
-                <span className="text-sm text-slate-400 dark:text-slate-500 shrink-0 mt-0.5">
+                <span className="text-sm text-emerald-600/50 dark:text-emerald-400/50 shrink-0 mt-0.5">
                   {exp.period}
                 </span>
               </div>
               {i < experience.length - 1 && (
-                <hr className="border-slate-100 dark:border-slate-800/50" />
+                <hr className="border-emerald-50 dark:border-[#1a2e22]/60" />
               )}
             </div>
           ))}
         </motion.div>
 
-        <hr className="border-slate-200 dark:border-slate-800 mb-5" />
+        <hr className="border-emerald-100 dark:border-[#1a2e22] mb-5" />
 
         <a
           href="#"
-          className="inline-flex items-center gap-1.5 text-sm text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"
+          className="inline-flex items-center gap-1.5 text-sm text-emerald-600/60 dark:text-emerald-400/50 hover:text-emerald-500 dark:hover:text-emerald-400 transition-colors"
         >
           All Employment <ArrowRight size={13} />
         </a>

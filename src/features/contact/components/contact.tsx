@@ -14,7 +14,7 @@ export default function ContactSection() {
   return (
     <section id="contact" className="py-20">
       <div className="max-w-2xl mx-auto px-6">
-        <hr className="border-slate-200 dark:border-slate-800 mb-12" />
+        <hr className="border-emerald-100 dark:border-[#1a2e22] mb-12" />
 
         <motion.div
           initial={{ opacity: 0, y: 16 }}
@@ -24,12 +24,12 @@ export default function ContactSection() {
           className="space-y-8"
         >
           <div>
-            <p className="text-xs font-semibold uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-3">
+            <p className="text-xs font-semibold uppercase tracking-widest text-emerald-600 dark:text-emerald-500 mb-3">
               Get in touch
             </p>
             <a
               href="mailto:priaynshuchourasia916@gmail.com"
-              className="text-xl font-semibold text-slate-900 dark:text-white hover:text-slate-500 dark:hover:text-slate-400 transition-colors"
+              className="text-xl font-semibold text-emerald-950 dark:text-emerald-50 hover:text-emerald-500 dark:hover:text-emerald-400 transition-colors"
             >
               priaynshuchourasia916@gmail.com
             </a>
@@ -45,7 +45,7 @@ export default function ContactSection() {
                   target={link.href.startsWith('mailto') ? undefined : '_blank'}
                   rel="noopener noreferrer"
                   aria-label={link.label}
-                  className="text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"
+                  className="text-emerald-600/50 dark:text-emerald-400/50 hover:text-emerald-500 dark:hover:text-emerald-400 transition-colors"
                 >
                   <Icon size={20} />
                 </a>
@@ -53,13 +53,13 @@ export default function ContactSection() {
             })}
           </div>
 
-          <div className="flex items-center justify-between pt-8 border-t border-slate-200 dark:border-slate-800">
-            <p className="text-sm text-slate-400 dark:text-slate-500">
+          <div className="flex items-center justify-between pt-8 border-t border-emerald-100 dark:border-[#1a2e22]">
+            <p className="text-sm text-emerald-600/50 dark:text-emerald-400/40">
               © Priyanshu Chourasia 2025
             </p>
             <a
               href="#home"
-              className="text-sm text-slate-400 dark:text-slate-500 hover:text-slate-900 dark:hover:text-white transition-colors"
+              className="text-sm text-emerald-600/50 dark:text-emerald-400/40 hover:text-emerald-500 dark:hover:text-emerald-400 transition-colors"
             >
               Back to Top ↑
             </a>

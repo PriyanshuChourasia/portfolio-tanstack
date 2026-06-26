@@ -7,7 +7,7 @@ import ContactSection from '@/features/contact/components/contact'
 
 export default function Home() {
   return (
-    <main className="bg-white dark:bg-slate-950 text-slate-900 dark:text-white">
+    <main className="bg-white dark:bg-[#111111] text-gray-900 dark:text-gray-100">
       <Navbar />
       <Hero />
       <ResumeSection />
