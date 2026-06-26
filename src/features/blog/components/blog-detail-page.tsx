@@ -1,12 +1,15 @@
 import { Link } from '@tanstack/react-router'
 import { motion } from 'framer-motion'
-import { ArrowLeft, Calendar, User, Tag } from 'lucide-react'
-import blogData from '@/data/blog-data.json'
+import { BookOpen, Calendar, User, Tag } from 'lucide-react'
+import { useState } from 'react'
+import { getBlogPosts } from '@/data/blog-posts'
 import BlogCommentsSection from './blog-comments-section'
 import { Navbar } from '@/components/Navbar'
 
 export function BlogPostDetailPage({ postId }: { postId: number }) {
+  const [hasImageError, setHasImageError] = useState(false)
   const post = getBlogPosts().find((item) => item.id === postId)
+  const shouldShowHeroImage = Boolean(post?.image?.trim()) && !hasImageError
 
   if (!post) {
     return (
@@ -24,7 +27,6 @@ export function BlogPostDetailPage({ postId }: { postId: number }) {
               to="/"
               className="inline-flex items-center gap-2 rounded-full bg-cyan-500 px-6 py-3 text-sm font-semibold text-white hover:bg-cyan-600 transition-colors"
             >
-              <ArrowLeft size={16} />
               Back home
             </Link>
           </div>
@@ -41,40 +43,39 @@ export function BlogPostDetailPage({ postId }: { postId: number }) {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.4 }}
-        className="pt-20"
+        className="pt-18"
       >
         {/* Hero banner */}
-        <div className="relative w-full h-64 sm:h-80 md:h-96 overflow-hidden bg-slate-100 dark:bg-slate-900">
-          <img
-            src={post.image}
-            alt={post.title}
-            className="w-full h-full object-cover opacity-60 dark:opacity-40"
-          />
-          <div className="absolute inset-0 bg-linear-to-t from-white dark:from-slate-950 via-white/40 dark:via-slate-950/60 to-transparent" />
-
-          {/* Back link overlaid on hero */}
-          <div className="absolute top-6 left-4 sm:left-8">
-            <Link
-              to="/"
-              className="inline-flex items-center gap-2 rounded-full border border-slate-200/80 dark:border-white/20 bg-white/80 dark:bg-slate-900/80 backdrop-blur px-4 py-2 text-sm font-semibold text-slate-700 dark:text-slate-200 hover:border-cyan-400/60 hover:text-cyan-600 dark:hover:text-cyan-300 transition-colors"
-            >
-              <ArrowLeft size={14} />
-              Back
-            </Link>
-          </div>
+        <div className="relative w-full h-36 sm:h-48 md:h-60 overflow-hidden bg-linear-to-br from-slate-100 via-slate-100 to-cyan-50 dark:from-slate-900 dark:via-slate-950 dark:to-cyan-950/30">
+          {shouldShowHeroImage ? (
+            <img
+              src={post.image}
+              alt={post.title}
+              onError={() => setHasImageError(true)}
+              className="w-full h-full object-cover opacity-60 dark:opacity-40"
+            />
+          ) : (
+            /* Blog logo placeholder */
+            <div className="flex h-full w-full items-center justify-center">
+              <div className="flex flex-col items-center gap-3">
+                <p className="text-xs font-semibold uppercase tracking-[0.3em] text-cyan-400/60"></p>
+              </div>
+            </div>
+          )}
+          <div className="absolute inset-0 bg-linear-to-t from-slate-50/80 dark:from-slate-950 via-slate-50/20 dark:via-slate-950/40 to-transparent" />
         </div>
 
         {/* Content wrapper */}
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 -mt-20 relative z-10 pb-24">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 -mt-10 relative z-10 pb-16">
           {/* Header card */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="rounded-2xl border border-slate-200 dark:border-slate-700/50 bg-white dark:bg-slate-900 shadow-xl dark:shadow-slate-900/50 p-6 sm:p-10 mb-8"
+            className="rounded-2xl border border-slate-200 dark:border-slate-700/50 bg-white dark:bg-slate-900 shadow-xl dark:shadow-slate-900/50 p-6 sm:p-10 mb-6"
           >
             {/* Meta row */}
-            <div className="flex flex-wrap items-center gap-4 mb-6 text-xs text-slate-500 dark:text-slate-400">
+            <div className="flex flex-wrap items-center gap-4 mb-5 text-xs text-slate-500 dark:text-slate-400">
               <span className="flex items-center gap-1.5">
                 <Calendar size={12} className="text-cyan-500" />
                 {post.date}
@@ -82,9 +83,6 @@ export function BlogPostDetailPage({ postId }: { postId: number }) {
               <span className="flex items-center gap-1.5">
                 <User size={12} className="text-cyan-500" />
                 {post.author}
-              </span>
-              <span className="uppercase tracking-widest text-cyan-600 dark:text-cyan-400 font-semibold text-[10px]">
-                {post.category}
               </span>
             </div>
 
@@ -94,7 +92,7 @@ export function BlogPostDetailPage({ postId }: { postId: number }) {
             </h1>
 
             {/* Intro */}
-            <p className="text-base sm:text-lg leading-relaxed text-slate-600 dark:text-slate-300 mb-8 border-l-4 border-cyan-400 pl-5">
+            <p className="text-base sm:text-lg leading-relaxed text-slate-600 dark:text-slate-300 mb-7 border-l-4 border-cyan-400 pl-5">
               {post.intro}
             </p>
 
@@ -119,7 +117,7 @@ export function BlogPostDetailPage({ postId }: { postId: number }) {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.25 }}
-            className="rounded-2xl border border-slate-200 dark:border-slate-700/50 bg-white dark:bg-slate-900 shadow-sm p-6 sm:p-10 mb-8"
+            className="rounded-2xl border border-slate-200 dark:border-slate-700/50 bg-white dark:bg-slate-900 shadow-sm p-6 sm:p-10 mb-6"
           >
             <article
               className="

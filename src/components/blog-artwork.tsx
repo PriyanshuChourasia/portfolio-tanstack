@@ -6,6 +6,8 @@ type BlogArtworkProps = {
   alt: string
   className?: string
   placeholderLabel?: string
+  showPlaceholder?: boolean
+  compact?: boolean
 }
 
 export function BlogArtwork({
@@ -13,6 +15,8 @@ export function BlogArtwork({
   alt,
   className = '',
   placeholderLabel = 'Blog post',
+  showPlaceholder = true,
+  compact = false,
 }: BlogArtworkProps) {
   const [hasImageError, setHasImageError] = useState(false)
 
@@ -23,6 +27,22 @@ export function BlogArtwork({
   const shouldShowImage = Boolean(src?.trim()) && !hasImageError
 
   if (!shouldShowImage) {
+    if (!showPlaceholder) {
+      return null
+    }
+
+    if (compact) {
+      return (
+        <div
+          className={`flex h-full w-full items-center justify-center bg-linear-to-br from-cyan-500/10 via-slate-900/85 to-blue-950/80 ${className}`}
+        >
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-cyan-400/15 bg-cyan-400/10 text-cyan-300/70">
+            <BookOpen className="h-5 w-5" aria-hidden="true" />
+          </div>
+        </div>
+      )
+    }
+
     return (
       <div
         className={`flex h-full w-full flex-col items-center justify-center gap-4 bg-linear-to-br from-cyan-500/10 via-slate-900/85 to-blue-950/80 text-center ${className}`}
