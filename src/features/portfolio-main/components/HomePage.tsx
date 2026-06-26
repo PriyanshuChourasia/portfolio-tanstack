@@ -1,5 +1,3 @@
-﻿
-
 import { Navbar } from '@/components/Navbar'
 import { Hero } from '@/components/Carousal'
 import AboutSection from '@/features/aboutus/components/aboutus'
@@ -11,7 +9,7 @@ import ContactSection from '@/features/contact/components/contact'
 
 export default function Home() {
   return (
-    <main className="bg-slate-950 text-white ">
+    <main className="text-slate-900 dark:text-white">
       <Navbar />
       <Hero />
       <AboutSection />

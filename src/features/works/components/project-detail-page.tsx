@@ -1,94 +1,170 @@
-  
-
 import { Link } from '@tanstack/react-router'
 import { motion } from 'framer-motion'
+import { ArrowLeft, ExternalLink, Briefcase, Tag } from 'lucide-react'
 import worksData from '@/data/works-data.json'
+import { Navbar } from '@/components/Navbar'
 
 export function ProjectDetailPage({ projectId }: { projectId: number }) {
   const project = worksData.items[projectId - 1]
 
   if (!project) {
     return (
-      <main className="min-h-screen bg-slate-950 px-4 py-16 text-white sm:px-6 sm:py-20">
-        <div className="mx-auto max-w-3xl rounded-3xl border border-white/10 bg-white/5 p-6 backdrop-blur-xl sm:rounded-[28px] sm:p-8">
-          <p className="text-sm uppercase tracking-[0.3em] text-cyan-300">Project not found</p>
-          <h1 className="mt-4 text-2xl font-bold sm:text-3xl">This project does not exist.</h1>
-          <Link
-            to="/"
-            className="mt-8 inline-flex w-full items-center justify-center rounded-full border border-cyan-400/20 bg-cyan-400/10 px-5 py-3 text-sm font-semibold text-cyan-200 sm:w-auto"
-          >
-            Back home
-          </Link>
+      <div className="min-h-screen bg-white dark:bg-slate-950">
+        <Navbar />
+        <div className="flex items-center justify-center min-h-screen px-4">
+          <div className="max-w-md text-center">
+            <p className="text-sm uppercase tracking-widest text-cyan-500 mb-4">404</p>
+            <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-6">
+              Project not found
+            </h1>
+            <Link
+              to="/projects"
+              className="inline-flex items-center gap-2 rounded-full bg-cyan-500 px-6 py-3 text-sm font-semibold text-white hover:bg-cyan-600 transition-colors"
+            >
+              <ArrowLeft size={16} />
+              All projects
+            </Link>
+          </div>
         </div>
-      </main>
+      </div>
     )
   }
 
   return (
-    <motion.main
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="min-h-screen bg-slate-950 px-4 py-4 text-white sm:px-6 sm:py-16"
-    >
-      <div className="mx-auto max-w-6xl space-y-6 sm:space-y-8">
-       
+    <div className="min-h-screen bg-white dark:bg-slate-950">
+      <Navbar />
 
-        <div className="overflow-hidden rounded-3xl border border-white/10 bg-linear-to-br from-slate-900/90 via-slate-900/75 to-cyan-950/35 shadow-2xl shadow-cyan-950/20 backdrop-blur-xl sm:rounded-4xl">
-          <Link
-          to="/"
-          className="inline-flex items-center gap-2 py-5  px-6 text-sm font-semibold text-cyan-300 transition-colors hover:text-cyan-200"
-        >
-          <span aria-hidden="true">←</span>
-          Back to projects
-        </Link>
-          <div className="grid gap-0 lg:grid-cols-[1.1fr_0.9fr]">
-            <div className="p-5 sm:p-8 md:p-12 lg:p-14">
-              <div className="flex flex-wrap items-center gap-3 text-[11px] uppercase tracking-[0.3em] text-cyan-300">
-                <span>{project.category}</span>
-                <span className="text-slate-500">•</span>
-                <span>Project {projectId}</span>
-              </div>
+      <motion.main
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.4 }}
+        className="pt-20"
+      >
+        {/* Hero image banner */}
+        <div className="relative w-full h-64 sm:h-80 md:h-96 overflow-hidden bg-slate-100 dark:bg-slate-900">
+          <img
+            src={project.image}
+            alt={project.title}
+            className="w-full h-full object-cover opacity-60 dark:opacity-40"
+          />
+          <div className="absolute inset-0 bg-linear-to-t from-white dark:from-slate-950 via-white/30 dark:via-slate-950/50 to-transparent" />
 
-              <h1 className="mt-5 text-3xl font-bold leading-tight sm:mt-6 sm:text-4xl md:text-6xl">
-                {project.title}
-              </h1>
-
-              <p className="mt-5 max-w-2xl text-base leading-7 text-slate-300 sm:mt-6 sm:text-lg sm:leading-8">
-                {project.description}
-              </p>
-
-              <div className="mt-6 flex flex-wrap gap-3 sm:mt-8">
-                <Link
-                  to="/"
-                  className="inline-flex w-full items-center justify-center rounded-full border border-cyan-400/20 bg-cyan-400/10 px-5 py-3 text-sm font-semibold text-cyan-200 transition-colors hover:border-cyan-300/40 hover:bg-cyan-400/20 sm:w-auto"
-                >
-                  Back to homepage
-                </Link>
-                {project.link && project.link !== '#' ? (
-                  <a
-                    href={project.link}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="inline-flex w-full items-center justify-center rounded-full border border-white/10 bg-white/5 px-5 py-3 text-sm font-semibold text-white transition-colors hover:border-white/20 hover:bg-white/10 sm:w-auto"
-                  >
-                    View live project
-                  </a>
-                ) : null}
-              </div>
-            </div>
-
-            <div className="border-t border-white/10 bg-black/10 p-3 sm:p-4 lg:border-l lg:border-t-0 lg:p-6">
-              <div className="h-64 overflow-hidden rounded-2xl border border-white/10 bg-slate-900 sm:h-80 sm:rounded-3xl lg:h-full">
-                <img
-                  src={project.image}
-                  alt={project.title}
-                  className="h-full w-full object-cover"
-                />
-              </div>
-            </div>
+          {/* Back link */}
+          <div className="absolute top-6 left-4 sm:left-8">
+            <Link
+              to="/projects"
+              className="inline-flex items-center gap-2 rounded-full border border-slate-200/80 dark:border-white/20 bg-white/80 dark:bg-slate-900/80 backdrop-blur px-4 py-2 text-sm font-semibold text-slate-700 dark:text-slate-200 hover:border-cyan-400/60 hover:text-cyan-600 dark:hover:text-cyan-300 transition-colors"
+            >
+              <ArrowLeft size={14} />
+              All Projects
+            </Link>
           </div>
         </div>
-      </div>
-    </motion.main>
+
+        {/* Content */}
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 -mt-20 relative z-10 pb-24">
+          {/* Main card */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            className="rounded-2xl border border-slate-200 dark:border-slate-700/50 bg-white dark:bg-slate-900 shadow-xl dark:shadow-slate-900/50 overflow-hidden mb-8"
+          >
+            <div className="grid lg:grid-cols-[1.1fr_0.9fr] gap-0">
+              {/* Left: info */}
+              <div className="p-6 sm:p-10 lg:p-12">
+                {/* Meta */}
+                <div className="flex flex-wrap items-center gap-3 mb-6">
+                  <span className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 px-3 py-1 text-[11px] font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300">
+                    <Tag size={10} />
+                    {project.category}
+                  </span>
+                  <span className="text-xs text-slate-400 dark:text-slate-500">Project {projectId}</span>
+                </div>
+
+                <h1 className="text-3xl sm:text-4xl font-bold leading-tight text-slate-900 dark:text-white mb-4">
+                  {project.title}
+                </h1>
+
+                {project.client && (
+                  <div className="flex items-center gap-2 mb-6">
+                    <Briefcase size={14} className="text-cyan-500 shrink-0" />
+                    <span className="text-sm font-semibold text-cyan-600 dark:text-cyan-400">
+                      {project.client}
+                    </span>
+                  </div>
+                )}
+
+                <p className="text-base leading-8 text-slate-600 dark:text-slate-300 mb-8">
+                  {project.description}
+                </p>
+
+                {/* CTA buttons */}
+                <div className="flex flex-wrap gap-3">
+                  <Link
+                    to="/projects"
+                    className="inline-flex items-center gap-2 rounded-full border border-slate-200 dark:border-slate-700 bg-transparent px-5 py-2.5 text-sm font-semibold text-slate-700 dark:text-slate-300 hover:border-cyan-400 hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors"
+                  >
+                    <ArrowLeft size={14} />
+                    All projects
+                  </Link>
+
+                  {project.link && project.link !== '#' && (
+                    <a
+                      href={project.link}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center gap-2 rounded-full bg-cyan-500 hover:bg-cyan-600 px-5 py-2.5 text-sm font-semibold text-white transition-colors"
+                    >
+                      <ExternalLink size={14} />
+                      View live project
+                    </a>
+                  )}
+                </div>
+              </div>
+
+              {/* Right: image */}
+              <div className="border-t border-slate-100 dark:border-white/5 lg:border-t-0 lg:border-l bg-slate-50 dark:bg-slate-800/30 p-4 sm:p-6 flex items-center">
+                <div className="w-full h-64 sm:h-80 lg:h-full min-h-[280px] overflow-hidden rounded-xl border border-slate-200 dark:border-slate-700/50 bg-slate-100 dark:bg-slate-900">
+                  <img
+                    src={project.image}
+                    alt={project.title}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Navigation between projects */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+            className="flex items-center justify-between gap-4"
+          >
+            {projectId > 1 && (
+              <Link
+                to="/projects/$id"
+                params={{ id: String(projectId - 1) }}
+                className="inline-flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 transition-colors"
+              >
+                ← Previous project
+              </Link>
+            )}
+            <span className="flex-1" />
+            {worksData.items[projectId] && (
+              <Link
+                to="/projects/$id"
+                params={{ id: String(projectId + 1) }}
+                className="inline-flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 transition-colors"
+              >
+                Next project →
+              </Link>
+            )}
+          </motion.div>
+        </div>
+      </motion.main>
+    </div>
   )
 }

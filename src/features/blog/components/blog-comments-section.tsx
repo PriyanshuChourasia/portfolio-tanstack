@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { MessageCircle, Heart } from 'lucide-react'
 
 export default function BlogCommentsSection() {
   const [liked, setLiked] = useState(false)
@@ -8,18 +9,8 @@ export default function BlogCommentsSection() {
   const [comments, setComments] = useState<
     Array<{ id: number; name: string; text: string; createdAt: string }>
   >([
-    {
-      id: 1,
-      name: 'Ava',
-      text: 'Great write-up. The practical examples are really helpful.',
-      createdAt: '2h ago',
-    },
-    {
-      id: 2,
-      name: 'Noah',
-      text: 'Loved the structure of this post. Looking forward to more.',
-      createdAt: '45m ago',
-    },
+    { id: 1, name: 'Ava', text: 'Great write-up. The practical examples are really helpful.', createdAt: '2h ago' },
+    { id: 2, name: 'Noah', text: 'Loved the structure of this post. Looking forward to more.', createdAt: '45m ago' },
   ])
 
   const toggleLike = () => {
@@ -30,87 +21,87 @@ export default function BlogCommentsSection() {
     })
   }
 
-  const addComment = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-
+  const addComment = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
     const name = commentName.trim()
     const text = commentText.trim()
-    if (!name || !text) {
-      return
-    }
-
-    setComments((prev) => [
-      {
-        id: Date.now(),
-        name,
-        text,
-        createdAt: 'Just now',
-      },
-      ...prev,
-    ])
+    if (!name || !text) return
+    setComments((prev) => [{ id: Date.now(), name, text, createdAt: 'Just now' }, ...prev])
     setCommentName('')
     setCommentText('')
   }
 
   return (
-    <section className="border-t border-white/10 px-4 py-8 sm:px-6 sm:py-10 md:px-12 lg:px-14">
-      <div className="space-y-5 rounded-2xl border border-white/10 bg-slate-900/40 p-4 sm:p-6">
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <h2 className="text-lg font-semibold text-white sm:text-xl">Likes & Comments</h2>
-          <button
-            type="button"
-            onClick={toggleLike}
-            className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-semibold transition-colors ${
-              liked
-                ? 'border-pink-400/50 bg-pink-500/20 text-pink-200'
-                : 'border-cyan-400/20 bg-cyan-400/10 text-cyan-200 hover:border-cyan-300/40'
-            }`}
-          >
-            <span aria-hidden="true">{liked ? '♥' : '♡'}</span>
-            <span>{likeCount} likes</span>
-          </button>
+    <div className="rounded-2xl border border-slate-200 dark:border-slate-700/50 bg-white dark:bg-slate-900 shadow-sm overflow-hidden">
+      {/* Header */}
+      <div className="flex items-center justify-between px-6 py-5 border-b border-slate-100 dark:border-slate-700/50">
+        <div className="flex items-center gap-2 text-slate-900 dark:text-white font-semibold">
+          <MessageCircle size={18} className="text-cyan-500" />
+          <span>Discussion ({comments.length})</span>
         </div>
 
-        <form onSubmit={addComment} className="space-y-3">
-          <div className="grid gap-3 sm:grid-cols-2">
-            <input
-              type="text"
-              value={commentName}
-              onChange={(event) => setCommentName(event.target.value)}
-              placeholder="Your name"
-              className="w-full rounded-xl border border-white/15 bg-slate-950/70 px-3 py-2 text-sm text-white placeholder:text-slate-500 focus:border-cyan-400/40 focus:outline-none"
-            />
-            <button
-              type="submit"
-              className="rounded-xl border border-cyan-400/30 bg-cyan-500/15 px-4 py-2 text-sm font-semibold text-cyan-200 transition-colors hover:border-cyan-300/50 hover:bg-cyan-500/25"
-            >
-              Add Comment
-            </button>
-          </div>
+        <button
+          type="button"
+          onClick={toggleLike}
+          className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-semibold transition-all ${
+            liked
+              ? 'border-pink-300 dark:border-pink-400/50 bg-pink-50 dark:bg-pink-500/15 text-pink-600 dark:text-pink-300'
+              : 'border-slate-200 dark:border-slate-700 bg-transparent text-slate-500 dark:text-slate-400 hover:border-pink-300 dark:hover:border-pink-400/40 hover:text-pink-500 dark:hover:text-pink-300'
+          }`}
+        >
+          <Heart size={15} className={liked ? 'fill-current' : ''} />
+          <span>{likeCount}</span>
+        </button>
+      </div>
+
+      {/* Comment form */}
+      <form onSubmit={addComment} className="px-6 py-6 border-b border-slate-100 dark:border-slate-700/50">
+        <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-4">Leave a comment</h3>
+        <div className="space-y-3">
+          <input
+            type="text"
+            value={commentName}
+            onChange={(e) => setCommentName(e.target.value)}
+            placeholder="Your name"
+            className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/60 px-4 py-2.5 text-sm text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:border-cyan-400 dark:focus:border-cyan-500 focus:outline-none focus:ring-2 focus:ring-cyan-400/20 dark:focus:ring-cyan-500/20 transition-colors"
+          />
           <textarea
             value={commentText}
-            onChange={(event) => setCommentText(event.target.value)}
+            onChange={(e) => setCommentText(e.target.value)}
             rows={3}
-            placeholder="Write your comment..."
-            className="w-full rounded-xl border border-white/15 bg-slate-950/70 px-3 py-2 text-sm text-white placeholder:text-slate-500 focus:border-cyan-400/40 focus:outline-none"
+            placeholder="Share your thoughts..."
+            className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/60 px-4 py-2.5 text-sm text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:border-cyan-400 dark:focus:border-cyan-500 focus:outline-none focus:ring-2 focus:ring-cyan-400/20 dark:focus:ring-cyan-500/20 transition-colors resize-none"
           />
-        </form>
-
-        <div className="space-y-3">
-          {comments.map((comment) => (
-            <div
-              key={comment.id}
-              className="rounded-xl border border-white/10 bg-white/5 px-4 py-3"
-            >
-              <div className="mb-1 flex items-center justify-between gap-3">
-                <p className="text-sm font-semibold text-white">{comment.name}</p>
-                <p className="text-xs text-slate-500">{comment.createdAt}</p>
-              </div>
-              <p className="text-sm leading-6 text-slate-300">{comment.text}</p>
-            </div>
-          ))}
+          <button
+            type="submit"
+            className="rounded-xl bg-cyan-500 hover:bg-cyan-600 px-5 py-2.5 text-sm font-semibold text-white transition-colors"
+          >
+            Post Comment
+          </button>
         </div>
+      </form>
+
+      {/* Comment list */}
+      <div className="px-6 py-4 space-y-4">
+        {comments.map((comment) => (
+          <div
+            key={comment.id}
+            className="flex gap-3"
+          >
+            {/* Avatar */}
+            <div className="shrink-0 w-9 h-9 rounded-full bg-linear-to-br from-cyan-400 to-blue-500 flex items-center justify-center text-white text-sm font-bold">
+              {comment.name[0].toUpperCase()}
+            </div>
+            <div className="flex-1 rounded-xl border border-slate-100 dark:border-slate-700/50 bg-slate-50 dark:bg-slate-800/40 px-4 py-3">
+              <div className="flex items-center justify-between gap-3 mb-1.5">
+                <p className="text-sm font-semibold text-slate-900 dark:text-white">{comment.name}</p>
+                <p className="text-xs text-slate-400 dark:text-slate-500">{comment.createdAt}</p>
+              </div>
+              <p className="text-sm leading-6 text-slate-600 dark:text-slate-300">{comment.text}</p>
+            </div>
+          </div>
+        ))}
       </div>
-    </section>
+    </div>
   )
 }

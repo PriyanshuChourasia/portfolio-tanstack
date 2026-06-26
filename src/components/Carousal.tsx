@@ -17,11 +17,16 @@ import {
   SiOpenai,
   SiDocker,
 } from 'react-icons/si'
+import { useTheme } from 'next-themes'
+import { ThreeScene } from './ThreeScene'
 import badgesData from '../data/carousel-data.json'
 
 export function Hero() {
   const sectionRef = useRef<HTMLDivElement>(null)
   const [hoveredBadgeId, setHoveredBadgeId] = useState<string | null>(null)
+  const { resolvedTheme } = useTheme()
+  const isDark = resolvedTheme === 'dark'
+
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ['start start', 'end center'],
@@ -41,7 +46,6 @@ export function Hero() {
     const y = event.clientY - rect.top
     const centerX = rect.width / 2
     const centerY = rect.height / 2
-
     rotateY.set(((x - centerX) / centerX) * 10)
     rotateX.set(-((y - centerY) / centerY) * 10)
   }
@@ -51,12 +55,9 @@ export function Hero() {
     rotateY.set(0)
   }
 
-  const badgeDefs = badgesData as Array<any>
-
   const ICONS: Record<string, any> = {
     javascript: SiJavascript,
     docker: SiDocker,
-
     openai: SiOpenai,
     github: SiGithub,
     nodedotjs: SiNodedotjs,
@@ -67,56 +68,14 @@ export function Hero() {
   }
 
   const badges = useMemo(() => {
-    return badgeDefs.map((b, index) => ({
+    return (badgesData as Array<any>).map((b, index) => ({
       ...b,
       iconComponent: ICONS[(b as any).icon],
-      floatX: [
-        0,
-        (index % 2 === 0 ? 1 : -1) * (9 + (index % 4)),
-        0,
-        (index % 3 === 0 ? -1 : 1) * (8 + (index % 3)),
-        0,
-      ],
-      floatY: [
-        0,
-        (index % 2 === 0 ? -1 : 1) * (9 + (index % 3)),
-        0,
-        (index % 4 === 0 ? 1 : -1) * (8 + (index % 2)),
-        0,
-      ],
+      floatX: [0, (index % 2 === 0 ? 1 : -1) * (9 + (index % 4)), 0, (index % 3 === 0 ? -1 : 1) * (8 + (index % 3)), 0],
+      floatY: [0, (index % 2 === 0 ? -1 : 1) * (9 + (index % 3)), 0, (index % 4 === 0 ? 1 : -1) * (8 + (index % 2)), 0],
       floatRotate: [0, 4, 0, -4, 0],
       floatDuration: 3 + (index % 4) * 0.4,
       floatDelay: index * 0.15,
-      iconClass:
-        (b as any).id === 'javascript'
-          ? 'text-amber-100'
-          : (b as any).id === 'docker'
-            ? 'text-sky-100'
-            : (b as any).id === 'openai'
-              ? 'text-emerald-100'
-              : (b as any).id === 'github'
-                ? 'text-slate-100'
-                : (b as any).id === 'nodedotjs'
-                  ? 'text-lime-100'
-                  : (b as any).id === 'react'
-                    ? 'text-cyan-100'
-                    : (b as any).id === 'typescript'
-                      ? 'text-blue-100'
-                      : (b as any).id === 'next'
-                        ? 'text-slate-100'
-                        : (b as any).id === 'tailwind'
-                          ? 'text-cyan-100'
-                          : 'text-fuchsia-100',
-      labelClass:
-        (b as any).id === 'copilot'
-          ? 'text-fuchsia-100'
-          : (b as any).id === 'claude'
-            ? 'text-violet-100'
-            : (b as any).id === 'langgraph'
-              ? 'text-amber-100'
-              : (b as any).id === 'langscreen'
-                ? 'text-sky-100'
-                : 'text-white',
     }))
   }, [])
 
@@ -124,30 +83,28 @@ export function Hero() {
     <section
       id="home"
       ref={sectionRef}
-      className="relative min-h-screen w-full overflow-hidden bg-slate-950 flex items-center"
+      className="relative min-h-screen w-full overflow-hidden bg-white dark:bg-slate-950 flex items-center"
     >
-      <div className="relative z-10 max-w-7xl mx-auto w-full px-6 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-        <motion.div
-          style={{ y: textY }}
-          initial={{ opacity: 0, x: -50 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.8 }}
-        >
+      {/* Three.js animated particle network background */}
+      <ThreeScene isDark={isDark} />
+
+      {/* Gradient overlays for depth */}
+      <div className="absolute inset-0 bg-linear-to-b from-transparent via-transparent to-white/30 dark:to-slate-950/30 pointer-events-none" />
+
+      <div className="relative z-10 max-w-7xl mx-auto w-full px-4 sm:px-6 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center py-24 lg:py-0">
+        {/* Left: text */}
+        <motion.div style={{ y: textY }} initial={{ opacity: 0, x: -50 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.8 }}>
           <motion.p
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             transition={{ delay: 0.2 }}
-            className="text-cyan-500 text-lg mb-4"
+            className="text-cyan-500 text-lg mb-4 font-medium"
           >
             Welcome to my portfolio
           </motion.p>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4 }}
-          >
-            <h1 className="text-5xl lg:text-6xl font-bold mb-4 leading-tight">
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}>
+            <h1 className="text-5xl lg:text-6xl font-bold mb-4 leading-tight text-slate-900 dark:text-white">
               Hi I&apos;m{' '}
               <span className="bg-linear-to-r from-blue-500 to-cyan-500 bg-clip-text text-transparent">
                 Priyanshu
@@ -156,11 +113,9 @@ export function Hero() {
               Chourasia
             </h1>
 
-            <p className="text-slate-400 text-lg leading-relaxed max-w-xl">
-              A Full-Stack Developer with a specialization in backend
-              development and implementing design-driven frontend solutions,
-              with a professional end to end development project and a wise use
-              of AI tools <span className="font-bold">.</span>
+            <p className="text-slate-600 dark:text-slate-400 text-lg leading-relaxed max-w-xl">
+              A Full-Stack Developer specializing in backend development and design-driven frontend solutions,
+              with end-to-end project delivery and a pragmatic use of AI tools.
             </p>
           </motion.div>
 
@@ -168,7 +123,7 @@ export function Hero() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6 }}
-            className="mt-8 flex gap-4"
+            className="mt-8 flex flex-wrap gap-4"
           >
             <motion.button
               whileHover={{ scale: 1.05 }}
@@ -181,13 +136,14 @@ export function Hero() {
               href="#contact"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="px-8 py-3 rounded-full border border-cyan-500/50 text-white font-semibold hover:bg-cyan-500/10 hover:border-cyan-400 transition-all"
+              className="px-8 py-3 rounded-full border border-cyan-500/50 text-slate-800 dark:text-white font-semibold hover:bg-cyan-500/10 hover:border-cyan-400 transition-all"
             >
               Get in Touch
             </motion.a>
           </motion.div>
         </motion.div>
 
+        {/* Right: 3D card with profile image and floating badges */}
         <motion.div
           style={{ y: imageY, scale: imageScale }}
           initial={{ opacity: 0, scale: 0.8 }}
@@ -207,7 +163,7 @@ export function Hero() {
                 rotateY: springRotateY,
                 transformStyle: 'preserve-3d',
               }}
-              className="absolute inset-0 rounded-4xl border border-cyan-400/15 bg-linear-to-br from-cyan-500/10 via-slate-900/40 to-blue-950/25 shadow-none"
+              className="absolute inset-0 rounded-4xl border border-cyan-400/20 dark:border-cyan-400/15 bg-linear-to-br from-cyan-500/10 via-white/5 dark:via-slate-900/40 to-blue-200/20 dark:to-blue-950/25"
             />
 
             {badges.map((b) => {
@@ -215,16 +171,13 @@ export function Hero() {
               const isHovered = hoveredBadgeId === b.id
               const hoverBg = (b as any).hoverBg ?? 'rgba(34, 211, 238, 0.2)'
               const hoverBorder = (b as any).hoverBorder ?? '#22d3ee'
-              const hoverGlow =
-                (b as any).hoverGlow ?? 'rgba(34, 211, 238, 0.45)'
+              const hoverGlow = (b as any).hoverGlow ?? 'rgba(34, 211, 238, 0.45)'
               const hoverIconColor = (b as any).hoverIconColor ?? '#67e8f9'
+
               return (
                 <motion.div
                   key={b.id}
-                  style={{
-                    left: b.left,
-                    top: b.top,
-                  }}
+                  style={{ left: b.left, top: b.top }}
                   animate={
                     isHovered
                       ? { scale: 1.1 }
@@ -247,7 +200,7 @@ export function Hero() {
                   }
                   onHoverStart={() => setHoveredBadgeId(b.id)}
                   onHoverEnd={() => setHoveredBadgeId(null)}
-                  className="absolute z-0 flex h-14 w-14 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-white/8 bg-slate-800/85 text-white shadow-lg backdrop-blur sm:h-16 sm:w-16"
+                  className="absolute z-20 flex h-14 w-14 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-slate-200 dark:border-white/8 bg-white/90 dark:bg-slate-800/85 text-slate-700 dark:text-white shadow-lg backdrop-blur sm:h-16 sm:w-16"
                   whileHover={{
                     backgroundColor: hoverBg,
                     borderColor: hoverBorder,
@@ -258,12 +211,12 @@ export function Hero() {
                 >
                   {Component ? (
                     <Component
-                      className={`h-7 w-7 ${b.iconClass}`}
+                      className="h-7 w-7"
                       style={{ color: isHovered ? hoverIconColor : undefined }}
                     />
                   ) : (
                     <span
-                      className={`text-xs font-semibold ${b.labelClass}`}
+                      className="text-xs font-semibold"
                       style={{ color: isHovered ? hoverIconColor : undefined }}
                     >
                       {(b as any).label}
@@ -277,7 +230,7 @@ export function Hero() {
               <img
                 src="/hero-person.png"
                 alt="Priyanshu Chourasia"
-                className="h-full w-full rounded-2xl object-contain object-center shadow-2xl shadow-cyan-500/30"
+                className="h-full w-full rounded-2xl object-contain object-center shadow-2xl shadow-cyan-500/20 dark:shadow-cyan-500/30"
               />
             </div>
           </div>
