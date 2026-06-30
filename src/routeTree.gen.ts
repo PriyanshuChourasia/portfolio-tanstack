@@ -10,43 +10,53 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as BlogIdRouteImport } from './routes/blog/$id'
+import { Route as UnitsIndexRouteImport } from './routes/units/index'
+import { Route as UnitsConversionRouteImport } from './routes/units/conversion'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const BlogIdRoute = BlogIdRouteImport.update({
-  id: '/blog/$id',
-  path: '/blog/$id',
+const UnitsIndexRoute = UnitsIndexRouteImport.update({
+  id: '/units/',
+  path: '/units/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const UnitsConversionRoute = UnitsConversionRouteImport.update({
+  id: '/units/conversion',
+  path: '/units/conversion',
   getParentRoute: () => rootRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/blog/$id': typeof BlogIdRoute
+  '/units/conversion': typeof UnitsConversionRoute
+  '/units': typeof UnitsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/blog/$id': typeof BlogIdRoute
+  '/units/conversion': typeof UnitsConversionRoute
+  '/units': typeof UnitsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/blog/$id': typeof BlogIdRoute
+  '/units/conversion': typeof UnitsConversionRoute
+  '/units/': typeof UnitsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/blog/$id'
+  fullPaths: '/' | '/units/conversion' | '/units'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/blog/$id'
-  id: '__root__' | '/' | '/blog/$id'
+  to: '/' | '/units/conversion' | '/units'
+  id: '__root__' | '/' | '/units/conversion' | '/units/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  BlogIdRoute: typeof BlogIdRoute
+  UnitsConversionRoute: typeof UnitsConversionRoute
+  UnitsIndexRoute: typeof UnitsIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -58,11 +68,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/blog/$id': {
-      id: '/blog/$id'
-      path: '/blog/$id'
-      fullPath: '/blog/$id'
-      preLoaderRoute: typeof BlogIdRouteImport
+    '/units/': {
+      id: '/units/'
+      path: '/units'
+      fullPath: '/units'
+      preLoaderRoute: typeof UnitsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/units/conversion': {
+      id: '/units/conversion'
+      path: '/units/conversion'
+      fullPath: '/units/conversion'
+      preLoaderRoute: typeof UnitsConversionRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -70,7 +87,8 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  BlogIdRoute: BlogIdRoute,
+  UnitsConversionRoute: UnitsConversionRoute,
+  UnitsIndexRoute: UnitsIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
