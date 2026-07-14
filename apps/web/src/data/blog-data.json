@@ -1,0 +1,75 @@
+{
+  "posts": [
+    {
+      "id": 1,
+      "date": "08 AUG 2026",
+      "author": "Priyanshu Chourasia",
+      "title": "Welcome to MultiThreading!",
+      "category": "Operating System, Threading, Process",
+      "image": "/images/blog1.png",
+      "desc": "This is the Part-I of multi-threading journey of mine....",
+      "intro": "Concurrency vs Parallelism",
+      "content": "<p><b class=\"text-lg font-bold\">Context Switching</b>. Keep context of this word we are going to understand threading concepts. Your OS is not some magical place, It's a kitchen where cooks numbers defines the process or resources being used.</p> </br> <p class=\"py-4\">Like your kitchen consist of single chef or multi chef and your system defines as single core or multi core</p> </br> <image src=\"/images/osprocess.png\" />",
+      "codeSnippet": "def print_hi(name)\n  puts \"Hi, #{name}\"\nend\nprint_hi('Tom')\n#=> prints 'Hi, Tom' to STDOUT.",
+      "footer": "<p>Check out the <a href=\"#\" className=\"text-primary\">Jekyll docs</a> for more info on how to get the most out of Jekyll. File all bugs/feature requests at <a href=\"#\" className=\"text-primary\">Jekyll's GitHub repo</a>. If you have questions, you can ask them on <a href=\"#\" className=\"text-primary\">Jekyll Talk</a>.</p>",
+      "tags": [
+        "OS",
+        "Process",
+        "Thread",
+        "Concurrency"
+      ]
+    },
+    {
+      "id": 2,
+      "date": "04 May 2026",
+      "author": "Admin",
+      "title": "Journey of GIT",
+      "category": "File System, Github, Git",
+      "image": "/images/gitimage.png",
+      "desc": "The path of a programmer is filled with continuous learning and discovery...",
+      "intro": "The path of a programmer is filled with continuous learning and discovery...",
+      "content": "<p>Continuous learning is essential in the tech industry. Every day brings new technologies, frameworks, and best practices to discover and master.</p>",
+      "codeSnippet": "const learn = () => {\n  console.log('Keep learning!');\n};",
+      "tags": [
+        "Learning",
+        "Development"
+      ]
+    },
+    {
+      "id": 3,
+      "date": "02 AUG 2020",
+      "author": "Admin",
+      "title": "Design is not just what it looks like",
+      "category": "Inspiration",
+      "image": "/images/blog3.png",
+      "desc": "Good design is about making things simple and intuitive...",
+      "intro": "",
+      "content": "<p>Great design combines aesthetics with functionality. It's about creating experiences that users love.</p>",
+      "codeSnippet": "// Good design principles\nconst design = {\n  form: 'follows function',\n  simplicity: true\n};",
+      "tags": [
+        "Design",
+        "UX"
+      ]
+    },
+    {
+      "id": 4,
+      "date": "10 JUL 2026",
+      "author": "Priyanshu Chourasia",
+      "title": "LLM from Scratch: Practical Engineering from Base Model to PPO RLHF (Phase 1)",
+      "category": "Machine Learning, LLM, Deep Learning",
+      "image": "/images/placeholder-logo.png",
+      "desc": "Phase 1 of a hands-on series on building an LLM from scratch — from raw-text pretraining to PPO-based RLHF.",
+      "intro": "Base Model to PPO RLHF — Phase 1",
+      "content": "<p><b class=\"text-lg font-bold\">Base Model</b>. Before a language model can follow instructions, argue with you, or write code, it has to learn language itself — from raw text, with no notion of 'assistant' or 'user'. This is Phase 1 of a multi-part series where I build an LLM from scratch and walk through every stage: pretraining a base model, supervised fine-tuning, reward modeling, and finally PPO-based RLHF.</p> </br> <p class=\"py-4\">The goal of this series isn't to reproduce a paper — it's practical engineering. Each phase covers the actual code, the failure modes I hit, and the compute/data tradeoffs that matter when you don't have a datacenter.</p> </br> <p class=\"py-4\"><b class=\"text-lg font-bold\">The Pipeline</b></p> <p class=\"py-4\">Roughly, the journey looks like this:</p> <ul class=\"list-disc pl-6 py-2\"><li><b>Base model pretraining</b> — next-token prediction on a large text corpus.</li><li><b>Supervised Fine-Tuning (SFT)</b> — teaching the base model to follow instructions using curated prompt/response pairs.</li><li><b>Reward Modeling</b> — training a model to score outputs by human preference.</li><li><b>PPO (RLHF)</b> — using the reward model to fine-tune the policy with Proximal Policy Optimization.</li></ul> </br> <p class=\"py-4\">In this first post, I set up the training stack and get a small base model learning from raw text — the foundation everything else builds on.</p>",
+      "codeSnippet": "for step, batch in enumerate(dataloader):\n    logits = model(batch.input_ids)\n    loss = cross_entropy(logits, batch.labels)\n    loss.backward()\n    optimizer.step()\n    optimizer.zero_grad()",
+      "footer": "<p>This is Phase 1 of the series — Phase 2 will cover Supervised Fine-Tuning (SFT) in detail.</p>",
+      "tags": [
+        "LLM",
+        "Machine Learning",
+        "RLHF",
+        "PPO",
+        "Deep Learning"
+      ]
+    }
+  ]
+}

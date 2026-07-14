@@ -2,26 +2,34 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Monorepo layout
+
+This is a **pnpm + Turborepo monorepo**. The portfolio app lives in `apps/web/`; all paths below (`src/`, `package.json`, etc.) are relative to `apps/web/` unless stated otherwise. Root-level `turbo.json` defines the task pipeline and `pnpm-workspace.yaml` defines the workspace. There are no `packages/*` yet — add shared packages there if a second app is introduced.
+
 ## Commands
 
+Run from the repo root — `turbo` fans these out to every app in the workspace (currently just `web`):
+
 ```bash
-npm run dev        # Start dev server on port 3000
-npm run build      # Build for production (vite build && tsc)
-npm run serve      # Preview production build
-npm run lint       # ESLint check
-npm run format     # Prettier format
-npm run check      # Prettier write + ESLint fix (combined)
-npm run test       # Run Vitest tests
+pnpm dev            # Start dev server on port 3000 (apps/web)
+pnpm build          # Build for production (vite build && tsc)
+pnpm serve          # Preview production build
+pnpm lint           # ESLint check
+pnpm format         # Prettier format
+pnpm check          # Prettier write + ESLint fix (combined)
+pnpm test           # Run Vitest tests
 ```
 
-To add shadcn/ui components:
+Equivalent commands can be run scoped to a single app with `pnpm --filter web run <script>`, or by `cd apps/web` and using `pnpm run <script>` directly.
+
+To add shadcn/ui components (run from `apps/web/`):
 ```bash
 pnpx shadcn@latest add <component-name>
 ```
 
 ## Architecture
 
-This is a personal portfolio SPA built with TanStack Router (file-based routing), React 19, TailwindCSS v4, and Framer Motion / GSAP for animations.
+This is a personal portfolio SPA built with TanStack Router (file-based routing), React 19, TailwindCSS v4, and Framer Motion / GSAP for animations. It lives at `apps/web/` in the monorepo.
 
 ### Entry point
 
