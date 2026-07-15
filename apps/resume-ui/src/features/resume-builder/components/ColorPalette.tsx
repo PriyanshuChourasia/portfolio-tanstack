@@ -1,6 +1,6 @@
 import { cn } from '@/lib/utils'
 import type { ResumeTheme } from '../types'
-import { DEFAULT_THEME } from '../constants'
+import { DEFAULT_THEME } from '../types'
 
 interface ColorPaletteProps {
   theme: ResumeTheme

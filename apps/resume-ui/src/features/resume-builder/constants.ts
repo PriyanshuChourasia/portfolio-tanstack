@@ -1,26 +1,25 @@
 import type {
+  AwardEntry,
   CertificationEntry,
   EducationEntry,
   ExperienceEntry,
+  InterestEntry,
   LanguageEntry,
+  PersonalInfo,
   ProjectEntry,
+  PublicationEntry,
+  ReferenceEntry,
   ResumeData,
-  ResumeTheme,
   SkillCategory,
+  VolunteerEntry,
+  CustomSectionEntry,
 } from './types'
+import { DEFAULT_THEME, DEFAULT_SETTINGS, DEFAULT_SECTION_ORDER } from './types'
 
 export const STORAGE_KEY = 'resume-builder:data'
 
 export function createId(): string {
   return crypto.randomUUID()
-}
-
-export const DEFAULT_THEME: ResumeTheme = {
-  primary: '#0f172a',
-  accent: '#2563eb',
-  text: '#1e293b',
-  muted: '#64748b',
-  background: '#ffffff',
 }
 
 export function createEmptyResumeData(): ResumeData {
@@ -42,7 +41,15 @@ export function createEmptyResumeData(): ResumeData {
     projects: [],
     certifications: [],
     languages: [],
+    awards: [],
+    volunteer: [],
+    references: [],
+    publications: [],
+    interests: [],
+    customSections: [],
     theme: { ...DEFAULT_THEME },
+    settings: { ...DEFAULT_SETTINGS },
+    sectionOrder: [...DEFAULT_SECTION_ORDER],
   }
 }
 
@@ -96,10 +103,38 @@ export function createEmptyLanguage(): LanguageEntry {
   return { id: createId(), name: '', level: '' }
 }
 
-/**
- * Pre-populated sample resume data so the builder isn't empty on first visit.
- * Based on the real resume content from the static template routes.
- */
+export function createEmptyAward(): AwardEntry {
+  return { id: createId(), name: '', date: '', issuer: '', description: '' }
+}
+
+export function createEmptyVolunteer(): VolunteerEntry {
+  return {
+    id: createId(),
+    role: '',
+    organization: '',
+    location: '',
+    startDate: '',
+    endDate: '',
+    bullets: '',
+  }
+}
+
+export function createEmptyReference(): ReferenceEntry {
+  return { id: createId(), name: '', title: '', company: '', email: '', phone: '' }
+}
+
+export function createEmptyPublication(): PublicationEntry {
+  return { id: createId(), title: '', publisher: '', date: '', url: '', description: '' }
+}
+
+export function createEmptyInterest(): InterestEntry {
+  return { id: createId(), name: '', description: '' }
+}
+
+export function createEmptyCustomSection(): CustomSectionEntry {
+  return { id: createId(), title: '', content: '' }
+}
+
 export function createSampleResumeData(): ResumeData {
   return {
     personalInfo: {
@@ -140,41 +175,13 @@ export function createSampleResumeData(): ResumeData {
       },
     ],
     skills: [
-      {
-        id: createId(),
-        label: 'Languages',
-        value: 'Java, Python, PHP, JavaScript (ES6+), TypeScript',
-      },
-      {
-        id: createId(),
-        label: 'Frontend',
-        value: 'React, React Query, Next.js, zod, HTML5, CSS3, Tailwind CSS, Web Workers, Shadcn/ui',
-      },
-      {
-        id: createId(),
-        label: 'Backend',
-        value: 'Spring Boot, Express.js, Node.js, Laravel, REST API Design, Multi-Threading, WebSockets',
-      },
-      {
-        id: createId(),
-        label: 'Mobile',
-        value: 'React Native, Flutter, Google Maps SDK',
-      },
-      {
-        id: createId(),
-        label: 'Databases',
-        value: 'MySQL, MongoDB, PostgreSQL, schema design, indexing, query optimization',
-      },
-      {
-        id: createId(),
-        label: 'DevOps & Tools',
-        value: 'Docker, Nginx, Redis, Ubuntu Server, GitHub Actions CI/CD, Git, Linux',
-      },
-      {
-        id: createId(),
-        label: 'AI & MCP',
-        value: 'Claude Code, MCP server development, prompt engineering',
-      },
+      { id: createId(), label: 'Languages', value: 'Java, Python, PHP, JavaScript (ES6+), TypeScript' },
+      { id: createId(), label: 'Frontend', value: 'React, React Query, Next.js, zod, HTML5, CSS3, Tailwind CSS, Web Workers, Shadcn/ui' },
+      { id: createId(), label: 'Backend', value: 'Spring Boot, Express.js, Node.js, Laravel, REST API Design, Multi-Threading, WebSockets' },
+      { id: createId(), label: 'Mobile', value: 'React Native, Flutter, Google Maps SDK' },
+      { id: createId(), label: 'Databases', value: 'MySQL, MongoDB, PostgreSQL, schema design, indexing, query optimization' },
+      { id: createId(), label: 'DevOps & Tools', value: 'Docker, Nginx, Redis, Ubuntu Server, GitHub Actions CI/CD, Git, Linux' },
+      { id: createId(), label: 'AI & MCP', value: 'Claude Code, MCP server development, prompt engineering' },
     ],
     projects: [
       {
@@ -184,8 +191,7 @@ export function createSampleResumeData(): ResumeData {
         stack: 'JavaScript, TypeScript, React, Shadcn/ui, CSS',
         startDate: '',
         endDate: '',
-        bullets:
-          'Designed, built, and self-hosted a personal portfolio site on a custom domain, including a custom MCP server exposing internal APIs for AI-agent access.',
+        bullets: 'Designed, built, and self-hosted a personal portfolio site on a custom domain, including a custom MCP server exposing internal APIs for AI-agent access.',
       },
       {
         id: createId(),
@@ -194,8 +200,7 @@ export function createSampleResumeData(): ResumeData {
         stack: 'PHP, Laravel, JavaScript, TypeScript, TanStack React',
         startDate: '',
         endDate: '',
-        bullets:
-          'Contributed to the Booking and Inventory modules of a full-stack clinic management system, centralizing operations into a unified dashboard in place of manual processes.\nBuilt reporting features for customer relationship management and inventory tracking, implemented role-based authentication and authorization for employee access control.',
+        bullets: 'Contributed to the Booking and Inventory modules of a full-stack clinic management system, centralizing operations into a unified dashboard in place of manual processes.\nBuilt reporting features for customer relationship management and inventory tracking, implemented role-based authentication and authorization for employee access control.',
       },
       {
         id: createId(),
@@ -204,21 +209,24 @@ export function createSampleResumeData(): ResumeData {
         stack: 'Java, Spring Boot, PHP, Laravel, TypeScript, TanStack React, Docker',
         startDate: '',
         endDate: '',
-        bullets:
-          'Built a full-stack income-tax filing platform as part of a 4-member team, guiding users through the entire ITR filing flow end-to-end.\nIntegrated with the Income Tax Department of India e-Filing portal for prefill data retrieval and ITR submission.\nBuilt on a multi-modular Spring Boot architecture with end-to-end encryption/decryption of financial and personal data.\nDesigned and built the Help Support Web Application from architecture through frontend-backend integration.\nOwned deployment and infrastructure for frontend and backend services on Ubuntu/Nginx/Docker.',
+        bullets: 'Built a full-stack income-tax filing platform as part of a 4-member team, guiding users through the entire ITR filing flow end-to-end.\nIntegrated with the Income Tax Department of India e-Filing portal for prefill data retrieval and ITR submission.\nBuilt on a multi-modular Spring Boot architecture with end-to-end encryption/decryption of financial and personal data.\nDesigned and built the Help Support Web Application from architecture through frontend-backend integration.\nOwned deployment and infrastructure for frontend and backend services on Ubuntu/Nginx/Docker.',
       },
     ],
     certifications: [
-      {
-        id: createId(),
-        name: 'MCP & A2A: Model Context Protocol & Agent-to-Agent Protocol',
-        url: '',
-      },
+      { id: createId(), name: 'MCP & A2A: Model Context Protocol & Agent-to-Agent Protocol', url: '' },
     ],
     languages: [
       { id: createId(), name: 'English', level: 'Advanced' },
       { id: createId(), name: 'Hindi', level: 'Native' },
     ],
+    awards: [],
+    volunteer: [],
+    references: [],
+    publications: [],
+    interests: [],
+    customSections: [],
     theme: { ...DEFAULT_THEME },
+    settings: { ...DEFAULT_SETTINGS },
+    sectionOrder: [...DEFAULT_SECTION_ORDER],
   }
 }

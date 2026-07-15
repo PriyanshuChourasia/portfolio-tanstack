@@ -64,7 +64,7 @@ export function ResumePagination({ children }: ResumePaginationProps) {
     <div className="relative" ref={contentRef}>
       {/* Page indicator badge */}
       {totalPages > 1 && (
-        <div className="bg-background/80 text-muted-foreground sticky top-3 z-10 mx-auto mb-4 flex w-fit items-center gap-1.5 rounded-full border px-3 py-1 text-[11px] font-medium shadow-xs backdrop-blur-sm">
+        <div className="bg-background/80 text-muted-foreground sticky top-3 z-10 mx-auto mb-4 flex w-fit items-center gap-1.5 rounded-full border px-3 py-1 text-[11px] font-medium shadow-xs backdrop-blur-sm print:hidden">
           <svg
             className="size-3"
             viewBox="0 0 24 24"

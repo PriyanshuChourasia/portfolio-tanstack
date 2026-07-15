@@ -25,6 +25,24 @@
       "title": "Programming Course",
       "company": "Paris",
       "desc": "Completed comprehensive training in modern web development and software engineering principles."
+    },
+    {
+      "period": "20XX - 20XX",
+      "title": "Diploma",
+      "company": "Your Polytechnic Institute",
+      "desc": "Diploma in Computer Science / Engineering."
+    },
+    {
+      "period": "20XX - 20XX",
+      "title": "12th Grade",
+      "company": "Your School Name",
+      "desc": "Higher Secondary Education, Science Stream."
+    },
+    {
+      "period": "20XX - 20XX",
+      "title": "10th Grade",
+      "company": "Your School Name",
+      "desc": "Secondary School Education."
     }
   ],
   "designSkills": [

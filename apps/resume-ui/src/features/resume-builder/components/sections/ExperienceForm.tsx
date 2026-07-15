@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
+import { DateRangeFields } from '../DateRangeFields'
 import { RepeatableCard } from '../RepeatableCard'
 import { createEmptyExperience } from '../../constants'
 import type { ExperienceEntry } from '../../types'
@@ -59,25 +60,15 @@ export function ExperienceForm({
                 onChange={(e) => update(index, { location: e.target.value })}
               />
             </div>
-            <div className="grid grid-cols-2 gap-2">
-              <div className="space-y-1.5">
-                <Label className="text-xs font-medium">Start Date</Label>
-                <Input
-                  value={exp.startDate}
-                  placeholder="Jan 2020"
-                  onChange={(e) =>
-                    update(index, { startDate: e.target.value })
-                  }
-                />
-              </div>
-              <div className="space-y-1.5">
-                <Label className="text-xs font-medium">End Date</Label>
-                <Input
-                  value={exp.endDate}
-                  placeholder="Present"
-                  onChange={(e) => update(index, { endDate: e.target.value })}
-                />
-              </div>
+            <div className="space-y-1.5">
+              <Label className="text-xs font-medium">Dates</Label>
+              <DateRangeFields
+                startDate={exp.startDate}
+                endDate={exp.endDate}
+                onStartDateChange={(value) => update(index, { startDate: value })}
+                onEndDateChange={(value) => update(index, { endDate: value })}
+                presentCheckboxLabel="Currently working here"
+              />
             </div>
           </div>
           <div className="space-y-1.5">

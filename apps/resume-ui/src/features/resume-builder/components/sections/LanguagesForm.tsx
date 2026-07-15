@@ -1,5 +1,6 @@
 import { Globe, Plus, Trash2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { Combobox } from '@/components/ui/combobox'
 import { Input } from '@/components/ui/input'
 import { createEmptyLanguage } from '../../constants'
 import type { LanguageEntry } from '../../types'
@@ -12,6 +13,11 @@ interface LanguagesFormProps {
 }
 
 const LEVEL_ORDER = ['', 'Native', 'Fluent', 'Advanced', 'Intermediate', 'Beginner']
+
+const LEVEL_OPTIONS = LEVEL_ORDER.filter(Boolean).map((level) => ({
+  value: level,
+  label: level,
+}))
 
 const LEVEL_DOTS: Record<string, number> = {
   Native: 5,
@@ -66,21 +72,18 @@ export function LanguagesForm({
               placeholder="English"
               onChange={(e) => update(index, { name: e.target.value })}
             />
-            <select
+            <Combobox
+              options={LEVEL_OPTIONS}
               value={lang.level}
-              onChange={(e) => update(index, { level: e.target.value })}
-              className="border-input bg-background ring-offset-background focus-visible:ring-ring flex h-8 w-28 shrink-0 rounded-md border px-2 py-1 text-xs shadow-xs transition-colors focus-visible:ring-1 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
-            >
-              {LEVEL_ORDER.map((level) => (
-                <option key={level} value={level}>
-                  {level || 'Level'}
-                </option>
-              ))}
-            </select>
+              onChange={(value) => update(index, { level: value })}
+              placeholder="Level"
+              searchPlaceholder="Search level..."
+              className="h-8 w-28 shrink-0 px-2 text-xs"
+            />
             <Button
               type="button"
               variant="ghost"
-              size="icon-xs"
+              size="icon-sm"
               className="text-muted-foreground/30 hover:text-destructive hover:bg-destructive/10 shrink-0 transition-all"
               onClick={() => remove(index)}
               aria-label="Remove language"

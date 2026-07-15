@@ -15,7 +15,7 @@ import type { ResumeTemplateDefinition } from './types'
 export const resumeTemplates: Array<ResumeTemplateDefinition> = [
   {
     id: 'classic',
-    name: 'Classic',
+    name: 'Germany',
     description: 'Serif, single-column ATS-friendly layout.',
     component: ClassicTemplate,
   },
@@ -28,7 +28,7 @@ export const resumeTemplates: Array<ResumeTemplateDefinition> = [
   },
   {
     id: 'bold',
-    name: 'Bold',
+    name: 'Poland',
     description:
       'Blue accented headings with an optional photo and a flat skills grid.',
     component: BoldTemplate,

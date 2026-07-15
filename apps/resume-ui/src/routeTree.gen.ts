@@ -9,12 +9,30 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as ResumeToPortfolioRouteImport } from './routes/resume-to-portfolio'
+import { Route as ResumeRouteImport } from './routes/resume'
+import { Route as PortfolioRouteImport } from './routes/portfolio'
 import { Route as ClassicRouteImport } from './routes/classic'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as PolandFrontendRouteImport } from './routes/poland/frontend'
 import { Route as PolandBackendRouteImport } from './routes/poland/backend'
 import { Route as GermanyBackendRouteImport } from './routes/germany/backend'
 
+const ResumeToPortfolioRoute = ResumeToPortfolioRouteImport.update({
+  id: '/resume-to-portfolio',
+  path: '/resume-to-portfolio',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResumeRoute = ResumeRouteImport.update({
+  id: '/resume',
+  path: '/resume',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PortfolioRoute = PortfolioRouteImport.update({
+  id: '/portfolio',
+  path: '/portfolio',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ClassicRoute = ClassicRouteImport.update({
   id: '/classic',
   path: '/classic',
@@ -44,6 +62,9 @@ const GermanyBackendRoute = GermanyBackendRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/classic': typeof ClassicRoute
+  '/portfolio': typeof PortfolioRoute
+  '/resume': typeof ResumeRoute
+  '/resume-to-portfolio': typeof ResumeToPortfolioRoute
   '/germany/backend': typeof GermanyBackendRoute
   '/poland/backend': typeof PolandBackendRoute
   '/poland/frontend': typeof PolandFrontendRoute
@@ -51,6 +72,9 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/classic': typeof ClassicRoute
+  '/portfolio': typeof PortfolioRoute
+  '/resume': typeof ResumeRoute
+  '/resume-to-portfolio': typeof ResumeToPortfolioRoute
   '/germany/backend': typeof GermanyBackendRoute
   '/poland/backend': typeof PolandBackendRoute
   '/poland/frontend': typeof PolandFrontendRoute
@@ -59,6 +83,9 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/classic': typeof ClassicRoute
+  '/portfolio': typeof PortfolioRoute
+  '/resume': typeof ResumeRoute
+  '/resume-to-portfolio': typeof ResumeToPortfolioRoute
   '/germany/backend': typeof GermanyBackendRoute
   '/poland/backend': typeof PolandBackendRoute
   '/poland/frontend': typeof PolandFrontendRoute
@@ -68,6 +95,9 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/classic'
+    | '/portfolio'
+    | '/resume'
+    | '/resume-to-portfolio'
     | '/germany/backend'
     | '/poland/backend'
     | '/poland/frontend'
@@ -75,6 +105,9 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/classic'
+    | '/portfolio'
+    | '/resume'
+    | '/resume-to-portfolio'
     | '/germany/backend'
     | '/poland/backend'
     | '/poland/frontend'
@@ -82,6 +115,9 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/classic'
+    | '/portfolio'
+    | '/resume'
+    | '/resume-to-portfolio'
     | '/germany/backend'
     | '/poland/backend'
     | '/poland/frontend'
@@ -90,6 +126,9 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ClassicRoute: typeof ClassicRoute
+  PortfolioRoute: typeof PortfolioRoute
+  ResumeRoute: typeof ResumeRoute
+  ResumeToPortfolioRoute: typeof ResumeToPortfolioRoute
   GermanyBackendRoute: typeof GermanyBackendRoute
   PolandBackendRoute: typeof PolandBackendRoute
   PolandFrontendRoute: typeof PolandFrontendRoute
@@ -97,6 +136,27 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/resume-to-portfolio': {
+      id: '/resume-to-portfolio'
+      path: '/resume-to-portfolio'
+      fullPath: '/resume-to-portfolio'
+      preLoaderRoute: typeof ResumeToPortfolioRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/resume': {
+      id: '/resume'
+      path: '/resume'
+      fullPath: '/resume'
+      preLoaderRoute: typeof ResumeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/portfolio': {
+      id: '/portfolio'
+      path: '/portfolio'
+      fullPath: '/portfolio'
+      preLoaderRoute: typeof PortfolioRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/classic': {
       id: '/classic'
       path: '/classic'
@@ -138,6 +198,9 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ClassicRoute: ClassicRoute,
+  PortfolioRoute: PortfolioRoute,
+  ResumeRoute: ResumeRoute,
+  ResumeToPortfolioRoute: ResumeToPortfolioRoute,
   GermanyBackendRoute: GermanyBackendRoute,
   PolandBackendRoute: PolandBackendRoute,
   PolandFrontendRoute: PolandFrontendRoute,

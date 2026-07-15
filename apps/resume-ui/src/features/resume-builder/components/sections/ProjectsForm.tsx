@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
+import { DateRangeFields } from '../DateRangeFields'
 import { RepeatableCard } from '../RepeatableCard'
 import { createEmptyProject } from '../../constants'
 import type { ProjectEntry } from '../../types'
@@ -52,28 +53,13 @@ export function ProjectsForm({ items, add, update, remove }: ProjectsFormProps) 
 
             <div className="space-y-1.5">
               <Label className="text-xs font-medium">Dates</Label>
-              <div className="grid grid-cols-2 gap-2">
-                <Input
-                  value={project.startDate}
-                  placeholder="Start"
-                  onChange={(e) => update(index, { startDate: e.target.value })}
-                />
-                <Input
-                  value={project.endDate === 'Present' ? '' : project.endDate}
-                  placeholder="End"
-                  disabled={project.endDate === 'Present'}
-                  onChange={(e) => update(index, { endDate: e.target.value })}
-                />
-              </div>
-              <label className="mt-1 flex cursor-pointer items-center gap-1.5 text-[11px] text-muted-foreground">
-                <input
-                  type="checkbox"
-                  checked={project.endDate === 'Present'}
-                  onChange={(e) => update(index, { endDate: e.target.checked ? 'Present' : '' })}
-                  className="size-3.5 rounded border-gray-300 text-primary focus:ring-primary"
-                />
-                In progress
-              </label>
+              <DateRangeFields
+                startDate={project.startDate}
+                endDate={project.endDate}
+                onStartDateChange={(value) => update(index, { startDate: value })}
+                onEndDateChange={(value) => update(index, { endDate: value })}
+                presentCheckboxLabel="In progress"
+              />
             </div>
 
             <div className="space-y-1.5 sm:col-span-2">

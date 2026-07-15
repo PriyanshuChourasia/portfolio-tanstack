@@ -50,7 +50,7 @@ export function CertificationsForm({
             <Button
               type="button"
               variant="ghost"
-              size="icon-xs"
+              size="icon-sm"
               className="text-muted-foreground/30 hover:text-destructive hover:bg-destructive/10 shrink-0 self-start transition-all"
               onClick={() => remove(index)}
               aria-label="Remove certification"

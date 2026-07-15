@@ -28,7 +28,7 @@ export function RepeatableCard({
         <Button
           type="button"
           variant="ghost"
-          size="icon-xs"
+          size="icon-sm"
           className="text-muted-foreground/30 hover:text-destructive hover:bg-destructive/10 transition-all"
           onClick={onRemove}
           aria-label="Remove entry"

@@ -508,7 +508,7 @@ function CreativePreview({ data }: { data: ResumeData }) {
   )
 }
 
-const previewComponents: Record<ResumeLayout, React.ComponentType<{ data: ResumeData }>> = {
+export const previewComponents: Record<ResumeLayout, React.ComponentType<{ data: ResumeData }>> = {
   classic: ClassicPreview,
   modern: ModernPreview,
   minimal: MinimalPreview,

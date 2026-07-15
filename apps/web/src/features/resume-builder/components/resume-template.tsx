@@ -1,8 +1,9 @@
-import { useState, useCallback, useEffect, useRef } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
-import { ChevronLeft, ChevronRight, Download, Shuffle, Play, Pause } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Download, LayoutGrid, Pause, Play, Shuffle } from 'lucide-react'
 import { EditorPanel } from './editor-panel'
 import { ResumePreview } from './resume-preview'
+import { TemplateShowcase } from './template-showcase'
 
 export type ResumeLayout = 'classic' | 'modern' | 'minimal' | 'professional' | 'creative'
 
@@ -370,12 +371,23 @@ const demoProfiles: { name: string; data: ResumeData }[] = [
 ]
 
 export function ResumeTemplate() {
+  const [view, setView] = useState<'showcase' | 'builder'>('showcase')
   const [data, setData] = useState<ResumeData>(demoProfiles[0].data)
   const [activeProfileIdx, setActiveProfileIdx] = useState(0)
   const [activeLayout, setActiveLayout] = useState<ResumeLayout>('classic')
   const [sidebarOpen, setSidebarOpen] = useState(true)
   const [isCycling, setIsCycling] = useState(false)
   const cycleRef = useRef<ReturnType<typeof setInterval> | null>(null)
+
+  const handleSelectTemplate = useCallback((layout: ResumeLayout) => {
+    setActiveLayout(layout)
+    setView('builder')
+  }, [])
+
+  const handleBackToShowcase = useCallback(() => {
+    setIsCycling(false)
+    setView('showcase')
+  }, [])
 
   const shuffleProfile = useCallback(() => {
     const next = (activeProfileIdx + 1) % demoProfiles.length
@@ -409,11 +421,22 @@ export function ResumeTemplate() {
     }
   }, [isCycling])
 
+  if (view === 'showcase') {
+    return <TemplateShowcase onSelect={handleSelectTemplate} />
+  }
+
   return (
     <div className="h-screen w-full bg-slate-950 flex flex-col overflow-hidden">
       {/* Header with layout names */}
       <header className="h-14 shrink-0 bg-slate-900/80 border-b border-slate-800 backdrop-blur-md flex items-center justify-between px-4 z-20">
         <div className="flex items-center gap-2">
+          <button
+            onClick={handleBackToShowcase}
+            className="p-1.5 rounded-md hover:bg-slate-800 text-slate-400 hover:text-white transition-colors"
+            title="Back to templates"
+          >
+            <LayoutGrid className="w-4 h-4" />
+          </button>
           <button
             onClick={() => setSidebarOpen(!sidebarOpen)}
             className="p-1.5 rounded-md hover:bg-slate-800 text-slate-400 hover:text-white transition-colors"

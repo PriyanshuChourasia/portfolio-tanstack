@@ -1,7 +1,9 @@
 import { Plus } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { Combobox } from '@/components/ui/combobox'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { DateRangeFields } from '../DateRangeFields'
 import { RepeatableCard } from '../RepeatableCard'
 import { createEmptyEducation } from '../../constants'
 import type { EducationEntry } from '../../types'
@@ -14,11 +16,14 @@ interface EducationFormProps {
 }
 
 const COMMON_DEGREES = [
+  '10th', '12th', 'Diploma',
   'BE', 'B.Tech', 'B.Sc', 'BCA', 'B.Com', 'BA', 'BBA', 'B.Des',
   'B.Arch', 'LLB',
   'ME', 'M.Tech', 'M.Sc', 'MCA', 'M.Com', 'MA', 'MBA', 'M.Des',
-  'LLM', 'PhD', 'Diploma',
+  'LLM', 'PhD', 'Other',
 ]
+
+const DEGREE_OPTIONS = COMMON_DEGREES.map((d) => ({ value: d, label: d }))
 
 const INDIAN_STATES = [
   'Andhra Pradesh', 'Arunachal Pradesh', 'Assam', 'Bihar', 'Chhattisgarh',
@@ -31,6 +36,8 @@ const INDIAN_STATES = [
   'Dadra and Nagar Haveli and Daman and Diu', 'Delhi',
   'Jammu and Kashmir', 'Ladakh', 'Lakshadweep', 'Puducherry',
 ]
+
+const STATE_OPTIONS = INDIAN_STATES.map((s) => ({ value: s, label: s }))
 
 export function EducationForm({ items, add, update, remove }: EducationFormProps) {
   return (
@@ -50,17 +57,13 @@ export function EducationForm({ items, add, update, remove }: EducationFormProps
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <div className="space-y-1.5 sm:col-span-2">
               <Label className="text-xs font-medium">Degree</Label>
-              <select
+              <Combobox
+                options={DEGREE_OPTIONS}
                 value={ed.degree}
-                onChange={(e) => update(index, { degree: e.target.value })}
-                className="border-input bg-background ring-offset-background focus-visible:ring-ring flex h-9 w-full rounded-md border px-3 py-1 text-sm shadow-xs transition-colors focus-visible:ring-1 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
-              >
-                <option value="">Select degree</option>
-                {COMMON_DEGREES.map((d) => (
-                  <option key={d} value={d}>{d}</option>
-                ))}
-                <option value="Other">Other</option>
-              </select>
+                onChange={(value) => update(index, { degree: value })}
+                placeholder="Select degree"
+                searchPlaceholder="Search degree..."
+              />
             </div>
 
             <div className="space-y-1.5 sm:col-span-2">
@@ -83,44 +86,24 @@ export function EducationForm({ items, add, update, remove }: EducationFormProps
 
             <div className="space-y-1.5">
               <Label className="text-xs font-medium">State</Label>
-              <select
+              <Combobox
+                options={STATE_OPTIONS}
                 value={ed.state}
-                onChange={(e) => update(index, { state: e.target.value })}
-                className="border-input bg-background ring-offset-background focus-visible:ring-ring flex h-9 w-full rounded-md border px-3 py-1 text-sm shadow-xs transition-colors focus-visible:ring-1 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
-              >
-                <option value="">Select state</option>
-                {INDIAN_STATES.map((st) => (
-                  <option key={st} value={st}>{st}</option>
-                ))}
-              </select>
+                onChange={(value) => update(index, { state: value })}
+                placeholder="Select state"
+                searchPlaceholder="Search state..."
+              />
             </div>
 
             <div className="space-y-1.5">
               <Label className="text-xs font-medium">Dates</Label>
-              <div className="grid grid-cols-2 gap-2">
-                <Input
-                  value={ed.startDate}
-                  placeholder="Start"
-                  onChange={(e) => update(index, { startDate: e.target.value })}
-                />
-                <div className="relative">
-                  <Input
-                    value={ed.endDate === 'Present' ? '' : ed.endDate}
-                    placeholder="End"
-                    disabled={ed.endDate === 'Present'}
-                    onChange={(e) => update(index, { endDate: e.target.value })}
-                  />
-                </div>
-              </div>
-              <label className="mt-1 flex cursor-pointer items-center gap-1.5 text-[11px] text-muted-foreground">
-                <input
-                  type="checkbox"
-                  checked={ed.endDate === 'Present'}
-                  onChange={(e) => update(index, { endDate: e.target.checked ? 'Present' : '' })}
-                  className="size-3.5 rounded border-gray-300 text-primary focus:ring-primary"
-                />
-                Currently pursuing / ongoing
-              </label>
+              <DateRangeFields
+                startDate={ed.startDate}
+                endDate={ed.endDate}
+                onStartDateChange={(value) => update(index, { startDate: value })}
+                onEndDateChange={(value) => update(index, { endDate: value })}
+                presentCheckboxLabel="Currently pursuing / ongoing"
+              />
             </div>
           </div>
         </RepeatableCard>

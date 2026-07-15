@@ -1,4 +1,3 @@
-
 <!doctype html>
 <html lang="en">
   <head>
@@ -62,6 +61,27 @@
         "description": "Build a professional, ATS-friendly resume for free. Pick from multiple recruiter-tested templates, fill in your details, and export straight to PDF."
       }
     </script>
+
+    <!-- Blocking script: apply theme class before first paint to prevent flash -->
+    <script>
+      (function () {
+        try {
+          var t = localStorage.getItem('resume-ui:theme');
+          if (t === 'dark' || t === 'light') {
+            document.documentElement.classList.add(t);
+          } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+          }
+        } catch (e) {}
+      })();
+    </script>
+    <style>
+      /* Prevent flash of unstyled content — body gets background immediately */
+      html.light body { background: #fafafa; color: #18181b; }
+      html.dark body  { background: #0a0a0a; color: #fafafa; }
+      /* Fallback before class is set */
+      body { background: #fafafa; color: #18181b; }
+    </style>
   </head>
   <body>
     <div id="app"></div>
