@@ -148,6 +148,7 @@ interface ResumeStore {
   updateSettings: (patch: Partial<ResumeSettings>) => void
   setSectionOrder: (order: Array<SectionId>) => void
   toggleSection: (sectionId: SectionId) => void
+  toggleSectionPageBreak: (sectionId: SectionId) => void
 
   // List CRUD
   experience: ListField<ExperienceEntry>
@@ -320,6 +321,23 @@ export const useResumeStore = create<ResumeStore>((set, get) => ({
         ? state.history.present.sectionOrder
         : [...state.history.present.sectionOrder, sectionId]
       const newData = { ...state.history.present, sectionOrder: order }
+      const newHistory = pushHistory(state.history, newData)
+      saveResumeData(state.document.meta.id, newData)
+      return {
+        history: newHistory,
+        document: { ...state.document, data: newData },
+        canUndo: newHistory.past.length > 0,
+        canRedo: newHistory.future.length > 0,
+      }
+    }),
+
+  toggleSectionPageBreak: (sectionId) =>
+    set((state) => {
+      const current = state.history.present.pageBreakBefore
+      const pageBreakBefore = current.includes(sectionId)
+        ? current.filter((id) => id !== sectionId)
+        : [...current, sectionId]
+      const newData = { ...state.history.present, pageBreakBefore }
       const newHistory = pushHistory(state.history, newData)
       saveResumeData(state.document.meta.id, newData)
       return {

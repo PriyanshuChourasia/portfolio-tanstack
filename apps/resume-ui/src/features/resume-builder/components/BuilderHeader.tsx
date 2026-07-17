@@ -19,6 +19,7 @@ import { useTheme } from './ThemeProvider'
 import { TemplatePicker } from './TemplatePicker'
 import { ResumeManager } from './ResumeManager'
 import { SettingsPanel } from './SettingsPanel'
+import { HelpPanel } from './HelpPanel'
 
 interface BuilderHeaderProps {
   templateId: string
@@ -207,6 +208,9 @@ export function BuilderHeader({
           >
             <Printer className="size-4" />
           </Button>
+
+          {/* Help */}
+          <HelpPanel />
 
           {/* Settings */}
           <SettingsPanel />

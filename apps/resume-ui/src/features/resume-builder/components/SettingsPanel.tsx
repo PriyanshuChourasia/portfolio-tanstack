@@ -10,6 +10,7 @@ import {
 import { Label } from '@/components/ui/label'
 import { useResumeStore } from '../store'
 import type { ResumeSettings } from '../types'
+import { ColorPalette } from './ColorPalette'
 
 const FONT_OPTIONS = ['Inter', 'Geist', 'Manrope', 'System'] as const
 
@@ -109,6 +110,8 @@ function RangeSlider({
 export function SettingsPanel() {
   const settings = useResumeStore((s) => s.history.present.settings)
   const updateSettings = useResumeStore((s) => s.updateSettings)
+  const theme = useResumeStore((s) => s.history.present.theme)
+  const setFullTheme = useResumeStore((s) => s.setFullTheme)
 
   const patch = <K extends keyof ResumeSettings>(key: K, value: ResumeSettings[K]) =>
     updateSettings({ [key]: value })
@@ -224,6 +227,14 @@ export function SettingsPanel() {
               onChange={(v) => patch('margins', v)}
             />
           </SettingGroup>
+        </div>
+
+        {/* Colors */}
+        <div className="border-t pt-4">
+          <Label className="mb-2 block text-xs font-medium text-muted-foreground">
+            Colors
+          </Label>
+          <ColorPalette theme={theme} onChange={setFullTheme} />
         </div>
       </DialogContent>
     </Dialog>

@@ -5,6 +5,7 @@ import { useShallow } from 'zustand/react/shallow'
 import { useResumeStore } from '../store'
 import { resumeTemplates } from '../templates/registry'
 import { extractTextFromPdf } from '../utils/pdf-parse'
+import { extractTextFromImage } from '../utils/extract-text-from-image'
 import { parseResumeText } from '../utils/parse-resume-text'
 import { exportAsWord } from '../utils/export-word'
 import { generatePdf } from '../utils/generate-pdf'
@@ -12,7 +13,9 @@ import { BuilderHeader } from './BuilderHeader'
 import { BuilderSidebar } from './BuilderSidebar'
 import { BulletStyle } from './BulletStyle'
 import { FontSizeStyle } from './FontSizeStyle'
+import { PaginatedPreviewPages } from './PaginatedPreviewPages'
 import { ResumePagination } from './ResumePagination'
+import type { PageLayout } from './ResumePagination'
 import { ResumePreview } from './ResumePreview'
 
 export function BuilderLayout() {
@@ -20,6 +23,7 @@ export function BuilderLayout() {
   const [importing, setImporting] = useState(false)
   const [exporting, setExporting] = useState<'pdf' | 'word' | null>(null)
   const [mobileTab, setMobileTab] = useState<'edit' | 'preview'>('edit')
+  const [pageLayout, setPageLayout] = useState<PageLayout>({ breaks: [], totalHeight: 0 })
 
   const settings = useResumeStore((s) => s.history.present.settings)
   const builder = useResumeStore(
@@ -53,7 +57,7 @@ export function BuilderLayout() {
     setExporting('pdf')
     await new Promise((r) => setTimeout(r, 50))
     try {
-      await generatePdf(el, `${templateName}.pdf`, settings.orientation)
+      await generatePdf(el, `${templateName}.pdf`, settings.orientation, settings.margins)
     } catch (err) {
       console.error('PDF export failed:', err)
       alert('Failed to generate PDF. Trying browser print instead.')
@@ -61,7 +65,7 @@ export function BuilderLayout() {
     } finally {
       setExporting(null)
     }
-  }, [templateName, settings.orientation])
+  }, [templateName, settings.orientation, settings.margins])
 
   const handleExportWord = useCallback(async () => {
     const el = previewRef.current
@@ -76,7 +80,7 @@ export function BuilderLayout() {
     }
   }, [templateName, settings.orientation])
 
-  const handlePdfUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (!file) return
 
@@ -101,8 +105,15 @@ export function BuilderLayout() {
     }
 
     setImporting(true)
+    const isPdf = file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf')
     try {
-      const rawText = await extractTextFromPdf(file)
+      const rawText = isPdf ? await extractTextFromPdf(file) : await extractTextFromImage(file)
+
+      if (!rawText) {
+        alert('No text could be extracted from this file. Try a different file.')
+        return
+      }
+
       const parsed = parseResumeText(rawText)
 
       if (parsed.personalInfo) builder.updatePersonalInfo(parsed.personalInfo)
@@ -128,8 +139,8 @@ export function BuilderLayout() {
         alert(`Import complete\n\n${summaryParts.join('\n')}`)
       }
     } catch (err) {
-      console.error('Failed to parse PDF:', err)
-      alert('Could not parse this PDF. Try copying the text and pasting it manually.')
+      console.error(`Failed to parse ${isPdf ? 'PDF' : 'image'}:`, err)
+      alert(`Could not parse this ${isPdf ? 'PDF' : 'image'}. Try copying the text and pasting it manually.`)
     } finally {
       setImporting(false)
       if (fileInputRef.current) fileInputRef.current.value = ''
@@ -137,8 +148,8 @@ export function BuilderLayout() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col bg-background print:bg-white">
-      <input ref={fileInputRef} type="file" accept=".pdf" className="hidden" onChange={handlePdfUpload} />
+    <div className="flex min-h-screen flex-col bg-background md:h-screen md:overflow-hidden print:bg-white print:h-auto print:overflow-visible">
+      <input ref={fileInputRef} type="file" accept=".pdf,.png,.jpg,.jpeg,.webp,.bmp,.tiff,.tif" className="hidden" onChange={handleFileUpload} />
 
       {/* Header */}
       <BuilderHeader
@@ -152,14 +163,14 @@ export function BuilderLayout() {
       />
 
       {/* Main content: form + preview */}
-      <div className="flex flex-1 flex-col md:flex-row print:block">
+      <div className="flex flex-1 flex-col md:flex-row md:min-h-0 print:block">
         {/* Sidebar — mobile: only visible when edit tab is active */}
-        <div className={mobileTab === 'edit' ? 'flex md:flex' : 'hidden md:flex'}>
+        <div className={mobileTab === 'edit' ? 'flex md:flex md:h-full md:min-h-0 md:overflow-hidden' : 'hidden md:flex md:h-full md:min-h-0 md:overflow-hidden'}>
           <BuilderSidebar templateId={templateId} />
         </div>
 
         {/* Preview — mobile: only visible when preview tab is active */}
-        <div className={`${mobileTab === 'preview' ? 'flex' : 'hidden'} md:flex min-w-0 flex-1 flex-col overflow-hidden print:overflow-visible md:max-h-[calc(100vh-57px)]`}>
+        <div className={`${mobileTab === 'preview' ? 'flex' : 'hidden'} md:flex print:flex min-w-0 flex-1 flex-col overflow-hidden print:overflow-visible md:h-full md:min-h-0`}>
           {/* Preview header */}
           <div className="flex items-center gap-2 border-b bg-card/50 px-4 py-1.5 sm:px-5 sm:py-2 print:hidden">
             <svg className="size-3 shrink-0 text-muted-foreground sm:size-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -181,24 +192,45 @@ export function BuilderLayout() {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.45, ease: 'easeOut' }}
-            className="flex-1 overflow-y-auto p-3 pb-8 sm:p-4 sm:pb-32 md:p-6 md:pb-28 print:overflow-visible print:bg-transparent dark:bg-muted/20 bg-muted/30"
+            className="flex-1 min-h-0 overflow-y-auto p-3 pb-8 sm:p-4 sm:pb-32 md:p-6 md:pb-28 print:overflow-visible print:bg-transparent dark:bg-muted/20 bg-muted/30"
           >
             <div className="flex flex-col items-center gap-4 print:block">
+              {/* Collapsed to zero height on screen when paginated (kept in
+                  normal, non-absolute flow so its width — and therefore its
+                  text wrapping and measured break points — exactly matches
+                  the visible sliced pages below). Restored for print, where
+                  it's the only thing that renders, using the browser's
+                  native pagination. Also the untouched source for Word/PDF export. */}
               <div
-                ref={previewRef}
-                className={`w-full rounded-sm shadow-xl ring-1 ring-black/5 dark:ring-white/10 print:static print:shadow-none fs-preview ${
-                  settings.orientation === 'landscape' ? 'max-w-[1100px]' : 'max-w-[850px]'
-                }`}
-                style={{ overflowX: 'auto' }}
+                className={`w-full ${pageLayout.breaks.length > 0 ? 'h-0 overflow-hidden print:h-auto print:overflow-visible' : ''}`}
               >
-                <FontSizeStyle size={settings.fontSize} />
-                <BulletStyle type={settings.bulletStyle} />
-                <div style={{ minWidth: 'min(320px, 100%)' }}>
-                  <ResumePagination>
-                    <ResumePreview templateId={templateId} data={data} />
-                  </ResumePagination>
+                <div
+                  ref={previewRef}
+                  className={`w-full rounded-sm shadow-xl ring-1 ring-black/5 dark:ring-white/10 print:shadow-none fs-preview ${
+                    settings.orientation === 'landscape' ? 'max-w-[1100px]' : 'max-w-[850px]'
+                  }`}
+                  style={{ overflowX: 'auto' }}
+                >
+                  <FontSizeStyle size={settings.fontSize} />
+                  <BulletStyle type={settings.bulletStyle} />
+                  <div style={{ minWidth: 'min(320px, 100%)' }}>
+                    <ResumePagination onLayoutChange={setPageLayout} forcedSectionIds={data.pageBreakBefore}>
+                      <ResumePreview templateId={templateId} data={data} />
+                    </ResumePagination>
+                  </div>
                 </div>
               </div>
+
+              {pageLayout.breaks.length > 0 && (
+                <PaginatedPreviewPages
+                  templateId={templateId}
+                  data={data}
+                  settings={settings}
+                  pageBreaks={pageLayout.breaks}
+                  totalHeight={pageLayout.totalHeight}
+                  className={settings.orientation === 'landscape' ? 'max-w-[1100px]' : 'max-w-[850px]'}
+                />
+              )}
             </div>
           </motion.div>
         </div>

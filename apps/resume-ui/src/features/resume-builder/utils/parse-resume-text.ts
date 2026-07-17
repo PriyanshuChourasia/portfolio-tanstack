@@ -191,8 +191,9 @@ export function parseResumeText(rawText: string): Partial<ResumeData> {
   if (urlMatches) result.personalInfo.website = urlMatches[0]
 
   // Location — look for "City, State" or "City, Country" patterns in first 20 lines
-  const locationMatch = text.match(
-    /([A-Z][a-z]+(?:[\s-][A-Z][a-z]+)*),\s*([A-Z]{2}|[A-Z][a-z]+)/,
+  const headerText = lines.slice(0, 20).join('\n')
+  const locationMatch = headerText.match(
+    /\b([A-Z][a-z]+(?:[\s-][A-Z][a-z]+)*),\s*([A-Z]{2}|[A-Z][a-z]+)\b/,
   )
   if (locationMatch) result.personalInfo.location = locationMatch[0]
 

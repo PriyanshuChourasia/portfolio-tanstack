@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import { DEFAULT_SECTION_ORDER, type SectionId } from '../types'
 import type { ResumeTemplateProps, ResumeTheme } from './types'
 
 export function ElegantTemplate({ data, theme = data.theme }: ResumeTemplateProps) {
@@ -16,6 +17,123 @@ export function ElegantTemplate({ data, theme = data.theme }: ResumeTemplateProp
     .flatMap((s) => s.value.split(','))
     .map((v) => v.trim())
     .filter(Boolean)
+
+  const order = data.sectionOrder?.length ? data.sectionOrder : DEFAULT_SECTION_ORDER
+
+  const sectionRenderers: Partial<Record<SectionId, ReactNode>> = {
+    summary: summary && (
+      <ElegantSection title="Profile" theme={theme}>
+        <p
+          className="text-center text-[13px] italic"
+          style={{ color: theme.text }}
+        >
+          {summary}
+        </p>
+      </ElegantSection>
+    ),
+
+    experience: experience.length > 0 && (
+      <ElegantSection title="Experience" theme={theme}>
+        <div className="space-y-5">
+          {experience.map((exp) => (
+            <div key={exp.id} className="break-inside-avoid">
+              <div className="flex items-start justify-between gap-3">
+                <span
+                  className="font-bold whitespace-nowrap"
+                  style={{ color: theme.primary }}
+                >
+                  ❖ {[exp.role, exp.company].filter(Boolean).join(' - ')}
+                </span>
+                <span
+                  className="mx-2 flex-1 translate-y-[-2px] border-b border-dotted"
+                  style={{ borderColor: theme.muted }}
+                />
+                <span
+                  className="shrink-0 text-right text-xs"
+                  style={{ color: theme.muted }}
+                >
+                  <span className="block">
+                    {[exp.startDate, exp.endDate].filter(Boolean).join(' - ')}
+                  </span>
+                  {exp.location && <span className="block">{exp.location}</span>}
+                </span>
+              </div>
+              {exp.bullets && (
+                <ul
+                  className="mt-2 list-disc space-y-1 pl-5 marker:text-neutral-400"
+                  style={{ color: theme.text }}
+                >
+                  {exp.bullets
+                    .split('\n')
+                    .filter(Boolean)
+                    .map((line, i) => <li key={i}>{line}</li>)}
+                </ul>
+              )}
+            </div>
+          ))}
+        </div>
+      </ElegantSection>
+    ),
+
+    education: education.length > 0 && (
+      <ElegantSection title="Education" theme={theme}>
+        <div className="space-y-3">
+          {education.map((ed) => (
+            <div key={ed.id} className="flex items-start justify-between gap-3">
+              <span
+                className="font-bold whitespace-nowrap"
+                style={{ color: theme.primary }}
+              >
+                ❖ {ed.degree}
+                {ed.fieldOfStudy && <span className="font-normal"> {'—'} {ed.fieldOfStudy}</span>}
+              </span>
+              <span
+                className="mx-2 flex-1 translate-y-[-2px] border-b border-dotted"
+                style={{ borderColor: theme.muted }}
+              />
+              <span
+                className="shrink-0 text-right text-xs"
+                style={{ color: theme.muted }}
+              >
+                <span className="block">
+                  {ed.startDate
+                    ? [ed.startDate, ed.endDate || 'Present'].join(' - ')
+                    : ed.date}
+                </span>
+                {ed.institution && <span className="block">{ed.institution}</span>}
+              </span>
+            </div>
+          ))}
+        </div>
+      </ElegantSection>
+    ),
+
+    skills: flatSkills.length > 0 && (
+      <ElegantSection title="Skills" theme={theme}>
+        <p className="text-center" style={{ color: theme.text }}>
+          {flatSkills.join(' • ')}
+        </p>
+      </ElegantSection>
+    ),
+
+    certifications: certifications.length > 0 && (
+      <ElegantSection title="Certificates" theme={theme}>
+        <ul className="space-y-1 text-center" style={{ color: theme.text }}>
+          {certifications.map((c) => (
+            <li key={c.id}>{c.name}</li>
+          ))}
+        </ul>
+      </ElegantSection>
+    ),
+
+    languages: languages.length > 0 && (
+      <ElegantSection title="Languages" theme={theme}>
+        <p className="text-center" style={{ color: theme.text }}>
+          {languages.map((l) => l.name).join(', ')}
+        </p>
+      </ElegantSection>
+    ),
+  }
 
   return (
     <main
@@ -56,119 +174,7 @@ export function ElegantTemplate({ data, theme = data.theme }: ResumeTemplateProp
         style={{ borderColor: theme.primary }}
       />
 
-      {summary && (
-        <ElegantSection title="Profile" theme={theme}>
-          <p
-            className="text-center text-[13px] italic"
-            style={{ color: theme.text }}
-          >
-            {summary}
-          </p>
-        </ElegantSection>
-      )}
-
-      {experience.length > 0 && (
-        <ElegantSection title="Experience" theme={theme}>
-          <div className="space-y-5">
-            {experience.map((exp) => (
-              <div key={exp.id} className="break-inside-avoid">
-                <div className="flex items-start justify-between gap-3">
-              <span
-                className="font-bold whitespace-nowrap"
-                style={{ color: theme.primary }}
-              >
-                ❖ {[exp.role, exp.company].filter(Boolean).join(' - ')}
-              </span>
-              <span
-                className="mx-2 flex-1 translate-y-[-2px] border-b border-dotted"
-                style={{ borderColor: theme.muted }}
-              />
-              <span
-                className="shrink-0 text-right text-xs"
-                style={{ color: theme.muted }}
-              >
-                    <span className="block">
-                      {[exp.startDate, exp.endDate].filter(Boolean).join(' - ')}
-                    </span>
-                    {exp.location && <span className="block">{exp.location}</span>}
-                  </span>
-                </div>
-                {exp.bullets && (
-                  <ul
-                    className="mt-2 list-disc space-y-1 pl-5 marker:text-neutral-400"
-                    style={{ color: theme.text }}
-                  >
-                    {exp.bullets
-                      .split('\n')
-                      .filter(Boolean)
-                      .map((line, i) => <li key={i}>{line}</li>)}
-                  </ul>
-                )}
-              </div>
-            ))}
-          </div>
-        </ElegantSection>
-      )}
-
-      {education.length > 0 && (
-        <ElegantSection title="Education" theme={theme}>
-          <div className="space-y-3">
-            {education.map((ed) => (
-              <div key={ed.id} className="flex items-start justify-between gap-3">
-              <span
-                className="font-bold whitespace-nowrap"
-                style={{ color: theme.primary }}
-              >
-                ❖ {ed.degree}
-                {ed.fieldOfStudy && <span className="font-normal"> {'—'} {ed.fieldOfStudy}</span>}
-              </span>
-              <span
-                className="mx-2 flex-1 translate-y-[-2px] border-b border-dotted"
-                style={{ borderColor: theme.muted }}
-              />
-              <span
-                className="shrink-0 text-right text-xs"
-                style={{ color: theme.muted }}
-              >
-                  <span className="block">
-                    {ed.startDate
-                      ? [ed.startDate, ed.endDate || 'Present'].join(' - ')
-                      : ed.date}
-                  </span>
-                  {ed.institution && <span className="block">{ed.institution}</span>}
-                </span>
-              </div>
-            ))}
-          </div>
-        </ElegantSection>
-      )}
-
-      {flatSkills.length > 0 && (
-        <ElegantSection title="Skills" theme={theme}>
-          <p className="text-center" style={{ color: theme.text }}>
-            {flatSkills.join(' • ')}
-          </p>
-        </ElegantSection>
-      )}
-
-      {(certifications.length > 0 || languages.length > 0) && (
-        <ElegantSection title="Additional Information" theme={theme}>
-          <ul className="space-y-1 text-center" style={{ color: theme.text }}>
-            {languages.length > 0 && (
-              <li>
-                <span className="font-bold">Languages: </span>
-                {languages.map((l) => l.name).join(', ')}
-              </li>
-            )}
-            {certifications.length > 0 && (
-              <li>
-                <span className="font-bold">Certificates: </span>
-                {certifications.map((c) => c.name).join(', ')}
-              </li>
-            )}
-          </ul>
-        </ElegantSection>
-      )}
+      {order.map((id) => sectionRenderers[id] && <div key={id} data-section-id={id}>{sectionRenderers[id]}</div>)}
     </main>
   )
 }

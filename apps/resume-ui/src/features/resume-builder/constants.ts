@@ -50,6 +50,7 @@ export function createEmptyResumeData(): ResumeData {
     theme: { ...DEFAULT_THEME },
     settings: { ...DEFAULT_SETTINGS },
     sectionOrder: [...DEFAULT_SECTION_ORDER],
+    pageBreakBefore: [],
   }
 }
 
@@ -228,5 +229,6 @@ export function createSampleResumeData(): ResumeData {
     theme: { ...DEFAULT_THEME },
     settings: { ...DEFAULT_SETTINGS },
     sectionOrder: [...DEFAULT_SECTION_ORDER],
+    pageBreakBefore: [],
   }
 }

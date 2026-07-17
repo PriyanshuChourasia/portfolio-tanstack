@@ -170,6 +170,7 @@ export interface ResumeData {
   theme: ResumeTheme
   settings: ResumeSettings
   sectionOrder: Array<SectionId>
+  pageBreakBefore: Array<SectionId>
 }
 
 export interface ResumeMeta {

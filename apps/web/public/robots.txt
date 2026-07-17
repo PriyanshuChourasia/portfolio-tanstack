@@ -1,3 +1,6 @@
 # https://www.robotstxt.org/robotstxt.html
 User-agent: *
-Disallow:
+Disallow: /blog/write
+Disallow: /resume/template
+
+Sitemap: https://codymitra.com/sitemap.xml

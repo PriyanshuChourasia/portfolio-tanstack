@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import { DEFAULT_SECTION_ORDER, type SectionId } from '../types'
 import type { ResumeTemplateProps, ResumeTheme } from './types'
 
 export function MinimalTemplate({ data, theme = data.theme }: ResumeTemplateProps) {
@@ -18,6 +19,103 @@ export function MinimalTemplate({ data, theme = data.theme }: ResumeTemplateProp
     .filter(Boolean)
     .join(' | ')
 
+  const order = data.sectionOrder?.length ? data.sectionOrder : DEFAULT_SECTION_ORDER
+
+  const sectionRenderers: Partial<Record<SectionId, ReactNode>> = {
+    experience: experience.length > 0 && (
+      <MinimalSection title="Experience" theme={theme}>
+        <div className="space-y-4">
+          {experience.map((exp) => (
+            <div key={exp.id} className="break-inside-avoid">
+              <div className="flex items-baseline justify-between gap-3">
+                <span
+                  className="font-bold"
+                  style={{ color: theme.primary }}
+                >
+                  {exp.company}
+                </span>
+                <span
+                  className="shrink-0 font-bold"
+                  style={{ color: theme.primary }}
+                >
+                  {[exp.startDate, exp.endDate].filter(Boolean).join(' – ')}
+                </span>
+              </div>
+              <div className="flex items-baseline justify-between gap-3">
+                <span>{exp.role}</span>
+                <span className="shrink-0">{exp.location}</span>
+              </div>
+              {exp.bullets && (
+                <ul className="mt-1.5 list-disc space-y-1 pl-5">
+                  {exp.bullets
+                    .split('\n')
+                    .filter(Boolean)
+                    .map((line, i) => <li key={i}>{line}</li>)}
+                </ul>
+              )}
+            </div>
+          ))}
+        </div>
+      </MinimalSection>
+    ),
+
+    education: education.length > 0 && (
+      <MinimalSection title="Education" theme={theme}>
+        <div className="space-y-3">
+          {education.map((ed) => (
+            <div key={ed.id}>
+              <div className="flex items-baseline justify-between gap-3">
+                <span
+                  className="font-bold"
+                  style={{ color: theme.primary }}
+                >
+                  {ed.institution}
+                </span>
+                <span
+                  className="shrink-0 font-bold"
+                  style={{ color: theme.primary }}
+                >
+                  {ed.startDate
+                    ? [ed.startDate, ed.endDate || 'Present'].join(' – ')
+                    : ed.date}
+                </span>
+              </div>
+              <div className="flex items-baseline justify-between gap-3">
+                <span>
+                  {ed.degree}
+                  {ed.fieldOfStudy && <span> — {ed.fieldOfStudy}</span>}
+                </span>
+                <span className="shrink-0">{ed.state || ed.location}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </MinimalSection>
+    ),
+
+    skills: flatSkills.length > 0 && (
+      <MinimalSection title="Technical Skills" theme={theme}>
+        <p>{flatSkills.join(', ')}</p>
+      </MinimalSection>
+    ),
+
+    certifications: certifications.length > 0 && (
+      <MinimalSection title="Certifications & Training" theme={theme}>
+        <p>{certifications.map((c) => c.name).join(', ')}</p>
+      </MinimalSection>
+    ),
+
+    languages: languages.length > 0 && (
+      <MinimalSection title="Languages" theme={theme}>
+        <p>
+          {languages
+            .map((l) => (l.level ? `${l.name} (${l.level})` : l.name))
+            .join(', ')}
+        </p>
+      </MinimalSection>
+    ),
+  }
+
   return (
     <main
       className="mx-auto max-w-[850px] bg-white px-14 py-12 font-serif text-[13.5px] leading-relaxed shadow-sm print:p-0 print:shadow-none"
@@ -33,105 +131,7 @@ export function MinimalTemplate({ data, theme = data.theme }: ResumeTemplateProp
         {contactLine && <p className="mt-1" style={{ color: theme.muted }}>{contactLine}</p>}
       </header>
 
-      {experience.length > 0 && (
-        <MinimalSection title="Experience" theme={theme}>
-          <div className="space-y-4">
-            {experience.map((exp) => (
-              <div key={exp.id} className="break-inside-avoid">
-                <div className="flex items-baseline justify-between gap-3">
-                  <span
-                  className="font-bold"
-                  style={{ color: theme.primary }}
-                >
-                  {exp.company}
-                </span>
-                  <span
-                    className="shrink-0 font-bold"
-                    style={{ color: theme.primary }}
-                  >
-                    {[exp.startDate, exp.endDate].filter(Boolean).join(' – ')}
-                  </span>
-                </div>
-                <div className="flex items-baseline justify-between gap-3">
-                  <span>{exp.role}</span>
-                  <span className="shrink-0">{exp.location}</span>
-                </div>
-                {exp.bullets && (
-                  <ul className="mt-1.5 list-disc space-y-1 pl-5">
-                    {exp.bullets
-                      .split('\n')
-                      .filter(Boolean)
-                      .map((line, i) => <li key={i}>{line}</li>)}
-                  </ul>
-                )}
-              </div>
-            ))}
-          </div>
-        </MinimalSection>
-      )}
-
-      {education.length > 0 && (
-        <MinimalSection title="Education" theme={theme}>
-          <div className="space-y-3">
-            {education.map((ed) => (
-              <div key={ed.id}>
-                <div className="flex items-baseline justify-between gap-3">
-                  <span
-                  className="font-bold"
-                  style={{ color: theme.primary }}
-                >
-                  {ed.institution}
-                </span>
-                  <span
-                    className="shrink-0 font-bold"
-                    style={{ color: theme.primary }}
-                  >
-                    {ed.startDate
-                      ? [ed.startDate, ed.endDate || 'Present'].join(' \u2013 ')
-                      : ed.date}
-                  </span>
-                </div>
-                <div className="flex items-baseline justify-between gap-3">
-                  <span>
-                    {ed.degree}
-                    {ed.fieldOfStudy && <span> \u2014 {ed.fieldOfStudy}</span>}
-                  </span>
-                  <span className="shrink-0">{ed.state || ed.location}</span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </MinimalSection>
-      )}
-
-      {(flatSkills.length > 0 ||
-        certifications.length > 0 ||
-        languages.length > 0) && (
-        <MinimalSection title="Other" theme={theme}>
-          <ul className="list-disc space-y-1 pl-5">
-            {flatSkills.length > 0 && (
-              <li>
-                <span className="font-bold">Technical Skills</span>:{' '}
-                {flatSkills.join(', ')}
-              </li>
-            )}
-            {certifications.length > 0 && (
-              <li>
-                <span className="font-bold">Certifications & Training</span>:{' '}
-                {certifications.map((c) => c.name).join(', ')}
-              </li>
-            )}
-            {languages.length > 0 && (
-              <li>
-                <span className="font-bold">Languages</span>:{' '}
-                {languages
-                  .map((l) => (l.level ? `${l.name} (${l.level})` : l.name))
-                  .join(', ')}
-              </li>
-            )}
-          </ul>
-        </MinimalSection>
-      )}
+      {order.map((id) => sectionRenderers[id] && <div key={id} data-section-id={id}>{sectionRenderers[id]}</div>)}
     </main>
   )
 }

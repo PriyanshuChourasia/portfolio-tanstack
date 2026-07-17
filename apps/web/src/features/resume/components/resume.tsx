@@ -1,8 +1,7 @@
 /* eslint-disable react/no-unescaped-entities */
 
-import { motion, useScroll, useTransform, useSpring } from 'framer-motion'
-import { useRef } from 'react'
-import resumeData from '@/data/resume-data.json'
+import { motion, useScroll, useSpring, useTransform } from 'framer-motion'
+import { useRef, useState } from 'react'
 import { ExperienceSection } from './ExperienceSection'
 import { EducationSection } from './EducationSection'
 import { DesignSkillsPanel } from './DesignSkillsPanel'
@@ -10,10 +9,20 @@ import { LanguagesPanel } from './LanguagesPanel'
 import { CodingSkillsPanel } from './CodingSkillsPanel'
 import { KnowledgePanel } from './KnowledgePanel'
 import { SkillsIllustrationBackground } from './SkillsIllustrationBackground'
+import { ShareResumeButton } from './ShareResumeButton'
+import { Combobox } from '@/components/ui/combobox'
+import resumeData from '@/data/resume-data.json'
+
+const resumeTypeOptions = [
+  { value: 'fresher', label: 'Fresher Resume' },
+  { value: 'experienced', label: 'Experienced Resume' },
+  { value: '3-year', label: '3 Year Experienced' },
+]
 
 export function ResumeSection() {
   const containerRef = useRef<HTMLDivElement>(null)
   const skillsRef = useRef<HTMLDivElement>(null)
+  const [resumeType, setResumeType] = useState('')
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -125,6 +134,16 @@ export function ResumeSection() {
           <p className="text-slate-600 dark:text-slate-400 text-lg max-w-2xl mx-auto mt-4">
             Experience, education, and the skills I use to ship products.
           </p>
+          <div className="mt-6 flex justify-center items-center gap-4">
+            <Combobox
+              options={resumeTypeOptions}
+              value={resumeType}
+              onValueChange={setResumeType}
+              placeholder="Resume Type"
+              searchPlaceholder="Search resume type..."
+            />
+            <ShareResumeButton />
+          </div>
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-5xl mx-auto">

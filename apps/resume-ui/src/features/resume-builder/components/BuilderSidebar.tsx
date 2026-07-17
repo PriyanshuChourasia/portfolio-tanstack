@@ -1,6 +1,22 @@
 import { useMemo, useState } from 'react'
 import { motion } from 'framer-motion'
 import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  type DragEndEvent,
+} from '@dnd-kit/core'
+import {
+  SortableContext,
+  sortableKeyboardCoordinates,
+  verticalListSortingStrategy,
+  useSortable,
+} from '@dnd-kit/sortable'
+import { CSS } from '@dnd-kit/utilities'
+import {
   Search,
   User,
   FileText,
@@ -17,6 +33,7 @@ import {
   Star,
   Puzzle,
   GripVertical,
+  SeparatorHorizontal,
 } from 'lucide-react'
 import {
   Accordion,
@@ -26,7 +43,7 @@ import {
 } from '@/components/ui/accordion'
 import { Input } from '@/components/ui/input'
 import { useResumeStore } from '../store'
-import { SECTION_LABELS, type SectionId } from '../types'
+import { SECTION_LABELS, DEFAULT_SECTION_ORDER, type SectionId } from '../types'
 import { PersonalInfoForm } from './sections/PersonalInfoForm'
 import { SummaryForm } from './sections/SummaryForm'
 import { ExperienceForm } from './sections/ExperienceForm'
@@ -70,12 +87,22 @@ const SECTION_META: SectionMeta[] = [
   { id: 'custom', icon: Puzzle, color: 'bg-fuchsia-500/10 text-fuchsia-600 dark:text-fuchsia-400' },
 ]
 
+const SECTION_META_BY_ID: Record<SectionId, SectionMeta> = SECTION_META.reduce(
+  (acc, meta) => {
+    acc[meta.id] = meta
+    return acc
+  },
+  {} as Record<SectionId, SectionMeta>,
+)
+
 export function BuilderSidebar({ templateId }: BuilderSidebarProps) {
   const [search, setSearch] = useState('')
 
   const data = useResumeStore((s) => s.history.present)
   const updatePersonalInfo = useResumeStore((s) => s.updatePersonalInfo)
   const updateSummary = useResumeStore((s) => s.updateSummary)
+  const setSectionOrder = useResumeStore((s) => s.setSectionOrder)
+  const toggleSectionPageBreak = useResumeStore((s) => s.toggleSectionPageBreak)
   const experience = useResumeStore((s) => s.experience)
   const education = useResumeStore((s) => s.education)
   const skills = useResumeStore((s) => s.skills)
@@ -125,16 +152,44 @@ export function BuilderSidebar({ templateId }: BuilderSidebarProps) {
     [data],
   )
 
+  const orderedSections = useMemo(() => {
+    const order = data.sectionOrder?.length ? data.sectionOrder : DEFAULT_SECTION_ORDER
+    const missing = SECTION_META.filter((s) => !order.includes(s.id)).map((s) => s.id)
+    return [...order, ...missing]
+      .map((id) => SECTION_META_BY_ID[id])
+      .filter((s): s is SectionMeta => Boolean(s))
+  }, [data.sectionOrder])
+
   const filteredSections = useMemo(() => {
-    if (!search.trim()) return SECTION_META
+    if (!search.trim()) return orderedSections
     const q = search.toLowerCase()
-    return SECTION_META.filter((s) => SECTION_LABELS[s.id].toLowerCase().includes(q))
-  }, [search])
+    return orderedSections.filter((s) => SECTION_LABELS[s.id].toLowerCase().includes(q))
+  }, [orderedSections, search])
 
   const defaultOpenValues = useMemo(
     () => SECTION_META.filter((s) => s.defaultOpen).map((s) => s.id),
     [],
   )
+
+  const isDraggable = !search.trim()
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
+    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }),
+  )
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event
+    if (!over || active.id === over.id) return
+    const ids = orderedSections.map((s) => s.id)
+    const oldIndex = ids.indexOf(active.id as SectionId)
+    const newIndex = ids.indexOf(over.id as SectionId)
+    if (oldIndex === -1 || newIndex === -1) return
+    const newOrder = [...ids]
+    const [moved] = newOrder.splice(oldIndex, 1)
+    newOrder.splice(newIndex, 0, moved)
+    setSectionOrder(newOrder)
+  }
 
   const sectionFormMap: Record<SectionId, React.ReactNode> = {
     personal: (
@@ -160,7 +215,7 @@ export function BuilderSidebar({ templateId }: BuilderSidebarProps) {
       initial={{ opacity: 0, x: -40 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.4, ease: 'easeOut' }}
-      className="flex w-full flex-col bg-background md:w-[45%] lg:w-[420px] md:border-r print:hidden"
+      className="flex w-full flex-col bg-background md:h-full md:w-[45%] md:min-h-0 lg:w-[420px] md:border-r print:hidden"
     >
       {/* Search */}
       <div className="border-b px-3 py-2.5 sm:px-4 sm:py-3">
@@ -176,53 +231,36 @@ export function BuilderSidebar({ templateId }: BuilderSidebarProps) {
       </div>
 
       {/* Sections */}
-      <div className="flex-1 overflow-y-auto overscroll-contain">
+      <div className="flex-1 min-h-0 overflow-y-auto overscroll-contain">
         <div className="space-y-0.5 p-3 pb-4 sm:p-4 sm:pb-4">
           <Accordion
             type="multiple"
             defaultValue={defaultOpenValues}
             className="space-y-1"
           >
-            {filteredSections.map((meta) => {
-              const Icon = meta.icon
-              const count = sectionCounts[meta.id]
-
-              return (
-                <motion.div
-                  key={meta.id}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <AccordionItem
-                    value={meta.id}
-                    className="overflow-hidden rounded-lg border bg-card shadow-sm transition-shadow hover:shadow-md"
+            <DndContext
+              sensors={sensors}
+              collisionDetection={closestCenter}
+              onDragEnd={handleDragEnd}
+            >
+              <SortableContext
+                items={filteredSections.map((s) => s.id)}
+                strategy={verticalListSortingStrategy}
+              >
+                {filteredSections.map((meta) => (
+                  <SortableSectionItem
+                    key={meta.id}
+                    meta={meta}
+                    count={sectionCounts[meta.id]}
+                    draggable={isDraggable}
+                    pageBreakActive={data.pageBreakBefore.includes(meta.id)}
+                    onTogglePageBreak={() => toggleSectionPageBreak(meta.id)}
                   >
-                    <AccordionTrigger className="group px-3 py-2.5 hover:no-underline sm:px-4 sm:py-3 [&[data-state=open]>svg]:rotate-180">
-                      <span className="flex items-center gap-2 sm:gap-2.5">
-                        <GripVertical className="size-3.5 shrink-0 text-muted-foreground/30" />
-                        <span
-                          className={`flex size-5 shrink-0 items-center justify-center rounded-md sm:size-6 ${meta.color}`}
-                        >
-                          <Icon className="size-3 sm:size-3.5" />
-                        </span>
-                        <span className="text-sm font-medium">
-                          {SECTION_LABELS[meta.id]}
-                        </span>
-                        {count > 0 && (
-                          <span className="rounded-full bg-primary/10 px-1.5 py-0.5 text-[10px] font-semibold text-primary sm:px-2">
-                            {count}
-                          </span>
-                        )}
-                      </span>
-                    </AccordionTrigger>
-                    <AccordionContent className="border-t px-3 pb-3 pt-2 sm:px-4 sm:pb-4 sm:pt-3">
-                      {sectionFormMap[meta.id]}
-                    </AccordionContent>
-                  </AccordionItem>
-                </motion.div>
-              )
-            })}
+                    {sectionFormMap[meta.id]}
+                  </SortableSectionItem>
+                ))}
+              </SortableContext>
+            </DndContext>
           </Accordion>
 
           {filteredSections.length === 0 && (
@@ -236,5 +274,108 @@ export function BuilderSidebar({ templateId }: BuilderSidebarProps) {
         </div>
       </div>
     </motion.aside>
+  )
+}
+
+interface SortableSectionItemProps {
+  meta: SectionMeta
+  count: number
+  draggable: boolean
+  pageBreakActive: boolean
+  onTogglePageBreak: () => void
+  children: React.ReactNode
+}
+
+function SortableSectionItem({
+  meta,
+  count,
+  draggable,
+  pageBreakActive,
+  onTogglePageBreak,
+  children,
+}: SortableSectionItemProps) {
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
+    id: meta.id,
+    disabled: !draggable,
+  })
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    zIndex: isDragging ? 50 : undefined,
+    opacity: isDragging ? 0.85 : undefined,
+  }
+
+  const Icon = meta.icon
+
+  return (
+    <motion.div
+      ref={setNodeRef}
+      style={style}
+      initial={{ opacity: 0, x: -20 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ duration: 0.3 }}
+    >
+      <AccordionItem
+        value={meta.id}
+        className={`overflow-hidden rounded-lg border bg-card shadow-sm transition-shadow hover:shadow-md ${isDragging ? 'scale-[1.02] shadow-lg' : ''}`}
+      >
+        <AccordionTrigger className="group px-3 py-2.5 hover:no-underline sm:px-4 sm:py-3 [&[data-state=open]>svg]:rotate-180">
+          <span className="flex items-center gap-2 sm:gap-2.5">
+            <span
+              {...(draggable ? { ...attributes, ...listeners } : {})}
+              className={draggable ? 'cursor-grab touch-none' : ''}
+              aria-label={draggable ? 'Drag to reorder' : undefined}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <GripVertical className="size-3.5 shrink-0 text-muted-foreground/40" />
+            </span>
+            <span
+              className={`flex size-5 shrink-0 items-center justify-center rounded-md sm:size-6 ${meta.color}`}
+            >
+              <Icon className="size-3 sm:size-3.5" />
+            </span>
+            <span className="text-sm font-medium">
+              {SECTION_LABELS[meta.id]}
+            </span>
+            {count > 0 && (
+              <span className="rounded-full bg-primary/10 px-1.5 py-0.5 text-[10px] font-semibold text-primary sm:px-2">
+                {count}
+              </span>
+            )}
+            <span
+              role="button"
+              tabIndex={0}
+              onClick={(e) => {
+                e.stopPropagation()
+                onTogglePageBreak()
+              }}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault()
+                  e.stopPropagation()
+                  onTogglePageBreak()
+                }
+              }}
+              title={
+                pageBreakActive
+                  ? 'Starts on a new page — click to undo'
+                  : 'Start this section on a new page'
+              }
+              className={`flex size-5 shrink-0 items-center justify-center rounded-md transition-colors sm:size-6 ${
+                pageBreakActive
+                  ? 'bg-primary/15 text-primary'
+                  : 'text-muted-foreground/30 hover:bg-muted hover:text-muted-foreground'
+              }`}
+            >
+              <SeparatorHorizontal className="size-3 sm:size-3.5" />
+            </span>
+          </span>
+        </AccordionTrigger>
+        <AccordionContent className="border-t px-3 pb-3 pt-2 sm:px-4 sm:pb-4 sm:pt-3">
+          {children}
+        </AccordionContent>
+      </AccordionItem>
+    </motion.div>
   )
 }

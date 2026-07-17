@@ -1,107 +1,110 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useLayoutEffect, useRef } from 'react'
 import type { ReactNode } from 'react'
+
+export interface PageLayout {
+  breaks: Array<number>
+  totalHeight: number
+}
 
 interface ResumePaginationProps {
   children: ReactNode
+  onLayoutChange?: (layout: PageLayout) => void
+  /** Section ids that must start on a fresh page, regardless of overflow. */
+  forcedSectionIds?: ReadonlyArray<string>
 }
 
 /** Approximate A4 height in pixels at 96dpi (297mm) */
-const A4_HEIGHT_PX = 1123
+export const A4_HEIGHT_PX = 1123
 
-export function ResumePagination({ children }: ResumePaginationProps) {
+/**
+ * Finds Y-offsets (relative to `root`) where a new page should start so
+ * that no page break lands in the middle of a leaf element (a line of
+ * text, a bullet, a heading). Breaks only ever fall on a leaf's top edge —
+ * including forced breaks, which snap to the top edge of a section's first
+ * leaf (its heading) rather than the section wrapper's own box, so the
+ * invariant holds for manual breaks too.
+ */
+function computePageBreaks(
+  root: HTMLElement,
+  pageHeight: number,
+  forcedSectionIds: ReadonlySet<string> = new Set(),
+): Array<number> {
+  const rootTop = root.getBoundingClientRect().top
+
+  const leaves = Array.from(root.querySelectorAll<HTMLElement>('*')).filter(
+    (el) => el.children.length === 0 && (el.textContent?.trim().length ?? 0) > 0,
+  )
+
+  if (root.scrollHeight <= pageHeight && forcedSectionIds.size === 0) return []
+
+  const breaks: Array<number> = []
+  let pageStart = 0
+  let lastSectionId: string | null = null
+
+  for (const leaf of leaves) {
+    const sectionEl = leaf.closest<HTMLElement>('[data-section-id]')
+    const sectionId = sectionEl?.dataset.sectionId ?? null
+    const isFirstLeafOfSection = sectionId !== null && sectionId !== lastSectionId
+    lastSectionId = sectionId
+
+    const rect = leaf.getBoundingClientRect()
+    const top = rect.top - rootTop
+    const bottom = rect.bottom - rootTop
+
+    const forcedBreakHere =
+      isFirstLeafOfSection && sectionId !== null && forcedSectionIds.has(sectionId)
+
+    if (top > pageStart && (forcedBreakHere || bottom - pageStart > pageHeight)) {
+      breaks.push(top)
+      pageStart = top
+    }
+  }
+  return breaks
+}
+
+/**
+ * Measures the rendered resume and reports the Y-offsets where it should
+ * be split into pages. Renders children untouched — this stays the single
+ * source of truth used for the browser's native print pagination and for
+ * Word/PDF export, so it must never be duplicated or visually altered here.
+ */
+export function ResumePagination({ children, onLayoutChange, forcedSectionIds = [] }: ResumePaginationProps) {
   const contentRef = useRef<HTMLDivElement>(null)
-  const [totalPages, setTotalPages] = useState(1)
-  const [currentPage, setCurrentPage] = useState(1)
+  const prevLayoutRef = useRef<PageLayout>({ breaks: [], totalHeight: 0 })
+  const forcedKey = forcedSectionIds.join(',')
 
-  // Measure content height to determine total pages
-  useEffect(() => {
+  useLayoutEffect(() => {
     const el = contentRef.current
     if (!el) return
+    const forcedSet = new Set(forcedKey ? forcedKey.split(',') : [])
     const measure = () => {
-      const height = el.scrollHeight
-      setTotalPages(Math.max(1, Math.ceil(height / A4_HEIGHT_PX)))
+      const breaks = computePageBreaks(el, A4_HEIGHT_PX, forcedSet)
+      const totalHeight = el.scrollHeight
+      const prev = prevLayoutRef.current
+      const unchanged =
+        totalHeight === prev.totalHeight &&
+        breaks.length === prev.breaks.length &&
+        breaks.every((offset, i) => offset === prev.breaks[i])
+      if (unchanged) return
+      prevLayoutRef.current = { breaks, totalHeight }
+      onLayoutChange?.({ breaks, totalHeight })
     }
     measure()
     const observer = new ResizeObserver(measure)
     observer.observe(el)
     return () => observer.disconnect()
-  }, [children])
+  }, [children, onLayoutChange, forcedKey])
 
-  // Track scroll position to determine current page
-  const handleScroll = useCallback(() => {
-    const el = contentRef.current
-    if (!el) return
-    let parent = el.parentElement
-    while (parent) {
-      const style = getComputedStyle(parent)
-      if (style.overflowY === 'auto' || style.overflowY === 'scroll') {
-        const scrollTop = parent.scrollTop
-        setCurrentPage(
-          Math.min(totalPages, Math.max(1, Math.floor(scrollTop / A4_HEIGHT_PX) + 1)),
-        )
-        return
-      }
-      parent = parent.parentElement
-    }
-  }, [totalPages])
-
-  useEffect(() => {
-    const el = contentRef.current
-    if (!el) return
-    let parent = el.parentElement
-    while (parent) {
-      const style = getComputedStyle(parent)
-      if (style.overflowY === 'auto' || style.overflowY === 'scroll') {
-        parent.addEventListener('scroll', handleScroll, { passive: true })
-        handleScroll()
-        return () => parent?.removeEventListener('scroll', handleScroll)
-      }
-      parent = parent.parentElement
-    }
-  }, [handleScroll])
-
+  // `overflow: hidden` has no visual effect here (no fixed height is set,
+  // so nothing actually overflows) — it only establishes a block formatting
+  // context so a template's own top margin is contained as real internal
+  // space instead of collapsing through this div. The visible page sheets
+  // in PaginatedPreviewPages also use `overflow: hidden` (for clipping), so
+  // without this, margins would collapse differently in the two contexts
+  // and the same offset wouldn't land on the same content in both places.
   return (
-    <div className="relative" ref={contentRef}>
-      {/* Page indicator badge */}
-      {totalPages > 1 && (
-        <div className="bg-background/80 text-muted-foreground sticky top-3 z-10 mx-auto mb-4 flex w-fit items-center gap-1.5 rounded-full border px-3 py-1 text-[11px] font-medium shadow-xs backdrop-blur-sm print:hidden">
-          <svg
-            className="size-3"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
-            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
-          </svg>
-          Page {currentPage} of {totalPages}
-        </div>
-      )}
-
-      {/* Full content with subtle page break lines via repeating gradient */}
-      <div
-        className="rounded-sm print:rounded-none"
-        style={{
-          backgroundImage:
-            totalPages > 1
-              ? `repeating-linear-gradient(
-                  to bottom,
-                  transparent 0,
-                  transparent ${A4_HEIGHT_PX - 1}px,
-                  hsl(var(--border) / 0.35) ${A4_HEIGHT_PX - 1}px,
-                  hsl(var(--border) / 0.35) ${A4_HEIGHT_PX}px,
-                  transparent ${A4_HEIGHT_PX}px,
-                  transparent ${A4_HEIGHT_PX * 2}px
-                )`
-              : 'none',
-          backgroundPosition: 'top center',
-        }}
-      >
-        {children}
-      </div>
+    <div ref={contentRef} style={{ overflow: 'hidden' }}>
+      {children}
     </div>
   )
 }

@@ -4,6 +4,7 @@ import AboutSection from '@/features/aboutus/components/aboutus'
 import { ResumeSection } from '@/features/resume/components/resume'
 import { Projects } from '@/features/works/components/works'
 import ArticlePreviewSection from '@/features/articles/components/article-preview'
+import { InterviewPreviewSection } from '@/features/ai-interview'
 import Articles from '@/features/articles/components/articles'
 import ContactSection from '@/features/contact/components/contact'
 
@@ -14,6 +15,7 @@ export default function Home() {
       <Hero />
       <AboutSection />
       <ResumeSection />
+      <InterviewPreviewSection />
       <ArticlePreviewSection />
       <Projects />
       <Articles />
