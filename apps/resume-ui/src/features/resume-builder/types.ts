@@ -168,6 +168,8 @@ export interface ResumeData {
   interests: Array<InterestEntry>
   customSections: Array<CustomSectionEntry>
   theme: ResumeTheme
+  /** Per-element color overrides, keyed by a stable element id (e.g. "name", "heading:experience"). */
+  elementColors: Record<string, string>
   settings: ResumeSettings
   sectionOrder: Array<SectionId>
   pageBreakBefore: Array<SectionId>
@@ -200,11 +202,12 @@ export type ResumeListKey =
   | 'customSections'
 
 export const DEFAULT_THEME: ResumeTheme = {
-  primary: '#0f172a',
-  accent: '#2563eb',
-  text: '#1e293b',
-  muted: '#64748b',
+  primary: '#111827',
+  accent: '#059669',
+  text: '#292524',
+  muted: '#57534e',
   background: '#ffffff',
+  sidebar: '#111827',
 }
 
 export const DEFAULT_SETTINGS: ResumeSettings = {

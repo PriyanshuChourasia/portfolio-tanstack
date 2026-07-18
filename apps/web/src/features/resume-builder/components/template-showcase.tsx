@@ -40,6 +40,12 @@ const templateInfo: Array<{
     tagline: 'Stand out with flair',
     bestFor: 'Creative, Media, Freelance',
   },
+  {
+    id: 'mech',
+    label: 'Mech',
+    tagline: 'Photo header with a career timeline',
+    bestFor: 'Engineering, Manufacturing, Technical',
+  },
 ]
 
 const showcaseData: ResumeData = {

@@ -3,6 +3,7 @@ import { BoldTemplate } from './BoldTemplate'
 import { ClassicTemplate } from './ClassicTemplate'
 import { ElegantTemplate } from './ElegantTemplate'
 import { FreshTemplate } from './FreshTemplate'
+import { MechTemplate } from './MechTemplate'
 import { MinimalTemplate } from './MinimalTemplate'
 import { ModernTemplate } from './ModernTemplate'
 import { NavyTemplate } from './NavyTemplate'
@@ -94,5 +95,12 @@ export const resumeTemplates: Array<ResumeTemplateDefinition> = [
     description:
       'Photo-centric design with a prominent rounded hero image, dark primary header bar, contact strip, and pill-styled skill tags.',
     component: VisualTemplate,
+  },
+  {
+    id: 'mech',
+    name: 'Mech',
+    description:
+      'Dark photo header with a light contact/skills sidebar and a dotted career timeline — built for engineering and technical resumes.',
+    component: MechTemplate,
   },
 ]

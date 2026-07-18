@@ -145,6 +145,7 @@ interface ResumeStore {
   updateSummary: (summary: string) => void
   updateTheme: (patch: Partial<ResumeTheme>) => void
   setFullTheme: (theme: ResumeTheme) => void
+  setElementColor: (id: string, color: string) => void
   updateSettings: (patch: Partial<ResumeSettings>) => void
   setSectionOrder: (order: Array<SectionId>) => void
   toggleSection: (sectionId: SectionId) => void
@@ -279,6 +280,25 @@ export const useResumeStore = create<ResumeStore>((set, get) => ({
   setFullTheme: (theme) =>
     set((state) => {
       const newData = { ...state.history.present, theme }
+      const newHistory = pushHistory(state.history, newData)
+      saveResumeData(state.document.meta.id, newData)
+      return {
+        history: newHistory,
+        document: { ...state.document, data: newData },
+        canUndo: newHistory.past.length > 0,
+        canRedo: newHistory.future.length > 0,
+      }
+    }),
+
+  setElementColor: (id, color) =>
+    set((state) => {
+      const nextColors = { ...state.history.present.elementColors }
+      if (color) {
+        nextColors[id] = color
+      } else {
+        delete nextColors[id]
+      }
+      const newData: ResumeData = { ...state.history.present, elementColors: nextColors }
       const newHistory = pushHistory(state.history, newData)
       saveResumeData(state.document.meta.id, newData)
       return {

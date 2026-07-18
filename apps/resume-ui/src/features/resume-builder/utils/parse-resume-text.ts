@@ -207,6 +207,11 @@ export function parseResumeText(rawText: string): Partial<ResumeData> {
         !l.includes('linkedin') &&
         !l.match(/https?:\/\//) &&
         !l.match(/^\+?[\d\s\-().]+$/) &&
+        // Address-shaped lines (explicit "Address:" label, a PIN/ZIP code, or
+        // an "At-Post"/"Tal-"/"Dist-" style Indian address fragment) aren't job titles.
+        !l.match(/^address\s*:/i) &&
+        !l.match(/\bpin\s*[-:]?\s*\d{6}\b/i) &&
+        !l.match(/\b(tal|dist|at-?post)[-.\s]/i) &&
         l.length < 120,
     )
     if (candidateLines.length > 0) {

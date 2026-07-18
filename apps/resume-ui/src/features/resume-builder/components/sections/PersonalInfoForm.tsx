@@ -1,3 +1,4 @@
+import type { ChangeEvent } from 'react'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import type { PersonalInfo } from '../../types'
@@ -122,6 +123,17 @@ function FieldIcon({ name }: { name: string }) {
 }
 
 export function PersonalInfoForm({ value, onChange }: PersonalInfoFormProps) {
+  const handlePhotoFile = (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    const reader = new FileReader()
+    reader.onload = () => {
+      onChange({ photoUrl: reader.result as string })
+    }
+    reader.readAsDataURL(file)
+    e.target.value = ''
+  }
+
   return (
     <div className="space-y-4">
       {fieldGroups.map((group) => (
@@ -158,6 +170,39 @@ export function PersonalInfoForm({ value, onChange }: PersonalInfoFormProps) {
                     onChange={(e) => onChange({ [field.key]: e.target.value })}
                   />
                 </div>
+                {field.key === 'photoUrl' && (
+                  <div className="mt-2 flex items-center gap-3">
+                    <div className="border-input bg-muted flex size-12 shrink-0 items-center justify-center overflow-hidden rounded-full border">
+                      {value.photoUrl ? (
+                        <img
+                          src={value.photoUrl}
+                          alt="Profile preview"
+                          className="size-full object-cover"
+                        />
+                      ) : (
+                        <FieldIcon name="image" />
+                      )}
+                    </div>
+                    <label className="border-input hover:bg-accent cursor-pointer rounded-md border px-3 py-1.5 text-xs font-medium transition-colors">
+                      Upload photo
+                      <input
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        onChange={handlePhotoFile}
+                      />
+                    </label>
+                    {value.photoUrl && (
+                      <button
+                        type="button"
+                        onClick={() => onChange({ photoUrl: '' })}
+                        className="text-destructive text-xs font-medium hover:underline"
+                      >
+                        Remove
+                      </button>
+                    )}
+                  </div>
+                )}
               </div>
             ))}
           </div>

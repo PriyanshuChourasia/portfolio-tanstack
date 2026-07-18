@@ -1,3 +1,4 @@
+import type { ChangeEvent } from 'react'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
@@ -14,6 +15,21 @@ interface EditorPanelProps {
 export function EditorPanel({ data, onChange }: EditorPanelProps) {
   const updatePersonal = (field: string, value: string) => {
     onChange({ ...data, personal: { ...data.personal, [field]: value } })
+  }
+
+  const handlePhotoUpload = (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    const reader = new FileReader()
+    reader.onload = () => {
+      updatePersonal('photo', reader.result as string)
+    }
+    reader.readAsDataURL(file)
+    e.target.value = ''
+  }
+
+  const removePhoto = () => {
+    updatePersonal('photo', '')
   }
 
   const updateExperience = (index: number, field: string, value: string) => {
@@ -101,6 +117,32 @@ export function EditorPanel({ data, onChange }: EditorPanelProps) {
       <div className="space-y-4">
         <h3 className="text-lg font-semibold text-white">Personal Info</h3>
         <div className="space-y-3">
+          <div>
+            <Label className="text-slate-400">Photo</Label>
+            <div className="flex items-center gap-3 mt-1.5">
+              <div className="w-16 h-16 rounded-full overflow-hidden bg-slate-800 border border-slate-700 flex items-center justify-center shrink-0">
+                {data.personal.photo ? (
+                  <img src={data.personal.photo} alt="Profile preview" className="w-full h-full object-cover" />
+                ) : (
+                  <span className="text-[10px] text-slate-500 text-center px-1">No photo</span>
+                )}
+              </div>
+              <div className="flex flex-col gap-1.5">
+                <label className="cursor-pointer text-xs px-3 py-1.5 rounded-md border border-cyan-500/50 text-cyan-400 hover:bg-cyan-500/10 transition-colors text-center">
+                  Upload
+                  <input type="file" accept="image/*" onChange={handlePhotoUpload} className="hidden" />
+                </label>
+                {data.personal.photo && (
+                  <button
+                    onClick={removePhoto}
+                    className="text-xs px-3 py-1.5 rounded-md border border-red-500/30 text-red-400 hover:bg-red-500/10 transition-colors"
+                  >
+                    Remove
+                  </button>
+                )}
+              </div>
+            </div>
+          </div>
           <div>
             <Label className="text-slate-400">Full Name</Label>
             <Input

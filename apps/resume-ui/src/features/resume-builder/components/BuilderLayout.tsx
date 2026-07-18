@@ -19,7 +19,9 @@ import type { PageLayout } from './ResumePagination'
 import { ResumePreview } from './ResumePreview'
 
 export function BuilderLayout() {
-  const [templateId, setTemplateId] = useState(resumeTemplates[0].id)
+  const [templateId, setTemplateId] = useState(
+    resumeTemplates.find((t) => t.id === 'mech')?.id ?? resumeTemplates[0].id,
+  )
   const [importing, setImporting] = useState(false)
   const [exporting, setExporting] = useState<'pdf' | 'word' | null>(null)
   const [mobileTab, setMobileTab] = useState<'edit' | 'preview'>('edit')
@@ -29,6 +31,7 @@ export function BuilderLayout() {
   const builder = useResumeStore(
     useShallow((s) => ({
       updatePersonalInfo: s.updatePersonalInfo,
+      setElementColor: s.setElementColor,
       experience: s.experience,
       education: s.education,
       skills: s.skills,
@@ -192,7 +195,7 @@ export function BuilderLayout() {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.45, ease: 'easeOut' }}
-            className="flex-1 min-h-0 overflow-y-auto p-3 pb-8 sm:p-4 sm:pb-32 md:p-6 md:pb-28 print:overflow-visible print:bg-transparent dark:bg-muted/20 bg-muted/30"
+            className="flex-1 min-h-0 overflow-y-auto p-3 pb-8 sm:p-4 sm:pb-32 md:p-6 md:pb-28 print:overflow-visible print:bg-transparent print:p-0 dark:bg-muted/20 bg-muted/30"
           >
             <div className="flex flex-col items-center gap-4 print:block">
               {/* Collapsed to zero height on screen when paginated (kept in
@@ -215,7 +218,12 @@ export function BuilderLayout() {
                   <BulletStyle type={settings.bulletStyle} />
                   <div style={{ minWidth: 'min(320px, 100%)' }}>
                     <ResumePagination onLayoutChange={setPageLayout} forcedSectionIds={data.pageBreakBefore}>
-                      <ResumePreview templateId={templateId} data={data} />
+                      <ResumePreview
+                        templateId={templateId}
+                        data={data}
+                        onElementColorChange={builder.setElementColor}
+                        onPhotoChange={(url) => builder.updatePersonalInfo({ photoUrl: url })}
+                      />
                     </ResumePagination>
                   </div>
                 </div>
@@ -229,6 +237,8 @@ export function BuilderLayout() {
                   pageBreaks={pageLayout.breaks}
                   totalHeight={pageLayout.totalHeight}
                   className={settings.orientation === 'landscape' ? 'max-w-[1100px]' : 'max-w-[850px]'}
+                  onElementColorChange={builder.setElementColor}
+                  onPhotoChange={(url) => builder.updatePersonalInfo({ photoUrl: url })}
                 />
               )}
             </div>

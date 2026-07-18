@@ -20,6 +20,7 @@ const templateColors: Record<string, string> = {
   navy: 'bg-indigo-800',
   simple: 'bg-gray-500',
   visual: 'bg-pink-600',
+  mech: 'bg-slate-800',
 }
 
 export function TemplatePicker({ selectedId, onSelect }: TemplatePickerProps) {

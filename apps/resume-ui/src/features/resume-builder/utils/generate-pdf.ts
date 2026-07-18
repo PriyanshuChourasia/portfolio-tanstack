@@ -10,9 +10,9 @@
  * cleaned up via the `afterprint` event with a timeout safety net.
  */
 const MARGIN_MM: Record<'narrow' | 'normal' | 'wide', number> = {
-  narrow: 8,
-  normal: 15,
-  wide: 24,
+  narrow: 2,
+  normal: 4,
+  wide: 8,
 }
 
 export async function generatePdf(
@@ -24,6 +24,15 @@ export async function generatePdf(
   const styleId = 'resume-print-style'
   const prevTitle = document.title
   const marginMm = MARGIN_MM[margins]
+  // A4 physical width in mm. Templates are built with fixed pixel widths
+  // (e.g. max-w-[900px], which is already wider than A4's ~794px @96dpi),
+  // so leaving that px width in place for print makes the output depend on
+  // whatever scale-to-fit / DPI defaults the exporting machine's browser
+  // happens to use — identical code can paginate differently on Mac vs
+  // Windows purely from that. Pinning the printed width to the physical
+  // page size in mm removes that variable entirely: it's the same box on
+  // every machine, independent of screen DPI, browser zoom, or print scale.
+  const pageWidthMm = orientation === 'landscape' ? 297 : 210
 
   // Remove any leftover style from a previous export
   document.getElementById(styleId)?.remove()
@@ -49,6 +58,14 @@ export async function generatePdf(
       print-color-adjust: exact !important;
     }
 
+    /* Pin the printed width to the physical page size (see comment above) —
+       overrides each template's own fixed px max-width (e.g. max-w-[900px])
+       so the box is identical on every machine regardless of DPI/zoom. */
+    .fs-preview {
+      width: ${pageWidthMm}mm !important;
+      max-width: ${pageWidthMm}mm !important;
+    }
+
     /* Every template's root is a <main> element inside .fs-preview. Several
        templates zero their own padding for print (relying on the old @page
        margin instead), so restore top/bottom whitespace here — !important
@@ -57,6 +74,8 @@ export async function generatePdf(
        fragment (top of each new page, bottom of each page before a break),
        not just at the very start/end of the whole flowed document. */
     .fs-preview main {
+      width: 100% !important;
+      max-width: 100% !important;
       padding-top: ${marginMm}mm !important;
       padding-bottom: ${marginMm}mm !important;
       padding-left: ${marginMm}mm !important;

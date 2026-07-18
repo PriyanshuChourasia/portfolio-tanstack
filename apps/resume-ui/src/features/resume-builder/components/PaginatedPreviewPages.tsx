@@ -10,6 +10,8 @@ interface PaginatedPreviewPagesProps {
   pageBreaks: Array<number>
   totalHeight: number
   className?: string
+  onElementColorChange?: (id: string, color: string) => void
+  onPhotoChange?: (dataUrl: string) => void
 }
 
 /**
@@ -27,6 +29,8 @@ export function PaginatedPreviewPages({
   pageBreaks,
   totalHeight,
   className = '',
+  onElementColorChange,
+  onPhotoChange,
 }: PaginatedPreviewPagesProps) {
   const startOffsets = [0, ...pageBreaks]
 
@@ -53,7 +57,12 @@ export function PaginatedPreviewPages({
               style={{ height, backgroundColor: data.theme.background }}
             >
               <div style={{ transform: `translateY(-${offset}px)` }}>
-                <ResumePreview templateId={templateId} data={data} />
+                <ResumePreview
+                  templateId={templateId}
+                  data={data}
+                  onElementColorChange={onElementColorChange}
+                  onPhotoChange={onPhotoChange}
+                />
               </div>
             </div>
           </div>

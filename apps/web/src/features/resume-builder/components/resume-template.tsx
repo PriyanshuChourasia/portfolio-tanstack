@@ -5,7 +5,7 @@ import { EditorPanel } from './editor-panel'
 import { ResumePreview } from './resume-preview'
 import { TemplateShowcase } from './template-showcase'
 
-export type ResumeLayout = 'classic' | 'modern' | 'minimal' | 'professional' | 'creative'
+export type ResumeLayout = 'classic' | 'modern' | 'minimal' | 'professional' | 'creative' | 'mech'
 
 export interface ResumePersonal {
   name: string
@@ -14,6 +14,7 @@ export interface ResumePersonal {
   location: string
   title: string
   summary: string
+  photo?: string
 }
 
 export interface ResumeExperience {
@@ -54,6 +55,7 @@ const layouts: { id: ResumeLayout; label: string }[] = [
   { id: 'minimal', label: 'Minimal' },
   { id: 'professional', label: 'Professional' },
   { id: 'creative', label: 'Creative' },
+  { id: 'mech', label: 'Mech' },
 ]
 
 const demoProfiles: { name: string; data: ResumeData }[] = [

@@ -1,5 +1,7 @@
 " "
-import { X, Search, User, FileText, Briefcase, MessageSquare, AtSign } from "lucide-react"
+import { AtSign, Briefcase, FileText, MessageSquare, Search, User, X } from "lucide-react"
+import { EditableLabel } from "./editable-label"
+import { useSectionLabels } from "@/hooks/use-section-labels"
 import { cn } from "@/lib/utils"
 
 interface SidebarDrawerProps {
@@ -9,14 +11,17 @@ interface SidebarDrawerProps {
   onTabChange?: (tab: string) => void
 }
 
+const NAV_KEYS = ["ABOUT", "RESUME", "WORKS", "BLOG", "CONTACT"] as const
+const NAV_ICONS = [User, FileText, Briefcase, MessageSquare, AtSign]
+
 export function SidebarDrawer({ isOpen, onClose, activeTab = 'ABOUT', onTabChange }: SidebarDrawerProps) {
-  const navItems = [
-    { label: "ABOUT", icon: User },
-    { label: "RESUME", icon: FileText },
-    { label: "WORKS", icon: Briefcase },
-    { label: "BLOG", icon: MessageSquare },
-    { label: "CONTACT", icon: AtSign },
-  ]
+  const { getLabel, updateLabel } = useSectionLabels()
+
+  const navItems = NAV_KEYS.map((key, i) => ({
+    key,
+    label: getLabel(key),
+    icon: NAV_ICONS[i],
+  }))
 
   const categories = [
     { name: "Design", count: 2 },
@@ -80,17 +85,22 @@ export function SidebarDrawer({ isOpen, onClose, activeTab = 'ABOUT', onTabChang
             <div className="space-y-2">
               {navItems.map((item) => (
                 <button
-                  key={item.label}
-                  onClick={() => handleTabChange(item.label)}
+                  key={item.key}
+                  onClick={() => handleTabChange(item.key)}
                   className={cn(
                     "w-full flex items-center gap-3 px-3 py-2 rounded-lg transition-all duration-300",
-                    activeTab === item.label 
+                    activeTab === item.key 
                       ? "bg-gradient-to-r from-[#00d4ff]/20 to-[#0ea5e9]/20 border border-[#00d4ff]/50 text-[#00d4ff]" 
                       : "text-muted-foreground hover:text-[#00d4ff] hover:bg-[#00d4ff]/10 border border-transparent hover:border-[#00d4ff]/30"
                   )}
                 >
                   <item.icon className="w-4 h-4" />
-                  <span className="label-text text-xs">{item.label}</span>
+                  <span className="label-text text-xs">
+                    <EditableLabel
+                      value={item.label}
+                      onChange={(v) => updateLabel(item.key, v.toUpperCase())}
+                    />
+                  </span>
                 </button>
               ))}
             </div>

@@ -1,3 +1,4 @@
+import { Mail, MapPin, Phone, User } from 'lucide-react'
 import type { ResumeData, ResumeLayout } from './resume-template'
 
 interface ResumePreviewProps {
@@ -508,12 +509,153 @@ function CreativePreview({ data }: { data: ResumeData }) {
   )
 }
 
+function MechPreview({ data }: { data: ResumeData }) {
+  return (
+    <div className="bg-white text-slate-900 shadow-lg rounded-sm min-h-[1056px] overflow-hidden">
+      <div className="bg-slate-800 text-white px-8 py-8 flex items-center gap-6">
+        <div className="w-28 h-28 rounded-full overflow-hidden border-4 border-white/10 bg-slate-700 flex items-center justify-center shrink-0">
+          {data.personal.photo ? (
+            <img src={data.personal.photo} alt={data.personal.name || 'Profile photo'} className="w-full h-full object-cover" />
+          ) : (
+            <User className="w-12 h-12 text-slate-400" />
+          )}
+        </div>
+        <div>
+          <h1 className="text-3xl font-bold tracking-wide uppercase">{data.personal.name || 'Your Name'}</h1>
+          <p className="text-sm text-cyan-300 tracking-[0.3em] uppercase mt-2">
+            {data.personal.title || 'Professional Title'}
+          </p>
+        </div>
+      </div>
+
+      <div className="flex">
+        <div className="w-[32%] bg-slate-100 p-6 space-y-6">
+          {(data.personal.phone || data.personal.email || data.personal.location) && (
+            <div>
+              <h2 className="text-sm font-bold tracking-widest text-slate-800 mb-3">CONTACT</h2>
+              <div className="space-y-2 text-xs text-slate-600">
+                {data.personal.phone && (
+                  <div className="flex items-start gap-2">
+                    <Phone className="w-3.5 h-3.5 mt-0.5 text-slate-500 shrink-0" />
+                    <span>{data.personal.phone}</span>
+                  </div>
+                )}
+                {data.personal.email && (
+                  <div className="flex items-start gap-2">
+                    <Mail className="w-3.5 h-3.5 mt-0.5 text-slate-500 shrink-0" />
+                    <span className="break-all">{data.personal.email}</span>
+                  </div>
+                )}
+                {data.personal.location && (
+                  <div className="flex items-start gap-2">
+                    <MapPin className="w-3.5 h-3.5 mt-0.5 text-slate-500 shrink-0" />
+                    <span>{data.personal.location}</span>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {data.skills.length > 0 && (
+            <div>
+              <h2 className="text-sm font-bold tracking-widest text-slate-800 mb-3">SKILLS</h2>
+              <ul className="space-y-1.5 text-xs text-slate-600">
+                {data.skills.map((skill, i) => (
+                  <li key={i} className="flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 rounded-full bg-slate-500 shrink-0" />
+                    {skill.name}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {data.languages.length > 0 && (
+            <div>
+              <h2 className="text-sm font-bold tracking-widest text-slate-800 mb-3">LANGUAGES</h2>
+              <ul className="space-y-1.5 text-xs text-slate-600">
+                {data.languages.map((lang, i) => (
+                  <li key={i} className="flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 rounded-full bg-slate-500 shrink-0" />
+                    {lang.name}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+
+        <div className="w-[68%] p-8 space-y-8">
+          {data.personal.summary && (
+            <div>
+              <div className="flex items-center gap-3 mb-3">
+                <span className="w-3 h-3 rounded-full bg-slate-800 shrink-0" />
+                <h2 className="text-sm font-bold tracking-widest text-slate-800">PROFILE</h2>
+              </div>
+              <div className="border-t border-slate-200 pt-3 pl-6">
+                <p className="text-sm text-slate-600 leading-relaxed">{data.personal.summary}</p>
+              </div>
+            </div>
+          )}
+
+          {data.experience.length > 0 && (
+            <div>
+              <div className="flex items-center gap-3 mb-4">
+                <span className="w-3 h-3 rounded-full bg-slate-800 shrink-0" />
+                <h2 className="text-sm font-bold tracking-widest text-slate-800">WORK EXPERIENCE</h2>
+              </div>
+              <div className="border-t border-slate-200 pt-4 pl-6 relative">
+                <div className="absolute left-[7px] top-4 bottom-4 w-px bg-slate-200" />
+                <div className="space-y-5">
+                  {data.experience.map((exp, i) => (
+                    <div key={i} className="relative pl-6">
+                      <span className="absolute left-0 top-1 w-2.5 h-2.5 rounded-full border-2 border-slate-800 bg-white" />
+                      <h3 className="text-sm font-semibold text-slate-900">{exp.title || 'Position'}</h3>
+                      <p className="text-xs text-cyan-700 font-medium">{exp.company}</p>
+                      <p className="text-xs text-slate-400 mt-0.5">{exp.period}</p>
+                      {exp.desc && <p className="text-xs text-slate-600 mt-1.5 leading-relaxed">{exp.desc}</p>}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {data.education.length > 0 && (
+            <div>
+              <div className="flex items-center gap-3 mb-4">
+                <span className="w-3 h-3 rounded-full bg-slate-800 shrink-0" />
+                <h2 className="text-sm font-bold tracking-widest text-slate-800">EDUCATION</h2>
+              </div>
+              <div className="border-t border-slate-200 pt-4 pl-6 relative">
+                <div className="absolute left-[7px] top-4 bottom-4 w-px bg-slate-200" />
+                <div className="space-y-5">
+                  {data.education.map((edu, i) => (
+                    <div key={i} className="relative pl-6">
+                      <span className="absolute left-0 top-1 w-2.5 h-2.5 rounded-full border-2 border-slate-800 bg-white" />
+                      <h3 className="text-sm font-semibold text-slate-900">{edu.title || 'Degree'}</h3>
+                      <p className="text-xs text-cyan-700 font-medium">{edu.company}</p>
+                      <p className="text-xs text-slate-400 mt-0.5">{edu.period}</p>
+                      {edu.desc && <p className="text-xs text-slate-600 mt-1.5 leading-relaxed">{edu.desc}</p>}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  )
+}
+
 export const previewComponents: Record<ResumeLayout, React.ComponentType<{ data: ResumeData }>> = {
   classic: ClassicPreview,
   modern: ModernPreview,
   minimal: MinimalPreview,
   professional: ProfessionalPreview,
   creative: CreativePreview,
+  mech: MechPreview,
 }
 
 export function ResumePreview({ data, layout }: ResumePreviewProps) {
