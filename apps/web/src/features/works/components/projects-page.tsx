@@ -1,11 +1,18 @@
 import { Link } from '@tanstack/react-router'
 import { motion } from 'framer-motion'
 import { useState } from 'react'
-import { ArrowRight, ExternalLink } from 'lucide-react'
+import { ArrowRight, ExternalLink, Plus } from 'lucide-react'
 import { Navbar } from '@/components/Navbar'
 import worksData from '@/data/works-data.json'
 
 type Category = string
+
+const CornerMark = ({ className }: { className: string }) => (
+  <Plus
+    className={`absolute h-4 w-4 text-white/40 ${className}`}
+    strokeWidth={1.5}
+  />
+)
 
 function CategoryPill({ label, active, onClick }: { label: string; active: boolean; onClick: () => void }) {
   return (
@@ -106,32 +113,57 @@ export function ProjectsPage() {
     <div className="min-h-screen bg-white dark:bg-slate-950">
       <Navbar />
 
-      <main className="pt-24 pb-24 px-4 sm:px-6">
-        <div className="max-w-7xl mx-auto">
-          {/* Page header */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-14"
-          >
-            <span className="inline-block mb-4 px-4 py-2 rounded-full border border-cyan-400/30 bg-cyan-50 dark:bg-cyan-400/10 text-xs font-semibold uppercase tracking-widest text-cyan-600 dark:text-cyan-300">
-              Portfolio
-            </span>
-            <h1 className="text-4xl sm:text-5xl font-bold text-slate-900 dark:text-white mb-4">
-              My <span className="text-cyan-500">Projects</span>
-            </h1>
-            <p className="text-slate-500 dark:text-slate-400 text-lg max-w-xl mx-auto">
-              A selection of products and systems I&apos;ve built — from web portals to mobile apps and backend services.
-            </p>
-          </motion.div>
+      {/* Full-bleed dark banner, matching the homepage hero's visual language */}
+      <section className="relative w-full overflow-hidden bg-slate-950 pt-32 pb-24 px-6 sm:px-10">
+        <div className="absolute inset-0 bg-linear-to-b from-slate-900 via-slate-950 to-slate-950" />
 
-          {/* Category filter */}
+        {/* Decorative rule-of-thirds grid */}
+        <div className="hidden sm:block absolute inset-6 lg:inset-10 pointer-events-none">
+          <div className="absolute left-1/3 top-0 bottom-0 w-px bg-white/10" />
+          <div className="absolute left-2/3 top-0 bottom-0 w-px bg-white/10" />
+          <div className="absolute top-1/2 left-0 right-0 h-px bg-white/10" />
+          <CornerMark className="-left-2 -top-2" />
+          <CornerMark className="-right-2 -top-2" />
+          <CornerMark className="-left-2 -bottom-2" />
+          <CornerMark className="-right-2 -bottom-2" />
+        </div>
+
+        {/* Oversized watermark, desktop only */}
+        <div
+          aria-hidden
+          className="hidden lg:flex absolute inset-0 items-center justify-center select-none pointer-events-none"
+        >
+          <span className="text-[9rem] xl:text-[11rem] font-black uppercase tracking-tight text-white/[0.06] leading-none">
+            Projects
+          </span>
+        </div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="relative z-10 text-center max-w-2xl mx-auto"
+        >
+          <span className="inline-block mb-4 px-4 py-2 rounded-full border border-cyan-400/30 bg-cyan-400/10 text-xs font-semibold uppercase tracking-widest text-cyan-300">
+            Portfolio
+          </span>
+          <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black uppercase tracking-tight leading-[0.9] text-white mb-5">
+            My Projects
+          </h1>
+          <p className="text-slate-300 text-base sm:text-lg">
+            A selection of products and systems I&apos;ve built — from web portals to mobile apps and backend services.
+          </p>
+        </motion.div>
+      </section>
+
+      <main className="pb-24 px-4 sm:px-6">
+        <div className="max-w-7xl mx-auto">
+          {/* Category filter — floats up over the banner/content seam */}
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, delay: 0.2 }}
-            className="flex flex-wrap justify-center gap-3 mb-12"
+            className="relative z-10 -mt-7 mb-12 flex flex-wrap justify-center gap-3 rounded-2xl border border-slate-200 dark:border-white/10 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md shadow-xl py-4 px-4"
           >
             {categories.map((cat) => (
               <CategoryPill

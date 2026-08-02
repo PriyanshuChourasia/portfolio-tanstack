@@ -34,6 +34,24 @@
       "icon": "Music",
       "description": "Spring boot Application, Updating Features and managing and updating code for primesys. Changing APIs endpoints and improving performance. Learnt a big deal of location and geographic directions while tracking users location activities.",
       "link": "#"
+    },
+    {
+      "title": "OPD ERP — Clinic Management System",
+      "category": "Full Stack",
+      "client": "Independent Product",
+      "image": "/opderp.png",
+      "icon": "ImageIcon",
+      "description": "A full-featured clinic management system covering the entire OPD workflow on a single record — patient registration, appointment & token queue, consultations, prescriptions, lab orders, billing & POS, and pharmacy dispensing. Role-based access for super admin, admin, doctor, receptionist, and assistant, with real-time sync and audit logging.",
+      "link": "https://opd.codymitra.com"
+    },
+    {
+      "title": "CodyERP — Restaurant Management System",
+      "category": "Full Stack",
+      "client": "Independent Product",
+      "image": "/restaurant.png",
+      "icon": "ImageIcon",
+      "description": "An all-in-one restaurant management platform in active development — POS billing, inventory tracking, staff management, and financial reporting in one place. Ships with developer/demo credentials for quickly inspecting the underlying data while building out new modules.",
+      "link": "https://restaurant.codymitra.com/"
     }
   ]
 }

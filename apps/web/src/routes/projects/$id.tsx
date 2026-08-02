@@ -1,8 +1,8 @@
-import { ProjectDetailPage } from '@/features/works/components/project-detail-page'
-import worksData from '@/data/works-data.json'
 import { createFileRoute } from '@tanstack/react-router'
-
-const SITE_URL = 'https://codymitra.com'
+import { ProjectDetailPage } from '@/features/works/components/project-detail-page'
+import { JsonLd } from '@/components/JsonLd'
+import worksData from '@/data/works-data.json'
+import { AUTHOR_NAME, DEFAULT_IMAGE, SITE_URL, absoluteUrl, buildMeta } from '@/lib/seo'
 
 export const Route = createFileRoute('/projects/$id')({
   head: ({ params }) => {
@@ -12,31 +12,33 @@ export const Route = createFileRoute('/projects/$id')({
       : 'Project not found | Priyanshu Chourasia'
     const description =
       project?.description ?? 'Browse projects built by Priyanshu Chourasia.'
-    const image = project?.image
-      ? `${SITE_URL}${project.image}`
-      : `${SITE_URL}/hero-person.png`
+    const image = project ? absoluteUrl(project.image) : DEFAULT_IMAGE
     const url = `${SITE_URL}/projects/${params.id}`
 
-    return {
-      meta: [
-        { title },
-        { name: 'description', content: description },
-        { property: 'og:type', content: 'article' },
-        { property: 'og:title', content: title },
-        { property: 'og:description', content: description },
-        { property: 'og:image', content: image },
-        { property: 'og:url', content: url },
-        { name: 'twitter:title', content: title },
-        { name: 'twitter:description', content: description },
-        { name: 'twitter:image', content: image },
-      ],
-      links: [{ rel: 'canonical', href: url }],
-    }
+    return buildMeta({ title, description, url, image, type: 'article' })
   },
   component: RouteComponent,
 })
 
 function RouteComponent() {
   const { id } = Route.useParams()
-  return <ProjectDetailPage projectId={parseInt(id)} />
+  const project = worksData.items[parseInt(id) - 1]
+
+  const schema = project && {
+    '@context': 'https://schema.org',
+    '@type': 'CreativeWork',
+    name: project.title,
+    description: project.description,
+    image: absoluteUrl(project.image),
+    url: `${SITE_URL}/projects/${id}`,
+    author: { '@type': 'Person', name: AUTHOR_NAME },
+    ...(project.link && project.link !== '#' ? { sameAs: project.link } : {}),
+  }
+
+  return (
+    <>
+      {schema && <JsonLd data={schema} />}
+      <ProjectDetailPage projectId={parseInt(id)} />
+    </>
+  )
 }

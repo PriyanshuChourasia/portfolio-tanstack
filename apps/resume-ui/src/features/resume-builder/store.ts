@@ -178,6 +178,7 @@ interface ResumeStore {
   // Import/Export
   exportAsJson: () => string
   importFromJson: (json: string) => void
+  importFromParsedData: (data: Partial<ResumeData>, name?: string) => void
 
   // Reset
   resetData: () => void
@@ -543,6 +544,30 @@ export const useResumeStore = create<ResumeStore>((set, get) => ({
     } catch (e) {
       console.error('Import failed:', e)
     }
+  },
+
+  importFromParsedData: (parsed, name) => {
+    const data: ResumeData = { ...createEmptyResumeData(), ...parsed }
+    const meta: ResumeMeta = {
+      id: createId(),
+      name: name ?? parsed.personalInfo?.fullName ?? 'Imported Resume',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    }
+    saveResumeData(meta.id, data)
+    set((state) => {
+      const newRegistry = [...state.registry, meta]
+      saveRegistry(newRegistry)
+      saveActiveId(meta.id)
+      return {
+        registry: newRegistry,
+        activeId: meta.id,
+        document: { meta, data },
+        history: { past: [], present: data, future: [] },
+        canUndo: false,
+        canRedo: false,
+      }
+    })
   },
 
   resetData: () =>

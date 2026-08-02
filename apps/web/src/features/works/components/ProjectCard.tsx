@@ -1,5 +1,5 @@
 import { useRef } from 'react'
-import { motion, useScroll, useTransform } from 'framer-motion'
+import { motion, useScroll, useSpring, useTransform } from 'framer-motion'
 import { Link } from '@tanstack/react-router'
 import worksData from '@/data/works-data.json'
 
@@ -13,7 +13,7 @@ interface WorkCardData {
   link: string
 }
 
-const cards: WorkCardData[] = worksData.items.slice(0, 4).map((item, index) => ({
+const cards: Array<WorkCardData> = worksData.items.slice(0, 6).map((item, index) => ({
   id: index + 1,
   title: item.title,
   client: item.client,
@@ -39,7 +39,12 @@ const Card = ({ i, card, progress, range, targetScale }: CardProps) => {
   })
 
   const imageScale = useTransform(scrollYProgress, [0, 1], [2, 1])
-  const scale = useTransform(progress, range, [1, targetScale])
+  const rawScale = useTransform(progress, range, [1, targetScale])
+  const scale = useSpring(rawScale, { stiffness: 220, damping: 30, mass: 0.4 })
+  const rotate = useSpring(
+    useTransform(progress, range, [0, i % 2 === 0 ? -1.5 : 1.5]),
+    { stiffness: 220, damping: 30, mass: 0.4 },
+  )
 
   return (
     <div
@@ -49,12 +54,18 @@ const Card = ({ i, card, progress, range, targetScale }: CardProps) => {
       <motion.div
         style={{
           scale,
+          rotate,
           top: `calc(-5vh + ${i * 25}px)`,
         }}
         className="relative flex w-[92%] max-w-[90%] flex-col overflow-hidden rounded-[30px] p-5 sm:p-8 lg:h-125 lg:flex-row lg:p-12 border border-slate-200 dark:border-white/10 bg-white dark:bg-slate-900/90 shadow-xl dark:shadow-black/40 backdrop-blur-xl"
       >
         {/* Light mode accent */}
         <div className="absolute inset-0 bg-linear-to-br from-cyan-50/60 via-transparent to-blue-50/40 dark:from-cyan-400/10 dark:via-transparent dark:to-fuchsia-400/10 pointer-events-none" />
+
+        {/* Oversized index number */}
+        <span className="absolute right-5 top-3 select-none text-6xl sm:text-7xl font-black text-slate-900/[0.04] dark:text-white/[0.06] leading-none pointer-events-none">
+          {String(i + 1).padStart(2, '0')}
+        </span>
 
         <div className="relative z-10 flex h-full w-full flex-col gap-6 lg:flex-row lg:gap-10">
           <div className="flex w-full flex-col justify-between lg:w-[45%]">

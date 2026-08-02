@@ -6,31 +6,23 @@ import TanStackQueryDevtools from '../integrations/tanstack-query/devtools'
 
 import type { QueryClient } from '@tanstack/react-query'
 import { Toaster } from '@/components/ui/sonner'
+import { DEFAULT_DESCRIPTION, DEFAULT_TITLE, SITE_URL, buildMeta } from '@/lib/seo'
 
 interface MyRouterContext {
   queryClient: QueryClient
 }
 
-const SITE_URL = 'https://codymitra.com'
-const DEFAULT_TITLE = 'Priyanshu Chourasia | Full Stack Developer Portfolio'
-const DEFAULT_DESCRIPTION =
-  'Portfolio of Priyanshu Chourasia, a Full Stack Developer building modern, performant web applications. Explore projects, blog posts, and experience.'
-const DEFAULT_IMAGE = `${SITE_URL}/hero-person.png`
-
 export const Route = createRootRouteWithContext<MyRouterContext>()({
+  // Fallback meta only — every indexable route below sets its own head()
+  // which overrides these by name/property. No `links` (canonical) here:
+  // it's not deduped across route matches by TanStack Router, so setting
+  // one at the root would sit alongside every child route's own canonical.
   head: () => ({
-    meta: [
-      { title: DEFAULT_TITLE },
-      { name: 'description', content: DEFAULT_DESCRIPTION },
-      { property: 'og:title', content: DEFAULT_TITLE },
-      { property: 'og:description', content: DEFAULT_DESCRIPTION },
-      { property: 'og:image', content: DEFAULT_IMAGE },
-      { property: 'og:url', content: SITE_URL },
-      { name: 'twitter:title', content: DEFAULT_TITLE },
-      { name: 'twitter:description', content: DEFAULT_DESCRIPTION },
-      { name: 'twitter:image', content: DEFAULT_IMAGE },
-    ],
-    links: [{ rel: 'canonical', href: SITE_URL }],
+    meta: buildMeta({
+      title: DEFAULT_TITLE,
+      description: DEFAULT_DESCRIPTION,
+      url: SITE_URL,
+    }).meta,
   }),
   component: () => (
     <>

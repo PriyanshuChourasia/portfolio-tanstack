@@ -15,33 +15,21 @@
   ],
   "education": [
     {
-      "period": "2006 - 2008",
-      "title": "Art University",
-      "company": "New York",
-      "desc": "Bachelor's Degree in Computer Science ABC Technical Institute, Jefferson, Missouri"
+      "period": "2020 - 2023",
+      "title": "B.Tech",
+      "company": "JIS University",
+      "desc": "Bachelor of Technology in Mechanical Engineering."
     },
     {
-      "period": "2005 - 2006",
-      "title": "Programming Course",
-      "company": "Paris",
-      "desc": "Completed comprehensive training in modern web development and software engineering principles."
-    },
-    {
-      "period": "20XX - 20XX",
+      "period": "2017 - 2020",
       "title": "Diploma",
-      "company": "Your Polytechnic Institute",
-      "desc": "Diploma in Computer Science / Engineering."
+      "company": "Kingston Polytechnic College",
+      "desc": "Diploma in Mechanical Engineering."
     },
     {
-      "period": "20XX - 20XX",
-      "title": "12th Grade",
-      "company": "Your School Name",
-      "desc": "Higher Secondary Education, Science Stream."
-    },
-    {
-      "period": "20XX - 20XX",
+      "period": "2006 - 2017",
       "title": "10th Grade",
-      "company": "Your School Name",
+      "company": "Guru Gobind Singh Public School (GGPS)",
       "desc": "Secondary School Education."
     }
   ],

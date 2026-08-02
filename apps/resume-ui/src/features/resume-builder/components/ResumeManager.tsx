@@ -1,5 +1,5 @@
 import { useRef, useState, useCallback } from 'react'
-import { FileText, Plus, Trash2, Pencil, Check, X, Upload, ChevronDown } from 'lucide-react'
+import { FileText, Plus, Trash2, Pencil, Check, X, ChevronDown, FileImage, File } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -9,6 +9,9 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover'
 import { useResumeStore } from '../store'
+import { extractTextFromPdf } from '../utils/pdf-parse'
+import { extractTextFromImage } from '../utils/extract-text-from-image'
+import { parseResumeText } from '../utils/parse-resume-text'
 
 function formatDate(iso: string): string {
   const d = new Date(iso)
@@ -20,7 +23,10 @@ export function ResumeManager() {
   const [editingId, setEditingId] = useState<string | null>(null)
   const [editName, setEditName] = useState('')
   const [deletingId, setDeletingId] = useState<string | null>(null)
+  const [importing, setImporting] = useState(false)
   const importRef = useRef<HTMLInputElement>(null)
+  const pdfImportRef = useRef<HTMLInputElement>(null)
+  const imageImportRef = useRef<HTMLInputElement>(null)
 
   const registry = useResumeStore((s) => s.registry)
   const activeId = useResumeStore((s) => s.activeId)
@@ -30,6 +36,7 @@ export function ResumeManager() {
   const deleteResume = useResumeStore((s) => s.deleteResume)
   const renameResume = useResumeStore((s) => s.renameResume)
   const importFromJson = useResumeStore((s) => s.importFromJson)
+  const importFromParsedData = useResumeStore((s) => s.importFromParsedData)
 
   const handleCreate = useCallback(() => {
     const id = createResume('Untitled Resume')
@@ -77,6 +84,60 @@ export function ResumeManager() {
     [importFromJson],
   )
 
+  const handlePdfImport = useCallback(
+    async (e: React.ChangeEvent<HTMLInputElement>) => {
+      const file = e.target.files?.[0]
+      if (!file) return
+      setImporting(true)
+      try {
+        const rawText = await extractTextFromPdf(file)
+        if (!rawText) {
+          alert('No text could be extracted from this PDF. Try a different file.')
+          return
+        }
+        const parsed = parseResumeText(rawText)
+        const name = parsed.personalInfo?.fullName
+          ? `${parsed.personalInfo.fullName} Resume`
+          : file.name.replace(/\.pdf$/i, '')
+        importFromParsedData(parsed, name)
+      } catch (err) {
+        console.error('PDF import failed:', err)
+        alert('Could not parse this PDF. Try copying the text and pasting it manually.')
+      } finally {
+        setImporting(false)
+        if (pdfImportRef.current) pdfImportRef.current.value = ''
+      }
+    },
+    [importFromParsedData],
+  )
+
+  const handleImageImport = useCallback(
+    async (e: React.ChangeEvent<HTMLInputElement>) => {
+      const file = e.target.files?.[0]
+      if (!file) return
+      setImporting(true)
+      try {
+        const rawText = await extractTextFromImage(file)
+        if (!rawText) {
+          alert('No text could be extracted from this image. Try a different file.')
+          return
+        }
+        const parsed = parseResumeText(rawText)
+        const name = parsed.personalInfo?.fullName
+          ? `${parsed.personalInfo.fullName} Resume`
+          : file.name.replace(/\.(png|jpe?g|webp|bmp|tiff?)$/i, '')
+        importFromParsedData(parsed, name)
+      } catch (err) {
+        console.error('Image import failed:', err)
+        alert('Could not parse this image. Try copying the text and pasting it manually.')
+      } finally {
+        setImporting(false)
+        if (imageImportRef.current) imageImportRef.current.value = ''
+      }
+    },
+    [importFromParsedData],
+  )
+
   return (
     <>
       <input
@@ -85,6 +146,20 @@ export function ResumeManager() {
         accept=".json"
         className="hidden"
         onChange={handleImport}
+      />
+      <input
+        ref={pdfImportRef}
+        type="file"
+        accept=".pdf"
+        className="hidden"
+        onChange={handlePdfImport}
+      />
+      <input
+        ref={imageImportRef}
+        type="file"
+        accept=".png,.jpg,.jpeg,.webp,.bmp,.tiff,.tif"
+        className="hidden"
+        onChange={handleImageImport}
       />
 
       <Popover open={open} onOpenChange={setOpen}>
@@ -252,10 +327,33 @@ export function ResumeManager() {
                 variant="outline"
                 size="xs"
                 className="flex-1"
+                disabled={importing}
                 onClick={() => importRef.current?.click()}
               >
-                <Upload className="size-3" />
-                Import
+                <FileText className="size-3" />
+                {importing ? 'Importing...' : 'Import'}
+              </Button>
+              <Button
+                type="button"
+                variant="outline"
+                size="xs"
+                className="flex-1"
+                disabled={importing}
+                onClick={() => pdfImportRef.current?.click()}
+              >
+                <File className="size-3" />
+                PDF
+              </Button>
+              <Button
+                type="button"
+                variant="outline"
+                size="xs"
+                className="flex-1"
+                disabled={importing}
+                onClick={() => imageImportRef.current?.click()}
+              >
+                <FileImage className="size-3" />
+                Image
               </Button>
             </div>
           </div>
