@@ -28,29 +28,28 @@ export function ScrollCircularProgress({ percentage, label, progress }: ScrollCi
             cy={size / 2}
             r={radius}
             fill="none"
-            stroke="var(--border)"
             strokeWidth="6"
+            className="stroke-slate-300 dark:stroke-[#2a3f5f]"
           />
           <motion.circle
             cx={size / 2}
             cy={size / 2}
             r={radius}
             fill="none"
-            stroke="var(--primary)"
             strokeWidth="6"
             strokeDasharray={circumference}
             strokeLinecap="round"
             style={{ strokeDashoffset: dashOffset }}
-            className="drop-shadow-[0_0_12px_rgba(0,212,255,0.35)]"
+            className="stroke-cyan-500 dark:stroke-[#00d4ff] drop-shadow-[0_0_12px_rgba(0,212,255,0.35)]"
           />
         </svg>
         <div className="absolute inset-0 flex items-center justify-center">
-          <span className="text-3xl font-extrabold bg-linear-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
+          <span className="text-3xl font-extrabold bg-linear-to-r from-cyan-600 to-blue-600 dark:from-cyan-400 dark:to-blue-500 bg-clip-text text-transparent">
             {percentage}%
           </span>
         </div>
       </div>
-      <p className="text-xs text-center text-slate-400 font-medium max-w-30">{label}</p>
+      <p className="text-xs text-center text-slate-500 dark:text-slate-400 font-medium max-w-30">{label}</p>
     </motion.div>
   )
 }

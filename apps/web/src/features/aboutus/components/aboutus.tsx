@@ -1,5 +1,4 @@
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion'
-import { GraduationCap, Rocket } from 'lucide-react'
 import { type ReactElement, useRef, useState, type MouseEvent } from 'react'
 import { PiFileHtmlFill } from 'react-icons/pi'
 import { SiJavascript, SiTypescript, SiCss, SiLangchain, SiKubernetes } from 'react-icons/si'
@@ -104,14 +103,12 @@ function TechCard({ tech }: { tech: TechItem }) {
 
 export default function AboutSection() {
   const [activeCategory, setActiveCategory] = useState<Category>('All')
-  const ref = useRef<HTMLDivElement>(null)
 
   const filtered = activeCategory === 'All' ? techStack : techStack.filter((t) => t.category === activeCategory)
 
   return (
     <section
-      id="about"
-      ref={ref}
+      id="tech-stack"
       className="relative min-h-screen w-full overflow-hidden bg-slate-50 dark:bg-slate-950 py-24 sm:py-32"
     >
       {/* Subtle background accent */}
@@ -121,68 +118,6 @@ export default function AboutSection() {
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6">
-        {/* Section heading */}
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="text-center mb-16"
-        >
-          <h2 className="text-4xl md:text-5xl font-bold mb-4 text-slate-900 dark:text-white">
-            Get to Know <span className="text-cyan-500">Me</span>
-          </h2>
-          <p className="text-slate-600 dark:text-slate-400 text-lg max-w-2xl mx-auto">
-            I&apos;m a Full-Stack Developer with a specialization in backend development and
-            implementing design-driven frontend solutions.
-          </p>
-        </motion.div>
-
-        {/* Education + Bootcamp */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto mb-20">
-          <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8 }}
-            className="flex items-start gap-4 p-6 rounded-2xl border border-slate-200 dark:border-slate-700/50 bg-white dark:bg-slate-800/30 hover:border-cyan-400/40 transition-colors"
-          >
-            <div className="shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-linear-to-r from-blue-500 to-cyan-500 text-white">
-              <GraduationCap className="w-5 h-5" />
-            </div>
-            <div className="grow">
-              <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-3">Education</h3>
-              <div className="space-y-1">
-                <p className="font-semibold text-cyan-500">JIS University</p>
-                <p className="text-sm text-slate-500 dark:text-slate-400">Aug 2020 – May 2023</p>
-                <p className="text-sm text-slate-600 dark:text-slate-300 mt-2">
-                  Mechanical Engineering degree with focus on software engineering and web technologies.
-                </p>
-              </div>
-            </div>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: 0.15 }}
-            className="flex items-start gap-4 p-6 rounded-2xl border border-slate-200 dark:border-slate-700/50 bg-white dark:bg-slate-800/30 hover:border-blue-400/40 transition-colors"
-          >
-            <div className="shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-linear-to-r from-blue-500 to-cyan-500 text-white">
-              <Rocket className="w-5 h-5" />
-            </div>
-            <div className="grow">
-              <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-3">Bootcamp</h3>
-              <div className="space-y-1">
-                <p className="font-semibold text-cyan-500">Software Development</p>
-                <p className="text-sm text-slate-500 dark:text-slate-400">Feb 2022 – May 2023</p>
-                <p className="text-sm text-slate-600 dark:text-slate-300 mt-2">
-                  Intensive full-stack development with{' '}
-                  <span className="font-semibold text-slate-800 dark:text-white">System Design</span> from Wish Institute.
-                </p>
-              </div>
-            </div>
-          </motion.div>
-        </div>
-
         {/* Tech Stack heading */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}

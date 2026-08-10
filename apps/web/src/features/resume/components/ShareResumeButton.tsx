@@ -95,23 +95,23 @@ export function ShareResumeButton() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -8, scale: 0.96 }}
             transition={{ duration: 0.15 }}
-            className="absolute right-0 z-20 mt-2 w-52 overflow-hidden rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 shadow-xl"
+            className="absolute right-0 z-20 mt-2 w-52 overflow-hidden rounded-xl border border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-900 shadow-xl"
           >
             <a
               href={RESUME_PDF_PATH}
               download={RESUME_FILE_NAME}
               onClick={() => setMenuOpen(false)}
-              className="flex items-center gap-2 px-4 py-3 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+              className="flex items-center gap-2 px-4 py-3 text-sm text-slate-700 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800 transition-colors"
             >
-              <Download className="w-4 h-4 text-cyan-500" />
+              <Download className="w-4 h-4 text-cyan-600 dark:text-cyan-500" />
               Download PDF
             </a>
             <button
               type="button"
               onClick={handleCopyLink}
-              className="flex w-full items-center gap-2 px-4 py-3 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors border-t border-slate-100 dark:border-slate-800"
+              className="flex w-full items-center gap-2 px-4 py-3 text-sm text-slate-700 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800 transition-colors border-t border-slate-100 dark:border-slate-800"
             >
-              <LinkIcon className="w-4 h-4 text-cyan-500" />
+              <LinkIcon className="w-4 h-4 text-cyan-600 dark:text-cyan-500" />
               Copy link
             </button>
           </motion.div>

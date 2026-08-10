@@ -1,5 +1,6 @@
 import { Navbar } from '@/components/Navbar'
 import { Hero } from '@/components/Carousal'
+import GetToKnowMe from '@/features/aboutus/components/GetToKnowMe'
 import AboutSection from '@/features/aboutus/components/aboutus'
 import { ResumeSection } from '@/features/resume/components/resume'
 import { Projects } from '@/features/works/components/works'
@@ -13,6 +14,7 @@ export default function Home() {
     <main className="text-slate-900 dark:text-white">
       <Navbar />
       <Hero />
+      <GetToKnowMe />
       <AboutSection />
       <ResumeSection />
       <InterviewPreviewSection />

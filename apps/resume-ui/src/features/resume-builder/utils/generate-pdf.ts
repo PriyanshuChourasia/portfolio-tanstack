@@ -15,11 +15,25 @@ const MARGIN_MM: Record<'narrow' | 'normal' | 'wide', number> = {
   wide: 8,
 }
 
+/**
+ * Padding applied to the top / left / right edges of the printed page.
+ * The bottom edge keeps the base MARGIN_MM value: resume content rarely runs
+ * all the way to the bottom of a page, so the bottom already has breathing
+ * room, whereas the top/left/right edges sit exactly against the content and
+ * look cramped with only the base margin.
+ */
+const EDGE_PADDING_MM: Record<'narrow' | 'normal' | 'wide', number> = {
+  narrow: 6,
+  normal: 12,
+  wide: 16,
+}
+
 export async function generatePdf(
-  _element: HTMLElement,
+  element: HTMLElement,
   filename: string = 'resume.pdf',
   orientation: 'portrait' | 'landscape' = 'portrait',
   margins: 'narrow' | 'normal' | 'wide' = 'normal',
+  forcedSectionIds: ReadonlyArray<string> = [],
 ): Promise<void> {
   const styleId = 'resume-print-style'
   const prevTitle = document.title
@@ -33,6 +47,27 @@ export async function generatePdf(
   // page size in mm removes that variable entirely: it's the same box on
   // every machine, independent of screen DPI, browser zoom, or print scale.
   const pageWidthMm = orientation === 'landscape' ? 297 : 210
+
+  // Forced page breaks: sections the user flagged "start on a new page" in
+  // the sidebar. The on-screen pagination only slices the decorative preview
+  // (PaginatedPreviewPages) — the real print DOM carries no break hints, so
+  // the browser flows these sections continuously into the PDF. Inject
+  // break-before for each flagged section here. The first section rendered
+  // is skipped (mirrors computePageBreaks' `top > pageStart` guard) so a
+  // flag on the leading section can't produce a blank first page.
+  const firstSectionId = element
+    .querySelector<HTMLElement>('[data-section-id]')
+    ?.dataset.sectionId
+  const forcedBreakCss = forcedSectionIds
+    .filter((id) => id && id !== firstSectionId)
+    .map(
+      (id) => `
+    .fs-preview [data-section-id="${id}"] {
+      break-before: page !important;
+      page-break-before: always !important;
+    }`,
+    )
+    .join('\n')
 
   // Remove any leftover style from a previous export
   document.getElementById(styleId)?.remove()
@@ -76,13 +111,17 @@ export async function generatePdf(
     .fs-preview main {
       width: 100% !important;
       max-width: 100% !important;
-      padding-top: ${marginMm}mm !important;
+      /* Top/left/right get a larger padding than the bottom (see EDGE_PADDING_MM) */
+      padding-top: ${EDGE_PADDING_MM[margins]}mm !important;
       padding-bottom: ${marginMm}mm !important;
-      padding-left: ${marginMm}mm !important;
-      padding-right: ${marginMm}mm !important;
+      padding-left: ${EDGE_PADDING_MM[margins]}mm !important;
+      padding-right: ${EDGE_PADDING_MM[margins]}mm !important;
       -webkit-box-decoration-break: clone;
       box-decoration-break: clone;
     }
+
+    /* Forced section page breaks ("start on a new page" toggles) */
+    ${forcedBreakCss}
   `
   document.head.appendChild(style)
 

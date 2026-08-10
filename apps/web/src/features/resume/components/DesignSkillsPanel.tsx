@@ -13,9 +13,9 @@ interface DesignSkillsPanelProps {
 
 export function DesignSkillsPanel({ designSkills, progress }: DesignSkillsPanelProps) {
   return (
-    <div className="rounded-2xl border border-slate-200 dark:border-slate-700/50 bg-white dark:bg-slate-900/60 backdrop-blur-sm p-6">
+    <div className="rounded-2xl border border-slate-200 bg-white/80 dark:border-slate-700/50 dark:bg-slate-900/60 backdrop-blur-sm p-6">
       <div className="flex items-center gap-3 mb-6">
-        <Palette className="w-5 h-5 text-cyan-500" />
+        <Palette className="w-5 h-5 text-cyan-600 dark:text-cyan-400" />
         <h3 className="text-base font-bold text-slate-900 dark:text-white">Design Skills</h3>
       </div>
       <div className="space-y-6">

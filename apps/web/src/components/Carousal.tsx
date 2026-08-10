@@ -49,10 +49,10 @@ export function Hero() {
       ref={sectionRef}
       className="relative w-full min-h-screen overflow-hidden bg-slate-950"
     >
-      {/* Full-bleed background portrait, centered */}
+      {/* Full-bleed background image, centered */}
       <motion.div style={{ y: imageY }} className="absolute inset-0">
         <img
-          src="/myprofile.jpeg"
+          src="/myimage.webp"
           alt="Priyanshu Chourasia"
           className="h-full w-full object-cover object-center"
         />

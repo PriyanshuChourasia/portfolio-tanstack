@@ -19,7 +19,7 @@ export function LanguageDot({ index, level, progress }: LanguageDotProps) {
   })
 
   return (
-    <div className="relative w-3 h-3 rounded-full bg-slate-700 overflow-hidden">
+    <div className="relative w-3 h-3 rounded-full bg-slate-300 dark:bg-slate-700 overflow-hidden">
       <motion.div
         className="absolute inset-0 rounded-full bg-linear-to-r from-blue-500 to-cyan-500 shadow-[0_0_8px_rgba(34,211,238,0.25)]"
         style={{ opacity: activeOpacity, scale: activeScale }}

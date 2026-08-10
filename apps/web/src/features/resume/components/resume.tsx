@@ -78,7 +78,7 @@ export function ResumeSection() {
     <section
       id="experience"
       ref={containerRef}
-      className="relative min-h-screen w-full overflow-hidden bg-white dark:bg-slate-950 py-32"
+      className="relative min-h-screen w-full overflow-hidden bg-white py-32 dark:bg-black"
     >
       <motion.div
         aria-hidden
@@ -119,8 +119,8 @@ export function ResumeSection() {
           style={{ x: deepX1, y: midY, rotate: midRotate }}
         />
 
-        <div className="absolute inset-x-0 top-0 h-24 bg-white dark:bg-slate-950" />
-        <div className="absolute inset-x-0 bottom-0 h-24 bg-white dark:bg-slate-950" />
+        <div className="absolute inset-x-0 top-0 h-24 bg-white dark:bg-black" />
+        <div className="absolute inset-x-0 bottom-0 h-24 bg-white dark:bg-black" />
       </motion.div>
 
       <div className="relative z-10 w-full mx-auto px-6">
@@ -129,7 +129,7 @@ export function ResumeSection() {
           className="text-center mb-20"
         >
           <h2 className="text-4xl md:text-5xl font-bold text-slate-900 dark:text-white">
-            Career <span className="text-cyan-500">Overview</span>
+            Career <span className="text-cyan-600 dark:text-cyan-400">Overview</span>
           </h2>
           <p className="text-slate-600 dark:text-slate-400 text-lg max-w-2xl mx-auto mt-4">
             Experience, education, and the skills I use to ship products.
@@ -174,7 +174,7 @@ export function ResumeSection() {
           className="text-center mt-24 mb-16"
         >
           <h2 className="text-4xl md:text-5xl font-bold text-slate-900 dark:text-white">
-            My <span className="text-cyan-500">Skills</span>
+            My <span className="text-cyan-600 dark:text-cyan-400">Skills</span>
           </h2>
         </motion.div>
 

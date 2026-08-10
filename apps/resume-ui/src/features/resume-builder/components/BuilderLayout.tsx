@@ -60,7 +60,7 @@ export function BuilderLayout() {
     setExporting('pdf')
     await new Promise((r) => setTimeout(r, 50))
     try {
-      await generatePdf(el, `${templateName}.pdf`, settings.orientation, settings.margins)
+      await generatePdf(el, `${templateName}.pdf`, settings.orientation, settings.margins, data.pageBreakBefore)
     } catch (err) {
       console.error('PDF export failed:', err)
       alert('Failed to generate PDF. Trying browser print instead.')
@@ -68,7 +68,7 @@ export function BuilderLayout() {
     } finally {
       setExporting(null)
     }
-  }, [templateName, settings.orientation, settings.margins])
+  }, [templateName, settings.orientation, settings.margins, data.pageBreakBefore])
 
   const handleExportWord = useCallback(async () => {
     const el = previewRef.current
@@ -77,11 +77,26 @@ export function BuilderLayout() {
     await new Promise((r) => setTimeout(r, 50))
     try {
       const clone = el.cloneNode(true) as HTMLElement
+      // Honor "start on a new page" toggles: apply the break as an inline
+      // style on the cloned section divs. Word's HTML engine honors inline
+      // page-break-before on block elements but does not support CSS
+      // attribute selectors in <style> blocks, so this is the reliable
+      // route. The first rendered section is skipped so a flag on it can't
+      // produce a blank first page (same guard as the PDF export).
+      const firstSectionId = clone
+        .querySelector<HTMLElement>('[data-section-id]')
+        ?.dataset.sectionId
+      for (const id of data.pageBreakBefore) {
+        if (!id || id === firstSectionId) continue
+        clone
+          .querySelector<HTMLElement>(`[data-section-id="${id}"]`)
+          ?.style.setProperty('page-break-before', 'always')
+      }
       exportAsWord(clone.innerHTML, `${templateName}.doc`, settings.orientation)
     } finally {
       setExporting(null)
     }
-  }, [templateName, settings.orientation])
+  }, [templateName, settings.orientation, data.pageBreakBefore])
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]

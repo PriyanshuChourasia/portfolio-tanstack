@@ -5,7 +5,6 @@ import { useEffect, useState } from 'react'
 import { FaLinkedin } from 'react-icons/fa'
 import { FaGithub } from 'react-icons/fa6'
 import { Twitter } from 'lucide-react'
-import { ThemeToggle } from './ThemeToggle'
 
 const socialLinks = [
   { name: 'Github', url: 'https://github.com/PriyanshuChourasia', icon: <FaGithub size={20} /> },
@@ -50,7 +49,7 @@ export function Navbar() {
         transition={{ duration: 0.5 }}
         className={`fixed top-0 w-full z-50 transition-all duration-300 ${
           scrolled
-            ? 'opacity-0 pointer-events-none'
+            ? 'bg-white/70 dark:bg-slate-900/70 backdrop-blur-md border-b border-slate-200/60 dark:border-slate-800/60 shadow-sm'
             : 'bg-transparent'
         }`}
       >
@@ -72,8 +71,10 @@ export function Navbar() {
                 <motion.a
                   key={item.id}
                   href={`#${item.id}`}
-                  whileHover={{ color: '#06b6d4' }}
-                  className="text-sm text-slate-600 dark:text-slate-400 hover:text-cyan-500 dark:hover:text-cyan-500 transition-colors relative group"
+                  whileHover={{ color: '#22d3ee' }}
+                  className={`text-sm transition-colors relative group ${
+                    scrolled ? 'text-slate-700 dark:text-slate-200' : 'text-slate-300'
+                  }`}
                 >
                   {item.label}
                   <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-linear-to-r from-blue-500 to-cyan-500 group-hover:w-full transition-all duration-300" />
@@ -91,14 +92,16 @@ export function Navbar() {
                     target="_blank"
                     rel="noopener noreferrer"
                     whileHover={{ scale: 1.1 }}
-                    className="text-slate-500 dark:text-slate-400 hover:text-cyan-500 transition-colors"
+                    className={`transition-colors ${
+                      scrolled
+                        ? 'text-slate-500 dark:text-slate-400 hover:text-cyan-500'
+                        : 'text-slate-300 hover:text-cyan-400'
+                    }`}
                   >
                     {link.icon}
                   </motion.a>
                 ))}
               </div>
-
-              <ThemeToggle />
 
               {/* Hamburger — mobile only */}
               <motion.button
@@ -132,7 +135,7 @@ export function Navbar() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.2 }}
-            className="fixed top-16 left-0 right-0 z-40 md:hidden bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-slate-200 dark:border-slate-700 shadow-xl"
+            className="fixed top-[4.5rem] left-0 right-0 z-40 md:hidden bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-slate-200 dark:border-slate-700 shadow-xl"
           >
             <div className="max-w-7xl mx-auto px-4 py-4 flex flex-col gap-1">
               {navItems.map((item) => {
