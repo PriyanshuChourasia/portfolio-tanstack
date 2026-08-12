@@ -1,6 +1,6 @@
 import { Link } from '@tanstack/react-router'
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion'
-import { Briefcase, FileText, FolderKanban, Home, Mail, BookOpen, Menu, X } from 'lucide-react'
+import { Briefcase, FileText, Home, Mail, Menu, X } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { FaLinkedin } from 'react-icons/fa'
 import { FaGithub } from 'react-icons/fa6'
@@ -16,8 +16,6 @@ const navItems = [
   { label: 'Home', id: 'home', icon: Home },
   { label: 'About', id: 'about', icon: FileText },
   { label: 'Experience', id: 'experience', icon: Briefcase },
-  { label: 'My Blog', id: 'articles', icon: BookOpen },
-  { label: 'Projects', id: 'projects', icon: FolderKanban },
   { label: 'Contact', id: 'contact', icon: Mail },
 ]
 
@@ -59,9 +57,16 @@ export function Navbar() {
             <Link to="/">
               <motion.div
                 whileHover={{ scale: 1.05 }}
-                className="text-xl font-bold bg-linear-to-r from-blue-500 to-cyan-500 bg-clip-text text-transparent"
+                className="flex items-center gap-2.5"
               >
-                CodyMitra
+                <img
+                  src="/myprofile.jpeg"
+                  alt="Priyanshu Chourasia"
+                  className="h-9 w-9 rounded-full object-cover border-2 border-cyan-400/60"
+                />
+                <span className="text-xl font-bold bg-linear-to-r from-blue-500 to-cyan-500 bg-clip-text text-transparent">
+                  CodyMitra
+                </span>
               </motion.div>
             </Link>
 

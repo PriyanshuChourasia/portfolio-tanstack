@@ -4,11 +4,12 @@ interface ScrollCircularProgressProps {
   percentage: number
   label: string
   progress: any
+  color: string
 }
 
-export function ScrollCircularProgress({ percentage, label, progress }: ScrollCircularProgressProps) {
+export function ScrollCircularProgress({ percentage, label, progress, color }: ScrollCircularProgressProps) {
   const clamp01 = (v: number) => Math.max(0, Math.min(1, v))
-  
+
   const radius = 58
   const circumference = 2 * Math.PI * radius
   const size = 140
@@ -20,9 +21,13 @@ export function ScrollCircularProgress({ percentage, label, progress }: ScrollCi
   })
 
   return (
-    <motion.div className="flex flex-col items-center gap-4" whileHover={{ scale: 1.05 }}>
+    <motion.div className="group flex flex-col items-center gap-4" whileHover={{ scale: 1.05 }}>
       <div className="relative" style={{ width: size, height: size }}>
-        <svg className="transform -rotate-90" width={size} height={size}>
+        <div
+          className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 blur-xl transition-opacity duration-300"
+          style={{ backgroundColor: color }}
+        />
+        <svg className="relative transform -rotate-90" width={size} height={size}>
           <circle
             cx={size / 2}
             cy={size / 2}
@@ -39,17 +44,18 @@ export function ScrollCircularProgress({ percentage, label, progress }: ScrollCi
             strokeWidth="6"
             strokeDasharray={circumference}
             strokeLinecap="round"
-            style={{ strokeDashoffset: dashOffset }}
-            className="stroke-cyan-500 dark:stroke-[#00d4ff] drop-shadow-[0_0_12px_rgba(0,212,255,0.35)]"
+            style={{ strokeDashoffset: dashOffset, stroke: color, filter: `drop-shadow(0 0 12px ${color}59)` }}
           />
         </svg>
         <div className="absolute inset-0 flex items-center justify-center">
-          <span className="text-3xl font-extrabold bg-linear-to-r from-cyan-600 to-blue-600 dark:from-cyan-400 dark:to-blue-500 bg-clip-text text-transparent">
+          <span className="text-3xl font-extrabold" style={{ color }}>
             {percentage}%
           </span>
         </div>
       </div>
-      <p className="text-xs text-center text-slate-500 dark:text-slate-400 font-medium max-w-30">{label}</p>
+      <p className="text-xs text-center text-slate-500 dark:text-slate-400 font-medium max-w-30 group-hover:text-slate-900 dark:group-hover:text-white transition-colors">
+        {label}
+      </p>
     </motion.div>
   )
 }

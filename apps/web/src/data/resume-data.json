@@ -33,70 +33,41 @@
       "desc": "Secondary School Education."
     }
   ],
-  "designSkills": [
-    {
-      "name": "Web Development",
-      "value": 95
-    },
-    {
-      "name": "Domain Driven Design",
-      "value": 80
-    },
-    {
-      "name": "Photoshop",
-      "value": 85
-    },
-    {
-      "name": "Graphic Design",
-      "value": 65
-    }
-  ],
   "codingSkills": [
     {
       "name": "HTML / CSS",
-      "value": 95
+      "value": 95,
+      "color": "#f97316"
     },
     {
       "name": "TypeScript / JavaScript",
-      "value": 95
+      "value": 95,
+      "color": "#eab308"
     },
     {
       "name": "Spring Boot / Laravel",
-      "value": 90
+      "value": 90,
+      "color": "#22c55e"
     },
     {
       "name": "MYSQL / PostGres",
-      "value": 75
+      "value": 75,
+      "color": "#3b82f6"
     },
     {
       "name": "Mongo-DB",
-      "value": 65
+      "value": 65,
+      "color": "#14b8a6"
     },
     {
       "name": "React / React Native",
-      "value": 85
+      "value": 85,
+      "color": "#06b6d4"
     },
     {
       "name": "Flutter / Dart",
-      "value": 65
-    }
-  ],
-  "languages": [
-    {
-      "name": "English",
-      "level": 9
-    },
-    {
-      "name": "German",
-      "level": 6
-    },
-    {
-      "name": "Italian",
-      "level": 4
-    },
-    {
-      "name": "French",
-      "level": 7
+      "value": 65,
+      "color": "#6366f1"
     }
   ],
   "knowledge": [

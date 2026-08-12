@@ -12,7 +12,6 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ProjectsIndexRouteImport } from './routes/projects/index'
 import { Route as ResumeTemplateRouteImport } from './routes/resume/template'
-import { Route as ResumeAiInterviewRouteImport } from './routes/resume/ai-interview'
 import { Route as ProjectsIdRouteImport } from './routes/projects/$id'
 import { Route as BlogWriteRouteImport } from './routes/blog/write'
 import { Route as BlogIdRouteImport } from './routes/blog/$id'
@@ -30,11 +29,6 @@ const ProjectsIndexRoute = ProjectsIndexRouteImport.update({
 const ResumeTemplateRoute = ResumeTemplateRouteImport.update({
   id: '/resume/template',
   path: '/resume/template',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ResumeAiInterviewRoute = ResumeAiInterviewRouteImport.update({
-  id: '/resume/ai-interview',
-  path: '/resume/ai-interview',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProjectsIdRoute = ProjectsIdRouteImport.update({
@@ -58,7 +52,6 @@ export interface FileRoutesByFullPath {
   '/blog/$id': typeof BlogIdRoute
   '/blog/write': typeof BlogWriteRoute
   '/projects/$id': typeof ProjectsIdRoute
-  '/resume/ai-interview': typeof ResumeAiInterviewRoute
   '/resume/template': typeof ResumeTemplateRoute
   '/projects/': typeof ProjectsIndexRoute
 }
@@ -67,7 +60,6 @@ export interface FileRoutesByTo {
   '/blog/$id': typeof BlogIdRoute
   '/blog/write': typeof BlogWriteRoute
   '/projects/$id': typeof ProjectsIdRoute
-  '/resume/ai-interview': typeof ResumeAiInterviewRoute
   '/resume/template': typeof ResumeTemplateRoute
   '/projects': typeof ProjectsIndexRoute
 }
@@ -77,7 +69,6 @@ export interface FileRoutesById {
   '/blog/$id': typeof BlogIdRoute
   '/blog/write': typeof BlogWriteRoute
   '/projects/$id': typeof ProjectsIdRoute
-  '/resume/ai-interview': typeof ResumeAiInterviewRoute
   '/resume/template': typeof ResumeTemplateRoute
   '/projects/': typeof ProjectsIndexRoute
 }
@@ -88,7 +79,6 @@ export interface FileRouteTypes {
     | '/blog/$id'
     | '/blog/write'
     | '/projects/$id'
-    | '/resume/ai-interview'
     | '/resume/template'
     | '/projects/'
   fileRoutesByTo: FileRoutesByTo
@@ -97,7 +87,6 @@ export interface FileRouteTypes {
     | '/blog/$id'
     | '/blog/write'
     | '/projects/$id'
-    | '/resume/ai-interview'
     | '/resume/template'
     | '/projects'
   id:
@@ -106,7 +95,6 @@ export interface FileRouteTypes {
     | '/blog/$id'
     | '/blog/write'
     | '/projects/$id'
-    | '/resume/ai-interview'
     | '/resume/template'
     | '/projects/'
   fileRoutesById: FileRoutesById
@@ -116,7 +104,6 @@ export interface RootRouteChildren {
   BlogIdRoute: typeof BlogIdRoute
   BlogWriteRoute: typeof BlogWriteRoute
   ProjectsIdRoute: typeof ProjectsIdRoute
-  ResumeAiInterviewRoute: typeof ResumeAiInterviewRoute
   ResumeTemplateRoute: typeof ResumeTemplateRoute
   ProjectsIndexRoute: typeof ProjectsIndexRoute
 }
@@ -142,13 +129,6 @@ declare module '@tanstack/react-router' {
       path: '/resume/template'
       fullPath: '/resume/template'
       preLoaderRoute: typeof ResumeTemplateRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/resume/ai-interview': {
-      id: '/resume/ai-interview'
-      path: '/resume/ai-interview'
-      fullPath: '/resume/ai-interview'
-      preLoaderRoute: typeof ResumeAiInterviewRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/projects/$id': {
@@ -180,7 +160,6 @@ const rootRouteChildren: RootRouteChildren = {
   BlogIdRoute: BlogIdRoute,
   BlogWriteRoute: BlogWriteRoute,
   ProjectsIdRoute: ProjectsIdRoute,
-  ResumeAiInterviewRoute: ResumeAiInterviewRoute,
   ResumeTemplateRoute: ResumeTemplateRoute,
   ProjectsIndexRoute: ProjectsIndexRoute,
 }

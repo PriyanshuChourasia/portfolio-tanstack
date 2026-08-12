@@ -3,12 +3,8 @@
 import { motion, useScroll, useSpring, useTransform } from 'framer-motion'
 import { useRef, useState } from 'react'
 import { ExperienceSection } from './ExperienceSection'
-import { EducationSection } from './EducationSection'
-import { DesignSkillsPanel } from './DesignSkillsPanel'
-import { LanguagesPanel } from './LanguagesPanel'
 import { CodingSkillsPanel } from './CodingSkillsPanel'
 import { KnowledgePanel } from './KnowledgePanel'
-import { SkillsIllustrationBackground } from './SkillsIllustrationBackground'
 import { ShareResumeButton } from './ShareResumeButton'
 import { Combobox } from '@/components/ui/combobox'
 import resumeData from '@/data/resume-data.json'
@@ -65,14 +61,8 @@ export function ResumeSection() {
   const midScale = useTransform(smoothProgress, [0, 1], [1.06, 0.94])
 
   const experience = resumeData.experience
-  const education = resumeData.education
-  const designSkills = resumeData.designSkills
   const codingSkills = resumeData.codingSkills
-  const languages = resumeData.languages
   const knowledge = resumeData.knowledge
-
-  const skillsComputerImageSrc = '/images/computer.png'
-  const skillsPersonImageSrc = '/images/person.png'
 
   return (
     <section
@@ -80,6 +70,19 @@ export function ResumeSection() {
       ref={containerRef}
       className="relative min-h-screen w-full overflow-hidden bg-white py-32 dark:bg-black"
     >
+      {/* Anime portrait background */}
+      <div className="absolute inset-y-0 right-0 w-full sm:w-3/4 lg:w-1/2 pointer-events-none overflow-hidden">
+        <img
+          src="/myanime.png"
+          alt=""
+          aria-hidden
+          className="absolute right-0 top-0 h-full w-auto max-w-none object-cover object-top opacity-60 dark:opacity-40"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-white dark:from-black via-white/40 dark:via-black/50 to-transparent" />
+        <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-white dark:from-black to-transparent" />
+        <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-white dark:from-black to-transparent" />
+      </div>
+
       <motion.div
         aria-hidden
         className="absolute inset-0 pointer-events-none overflow-hidden"
@@ -132,7 +135,7 @@ export function ResumeSection() {
             Career <span className="text-cyan-600 dark:text-cyan-400">Overview</span>
           </h2>
           <p className="text-slate-600 dark:text-slate-400 text-lg max-w-2xl mx-auto mt-4">
-            Experience, education, and the skills I use to ship products.
+            Experience and the skills I use to ship products.
           </p>
           <div className="mt-6 flex justify-center items-center gap-4">
             <Combobox
@@ -146,14 +149,21 @@ export function ResumeSection() {
           </div>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-5xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-5xl mx-auto items-stretch">
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
             viewport={{ once: true, margin: '100px' }}
+            className="relative rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700/60 shadow-xl aspect-4/3 md:aspect-auto"
           >
-            <ExperienceSection experiences={experience} />
+            <img
+              src="/myprofile.jpeg"
+              alt="Priyanshu working at his desk"
+              className="absolute inset-0 h-full w-full object-cover object-[65%_35%]"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-slate-950/5 to-transparent" />
+            <div className="absolute inset-0 rounded-2xl ring-1 ring-inset ring-cyan-400/20" />
           </motion.div>
 
           <motion.div
@@ -162,56 +172,22 @@ export function ResumeSection() {
             transition={{ duration: 0.8, delay: 0.1 }}
             viewport={{ once: true, margin: '100px' }}
           >
-            <EducationSection education={education} />
+            <ExperienceSection experiences={experience} />
           </motion.div>
         </div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true, margin: '100px' }}
-          className="text-center mt-24 mb-16"
-        >
-          <h2 className="text-4xl md:text-5xl font-bold text-slate-900 dark:text-white">
-            My <span className="text-cyan-600 dark:text-cyan-400">Skills</span>
-          </h2>
-        </motion.div>
-
-        <div className="absolute top-50 left-0 right-0 h-180 pointer-events-none overflow-hidden">
-          <SkillsIllustrationBackground
-            computerSrc={skillsComputerImageSrc}
-            personSrc={skillsPersonImageSrc}
-            progress={smoothSkillsProgress}
-          />
-        </div>
-
-        <div ref={skillsRef} className="relative z-10 max-w-6xl mx-auto">
-          <div className="grid grid-cols-1 gap-12">
-            <motion.div
-              initial={{ opacity: 0, x: -80 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8 }}
-              viewport={{ once: true, margin: '100px' }}
-              className="space-y-12"
-            >
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-                <DesignSkillsPanel
-                  designSkills={designSkills}
-                  progress={smoothSkillsProgress}
-                />
-                <LanguagesPanel
-                  languages={languages}
-                  progress={smoothSkillsProgress}
-                />
-              </div>
-
-              <CodingSkillsPanel
-                codingSkills={codingSkills}
-                progress={smoothSkillsProgress}
-              />
-            </motion.div>
-          </div>
+        <div ref={skillsRef} className="relative z-10 max-w-5xl mx-auto mt-24">
+          <motion.div
+            initial={{ opacity: 0, x: -80 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true, margin: '100px' }}
+          >
+            <CodingSkillsPanel
+              codingSkills={codingSkills}
+              progress={smoothSkillsProgress}
+            />
+          </motion.div>
         </div>
 
         <motion.div
