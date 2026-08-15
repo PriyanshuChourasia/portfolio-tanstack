@@ -13,7 +13,7 @@ export default function ContactSection() {
   return (
     <section
       id="contact"
-      className="relative min-h-screen w-full overflow-hidden bg-white dark:bg-slate-950 flex items-center justify-center py-16"
+      className="relative min-h-screen w-full overflow-x-clip bg-white dark:bg-slate-950 flex items-center justify-center py-16"
     >
       {/* Animated background blobs */}
       <motion.div className="absolute inset-0 pointer-events-none">
@@ -35,24 +35,30 @@ export default function ContactSection() {
       </motion.div>
 
       <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 text-center">
-        <motion.div initial={{ opacity: 0, y: 50 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+        >
           <span className="inline-block mb-6 px-4 py-2 rounded-full border border-cyan-400/30 bg-cyan-50 dark:bg-cyan-400/10 text-xs font-semibold uppercase tracking-widest text-cyan-600 dark:text-cyan-300">
             Get in Touch
           </span>
 
-          <h2 className="text-4xl md:text-5xl font-bold mb-6 leading-tight text-slate-900 dark:text-white">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-6 leading-tight text-slate-900 dark:text-white">
             Feel free to reach out — whether you&apos;re looking for a developer, have a query,
             or simply want to connect.
           </h2>
 
-          <p className="text-lg text-slate-500 dark:text-slate-400 mb-12">
-            I&apos;m always open to hearing about new projects and opportunities.
+          <p className="text-base sm:text-lg font-medium text-slate-600 dark:text-slate-300 mb-12">
+            I am always open to hearing about new projects and opportunities.
           </p>
         </motion.div>
 
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
           whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true }}
           transition={{ duration: 0.8, delay: 0.2 }}
           className="mb-12"
         >
@@ -60,18 +66,19 @@ export default function ContactSection() {
             href="mailto:priaynshuchourasia916@gmail.com"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="inline-flex items-center gap-3 px-8 py-4 rounded-full bg-linear-to-r from-blue-600 to-cyan-600 text-white font-semibold text-lg hover:shadow-2xl hover:shadow-blue-500/40 transition-shadow"
+            className="inline-flex max-w-full items-center gap-2.5 sm:gap-3 rounded-full bg-linear-to-r from-blue-600 to-cyan-600 px-5 sm:px-8 py-3.5 sm:py-4 text-sm sm:text-lg font-semibold text-white hover:shadow-2xl hover:shadow-blue-500/40 transition-shadow"
           >
-            <Mail className="w-5 h-5" />
-            priaynshuchourasia916@gmail.com
+            <Mail className="w-5 h-5 shrink-0" />
+            <span className="break-all">priaynshuchourasia916@gmail.com</span>
           </motion.a>
         </motion.div>
 
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
           transition={{ duration: 0.8, delay: 0.4 }}
-          className="flex items-center justify-center gap-5 flex-wrap"
+          className="flex items-center justify-center gap-4 sm:gap-5 flex-wrap"
         >
           {socialLinks.map((social, index) => {
             const Icon = social.icon
@@ -95,6 +102,7 @@ export default function ContactSection() {
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
           transition={{ duration: 0.8, delay: 0.6 }}
           className="mt-20 pt-8 border-t border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4"
         >

@@ -5,6 +5,7 @@ import { TanStackDevtools } from '@tanstack/react-devtools'
 import TanStackQueryDevtools from '../integrations/tanstack-query/devtools'
 
 import type { QueryClient } from '@tanstack/react-query'
+import { ScrollToTop } from '@/components/ScrollToTop'
 import { Toaster } from '@/components/ui/sonner'
 import { DEFAULT_DESCRIPTION, DEFAULT_TITLE, SITE_URL, buildMeta } from '@/lib/seo'
 
@@ -28,6 +29,7 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
     <>
       <HeadContent />
       <Outlet />
+      <ScrollToTop />
       <Toaster richColors position="bottom-right" />
       <TanStackDevtools
         config={{

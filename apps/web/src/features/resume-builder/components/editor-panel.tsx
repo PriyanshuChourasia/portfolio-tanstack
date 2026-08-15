@@ -113,7 +113,7 @@ export function EditorPanel({ data, onChange }: EditorPanelProps) {
   }
 
   return (
-    <div className="h-full overflow-y-auto custom-scrollbar p-6 space-y-6">
+    <div className="h-full overflow-y-auto custom-scrollbar p-6 space-y-6 max-h-[70vh] md:max-h-none">
       <div className="space-y-4">
         <h3 className="text-lg font-semibold text-white">Personal Info</h3>
         <div className="space-y-3">

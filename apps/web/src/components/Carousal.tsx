@@ -47,7 +47,7 @@ export function Hero() {
     <section
       id="home"
       ref={sectionRef}
-      className="relative w-full min-h-screen overflow-hidden bg-slate-950"
+      className="relative flex w-full min-h-screen flex-col overflow-hidden bg-slate-950"
     >
       {/* Full-bleed background image, centered */}
       <motion.div style={{ y: imageY }} className="absolute inset-0">
@@ -94,17 +94,17 @@ export function Hero() {
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        className="relative z-20 pt-28 px-6 sm:px-10 lg:pt-0 lg:absolute lg:top-32 lg:left-14 lg:max-w-xs"
+        className="relative z-20 pt-28 px-6 text-center sm:px-10 lg:pt-0 lg:absolute lg:top-32 lg:left-14 lg:max-w-xs lg:text-left"
       >
         <p className="text-cyan-400 text-sm font-semibold tracking-wide uppercase mb-3">
           Welcome to my portfolio
         </p>
-        <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
+        <p className="mx-auto max-w-sm text-slate-300 text-sm sm:text-base lg:mx-0 leading-relaxed">
           I design and build user-centered digital products that are simple,
           fast, and impactful — end to end.
         </p>
 
-        <div className="mt-6 flex flex-nowrap items-center gap-2 sm:gap-3">
+        <div className="mt-6 flex flex-nowrap items-center justify-center gap-2 sm:gap-3 lg:justify-start">
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
@@ -122,6 +122,9 @@ export function Hero() {
           </motion.a>
         </div>
       </motion.div>
+
+      {/* Spacer pushes the name toward the bottom so the viewport fills evenly */}
+      <div className="flex-1 lg:hidden" aria-hidden="true" />
 
       {/* Floating work-preview card — cycles through featured projects */}
       <motion.a
@@ -210,7 +213,6 @@ export function Hero() {
         transition={{ duration: 0.6, delay: 0.2 }}
         className="relative z-20 mt-10 pb-10 px-6 sm:px-10 text-center lg:text-left lg:pb-0 lg:mt-0 lg:absolute lg:bottom-10 lg:left-14 lg:px-0"
       >
-        <p className="text-xs text-slate-400 font-medium mb-2">&copy;2026</p>
         <h1 className="text-5xl sm:text-6xl lg:text-8xl xl:text-[8.5rem] font-black uppercase tracking-tight leading-[0.85] text-white">
           Priyanshu
         </h1>

@@ -153,8 +153,8 @@ export function TemplateShowcase({ onSelect }: TemplateShowcaseProps) {
                   {/* Preview thumbnail — renders the real template with demo data */}
                   <div className="relative h-[380px] overflow-hidden bg-slate-800">
                     <div
-                      className="absolute top-0 left-0 origin-top-left"
-                      style={{ width: 794, transform: 'scale(0.48)' }}
+                      className="absolute top-0 left-0 origin-top-left scale-[0.42] sm:scale-[0.48]"
+                      style={{ width: 794 }}
                     >
                       <PreviewComponent data={showcaseData} />
                     </div>
@@ -189,6 +189,14 @@ export function TemplateShowcase({ onSelect }: TemplateShowcaseProps) {
                       </span>
                     </div>
                     <p className="text-sm text-slate-500">{tpl.tagline}</p>
+                    {/* Always-visible CTA so templates are selectable on touch devices */}
+                    <button
+                      onClick={() => onSelect(tpl.id)}
+                      className="mt-4 flex w-full items-center justify-center gap-2 rounded-lg bg-cyan-500 px-5 py-2.5 text-sm font-semibold text-slate-950 transition-colors hover:bg-cyan-400"
+                    >
+                      Use This Template
+                      <ArrowRight className="w-4 h-4" />
+                    </button>
                   </div>
                 </div>
               </motion.div>

@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from 'react'
 import { Mail, MapPin, Phone, User } from 'lucide-react'
 import type { ResumeData, ResumeLayout } from './resume-template'
 
@@ -658,13 +659,63 @@ export const previewComponents: Record<ResumeLayout, React.ComponentType<{ data:
   mech: MechPreview,
 }
 
+// The resume templates are fixed-width A4 documents (210mm ≈ 794px). To keep
+// the preview from overflowing the viewport on mobile, scale it down to fit
+// the available width and reserve the scaled height so no dead space remains.
+const PREVIEW_WIDTH = 794
+
 export function ResumePreview({ data, layout }: ResumePreviewProps) {
   const PreviewComponent = previewComponents[layout]
+  const measureRef = useRef<HTMLDivElement>(null)
+  const contentRef = useRef<HTMLDivElement>(null)
+  const [scale, setScale] = useState(0.8)
+  const [contentHeight, setContentHeight] = useState(1056)
+
+  useEffect(() => {
+    const el = measureRef.current
+    if (!el) return
+    const update = () => {
+      const available = el.clientWidth
+      setScale(available > 0 ? Math.min(1, available / PREVIEW_WIDTH) : 1)
+    }
+    update()
+    const ro = new ResizeObserver(update)
+    ro.observe(el)
+    window.addEventListener('resize', update)
+    return () => {
+      ro.disconnect()
+      window.removeEventListener('resize', update)
+    }
+  }, [])
+
+  // Track the unscaled content height so the wrapper reserves the right space
+  // once scaled (content grows when switching layouts or editing data).
+  useEffect(() => {
+    const el = contentRef.current
+    if (!el) return
+    const ro = new ResizeObserver((entries) => {
+      const height = entries[0]?.contentRect.height
+      if (height) setContentHeight(height)
+    })
+    ro.observe(el)
+    return () => ro.disconnect()
+  }, [layout])
 
   return (
-    <div className="flex items-start justify-center p-8 min-h-full">
-      <div className="w-[210mm] shadow-2xl transform scale-[0.8] origin-top">
-        <PreviewComponent data={data} />
+    <div className="flex items-start justify-center p-4 sm:p-8 min-h-full">
+      <div ref={measureRef} className="w-full flex justify-center">
+        <div
+          className="relative shrink-0"
+          style={{ width: PREVIEW_WIDTH * scale, height: contentHeight * scale }}
+        >
+          <div
+            ref={contentRef}
+            className="w-[210mm] shadow-2xl origin-top-left"
+            style={{ transform: `scale(${scale})` }}
+          >
+            <PreviewComponent data={data} />
+          </div>
+        </div>
       </div>
     </div>
   )

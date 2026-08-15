@@ -68,7 +68,7 @@ export function ResumeSection() {
     <section
       id="experience"
       ref={containerRef}
-      className="relative min-h-screen w-full overflow-hidden bg-white py-32 dark:bg-black"
+      className="relative min-h-screen w-full overflow-hidden bg-white py-24 sm:py-32 dark:bg-black"
     >
       {/* Anime portrait background */}
       <div className="absolute inset-y-0 right-0 w-full sm:w-3/4 lg:w-1/2 pointer-events-none overflow-hidden">
@@ -137,7 +137,7 @@ export function ResumeSection() {
           <p className="text-slate-600 dark:text-slate-400 text-lg max-w-2xl mx-auto mt-4">
             Experience and the skills I use to ship products.
           </p>
-          <div className="mt-6 flex justify-center items-center gap-4">
+          <div className="mt-6 flex flex-wrap justify-center items-center gap-4">
             <Combobox
               options={resumeTypeOptions}
               value={resumeType}

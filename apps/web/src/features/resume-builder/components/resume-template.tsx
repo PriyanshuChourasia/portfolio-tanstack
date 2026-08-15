@@ -379,7 +379,18 @@ export function ResumeTemplate() {
   const [activeLayout, setActiveLayout] = useState<ResumeLayout>('classic')
   const [sidebarOpen, setSidebarOpen] = useState(true)
   const [isCycling, setIsCycling] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
   const cycleRef = useRef<ReturnType<typeof setInterval> | null>(null)
+
+  // Detect mobile so the editor sidebar collapses only on desktop and the
+  // layout can stack vertically on small screens.
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 767px)')
+    const handleChange = () => setIsMobile(mq.matches)
+    handleChange()
+    mq.addEventListener('change', handleChange)
+    return () => mq.removeEventListener('change', handleChange)
+  }, [])
 
   const handleSelectTemplate = useCallback((layout: ResumeLayout) => {
     setActiveLayout(layout)
@@ -428,105 +439,127 @@ export function ResumeTemplate() {
   }
 
   return (
-    <div className="h-screen w-full bg-slate-950 flex flex-col overflow-hidden">
+    <div className="w-full bg-slate-950 flex flex-col md:h-screen md:overflow-hidden">
       {/* Header with layout names */}
-      <header className="h-14 shrink-0 bg-slate-900/80 border-b border-slate-800 backdrop-blur-md flex items-center justify-between px-4 z-20">
-        <div className="flex items-center gap-2">
-          <button
-            onClick={handleBackToShowcase}
-            className="p-1.5 rounded-md hover:bg-slate-800 text-slate-400 hover:text-white transition-colors"
-            title="Back to templates"
-          >
-            <LayoutGrid className="w-4 h-4" />
-          </button>
-          <button
-            onClick={() => setSidebarOpen(!sidebarOpen)}
-            className="p-1.5 rounded-md hover:bg-slate-800 text-slate-400 hover:text-white transition-colors"
-          >
-            {sidebarOpen ? <ChevronLeft className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
-          </button>
-          <span className="text-sm font-semibold text-white">Resume Builder</span>
+      <header className="shrink-0 bg-slate-900/80 border-b border-slate-800 backdrop-blur-md z-20">
+        <div className="h-14 flex items-center justify-between px-3 sm:px-4 gap-2">
+          <div className="flex items-center gap-2 min-w-0">
+            <button
+              onClick={handleBackToShowcase}
+              className="p-1.5 rounded-md hover:bg-slate-800 text-slate-400 hover:text-white transition-colors shrink-0"
+              title="Back to templates"
+            >
+              <LayoutGrid className="w-4 h-4" />
+            </button>
+            <button
+              onClick={() => setSidebarOpen(!sidebarOpen)}
+              className="hidden md:flex p-1.5 rounded-md hover:bg-slate-800 text-slate-400 hover:text-white transition-colors"
+            >
+              {sidebarOpen ? <ChevronLeft className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
+            </button>
+            <span className="text-sm font-semibold text-white truncate">Resume Builder</span>
+          </div>
+
+          {/* Desktop layout tabs */}
+          <nav className="hidden lg:flex items-center gap-1">
+            {layouts.map((layout) => (
+              <button
+                key={layout.id}
+                onClick={() => setActiveLayout(layout.id)}
+                className={`relative px-4 py-1.5 text-sm rounded-md transition-all ${
+                  activeLayout === layout.id
+                    ? 'text-white'
+                    : 'text-slate-400 hover:text-white hover:bg-slate-800/50'
+                }`}
+              >
+                {activeLayout === layout.id && (
+                  <motion.div
+                    layoutId="activeLayout"
+                    className="absolute inset-0 bg-cyan-500/15 border border-cyan-500/30 rounded-md"
+                    transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                  />
+                )}
+                <span className="relative z-10">{layout.label}</span>
+              </button>
+            ))}
+          </nav>
+
+          <div className="flex items-center gap-2 shrink-0">
+            {/* Demo profile switcher */}
+            <div className="flex items-center gap-1 bg-slate-800/50 rounded-md border border-slate-700/50 px-1 py-0.5">
+              <div className="hidden sm:flex items-center gap-1">
+                {demoProfiles.map((profile, i) => (
+                  <button
+                    key={profile.name}
+                    onClick={() => selectProfile(i)}
+                    className={`px-2 py-1 text-xs rounded transition-colors ${
+                      activeProfileIdx === i
+                        ? 'bg-cyan-500/20 text-cyan-400'
+                        : 'text-slate-400 hover:text-white'
+                    }`}
+                  >
+                    {profile.name}
+                  </button>
+                ))}
+              </div>
+              <div className="hidden sm:block w-px h-4 bg-slate-700 mx-0.5" />
+              <button
+                onClick={shuffleProfile}
+                className="p-1 rounded text-slate-400 hover:text-white hover:bg-slate-700/50 transition-colors"
+                title="Next profile"
+              >
+                <Shuffle className="w-3.5 h-3.5" />
+              </button>
+              <button
+                onClick={toggleCycle}
+                className={`p-1 rounded transition-colors ${
+                  isCycling ? 'text-cyan-400 bg-cyan-500/10' : 'text-slate-400 hover:text-white hover:bg-slate-700/50'
+                }`}
+                title={isCycling ? 'Stop cycling' : 'Cycle through all templates'}
+              >
+                {isCycling ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5" />}
+              </button>
+            </div>
+
+            <button className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-cyan-400 hover:text-cyan-300 border border-cyan-500/30 rounded-md hover:bg-cyan-500/10 transition-colors">
+              <Download className="w-4 h-4" />
+              Export
+            </button>
+          </div>
         </div>
 
-        <nav className="flex items-center gap-1">
+        {/* Mobile/tablet layout tabs — horizontally scrollable row */}
+        <nav className="lg:hidden flex items-center gap-1 overflow-x-auto px-3 pb-2 custom-scrollbar">
           {layouts.map((layout) => (
             <button
               key={layout.id}
               onClick={() => setActiveLayout(layout.id)}
-              className={`relative px-4 py-1.5 text-sm rounded-md transition-all ${
+              className={`shrink-0 px-4 py-1.5 text-sm rounded-md border transition-all ${
                 activeLayout === layout.id
-                  ? 'text-white'
-                  : 'text-slate-400 hover:text-white hover:bg-slate-800/50'
+                  ? 'bg-cyan-500/15 text-white border-cyan-500/30'
+                  : 'text-slate-400 hover:text-white hover:bg-slate-800/50 border-transparent'
               }`}
             >
-              {activeLayout === layout.id && (
-                <motion.div
-                  layoutId="activeLayout"
-                  className="absolute inset-0 bg-cyan-500/15 border border-cyan-500/30 rounded-md"
-                  transition={{ type: 'spring', stiffness: 380, damping: 30 }}
-                />
-              )}
-              <span className="relative z-10">{layout.label}</span>
+              {layout.label}
             </button>
           ))}
         </nav>
-
-        <div className="flex items-center gap-2">
-          {/* Demo profile dropdown */}
-          <div className="flex items-center gap-1 bg-slate-800/50 rounded-md border border-slate-700/50 px-1 py-0.5">
-            {demoProfiles.map((profile, i) => (
-              <button
-                key={profile.name}
-                onClick={() => selectProfile(i)}
-                className={`px-2 py-1 text-xs rounded transition-colors ${
-                  activeProfileIdx === i
-                    ? 'bg-cyan-500/20 text-cyan-400'
-                    : 'text-slate-400 hover:text-white'
-                }`}
-              >
-                {profile.name}
-              </button>
-            ))}
-            <div className="w-px h-4 bg-slate-700 mx-0.5" />
-            <button
-              onClick={shuffleProfile}
-              className="p-1 rounded text-slate-400 hover:text-white hover:bg-slate-700/50 transition-colors"
-              title="Next profile"
-            >
-              <Shuffle className="w-3.5 h-3.5" />
-            </button>
-            <button
-              onClick={toggleCycle}
-              className={`p-1 rounded transition-colors ${
-                isCycling ? 'text-cyan-400 bg-cyan-500/10' : 'text-slate-400 hover:text-white hover:bg-slate-700/50'
-              }`}
-              title={isCycling ? 'Stop cycling' : 'Cycle through all templates'}
-            >
-              {isCycling ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5" />}
-            </button>
-          </div>
-
-          <button className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-cyan-400 hover:text-cyan-300 border border-cyan-500/30 rounded-md hover:bg-cyan-500/10 transition-colors">
-            <Download className="w-4 h-4" />
-            Export
-          </button>
-        </div>
       </header>
 
-      {/* Main content */}
-      <div className="flex flex-1 overflow-hidden">
-        {/* Left sidebar - Editor */}
+      {/* Main content — stacked on mobile, side-by-side on desktop */}
+      <div className="flex flex-1 flex-col md:flex-row md:overflow-hidden">
+        {/* Editor — full-width block on mobile, collapsible sidebar on desktop */}
         <motion.aside
-          animate={{ width: sidebarOpen ? 380 : 0 }}
-          className="overflow-hidden border-r border-slate-800 bg-slate-900/50 shrink-0"
+          animate={isMobile ? {} : { width: sidebarOpen ? 380 : 0 }}
+          className={`overflow-hidden border-r border-slate-800 bg-slate-900/50 shrink-0 ${isMobile ? 'w-full' : ''}`}
           transition={{ type: 'spring', stiffness: 300, damping: 30 }}
         >
-          <div className="w-[380px] h-full overflow-hidden">
+          <div className={`h-full overflow-hidden ${isMobile ? 'w-full' : 'w-[380px]'}`}>
             <EditorPanel data={data} onChange={setData} />
           </div>
         </motion.aside>
 
-        {/* Right panel - Preview */}
+        {/* Preview panel */}
         <main className="flex-1 overflow-y-auto bg-slate-950">
           <ResumePreview data={data} layout={activeLayout} />
         </main>

@@ -12,7 +12,6 @@ export function ScrollCircularProgress({ percentage, label, progress, color }: S
 
   const radius = 58
   const circumference = 2 * Math.PI * radius
-  const size = 140
 
   const fill = useTransform(progress, [0, 1], [0, percentage])
   const dashOffset = useTransform(fill, (v: number) => {
@@ -21,24 +20,25 @@ export function ScrollCircularProgress({ percentage, label, progress, color }: S
   })
 
   return (
-    <motion.div className="group flex flex-col items-center gap-4" whileHover={{ scale: 1.05 }}>
-      <div className="relative" style={{ width: size, height: size }}>
+    <motion.div className="group flex w-full flex-col items-center gap-4" whileHover={{ scale: 1.05 }}>
+      {/* Fluid circle so the fixed 140px ring never overflows narrow screens */}
+      <div className="relative aspect-square w-full max-w-[140px]">
         <div
           className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 blur-xl transition-opacity duration-300"
           style={{ backgroundColor: color }}
         />
-        <svg className="relative transform -rotate-90" width={size} height={size}>
+        <svg viewBox="0 0 140 140" className="relative h-full w-full -rotate-90">
           <circle
-            cx={size / 2}
-            cy={size / 2}
+            cx="70"
+            cy="70"
             r={radius}
             fill="none"
             strokeWidth="6"
             className="stroke-slate-300 dark:stroke-[#2a3f5f]"
           />
           <motion.circle
-            cx={size / 2}
-            cy={size / 2}
+            cx="70"
+            cy="70"
             r={radius}
             fill="none"
             strokeWidth="6"
