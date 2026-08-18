@@ -105,13 +105,15 @@ export function Hero() {
         </p>
 
         <div className="mt-6 flex flex-nowrap items-center justify-center gap-2 sm:gap-3 lg:justify-start">
-          <motion.button
+          <motion.a
+            href="/PriyanshuResume.pdf"
+            download
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             className="px-4 sm:px-6 py-2.5 rounded-full bg-linear-to-r from-blue-600 to-cyan-600 text-white text-xs sm:text-sm font-semibold whitespace-nowrap hover:shadow-xl hover:shadow-cyan-500/30 transition-shadow"
           >
             Download CV
-          </motion.button>
+          </motion.a>
           <motion.a
             href="#contact"
             whileHover={{ scale: 1.05 }}
@@ -120,6 +122,43 @@ export function Hero() {
           >
             Get in Touch
           </motion.a>
+        </div>
+      </motion.div>
+
+      {/* Doctor ERP notification board */}
+      <motion.div
+        role="link"
+        tabIndex={0}
+        onClick={() => window.open('https://github.com/PriyanshuChourasia/account_erp', '_blank', 'noopener,noreferrer')}
+        onKeyDown={(e) => { if (e.key === 'Enter') window.open('https://github.com/PriyanshuChourasia/account_erp', '_blank', 'noopener,noreferrer') }}
+        initial={{ opacity: 0, x: -20 }}
+        whileInView={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.6, delay: 0.5 }}
+        whileHover={{ scale: 1.02, x: 4 }}
+        className="group relative z-20 mx-6 sm:mx-10 mt-6 lg:mx-0 lg:absolute lg:left-14 lg:bottom-44 lg:max-w-sm w-auto rounded-2xl border border-white/10 bg-slate-900/70 backdrop-blur-md overflow-hidden transition-colors hover:border-emerald-500/30 cursor-pointer"
+      >
+        <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/5 via-transparent to-cyan-500/5 opacity-0 group-hover:opacity-100 transition-opacity" />
+        <div className="relative flex items-start gap-3 p-4">
+          <span className="relative flex h-2.5 w-2.5 mt-1 shrink-0">
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+            <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-emerald-500" />
+          </span>
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2 mb-1">
+              <span className="text-[10px] font-bold uppercase tracking-widest text-emerald-400/80">
+                Latest Project
+              </span>
+            </div>
+            <p className="text-sm font-semibold text-white leading-snug">
+              Doctor ERP (OPD)
+            </p>
+            <p className="text-xs text-slate-400 mt-1 leading-relaxed">
+              Full-stack clinic &amp; hospital management — registration to pharmacy dispensing. NestJS + React 19 · Aug 2026 — Present
+            </p>
+          </div>
+          <span className="flex items-center justify-center h-8 w-8 rounded-lg bg-white/5 border border-white/10 shrink-0 group-hover:bg-emerald-500/10 group-hover:border-emerald-500/20 transition-colors mt-0.5">
+            <ArrowUpRight className="h-3.5 w-3.5 text-slate-400 group-hover:text-emerald-400 transition-colors" />
+          </span>
         </div>
       </motion.div>
 

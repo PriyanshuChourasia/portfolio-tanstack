@@ -41,8 +41,127 @@
       "client": "Independent Product",
       "image": "/opderp.png",
       "icon": "ImageIcon",
-      "description": "A full-featured clinic management system covering the entire OPD workflow on a single record — patient registration, appointment & token queue, consultations, prescriptions, lab orders, billing & POS, and pharmacy dispensing. Role-based access for super admin, admin, doctor, receptionist, and assistant, with real-time sync and audit logging.",
-      "link": "https://opd.codymitra.com"
+      "description": "Doctor ERP is a full-stack clinic and hospital management system that digitizes the complete patient journey — from walk-in registration and appointment booking to live token queues, doctor consultation, smart prescriptions, POS billing, and pharmacy dispensing — in a single unified application. Built with NestJS, PostgreSQL, and Prisma on the backend and React 19, TanStack Router, and Tailwind on the frontend, it features role-native interfaces for admin, doctor, receptionist, pharmacist, and nurse users, backed by a granular role-based access control system with JWT refresh-token rotation.",
+      "link": "https://opd.codymitra.com",
+      "details": {
+        "tagline": "Full-stack clinic & hospital management system covering registration → appointments → queue → consultation → prescriptions → billing/POS → pharmacy dispensing, built for admin, doctor, receptionist, pharmacist & nurse roles.",
+        "journey": [
+          "Walk-in / Scheduled",
+          "Registration",
+          "Appointment",
+          "Token Queue",
+          "Consultation",
+          "Prescription",
+          "Billing / POS",
+          "Pharmacy Dispensing"
+        ],
+        "roles": [
+          {
+            "name": "Admin",
+            "blurb": "Platform control — users, roles & permissions, master data and audit logs."
+          },
+          {
+            "name": "Doctor",
+            "blurb": "Consult workflow — vitals, diagnosis, smart prescriptions and order generation."
+          },
+          {
+            "name": "Receptionist",
+            "blurb": "Front desk — registration, appointments and the live waiting-room token board."
+          },
+          {
+            "name": "Pharmacist",
+            "blurb": "Full-width POS terminal for dispensing, billing and receipts."
+          },
+          {
+            "name": "Nurse",
+            "blurb": "Token flow and vitals capture between consultation and pharmacy."
+          }
+        ],
+        "highlights": [
+          {
+            "title": "End-to-end coverage",
+            "description": "One system from registration to pharmacy checkout — no context-switching between apps."
+          },
+          {
+            "title": "Role-native interfaces",
+            "description": "A POS cashier gets a full-width terminal, doctors get a consult workflow, reception sees the waiting room."
+          },
+          {
+            "title": "Smart prescriptions",
+            "description": "Typeahead drug search, auto-generated lab/radiology/procedure orders, substitution & allergy tracking."
+          },
+          {
+            "title": "RBAC security",
+            "description": "Granular resource:action permissions on every endpoint, with refresh-token rotation and theft detection."
+          },
+          {
+            "title": "Real-time queues",
+            "description": "Live token board auto-refreshing so reception, nurses and doctors always share the same state."
+          }
+        ],
+        "modules": [
+          {
+            "name": "Queue Management",
+            "description": "Real-time token queue per doctor with status transitions — WAITING → IN_PROGRESS → COMPLETED / SKIPPED / NO_SHOW."
+          },
+          {
+            "name": "Appointments",
+            "description": "Walk-in, scheduled & follow-up appointments; slots auto-generated from recurring doctor schedules."
+          },
+          {
+            "name": "Consultation",
+            "description": "Vitals (BP, pulse, SpO₂, temp, weight, height), diagnosis and clinical notes."
+          },
+          {
+            "name": "Prescriptions",
+            "description": "Drug catalog search with substitution tracking & allergy warnings; auto-generates lab/radiology/procedure orders."
+          },
+          {
+            "name": "Billing / POS",
+            "description": "Discount engine (% or flat), CASH/CARD/UPI modes, receipts and a refund audit trail."
+          },
+          {
+            "name": "Pharmacy",
+            "description": "Partial or full dispensing with substitution tracking linked to the original prescription."
+          },
+          {
+            "name": "RBAC",
+            "description": "Granular resource:action permissions with an ADMIN wildcard and refresh-token rotation with theft detection."
+          },
+          {
+            "name": "Doctor Schedules",
+            "description": "Weekly recurring schedules that auto-generate bookable slots."
+          }
+        ],
+        "stack": [
+          {
+            "group": "Frontend",
+            "items": [
+              "React 19",
+              "Vite",
+              "TanStack Router",
+              "TanStack Query",
+              "Redux Toolkit",
+              "Tailwind CSS v4",
+              "shadcn/ui"
+            ]
+          },
+          {
+            "group": "Backend",
+            "items": [
+              "NestJS 11",
+              "TypeScript",
+              "Prisma 5",
+              "PostgreSQL",
+              "JWT auth"
+            ]
+          },
+          {
+            "group": "Monorepo",
+            "items": ["Turborepo", "npm workspaces", "Shared UI package"]
+          }
+        ]
+      }
     },
     {
       "title": "CodyERP — Restaurant Management System",
@@ -52,6 +171,15 @@
       "icon": "ImageIcon",
       "description": "An all-in-one restaurant management platform in active development — POS billing, inventory tracking, staff management, and financial reporting in one place. Ships with developer/demo credentials for quickly inspecting the underlying data while building out new modules.",
       "link": "https://restaurant.codymitra.com/"
+    },
+    {
+      "title": "Account ERP",
+      "category": "Full Stack",
+      "client": "Independent Product",
+      "image": "/opderp.png",
+      "icon": "ImageIcon",
+      "description": "An accounting and finance ERP module — part of the same product suite as OPD ERP and CodyERP. In active development.",
+      "link": "https://github.com/PriyanshuChourasia/account_erp"
     }
   ]
 }

@@ -1,11 +1,134 @@
 import { Link } from '@tanstack/react-router'
 import { motion } from 'framer-motion'
-import { ArrowLeft, ExternalLink, Briefcase, Tag } from 'lucide-react'
+import {
+  ArrowLeft,
+  ArrowRight,
+  Briefcase,
+  CalendarCheck,
+  CalendarDays,
+  ClipboardList,
+  CreditCard,
+  ExternalLink,
+  Footprints,
+  HeartPulse,
+  Layers,
+  ListOrdered,
+  Pill,
+  Radio,
+  ShieldCheck,
+  Sparkles,
+  Stethoscope,
+  Tag,
+  Ticket,
+  UserPlus,
+  UserRound,
+  Users,
+  Workflow,
+} from 'lucide-react'
+import type { Variants } from 'framer-motion'
+import type { LucideIcon } from 'lucide-react'
 import worksData from '@/data/works-data.json'
 import { Navbar } from '@/components/Navbar'
 
+type ProjectDetails = {
+  tagline?: string
+  journey?: Array<string>
+  roles?: Array<{ name: string; blurb: string }>
+  highlights?: Array<{ title: string; description: string }>
+  modules?: Array<{ name: string; description: string }>
+  stack?: Array<{ group: string; items: Array<string> }>
+}
+
+const staggerContainer: Variants = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.06 } },
+}
+
+const staggerItem: Variants = {
+  hidden: { opacity: 0, y: 16 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+}
+
+const journeyIcons: Array<LucideIcon> = [
+  Footprints,
+  UserPlus,
+  CalendarCheck,
+  Ticket,
+  Stethoscope,
+  ClipboardList,
+  CreditCard,
+  Pill,
+]
+
+function roleIcon(name: string): LucideIcon {
+  switch (name.toLowerCase()) {
+    case 'admin':
+      return ShieldCheck
+    case 'doctor':
+      return Stethoscope
+    case 'receptionist':
+      return UserRound
+    case 'pharmacist':
+      return Pill
+    case 'nurse':
+      return HeartPulse
+    default:
+      return Users
+  }
+}
+
+function highlightIcon(title: string): LucideIcon {
+  const n = title.toLowerCase()
+  if (n.includes('end-to-end')) return Workflow
+  if (n.includes('role-native')) return Users
+  if (n.includes('prescription')) return ClipboardList
+  if (n.includes('rbac')) return ShieldCheck
+  if (n.includes('real-time')) return Radio
+  return Sparkles
+}
+
+function moduleIcon(name: string): LucideIcon {
+  const n = name.toLowerCase()
+  if (n.includes('queue')) return ListOrdered
+  if (n.includes('appointment')) return CalendarCheck
+  if (n.includes('consult')) return Stethoscope
+  if (n.includes('prescription')) return ClipboardList
+  if (n.includes('billing')) return CreditCard
+  if (n.includes('pharmacy')) return Pill
+  if (n.includes('rbac')) return ShieldCheck
+  if (n.includes('schedule')) return CalendarDays
+  return Layers
+}
+
+function SectionHeading({
+  label,
+  title,
+  sub,
+}: {
+  label: string
+  title: string
+  sub?: string
+}) {
+  return (
+    <div className="max-w-3xl">
+      <span className="inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.25em] text-cyan-600 dark:text-cyan-400">
+        <span className="h-px w-6 bg-cyan-500/60" />
+        {label}
+      </span>
+      <h2 className="mt-3 text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white">
+        {title}
+      </h2>
+      {sub && (
+        <p className="mt-3 text-sm sm:text-base text-slate-500 dark:text-slate-400">
+          {sub}
+        </p>
+      )}
+    </div>
+  )
+}
+
 export function ProjectDetailPage({ projectId }: { projectId: number }) {
-  const project = worksData.items[projectId - 1]
+  const project = worksData.items.find((_, i) => i === projectId - 1)
 
   if (!project) {
     return (
@@ -13,7 +136,9 @@ export function ProjectDetailPage({ projectId }: { projectId: number }) {
         <Navbar />
         <div className="flex items-center justify-center min-h-screen px-4">
           <div className="max-w-md text-center">
-            <p className="text-sm uppercase tracking-widest text-cyan-500 mb-4">404</p>
+            <p className="text-sm uppercase tracking-widest text-cyan-500 mb-4">
+              404
+            </p>
             <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-6">
               Project not found
             </h1>
@@ -30,6 +155,18 @@ export function ProjectDetailPage({ projectId }: { projectId: number }) {
     )
   }
 
+  const details: ProjectDetails | undefined =
+    'details' in project ? project.details : undefined
+
+  const prevProject =
+    projectId > 1
+      ? worksData.items.find((_, i) => i === projectId - 2)
+      : undefined
+  const nextProject =
+    projectId < worksData.items.length
+      ? worksData.items.find((_, i) => i === projectId)
+      : undefined
+
   return (
     <div className="min-h-screen bg-white dark:bg-slate-950">
       <Navbar />
@@ -40,130 +177,378 @@ export function ProjectDetailPage({ projectId }: { projectId: number }) {
         transition={{ duration: 0.4 }}
         className="pt-20"
       >
-        {/* Hero image banner */}
-        <div className="relative w-full h-64 sm:h-80 md:h-96 overflow-hidden bg-slate-100 dark:bg-slate-900">
-          <img
-            src={project.image}
-            alt={project.title}
-            className="w-full h-full object-cover opacity-60 dark:opacity-40"
-          />
-          <div className="absolute inset-0 bg-linear-to-t from-white dark:from-slate-950 via-white/30 dark:via-slate-950/50 to-transparent" />
-
-          {/* Back link */}
-          <div className="absolute top-6 left-4 sm:left-8">
-            <Link
-              to="/projects"
-              className="inline-flex items-center gap-2 rounded-full border border-slate-200/80 dark:border-white/20 bg-white/80 dark:bg-slate-900/80 backdrop-blur px-4 py-2 text-sm font-semibold text-slate-700 dark:text-slate-200 hover:border-cyan-400/60 hover:text-cyan-600 dark:hover:text-cyan-300 transition-colors"
-            >
-              <ArrowLeft size={14} />
-              All Projects
-            </Link>
+        {/* Hero */}
+        <section className="relative overflow-hidden bg-slate-950">
+          {/* Background */}
+          <div className="absolute inset-0 bg-linear-to-b from-slate-900 via-slate-950 to-slate-950" />
+          <div className="absolute -top-40 -right-24 h-96 w-96 rounded-full bg-cyan-500/10 blur-3xl" />
+          <div className="absolute -bottom-48 -left-24 h-96 w-96 rounded-full bg-blue-500/10 blur-3xl" />
+          <div className="hidden sm:block absolute inset-6 lg:inset-10 pointer-events-none">
+            <div className="absolute left-1/3 top-0 bottom-0 w-px bg-white/5" />
+            <div className="absolute left-2/3 top-0 bottom-0 w-px bg-white/5" />
           </div>
-        </div>
 
-        {/* Content */}
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 -mt-20 relative z-10 pb-24">
-          {/* Main card */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            className="rounded-2xl border border-slate-200 dark:border-slate-700/50 bg-white dark:bg-slate-900 shadow-xl dark:shadow-slate-900/50 overflow-hidden mb-8"
+          {/* Oversized watermark number */}
+          <span
+            aria-hidden
+            className="hidden lg:block absolute -right-6 top-10 select-none text-[11rem] font-black text-white/[0.05] leading-none pointer-events-none"
           >
-            <div className="grid lg:grid-cols-[1.1fr_0.9fr] gap-0">
-              {/* Left: info */}
-              <div className="p-6 sm:p-10 lg:p-12">
-                {/* Meta */}
-                <div className="flex flex-wrap items-center gap-3 mb-6">
-                  <span className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 px-3 py-1 text-[11px] font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300">
-                    <Tag size={10} />
-                    {project.category}
-                  </span>
-                  <span className="text-xs text-slate-400 dark:text-slate-500">Project {projectId}</span>
-                </div>
+            {String(projectId).padStart(2, '0')}
+          </span>
 
-                <h1 className="text-3xl sm:text-4xl font-bold leading-tight text-slate-900 dark:text-white mb-4">
+          <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-16 sm:pt-12 sm:pb-24">
+            <div className="grid gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
+              {/* Left: info */}
+              <motion.div
+                initial={{ opacity: 0, y: 24 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.1 }}
+              >
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-cyan-400/30 bg-cyan-400/10 px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.25em] text-cyan-300">
+                  <Tag size={10} />
+                  {project.category}
+                </span>
+
+                <h1 className="mt-6 text-4xl sm:text-5xl lg:text-6xl font-black uppercase tracking-tight leading-[0.95] text-white">
                   {project.title}
                 </h1>
 
                 {project.client && (
-                  <div className="flex items-center gap-2 mb-6">
-                    <Briefcase size={14} className="text-cyan-500 shrink-0" />
-                    <span className="text-sm font-semibold text-cyan-600 dark:text-cyan-400">
+                  <div className="mt-5 flex items-center gap-2">
+                    <Briefcase size={14} className="text-cyan-400 shrink-0" />
+                    <span className="text-sm font-semibold text-cyan-400">
                       {project.client}
                     </span>
                   </div>
                 )}
 
-                <p className="text-base leading-8 text-slate-600 dark:text-slate-300 mb-8">
-                  {project.description}
+                <p className="mt-6 max-w-xl text-base leading-8 text-slate-300">
+                  {details?.tagline ?? project.description}
                 </p>
 
-                {/* CTA buttons */}
-                <div className="flex flex-wrap gap-3">
-                  <Link
-                    to="/projects"
-                    className="inline-flex items-center gap-2 rounded-full border border-slate-200 dark:border-slate-700 bg-transparent px-5 py-2.5 text-sm font-semibold text-slate-700 dark:text-slate-300 hover:border-cyan-400 hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors"
-                  >
-                    <ArrowLeft size={14} />
-                    All projects
-                  </Link>
-
-                  {project.link && project.link !== '#' && (
+                {/* CTAs */}
+                {project.link && project.link !== '#' && (
+                  <div className="mt-9 flex flex-wrap gap-3">
                     <a
                       href={project.link}
                       target="_blank"
                       rel="noreferrer"
-                      className="inline-flex items-center gap-2 rounded-full bg-cyan-500 hover:bg-cyan-600 px-5 py-2.5 text-sm font-semibold text-white transition-colors"
+                      className="inline-flex items-center gap-2 rounded-full bg-linear-to-r from-blue-600 to-cyan-600 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-cyan-500/25 transition-shadow hover:shadow-xl hover:shadow-cyan-500/40"
                     >
-                      <ExternalLink size={14} />
+                      <ExternalLink size={15} />
                       View live project
                     </a>
-                  )}
-                </div>
-              </div>
+                  </div>
+                )}
+              </motion.div>
 
-              {/* Right: image */}
-              <div className="border-t border-slate-100 dark:border-white/5 lg:border-t-0 lg:border-l bg-slate-50 dark:bg-slate-800/30 p-4 sm:p-6 flex items-center">
-                <div className="w-full h-64 sm:h-80 lg:h-full min-h-[280px] overflow-hidden rounded-xl border border-slate-200 dark:border-slate-700/50 bg-slate-100 dark:bg-slate-900">
-                  <img
-                    src={project.image}
-                    alt={project.title}
-                    className="w-full h-full object-cover"
-                  />
+              {/* Right: framed preview */}
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.7, delay: 0.2 }}
+                className="relative"
+              >
+                <div className="absolute -inset-4 rounded-3xl bg-linear-to-br from-cyan-500/25 via-transparent to-fuchsia-500/15 blur-2xl opacity-70" />
+
+                <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-slate-900/80 shadow-2xl shadow-black/50 backdrop-blur-xl">
+                  {/* Browser chrome */}
+                  <div className="flex items-center gap-1.5 border-b border-white/5 px-4 py-3">
+                    <span className="h-2.5 w-2.5 rounded-full bg-red-400/70" />
+                    <span className="h-2.5 w-2.5 rounded-full bg-yellow-400/70" />
+                    <span className="h-2.5 w-2.5 rounded-full bg-green-400/70" />
+                    <span className="ml-3 truncate rounded-md bg-white/5 px-3 py-1 text-xs text-slate-500">
+                      {project.link && project.link !== '#'
+                        ? project.link
+                        : `${project.title} — preview`}
+                    </span>
+                  </div>
+
+                  {/* Screenshot */}
+                  <div className="overflow-hidden">
+                    <img
+                      src={project.image}
+                      alt={`${project.title} preview`}
+                      className="w-full aspect-[16/10] object-cover object-top"
+                      loading="eager"
+                    />
+                  </div>
                 </div>
-              </div>
+              </motion.div>
             </div>
-          </motion.div>
+          </div>
+        </section>
 
-          {/* Navigation between projects */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-            className="flex items-center justify-between gap-4"
-          >
-            {projectId > 1 && (
-              <Link
-                to="/projects/$id"
-                params={{ id: String(projectId - 1) }}
-                className="inline-flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 transition-colors"
-              >
-                ← Previous project
-              </Link>
+        {/* Rich detail sections — only when the project has extended data */}
+        {details && (
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-20">
+            {/* Overview */}
+            <div>
+              <SectionHeading
+                label="Overview"
+                title="A real-time operating system for clinics"
+                sub="Replaces scattered spreadsheets, paper registers, and legacy software with one unified application."
+              />
+              <p className="mt-5 max-w-3xl text-base leading-8 text-slate-600 dark:text-slate-300">
+                {project.description}
+              </p>
+            </div>
+
+            {/* Patient journey */}
+            {details.journey && (
+              <div>
+                <SectionHeading
+                  label="The patient journey"
+                  title="One record, end to end"
+                  sub="A single system takes a patient from the front desk to pharmacy checkout."
+                />
+                <motion.div
+                  variants={staggerContainer}
+                  initial="hidden"
+                  whileInView="show"
+                  viewport={{ once: true, margin: '-60px' }}
+                  className="mt-8 grid grid-cols-2 lg:grid-cols-4 gap-3"
+                >
+                  {details.journey.map((step, i) => {
+                    const Icon = journeyIcons[i % journeyIcons.length]
+                    return (
+                      <motion.div
+                        key={step}
+                        variants={staggerItem}
+                        className="group relative rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4 sm:p-5 transition-colors hover:border-cyan-400/60 hover:shadow-lg hover:shadow-cyan-500/5"
+                      >
+                        <span className="absolute right-3 top-3 text-[10px] font-black tracking-widest text-slate-300 dark:text-slate-600">
+                          {String(i + 1).padStart(2, '0')}
+                        </span>
+                        <div className="flex h-9 w-9 items-center justify-center rounded-lg border border-cyan-400/20 bg-cyan-50 dark:bg-cyan-400/10">
+                          <Icon className="h-4 w-4 text-cyan-600 dark:text-cyan-400" />
+                        </div>
+                        <p className="mt-3 text-sm font-semibold leading-snug text-slate-700 dark:text-slate-200">
+                          {step}
+                        </p>
+                      </motion.div>
+                    )
+                  })}
+                </motion.div>
+              </div>
             )}
-            <span className="flex-1" />
-            {worksData.items[projectId] && (
-              <Link
-                to="/projects/$id"
-                params={{ id: String(projectId + 1) }}
-                className="inline-flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 transition-colors"
-              >
-                Next project →
-              </Link>
+
+            {/* Roles */}
+            {details.roles && (
+              <div>
+                <SectionHeading
+                  label="Built for every role"
+                  title="Five roles, five native interfaces"
+                  sub="Each user gets a workflow shaped around their job — not a one-size-fits-all dashboard."
+                />
+                <motion.div
+                  variants={staggerContainer}
+                  initial="hidden"
+                  whileInView="show"
+                  viewport={{ once: true, margin: '-60px' }}
+                  className="mt-8 grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3"
+                >
+                  {details.roles.map((role) => {
+                    const Icon = roleIcon(role.name)
+                    return (
+                      <motion.div
+                        key={role.name}
+                        variants={staggerItem}
+                        className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4 sm:p-5 transition-colors hover:border-cyan-400/60 hover:shadow-lg hover:shadow-cyan-500/5"
+                      >
+                        <div className="flex h-9 w-9 items-center justify-center rounded-lg border border-cyan-400/20 bg-cyan-50 dark:bg-cyan-400/10">
+                          <Icon className="h-4 w-4 text-cyan-600 dark:text-cyan-400" />
+                        </div>
+                        <p className="mt-3 text-xs font-bold uppercase tracking-widest text-slate-900 dark:text-white">
+                          {role.name}
+                        </p>
+                        <p className="mt-1.5 text-xs leading-relaxed text-slate-500 dark:text-slate-400">
+                          {role.blurb}
+                        </p>
+                      </motion.div>
+                    )
+                  })}
+                </motion.div>
+              </div>
             )}
-          </motion.div>
-        </div>
+
+            {/* Highlights */}
+            {details.highlights && (
+              <div>
+                <SectionHeading
+                  label="Why it stands out"
+                  title="Key highlights"
+                />
+                <motion.div
+                  variants={staggerContainer}
+                  initial="hidden"
+                  whileInView="show"
+                  viewport={{ once: true, margin: '-60px' }}
+                  className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
+                >
+                  {details.highlights.map((h) => {
+                    const Icon = highlightIcon(h.title)
+                    return (
+                      <motion.div
+                        key={h.title}
+                        variants={staggerItem}
+                        className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 transition-colors hover:border-cyan-400/60 hover:shadow-lg hover:shadow-cyan-500/5"
+                      >
+                        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-linear-to-br from-blue-600 to-cyan-600 text-white shadow-lg shadow-cyan-500/20">
+                          <Icon className="h-5 w-5" />
+                        </div>
+                        <h3 className="mt-4 text-base font-bold text-slate-900 dark:text-white">
+                          {h.title}
+                        </h3>
+                        <p className="mt-2 text-sm leading-relaxed text-slate-500 dark:text-slate-400">
+                          {h.description}
+                        </p>
+                      </motion.div>
+                    )
+                  })}
+                </motion.div>
+              </div>
+            )}
+
+            {/* Core modules */}
+            {details.modules && (
+              <div>
+                <SectionHeading
+                  label="Core modules"
+                  title="Everything the clinic needs, in one app"
+                  sub="From the waiting room to the pharmacy counter — every step is a first-class module."
+                />
+                <motion.div
+                  variants={staggerContainer}
+                  initial="hidden"
+                  whileInView="show"
+                  viewport={{ once: true, margin: '-60px' }}
+                  className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4"
+                >
+                  {details.modules.map((m) => {
+                    const Icon = moduleIcon(m.name)
+                    return (
+                      <motion.div
+                        key={m.name}
+                        variants={staggerItem}
+                        className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 transition-colors hover:border-cyan-400/60 hover:shadow-lg hover:shadow-cyan-500/5"
+                      >
+                        <Icon className="h-5 w-5 text-cyan-600 dark:text-cyan-400" />
+                        <h3 className="mt-3 text-sm font-bold text-slate-900 dark:text-white">
+                          {m.name}
+                        </h3>
+                        <p className="mt-1.5 text-xs leading-relaxed text-slate-500 dark:text-slate-400">
+                          {m.description}
+                        </p>
+                      </motion.div>
+                    )
+                  })}
+                </motion.div>
+              </div>
+            )}
+
+            {/* Tech stack */}
+            {details.stack && (
+              <div>
+                <SectionHeading
+                  label="Tech stack"
+                  title="Built with a modern monorepo"
+                  sub="NestJS + Prisma on the backend, React 19 on the frontend, Turborepo tying it together."
+                />
+                <motion.div
+                  variants={staggerContainer}
+                  initial="hidden"
+                  whileInView="show"
+                  viewport={{ once: true, margin: '-60px' }}
+                  className="mt-8 grid gap-4 sm:grid-cols-3"
+                >
+                  {details.stack.map((group) => (
+                    <motion.div
+                      key={group.group}
+                      variants={staggerItem}
+                      className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5"
+                    >
+                      <p className="text-[11px] font-bold uppercase tracking-widest text-cyan-600 dark:text-cyan-400">
+                        {group.group}
+                      </p>
+                      <div className="mt-3 flex flex-wrap gap-2">
+                        {group.items.map((item) => (
+                          <span
+                            key={item}
+                            className="rounded-full border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/60 px-3 py-1 text-xs font-medium text-slate-600 dark:text-slate-300"
+                          >
+                            {item}
+                          </span>
+                        ))}
+                      </div>
+                    </motion.div>
+                  ))}
+                </motion.div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Prev / Next navigation */}
+        <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+          <div className="grid gap-4 sm:grid-cols-2">
+            {prevProject ? (
+              <motion.div
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.25 }}
+              >
+                <Link
+                  to="/projects/$id"
+                  params={{ id: String(projectId - 1) }}
+                  className="group flex items-center gap-4 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 transition-all hover:-translate-y-0.5 hover:border-cyan-400/60 hover:shadow-lg hover:shadow-cyan-500/5"
+                >
+                  <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-slate-200 dark:border-slate-700 text-slate-400 group-hover:border-cyan-400/50 group-hover:text-cyan-400 transition-colors">
+                    <ArrowLeft size={16} />
+                  </span>
+                  <span className="min-w-0">
+                    <span className="block text-[11px] font-semibold uppercase tracking-widest text-slate-400 dark:text-slate-500">
+                      Previous project
+                    </span>
+                    <span className="mt-1 block truncate text-sm font-semibold text-slate-700 dark:text-slate-200 group-hover:text-cyan-600 dark:group-hover:text-cyan-400 transition-colors">
+                      {prevProject.title}
+                    </span>
+                  </span>
+                </Link>
+              </motion.div>
+            ) : (
+              <div className="hidden sm:block" />
+            )}
+
+            {nextProject ? (
+              <motion.div
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.3 }}
+              >
+                <Link
+                  to="/projects/$id"
+                  params={{ id: String(projectId + 1) }}
+                  className="group flex items-center justify-end gap-4 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 text-right transition-all hover:-translate-y-0.5 hover:border-cyan-400/60 hover:shadow-lg hover:shadow-cyan-500/5"
+                >
+                  <span className="min-w-0">
+                    <span className="block text-[11px] font-semibold uppercase tracking-widest text-slate-400 dark:text-slate-500">
+                      Next project
+                    </span>
+                    <span className="mt-1 block truncate text-sm font-semibold text-slate-700 dark:text-slate-200 group-hover:text-cyan-600 dark:group-hover:text-cyan-400 transition-colors">
+                      {nextProject.title}
+                    </span>
+                  </span>
+                  <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-slate-200 dark:border-slate-700 text-slate-400 group-hover:border-cyan-400/50 group-hover:text-cyan-400 transition-colors">
+                    <ArrowRight size={16} />
+                  </span>
+                </Link>
+              </motion.div>
+            ) : (
+              <div className="hidden sm:block" />
+            )}
+          </div>
+        </section>
       </motion.main>
     </div>
   )

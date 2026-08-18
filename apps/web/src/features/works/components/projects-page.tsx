@@ -110,14 +110,13 @@ export function ProjectsPage() {
     : worksData.items.filter((p) => p.category === activeCategory)
 
   return (
-    <div className="min-h-screen bg-white dark:bg-slate-950">
+    <div className="h-screen flex flex-col overflow-hidden bg-white dark:bg-slate-950">
       <Navbar />
 
-      {/* Full-bleed dark banner, matching the homepage hero's visual language */}
-      <section className="relative w-full overflow-hidden bg-slate-950 pt-32 pb-24 px-6 sm:px-10">
+      {/* Banner */}
+      <section className="relative w-full shrink-0 overflow-hidden bg-slate-950 pt-28 pb-16 px-6 sm:px-10">
         <div className="absolute inset-0 bg-linear-to-b from-slate-900 via-slate-950 to-slate-950" />
 
-        {/* Decorative rule-of-thirds grid */}
         <div className="hidden sm:block absolute inset-6 lg:inset-10 pointer-events-none">
           <div className="absolute left-1/3 top-0 bottom-0 w-px bg-white/10" />
           <div className="absolute left-2/3 top-0 bottom-0 w-px bg-white/10" />
@@ -128,7 +127,6 @@ export function ProjectsPage() {
           <CornerMark className="-right-2 -bottom-2" />
         </div>
 
-        {/* Oversized watermark, desktop only */}
         <div
           aria-hidden
           className="hidden lg:flex absolute inset-0 items-center justify-center select-none pointer-events-none"
@@ -147,23 +145,23 @@ export function ProjectsPage() {
           <span className="inline-block mb-4 px-4 py-2 rounded-full border border-cyan-400/30 bg-cyan-400/10 text-xs font-semibold uppercase tracking-widest text-cyan-300">
             Portfolio
           </span>
-          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black uppercase tracking-tight leading-[0.9] text-white mb-5">
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black uppercase tracking-tight leading-[0.9] text-white mb-4">
             My Projects
           </h1>
-          <p className="text-slate-300 text-base sm:text-lg">
+          <p className="text-slate-300 text-sm sm:text-base">
             A selection of products and systems I&apos;ve built — from web portals to mobile apps and backend services.
           </p>
         </motion.div>
       </section>
 
-      <main className="pb-24 px-4 sm:px-6">
+      {/* Scrollable content */}
+      <main className="flex-1 overflow-y-auto px-4 sm:px-6 pb-10 custom-scrollbar">
         <div className="max-w-7xl mx-auto">
-          {/* Category filter — floats up over the banner/content seam */}
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, delay: 0.2 }}
-            className="relative z-10 -mt-7 mb-12 flex flex-wrap justify-center gap-3 rounded-2xl border border-slate-200 dark:border-white/10 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md shadow-xl py-4 px-4"
+            className="relative z-10 -mt-6 mb-8 flex flex-wrap justify-center gap-3 rounded-2xl border border-slate-200 dark:border-white/10 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md shadow-xl py-3 px-4"
           >
             {categories.map((cat) => (
               <CategoryPill
@@ -175,7 +173,6 @@ export function ProjectsPage() {
             ))}
           </motion.div>
 
-          {/* Projects grid */}
           {filtered.length === 0 ? (
             <div className="text-center py-24 text-slate-400 dark:text-slate-500">
               No projects in this category yet.
@@ -199,8 +196,7 @@ export function ProjectsPage() {
             </motion.div>
           )}
 
-          {/* Back link */}
-          <div className="mt-16 text-center">
+          <div className="mt-10 text-center">
             <Link
               to="/"
               className="inline-flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 transition-colors"

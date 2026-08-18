@@ -3,7 +3,7 @@ import { Github, Linkedin, Mail, Phone, Twitter } from 'lucide-react'
 
 const socialLinks = [
   { icon: Mail, label: 'Email', href: 'mailto:priaynshuchourasia916@gmail.com', color: 'from-red-500 to-pink-500' },
-  { icon: Phone, label: 'Phone', href: 'tel:+91620313193', color: 'from-emerald-500 to-teal-500' },
+  { icon: Phone, label: 'Phone', href: 'tel:+916203163193', color: 'from-emerald-500 to-teal-500' },
   { icon: Linkedin, label: 'LinkedIn', href: 'https://www.linkedin.com/in/priyanshu-chourasia-17833120a/', color: 'from-blue-500 to-cyan-500' },
   { icon: Github, label: 'GitHub', href: 'https://github.com/PriyanshuChourasia', color: 'from-gray-500 to-slate-600' },
   { icon: Twitter, label: 'Twitter', href: 'https://x.com/CoderPriye', color: 'from-cyan-500 to-blue-500' },
@@ -111,10 +111,10 @@ export default function ContactSection() {
           </p>
           <span className="hidden sm:inline text-slate-300 dark:text-slate-700">•</span>
           <a
-            href="tel:+91620313193"
+            href="tel:+916203163193"
             className="text-sm text-slate-400 dark:text-slate-500 hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors"
           >
-            +91 620313193
+            +91 6203163193
           </a>
         </motion.div>
       </div>

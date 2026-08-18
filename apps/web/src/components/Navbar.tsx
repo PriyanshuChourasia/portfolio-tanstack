@@ -1,27 +1,62 @@
-import { Link } from '@tanstack/react-router'
-import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion'
-import { Briefcase, FileText, Home, Mail, Menu, X } from 'lucide-react'
+import { Link, useRouterState } from '@tanstack/react-router'
+import { AnimatePresence, motion, useScroll, useTransform } from 'framer-motion'
+import {
+  Briefcase,
+  FileText,
+  FolderKanban,
+  Home,
+  Mail,
+  Menu,
+  Twitter,
+  X,
+} from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { FaLinkedin } from 'react-icons/fa'
 import { FaGithub } from 'react-icons/fa6'
-import { Twitter } from 'lucide-react'
+import type { LucideIcon } from 'lucide-react'
 
 const socialLinks = [
-  { name: 'Github', url: 'https://github.com/PriyanshuChourasia', icon: <FaGithub size={20} /> },
-  { name: 'LinkedIn', url: 'https://www.linkedin.com/in/priyanshu-chourasia-17833120a/', icon: <FaLinkedin size={20} /> },
-  { name: 'Twitter', url: 'https://x.com/CoderPriye', icon: <Twitter size={20} /> },
+  {
+    name: 'Github',
+    url: 'https://github.com/PriyanshuChourasia',
+    icon: <FaGithub size={20} />,
+  },
+  {
+    name: 'LinkedIn',
+    url: 'https://www.linkedin.com/in/priyanshu-chourasia-17833120a/',
+    icon: <FaLinkedin size={20} />,
+  },
+  {
+    name: 'Twitter',
+    url: 'https://x.com/CoderPriye',
+    icon: <Twitter size={20} />,
+  },
 ]
 
-const navItems = [
+type NavItem = {
+  label: string
+  id: string
+  icon: LucideIcon
+  to?: '/projects'
+}
+
+const navItems: Array<NavItem> = [
   { label: 'Home', id: 'home', icon: Home },
   { label: 'About', id: 'about', icon: FileText },
   { label: 'Experience', id: 'experience', icon: Briefcase },
+  { label: 'Projects', id: 'projects', icon: FolderKanban, to: '/projects' },
   { label: 'Contact', id: 'contact', icon: Mail },
 ]
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
+  const { location } = useRouterState()
+  const isHome = location.pathname === '/'
+  const isProjectsActive =
+    location.pathname === '/projects' ||
+    location.pathname.startsWith('/projects/')
+  const navHref = (id: string) => (isHome ? `#${id}` : `/#${id}`)
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50)
@@ -72,19 +107,39 @@ export function Navbar() {
 
             {/* Desktop nav links */}
             <div className="hidden md:flex items-center gap-8">
-              {navItems.map((item) => (
-                <motion.a
-                  key={item.id}
-                  href={`#${item.id}`}
-                  whileHover={{ color: '#22d3ee' }}
-                  className={`text-sm transition-colors relative group ${
-                    scrolled ? 'text-slate-700 dark:text-slate-200' : 'text-slate-300'
-                  }`}
-                >
-                  {item.label}
-                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-linear-to-r from-blue-500 to-cyan-500 group-hover:w-full transition-all duration-300" />
-                </motion.a>
-              ))}
+              {navItems.map((item) => {
+                const active = item.to === '/projects' && isProjectsActive
+                const linkClass = `text-sm transition-colors relative group ${
+                  active
+                    ? 'text-cyan-500 dark:text-cyan-400'
+                    : scrolled
+                      ? 'text-slate-700 dark:text-slate-200'
+                      : 'text-slate-300'
+                }`
+                const underline = (
+                  <span
+                    className={`absolute bottom-0 left-0 h-0.5 bg-linear-to-r from-blue-500 to-cyan-500 transition-all duration-300 ${
+                      active ? 'w-full' : 'w-0 group-hover:w-full'
+                    }`}
+                  />
+                )
+                return item.to ? (
+                  <Link key={item.id} to={item.to} className={linkClass}>
+                    {item.label}
+                    {underline}
+                  </Link>
+                ) : (
+                  <motion.a
+                    key={item.id}
+                    href={navHref(item.id)}
+                    whileHover={{ color: '#22d3ee' }}
+                    className={linkClass}
+                  >
+                    {item.label}
+                    {underline}
+                  </motion.a>
+                )
+              })}
             </div>
 
             {/* Right side: social + theme toggle + hamburger */}
@@ -117,11 +172,23 @@ export function Navbar() {
               >
                 <AnimatePresence mode="wait" initial={false}>
                   {mobileOpen ? (
-                    <motion.span key="x" initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }} transition={{ duration: 0.15 }}>
+                    <motion.span
+                      key="x"
+                      initial={{ rotate: -90, opacity: 0 }}
+                      animate={{ rotate: 0, opacity: 1 }}
+                      exit={{ rotate: 90, opacity: 0 }}
+                      transition={{ duration: 0.15 }}
+                    >
                       <X size={18} />
                     </motion.span>
                   ) : (
-                    <motion.span key="menu" initial={{ rotate: 90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: -90, opacity: 0 }} transition={{ duration: 0.15 }}>
+                    <motion.span
+                      key="menu"
+                      initial={{ rotate: 90, opacity: 0 }}
+                      animate={{ rotate: 0, opacity: 1 }}
+                      exit={{ rotate: -90, opacity: 0 }}
+                      transition={{ duration: 0.15 }}
+                    >
                       <Menu size={18} />
                     </motion.span>
                   )}
@@ -145,12 +212,28 @@ export function Navbar() {
             <div className="max-w-7xl mx-auto px-4 py-4 flex flex-col gap-1">
               {navItems.map((item) => {
                 const Icon = item.icon
-                return (
+                const active = item.to === '/projects' && isProjectsActive
+                const linkClass = `flex items-center gap-3 px-4 py-3 rounded-xl transition-colors text-sm font-medium ${
+                  active
+                    ? 'bg-cyan-50 dark:bg-slate-800 text-cyan-600 dark:text-cyan-400'
+                    : 'text-slate-700 dark:text-slate-300 hover:bg-cyan-50 dark:hover:bg-slate-800 hover:text-cyan-600 dark:hover:text-cyan-400'
+                }`
+                return item.to ? (
+                  <Link
+                    key={item.id}
+                    to={item.to}
+                    onClick={handleNavClick}
+                    className={linkClass}
+                  >
+                    <Icon size={16} />
+                    {item.label}
+                  </Link>
+                ) : (
                   <a
                     key={item.id}
-                    href={`#${item.id}`}
+                    href={navHref(item.id)}
                     onClick={handleNavClick}
-                    className="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-700 dark:text-slate-300 hover:bg-cyan-50 dark:hover:bg-slate-800 hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors text-sm font-medium"
+                    className={linkClass}
                   >
                     <Icon size={16} />
                     {item.label}
@@ -182,6 +265,12 @@ export function Navbar() {
       >
         {navItems.map((item) => {
           const Icon = item.icon
+          const active = item.to === '/projects' && isProjectsActive
+          const linkClass = `relative flex items-center justify-center w-11 h-11 rounded-full border bg-white/80 dark:bg-slate-900/80 shadow-lg transition-all ${
+            active
+              ? 'border-cyan-500/70 text-cyan-500 dark:text-cyan-300'
+              : 'border-cyan-500/30 text-cyan-600 dark:text-cyan-300 hover:text-cyan-500 hover:border-cyan-500/70'
+          }`
           return (
             <motion.div
               key={item.id}
@@ -189,14 +278,25 @@ export function Navbar() {
               whileTap={{ scale: 0.95 }}
               className="relative group"
             >
-              <motion.a
-                href={`#${item.id}`}
-                aria-label={item.label}
-                title={item.label}
-                className="relative flex items-center justify-center w-11 h-11 rounded-full border border-cyan-500/30 bg-white/80 dark:bg-slate-900/80 text-cyan-600 dark:text-cyan-300 hover:text-cyan-500 hover:border-cyan-500/70 shadow-lg transition-all"
-              >
-                <Icon size={18} strokeWidth={1.75} />
-              </motion.a>
+              {item.to ? (
+                <Link
+                  to={item.to}
+                  aria-label={item.label}
+                  title={item.label}
+                  className={linkClass}
+                >
+                  <Icon size={18} strokeWidth={1.75} />
+                </Link>
+              ) : (
+                <motion.a
+                  href={navHref(item.id)}
+                  aria-label={item.label}
+                  title={item.label}
+                  className={linkClass}
+                >
+                  <Icon size={18} strokeWidth={1.75} />
+                </motion.a>
+              )}
               {/* Tooltip */}
               <span className="absolute right-14 top-1/2 -translate-y-1/2 px-2 py-1 rounded-md bg-slate-900 dark:bg-slate-700 text-white text-xs whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
                 {item.label}
