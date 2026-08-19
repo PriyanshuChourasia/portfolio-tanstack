@@ -1,74 +1,63 @@
 {
   "posts": [
     {
-      "id": 1,
-      "date": "08 AUG 2026",
+      "id": 3,
+      "date": "19 AUG 2026",
       "author": "Priyanshu Chourasia",
-      "title": "Welcome to MultiThreading!",
-      "category": "Operating System, Threading, Process",
-      "image": "/images/blog1.png",
-      "desc": "This is the Part-I of multi-threading journey of mine....",
-      "intro": "Concurrency vs Parallelism",
-      "content": "<p><b class=\"text-lg font-bold\">Context Switching</b>. Keep context of this word we are going to understand threading concepts. Your OS is not some magical place, It's a kitchen where cooks numbers defines the process or resources being used.</p> </br> <p class=\"py-4\">Like your kitchen consist of single chef or multi chef and your system defines as single core or multi core</p> </br> <image src=\"/images/osprocess.png\" />",
-      "codeSnippet": "def print_hi(name)\n  puts \"Hi, #{name}\"\nend\nprint_hi('Tom')\n#=> prints 'Hi, Tom' to STDOUT.",
-      "footer": "<p>Check out the <a href=\"#\" className=\"text-primary\">Jekyll docs</a> for more info on how to get the most out of Jekyll. File all bugs/feature requests at <a href=\"#\" className=\"text-primary\">Jekyll's GitHub repo</a>. If you have questions, you can ask them on <a href=\"#\" className=\"text-primary\">Jekyll Talk</a>.</p>",
+      "title": "Account ERP Project",
+      "category": "ERP, Accounting, Full Stack",
+      "image": "/opderp.png",
+      "desc": "An accounting and finance ERP module — part of the same product suite as OPD ERP and CodyERP. Ledgers, invoicing, and financial reporting, currently in active development.",
+      "intro": "Accounting & finance ERP — in active development",
+      "content": "<p><b class=\"text-lg font-bold\">Why another ERP module?</b>. OPD ERP handles the clinical side of the CodyMitra suite — registration, queues, consultations, pharmacy. Money still needed a home. <b>Account ERP</b> is the accounting and finance module for the same product family: ledgers, invoicing, expense tracking, and financial reporting that the other apps in the suite can eventually plug into.</p> </br> <p class=\"py-4\">It's a standalone repo right now, deliberately scoped small so I can get the core accounting primitives — chart of accounts, journal entries, double-entry balancing — right before wiring it into OPD ERP's billing data or CodyERP's restaurant POS.</p> </br> <p class=\"py-4\"><b class=\"text-lg font-bold\">What's being built</b></p> <ul class=\"list-disc pl-6 py-2\"><li><b>Chart of accounts</b> — configurable account hierarchy per business type.</li><li><b>Journal entries</b> — double-entry bookkeeping with automatic balancing checks.</li><li><b>Invoicing</b> — generate, send, and track invoice status.</li><li><b>Reports</b> — P&amp;L, balance sheet, and cash flow rolled up from the ledger.</li></ul> </br> <p class=\"py-4\">Same stack discipline as the rest of the suite — TypeScript end to end, Postgres as the source of truth, and a schema I'm trying hard not to have to migrate twice.</p>",
+      "codeSnippet": "function assertBalanced(entries) {\n  const total = entries.reduce(\n    (sum, e) => sum + (e.type === 'DEBIT' ? e.amount : -e.amount),\n    0,\n  )\n  if (total !== 0) throw new Error('Journal entry is not balanced')\n}",
+      "footer": "<p>Account ERP is in active development — code and progress live on <a href=\"https://github.com/PriyanshuChourasia/account_erp\" target=\"_blank\" rel=\"noopener noreferrer\" className=\"text-primary\">GitHub</a>.</p>",
       "tags": [
-        "OS",
-        "Process",
-        "Thread",
-        "Concurrency"
+        "ERP",
+        "Accounting",
+        "Finance",
+        "TypeScript",
+        "PostgreSQL"
       ]
     },
     {
       "id": 2,
-      "date": "04 May 2026",
-      "author": "Admin",
-      "title": "Journey of GIT",
-      "category": "File System, Github, Git",
-      "image": "/images/gitimage.png",
-      "desc": "The path of a programmer is filled with continuous learning and discovery...",
-      "intro": "The path of a programmer is filled with continuous learning and discovery...",
-      "content": "<p>Continuous learning is essential in the tech industry. Every day brings new technologies, frameworks, and best practices to discover and master.</p>",
-      "codeSnippet": "const learn = () => {\n  console.log('Keep learning!');\n};",
-      "tags": [
-        "Learning",
-        "Development"
-      ]
-    },
-    {
-      "id": 3,
-      "date": "02 AUG 2020",
-      "author": "Admin",
-      "title": "Design is not just what it looks like",
-      "category": "Inspiration",
-      "image": "/images/blog3.png",
-      "desc": "Good design is about making things simple and intuitive...",
-      "intro": "",
-      "content": "<p>Great design combines aesthetics with functionality. It's about creating experiences that users love.</p>",
-      "codeSnippet": "// Good design principles\nconst design = {\n  form: 'follows function',\n  simplicity: true\n};",
-      "tags": [
-        "Design",
-        "UX"
-      ]
-    },
-    {
-      "id": 4,
-      "date": "10 JUL 2026",
+      "date": "05 AUG 2026",
       "author": "Priyanshu Chourasia",
-      "title": "LLM from Scratch: Practical Engineering from Base Model to PPO RLHF (Phase 1)",
-      "category": "Machine Learning, LLM, Deep Learning",
-      "image": "/images/placeholder-logo.png",
-      "desc": "Phase 1 of a hands-on series on building an LLM from scratch — from raw-text pretraining to PPO-based RLHF.",
-      "intro": "Base Model to PPO RLHF — Phase 1",
-      "content": "<p><b class=\"text-lg font-bold\">Base Model</b>. Before a language model can follow instructions, argue with you, or write code, it has to learn language itself — from raw text, with no notion of 'assistant' or 'user'. This is Phase 1 of a multi-part series where I build an LLM from scratch and walk through every stage: pretraining a base model, supervised fine-tuning, reward modeling, and finally PPO-based RLHF.</p> </br> <p class=\"py-4\">The goal of this series isn't to reproduce a paper — it's practical engineering. Each phase covers the actual code, the failure modes I hit, and the compute/data tradeoffs that matter when you don't have a datacenter.</p> </br> <p class=\"py-4\"><b class=\"text-lg font-bold\">The Pipeline</b></p> <p class=\"py-4\">Roughly, the journey looks like this:</p> <ul class=\"list-disc pl-6 py-2\"><li><b>Base model pretraining</b> — next-token prediction on a large text corpus.</li><li><b>Supervised Fine-Tuning (SFT)</b> — teaching the base model to follow instructions using curated prompt/response pairs.</li><li><b>Reward Modeling</b> — training a model to score outputs by human preference.</li><li><b>PPO (RLHF)</b> — using the reward model to fine-tune the policy with Proximal Policy Optimization.</li></ul> </br> <p class=\"py-4\">In this first post, I set up the training stack and get a small base model learning from raw text — the foundation everything else builds on.</p>",
-      "codeSnippet": "for step, batch in enumerate(dataloader):\n    logits = model(batch.input_ids)\n    loss = cross_entropy(logits, batch.labels)\n    loss.backward()\n    optimizer.step()\n    optimizer.zero_grad()",
-      "footer": "<p>This is Phase 1 of the series — Phase 2 will cover Supervised Fine-Tuning (SFT) in detail.</p>",
+      "title": "OPD ERP Project",
+      "category": "ERP, Healthcare, Full Stack",
+      "image": "/opderpdashboard.png",
+      "desc": "A full-stack clinic & hospital management system covering registration → appointments → queue → consultation → prescriptions → billing/POS → pharmacy dispensing, built for admin, doctor, receptionist, pharmacist & nurse roles.",
+      "intro": "From walk-in to pharmacy checkout — one system, five roles",
+      "content": "<p><b class=\"text-lg font-bold\">One system, whole patient journey</b>. OPD ERP is a full-stack clinic and hospital management system that digitizes the complete patient journey — from walk-in registration and appointment booking to live token queues, doctor consultation, smart prescriptions, POS billing, and pharmacy dispensing — in a single application.</p> </br> <p class=\"py-4\">No context-switching between five different tools. Reception, doctors, nurses, and the pharmacy counter all read and write the same state.</p> </br> <p class=\"py-4\"><b class=\"text-lg font-bold\">The journey</b></p> <p class=\"py-4\">Walk-in / Scheduled → Registration → Appointment → Token Queue → Consultation → Prescription → Billing / POS → Pharmacy Dispensing.</p> </br> <p class=\"py-4\"><b class=\"text-lg font-bold\">Five role-native interfaces</b></p> <ul class=\"list-disc pl-6 py-2\"><li><b>Admin</b> — users, roles &amp; permissions, master data, audit logs.</li><li><b>Doctor</b> — vitals, diagnosis, smart prescriptions and order generation.</li><li><b>Receptionist</b> — registration, appointments, and the live waiting-room token board.</li><li><b>Pharmacist</b> — a full-width POS terminal for dispensing, billing, and receipts.</li><li><b>Nurse</b> — token flow and vitals capture between consultation and pharmacy.</li></ul> </br> <p class=\"py-4\"><b class=\"text-lg font-bold\">Under the hood</b></p> <p class=\"py-4\">NestJS 11, Prisma 5, and PostgreSQL on the backend; React 19, TanStack Router/Query, Redux Toolkit, and Tailwind CSS v4 on the frontend — all inside a Turborepo monorepo with a shared UI package. Every endpoint sits behind granular resource:action RBAC, with JWT refresh-token rotation and theft detection.</p> </br> <p class=\"py-4\">The token queue was the fun part — it has to stay real-time and consistent across reception, nurses, and doctors, transitioning through WAITING → IN_PROGRESS → COMPLETED / SKIPPED / NO_SHOW without anyone refreshing a page.</p>",
+      "codeSnippet": "enum TokenStatus {\n  WAITING\n  IN_PROGRESS\n  COMPLETED\n  SKIPPED\n  NO_SHOW\n}",
+      "footer": "<p>OPD ERP is live at <a href=\"https://opd.codymitra.com\" target=\"_blank\" rel=\"noopener noreferrer\" className=\"text-primary\">opd.codymitra.com</a> — part of the same CodyMitra product suite as Account ERP and CodyERP.</p>",
       "tags": [
-        "LLM",
-        "Machine Learning",
-        "RLHF",
-        "PPO",
-        "Deep Learning"
+        "ERP",
+        "Healthcare",
+        "NestJS",
+        "PostgreSQL",
+        "React",
+        "RBAC"
+      ]
+    },
+    {
+      "id": 1,
+      "date": "20 JUL 2026",
+      "author": "Priyanshu Chourasia",
+      "title": "ERP: What is it? What do I understand of it.",
+      "category": "ERP, Software Architecture",
+      "image": "/techstack.png",
+      "desc": "A personal take on what ERP actually means, after building two of them — the parts nobody tells you about until you're knee-deep in a schema.",
+      "intro": "Enterprise Resource Planning, from the inside",
+      "content": "<p><b class=\"text-lg font-bold\">ERP, before I built one</b>. Before OPD ERP, 'ERP' was just a word from business-school slides — Enterprise Resource Planning, some big SAP-shaped thing companies bought and complained about. After building two of them, I understand it very differently.</p> </br> <p class=\"py-4\"><b class=\"text-lg font-bold\">It's not one app — it's a shared source of truth</b></p> <p class=\"py-4\">An ERP isn't a CRUD app with more tables. It's several apps — registration, billing, inventory, pharmacy, accounting — that all have to agree on the same state at the same time. The hard part was never the forms; it was making sure a token status change in the queue, a stock decrement in the pharmacy, and a line item in an invoice all stay consistent without three separate services quietly disagreeing.</p> </br> <p class=\"py-4\"><b class=\"text-lg font-bold\">What actually makes it 'enterprise'</b></p> <ul class=\"list-disc pl-6 py-2\"><li><b>Role-native interfaces</b> — a receptionist, a doctor, and a pharmacist should never see the same screen. Each role needs its own workflow, not a shared dashboard with permissions hiding buttons.</li><li><b>Granular access control</b> — resource:action permissions on every endpoint, not a single admin/user toggle.</li><li><b>Auditability</b> — every state change (a prescription edit, a refund, a journal entry) needs a trail, because someone will eventually ask 'who changed this and when.'</li><li><b>Module boundaries that don't leak</b> — Account ERP has to be able to read OPD ERP's billing data someday without becoming tightly coupled to it.</li></ul> </br> <p class=\"py-4\"><b class=\"text-lg font-bold\">What I got wrong at first</b></p> <p class=\"py-4\">I started OPD ERP thinking the schema was the whole job. It's maybe a third of it. The rest is workflow — modelling a token that moves through five real-world states, or a prescription that can be partially dispensed and later returned. That's where most of my redesigns happened, not in the database.</p> </br> <p class=\"py-4\">Account ERP is where I'm applying that lesson from day one — smaller scope, double-entry correctness before features, and a schema I'm trying not to migrate twice.</p>",
+      "codeSnippet": "if (!user.can('prescription:edit')) {\n  throw new ForbiddenException()\n}",
+      "footer": "<p>Case studies: OPD ERP Project and Account ERP Project.</p>",
+      "tags": [
+        "ERP",
+        "Software Architecture",
+        "Learning",
+        "RBAC"
       ]
     }
   ]

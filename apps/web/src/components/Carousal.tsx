@@ -5,7 +5,7 @@ import {
   useTransform,
 } from 'framer-motion'
 import { useEffect, useRef, useState } from 'react'
-import { ArrowUpRight, Plus, Sparkles } from 'lucide-react'
+import { ArrowUpRight, Plus, Rocket, Sparkles } from 'lucide-react'
 import { useTheme } from 'next-themes'
 import worksData from '../data/works-data.json'
 import { ThreeScene } from './ThreeScene'
@@ -94,38 +94,50 @@ export function Hero() {
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        className="relative z-20 pt-28 px-6 text-center sm:px-10 lg:pt-0 lg:absolute lg:top-32 lg:left-14 lg:max-w-xs lg:text-left"
+        className="relative z-20 pt-28 px-6 sm:px-10 lg:pt-0 lg:absolute lg:top-28 lg:left-14 lg:max-w-sm lg:px-0"
       >
-        <p className="text-cyan-400 text-sm font-semibold tracking-wide uppercase mb-3">
-          Welcome to my portfolio
-        </p>
-        <p className="mx-auto max-w-sm text-slate-300 text-sm sm:text-base lg:mx-0 leading-relaxed">
-          I design and build user-centered digital products that are simple,
-          fast, and impactful — end to end.
-        </p>
+        <div className="rounded-3xl border border-white/10 bg-slate-900/60 backdrop-blur-xl shadow-2xl shadow-black/40 text-center lg:text-left overflow-hidden">
+          <div className="flex items-center justify-center gap-2 bg-linear-to-r from-emerald-500 to-teal-500 px-6 py-2.5">
+            <Rocket className="w-4 h-4 text-white shrink-0" />
+            <span className="text-xs sm:text-sm font-bold text-white tracking-wide">
+              Available for Freelance Work
+            </span>
+          </div>
 
-        <div className="mt-6 flex flex-nowrap items-center justify-center gap-2 sm:gap-3 lg:justify-start">
-          <motion.a
-            href="/PriyanshuResume.pdf"
-            download
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="px-4 sm:px-6 py-2.5 rounded-full bg-linear-to-r from-blue-600 to-cyan-600 text-white text-xs sm:text-sm font-semibold whitespace-nowrap hover:shadow-xl hover:shadow-cyan-500/30 transition-shadow"
-          >
-            Download CV
-          </motion.a>
-          <motion.a
-            href="#contact"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="px-4 sm:px-6 py-2.5 rounded-full border border-cyan-400/50 text-white text-xs sm:text-sm font-semibold whitespace-nowrap hover:bg-cyan-500/10 hover:border-cyan-400 transition-all"
-          >
-            Get in Touch
-          </motion.a>
+          <div className="p-6 sm:p-7">
+            <p className="text-cyan-400 text-xs font-semibold tracking-[0.2em] uppercase mb-2">
+              Welcome to my portfolio
+            </p>
+
+            <p className="text-slate-200 text-sm sm:text-base leading-relaxed">
+              I design and build user-centered digital products that are simple,
+              fast, and impactful — end to end.
+            </p>
+
+            <div className="mt-6 flex flex-nowrap items-center justify-center gap-2 sm:gap-3 lg:justify-start">
+              <motion.a
+                href="/PriyanshuResume.pdf"
+                download
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="px-4 sm:px-6 py-2.5 rounded-full bg-linear-to-r from-blue-600 to-cyan-600 text-white text-xs sm:text-sm font-semibold whitespace-nowrap hover:shadow-xl hover:shadow-cyan-500/30 transition-shadow"
+              >
+                Download CV
+              </motion.a>
+              <motion.a
+                href="#contact"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="px-4 sm:px-6 py-2.5 rounded-full border border-cyan-400/50 text-white text-xs sm:text-sm font-semibold whitespace-nowrap hover:bg-cyan-500/10 hover:border-cyan-400 transition-all"
+              >
+                Get in Touch
+              </motion.a>
+            </div>
+          </div>
         </div>
       </motion.div>
 
-      {/* Doctor ERP notification board */}
+      {/* Account ERP notification board */}
       <motion.div
         role="link"
         tabIndex={0}
@@ -135,35 +147,38 @@ export function Hero() {
         whileInView={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.6, delay: 0.5 }}
         whileHover={{ scale: 1.02, x: 4 }}
-        className="group relative z-20 mx-6 sm:mx-10 mt-6 lg:mx-0 lg:absolute lg:left-14 lg:bottom-44 lg:max-w-sm w-auto rounded-2xl border border-white/10 bg-slate-900/70 backdrop-blur-md overflow-hidden transition-colors hover:border-emerald-500/30 cursor-pointer"
+        className="group relative z-20 mx-6 sm:mx-10 mt-6 lg:mx-0 lg:absolute lg:left-14 lg:bottom-44 lg:max-w-sm w-auto rounded-2xl border border-white/10 bg-slate-900/70 backdrop-blur-md overflow-hidden shadow-2xl shadow-black/40 transition-colors hover:border-cyan-400/40 cursor-pointer"
       >
-        <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/5 via-transparent to-cyan-500/5 opacity-0 group-hover:opacity-100 transition-opacity" />
-        <div className="relative flex items-start gap-3 p-4">
-          <span className="relative flex h-2.5 w-2.5 mt-1 shrink-0">
-            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-            <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-emerald-500" />
+        <div className="relative flex items-center gap-2 overflow-hidden bg-linear-to-r from-blue-600 to-cyan-500 px-4 py-2">
+          <motion.div
+            aria-hidden
+            className="absolute inset-0 bg-linear-to-r from-transparent via-white/30 to-transparent"
+            animate={{ x: ['-120%', '220%'] }}
+            transition={{ duration: 2.2, repeat: Infinity, repeatDelay: 1.6, ease: 'easeInOut' }}
+          />
+          <span className="relative flex h-2 w-2 shrink-0">
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-white opacity-75" />
+            <span className="relative inline-flex h-2 w-2 rounded-full bg-white" />
           </span>
+          <span className="relative text-[10px] sm:text-xs font-bold uppercase tracking-widest text-white">
+            Latest Project — In Development
+          </span>
+        </div>
+
+        <div className="relative flex items-start gap-3 p-4">
           <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-2 mb-1">
-              <span className="text-[10px] font-bold uppercase tracking-widest text-emerald-400/80">
-                Latest Project
-              </span>
-            </div>
             <p className="text-sm font-semibold text-white leading-snug">
-              Doctor ERP (OPD)
+              Account ERP
             </p>
             <p className="text-xs text-slate-400 mt-1 leading-relaxed">
-              Full-stack clinic &amp; hospital management — registration to pharmacy dispensing. NestJS + React 19 · Aug 2026 — Present
+              Accounting &amp; finance ERP module — part of the OPD ERP &amp; CodyERP product suite. In active development
             </p>
           </div>
-          <span className="flex items-center justify-center h-8 w-8 rounded-lg bg-white/5 border border-white/10 shrink-0 group-hover:bg-emerald-500/10 group-hover:border-emerald-500/20 transition-colors mt-0.5">
-            <ArrowUpRight className="h-3.5 w-3.5 text-slate-400 group-hover:text-emerald-400 transition-colors" />
+          <span className="flex items-center justify-center h-8 w-8 rounded-lg bg-white/5 border border-white/10 shrink-0 group-hover:bg-cyan-500/10 group-hover:border-cyan-500/20 transition-colors mt-0.5">
+            <ArrowUpRight className="h-3.5 w-3.5 text-slate-400 group-hover:text-cyan-400 transition-colors" />
           </span>
         </div>
       </motion.div>
-
-      {/* Spacer pushes the name toward the bottom so the viewport fills evenly */}
-      <div className="flex-1 lg:hidden" aria-hidden="true" />
 
       {/* Floating work-preview card — cycles through featured projects */}
       <motion.a
@@ -172,9 +187,22 @@ export function Hero() {
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.3 }}
         whileHover={{ scale: 1.03 }}
-        className="hidden lg:block absolute z-20 top-32 right-10 w-44 rounded-2xl border border-white/10 bg-slate-900/80 backdrop-blur-md shadow-xl overflow-hidden"
+        className="group relative z-20 block mx-6 sm:mx-10 mt-4 lg:mx-0 lg:mt-0 lg:absolute lg:top-32 lg:right-10 lg:w-72 rounded-2xl border border-white/10 bg-slate-900/80 backdrop-blur-md shadow-2xl shadow-black/40 overflow-hidden transition-colors hover:border-cyan-400/40"
       >
-        <div className="relative h-24 w-full overflow-hidden bg-slate-800">
+        <div className="relative flex items-center gap-1.5 overflow-hidden bg-linear-to-r from-cyan-500 to-blue-600 px-3 py-1.5">
+          <motion.div
+            aria-hidden
+            className="absolute inset-0 bg-linear-to-r from-transparent via-white/30 to-transparent"
+            animate={{ x: ['-120%', '220%'] }}
+            transition={{ duration: 2.4, repeat: Infinity, repeatDelay: 1.8, ease: 'easeInOut' }}
+          />
+          <Sparkles className="relative h-3 w-3 text-white shrink-0" />
+          <span className="relative text-[10px] font-bold uppercase tracking-widest text-white">
+            Featured Work
+          </span>
+        </div>
+
+        <div className="relative h-36 w-full overflow-hidden bg-slate-800">
           <AnimatePresence mode="wait">
             <motion.img
               key={featuredWork?.title}
@@ -187,9 +215,9 @@ export function Hero() {
               className="absolute inset-0 h-full w-full object-cover"
             />
           </AnimatePresence>
+          <div className="absolute inset-0 bg-linear-to-t from-slate-950/70 via-transparent to-transparent" />
         </div>
-        <div className="flex items-center gap-1.5 px-3 py-2">
-          <Sparkles className="h-3 w-3 text-cyan-400 shrink-0" />
+        <div className="flex items-center justify-between gap-1.5 px-4 py-3">
           <AnimatePresence mode="wait">
             <motion.span
               key={featuredWork?.title}
@@ -197,11 +225,12 @@ export function Hero() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -4 }}
               transition={{ duration: 0.3 }}
-              className="text-[11px] font-medium text-slate-200 truncate"
+              className="text-sm font-medium text-slate-200 truncate"
             >
               {featuredWork?.title}
             </motion.span>
           </AnimatePresence>
+          <ArrowUpRight className="h-4 w-4 text-slate-500 shrink-0 group-hover:text-cyan-400 transition-colors" />
         </div>
         <div className="flex items-center justify-center gap-1 pb-2.5">
           {featuredWorks.map((w, i) => (
@@ -222,28 +251,33 @@ export function Hero() {
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.4 }}
         whileHover={{ scale: 1.03 }}
-        className="hidden lg:flex absolute z-20 bottom-28 right-10 items-center gap-3 rounded-2xl border border-cyan-400/20 bg-slate-900/90 backdrop-blur-md shadow-xl px-4 py-3"
+        className="relative z-20 flex items-center justify-between gap-3 mx-6 sm:mx-10 mt-4 lg:mx-0 lg:mt-0 lg:absolute lg:bottom-28 lg:right-10 rounded-2xl border border-cyan-400/20 bg-slate-900/90 backdrop-blur-md shadow-xl px-4 py-3"
       >
-        <img
-          src="/myprofile.jpeg"
-          alt="Priyanshu Chourasia"
-          className="h-10 w-10 rounded-full object-cover border border-cyan-400/30"
-        />
-        <div className="pr-2">
-          <p className="text-[11px] text-cyan-400 font-medium leading-none mb-1">
-            Let&apos;s Talk
-          </p>
-          <p className="text-sm text-white font-semibold leading-none">
-            Priyanshu
-          </p>
-          <p className="text-[10px] text-slate-400 leading-none mt-1">
-            Full-Stack Developer
-          </p>
+        <div className="flex min-w-0 items-center gap-3">
+          <img
+            src="/myprofile.jpeg"
+            alt="Priyanshu Chourasia"
+            className="h-10 w-10 shrink-0 rounded-full object-cover border border-cyan-400/30"
+          />
+          <div className="min-w-0 pr-2">
+            <p className="text-[11px] text-cyan-400 font-medium leading-none mb-1">
+              Let&apos;s Talk
+            </p>
+            <p className="text-sm text-white font-semibold leading-none">
+              Priyanshu
+            </p>
+            <p className="text-[10px] text-slate-400 leading-none mt-1">
+              Full-Stack Developer
+            </p>
+          </div>
         </div>
-        <span className="flex items-center justify-center h-7 w-7 rounded-full bg-white/10">
+        <span className="flex items-center justify-center h-7 w-7 rounded-full bg-white/10 shrink-0">
           <ArrowUpRight className="h-3.5 w-3.5 text-white" />
         </span>
       </motion.a>
+
+      {/* Spacer pushes the name toward the bottom so the viewport fills evenly */}
+      <div className="flex-1 lg:hidden" aria-hidden="true" />
 
       {/* Name + year */}
       <motion.div

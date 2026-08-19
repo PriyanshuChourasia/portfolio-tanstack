@@ -19,7 +19,7 @@ export default function Articles() {
     <section
       id="articles"
       ref={sectionRef}
-      className="relative min-h-screen w-full overflow-hidden bg-slate-50 dark:bg-slate-950 py-16 md:py-24"
+      className="relative min-h-screen w-full overflow-hidden bg-slate-50 dark:bg-slate-950 pt-6 pb-16 md:pt-8 md:pb-24"
     >
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6">
         <motion.div

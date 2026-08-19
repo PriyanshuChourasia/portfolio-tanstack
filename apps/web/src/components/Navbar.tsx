@@ -7,6 +7,7 @@ import {
   Home,
   Mail,
   Menu,
+  Newspaper,
   Twitter,
   X,
 } from 'lucide-react'
@@ -45,6 +46,7 @@ const navItems: Array<NavItem> = [
   { label: 'About', id: 'about', icon: FileText },
   { label: 'Experience', id: 'experience', icon: Briefcase },
   { label: 'Projects', id: 'projects', icon: FolderKanban, to: '/projects' },
+  { label: 'Blogs', id: 'articles', icon: Newspaper },
   { label: 'Contact', id: 'contact', icon: Mail },
 ]
 
