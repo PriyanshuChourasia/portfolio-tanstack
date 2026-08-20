@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');
-@import "tailwindcss";
-@import "tw-animate-css";
+@import 'tailwindcss';
+@import 'tw-animate-css';
 
 @custom-variant dark (&:is(.dark *));
 
@@ -140,11 +140,15 @@
 /* Custom layout utilities */
 @layer utilities {
   .card-shadow {
-    box-shadow: 0 0 80px rgba(0, 212, 255, 0.08), 0 0 40px rgba(59, 130, 246, 0.04);
+    box-shadow:
+      0 0 80px rgba(0, 212, 255, 0.08),
+      0 0 40px rgba(59, 130, 246, 0.04);
   }
 
   .card-shadow-hover {
-    box-shadow: 0 0 100px rgba(0, 212, 255, 0.12), 0 0 60px rgba(59, 130, 246, 0.08);
+    box-shadow:
+      0 0 100px rgba(0, 212, 255, 0.12),
+      0 0 60px rgba(59, 130, 246, 0.08);
   }
 
   .glow-sm {
@@ -238,7 +242,11 @@
   .floating-shape {
     position: absolute;
     border-radius: 50%;
-    background: linear-gradient(135deg, rgba(0, 212, 255, 0.05), rgba(59, 130, 246, 0.05));
+    background: linear-gradient(
+      135deg,
+      rgba(0, 212, 255, 0.05),
+      rgba(59, 130, 246, 0.05)
+    );
     border: 1px solid rgba(0, 212, 255, 0.1);
     pointer-events: none;
     animation: float 20s infinite ease-in-out;
@@ -246,7 +254,8 @@
   }
 
   @keyframes float {
-    0%, 100% {
+    0%,
+    100% {
       transform: translate(0, 0) rotate(0deg);
       opacity: 0.3;
     }
@@ -262,7 +271,8 @@
 
   /* Pulse animation for interactive elements */
   @keyframes pulse-glow {
-    0%, 100% {
+    0%,
+    100% {
       box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
     }
     50% {
@@ -290,8 +300,16 @@
 
   /* Added animation for rotating subtitle */
   @keyframes fadeInOut {
-    0%, 100% { opacity: 0; transform: translateY(10px); }
-    10%, 90% { opacity: 1; transform: translateY(0); }
+    0%,
+    100% {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    10%,
+    90% {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 
   .animate-fade-in-out {
@@ -300,7 +318,8 @@
 
   /* Parallax animations for resume section */
   @keyframes parallax-float-1 {
-    0%, 100% {
+    0%,
+    100% {
       transform: translateY(0px) rotate(0deg);
     }
     50% {
@@ -309,7 +328,8 @@
   }
 
   @keyframes parallax-float-2 {
-    0%, 100% {
+    0%,
+    100% {
       transform: translateY(0px) rotate(0deg);
     }
     50% {
@@ -327,7 +347,8 @@
 
   /* Enhanced glow for timeline dots */
   @keyframes glow-pulse {
-    0%, 100% {
+    0%,
+    100% {
       box-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
     }
     50% {
@@ -380,7 +401,12 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(135deg, transparent 0%, rgba(0, 212, 255, 0.1) 50%, transparent 100%);
+    background: linear-gradient(
+      135deg,
+      transparent 0%,
+      rgba(0, 212, 255, 0.1) 50%,
+      transparent 100%
+    );
     pointer-events: none;
     opacity: 0;
     transition: opacity 0.3s ease;
@@ -424,7 +450,8 @@
 
   /* Glow border animation */
   @keyframes glow-border {
-    0%, 100% {
+    0%,
+    100% {
       border-color: rgba(0, 212, 255, 0.3);
       box-shadow: 0 0 10px rgba(0, 212, 255, 0.1);
     }
@@ -452,19 +479,25 @@
   .star-border-card {
     position: relative;
     border: 1px solid #2a3f5f;
-    border-image: linear-gradient(90deg, #00d4ff 0%, #0ea5e9 50%, #2a3f5f 100%) 1;
+    border-image: linear-gradient(90deg, #00d4ff 0%, #0ea5e9 50%, #2a3f5f 100%)
+      1;
     animation: border-flow 3s ease-in-out infinite;
     box-shadow: inset 0 0 20px rgba(0, 212, 255, 0.1);
   }
 
   @keyframes border-flow {
-    0%, 100% {
+    0%,
+    100% {
       border-color: #2a3f5f;
-      box-shadow: inset 0 0 10px rgba(0, 212, 255, 0.1), 0 0 10px rgba(0, 212, 255, 0.1);
+      box-shadow:
+        inset 0 0 10px rgba(0, 212, 255, 0.1),
+        0 0 10px rgba(0, 212, 255, 0.1);
     }
     50% {
       border-color: #00d4ff;
-      box-shadow: inset 0 0 20px rgba(0, 212, 255, 0.2), 0 0 20px rgba(0, 212, 255, 0.2);
+      box-shadow:
+        inset 0 0 20px rgba(0, 212, 255, 0.2),
+        0 0 20px rgba(0, 212, 255, 0.2);
     }
   }
 }
@@ -479,7 +512,9 @@
     font-weight: 300;
     background: linear-gradient(135deg, #0f1419 0%, #1a2332 50%, #1a2f4f 100%);
     position: relative;
-    transition: background 0.3s ease, color 0.3s ease;
+    transition:
+      background 0.3s ease,
+      color 0.3s ease;
   }
 
   html:not(.dark) body {
@@ -494,16 +529,34 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: radial-gradient(circle at 20% 50%, rgba(0, 212, 255, 0.03), transparent 50%),
-                radial-gradient(circle at 80% 50%, rgba(59, 130, 246, 0.03), transparent 50%);
+    background:
+      radial-gradient(
+        circle at 20% 50%,
+        rgba(0, 212, 255, 0.03),
+        transparent 50%
+      ),
+      radial-gradient(
+        circle at 80% 50%,
+        rgba(59, 130, 246, 0.03),
+        transparent 50%
+      );
     pointer-events: none;
     z-index: -1;
     transition: background 0.3s ease;
   }
 
   html:not(.dark) body::before {
-    background: radial-gradient(circle at 20% 50%, rgba(59, 130, 246, 0.06), transparent 50%),
-                radial-gradient(circle at 80% 50%, rgba(99, 102, 241, 0.06), transparent 50%);
+    background:
+      radial-gradient(
+        circle at 20% 50%,
+        rgba(59, 130, 246, 0.06),
+        transparent 50%
+      ),
+      radial-gradient(
+        circle at 80% 50%,
+        rgba(99, 102, 241, 0.06),
+        transparent 50%
+      );
   }
 
   /* Selection color */
@@ -562,7 +615,8 @@
 
   /* Button glow on hover */
   @keyframes buttonGlow {
-    0%, 100% {
+    0%,
+    100% {
       box-shadow: 0 0 20px rgba(0, 212, 255, 0.4);
     }
     50% {
@@ -576,7 +630,8 @@
 
   /* Scroll indicator bounce */
   @keyframes bounce-soft {
-    0%, 100% {
+    0%,
+    100% {
       transform: translateY(0);
       opacity: 1;
     }
@@ -602,7 +657,8 @@
 
   /* Gradient text animation */
   @keyframes gradientShift {
-    0%, 100% {
+    0%,
+    100% {
       background-position: 0% 50%;
     }
     50% {
@@ -617,7 +673,8 @@
 
   /* Floating text effect */
   @keyframes floatingText {
-    0%, 100% {
+    0%,
+    100% {
       transform: translateY(0px);
     }
     50% {

@@ -1,48 +1,213 @@
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion'
-import { type ReactElement, useRef, useState, type MouseEvent, type CSSProperties } from 'react'
+import {
+  
+  
+  
+  useRef,
+  useState
+} from 'react'
 import { PiFileHtmlFill } from 'react-icons/pi'
-import { SiJavascript, SiTypescript, SiCss, SiLangchain, SiKubernetes } from 'react-icons/si'
+import {
+  SiClaude,
+  SiCss,
+  SiJavascript,
+  SiKubernetes,
+  SiLangchain, SiTypescript 
+} from 'react-icons/si'
 import { TbBrandReact, TbBrandRedux } from 'react-icons/tb'
-import { RiNextjsFill, RiTailwindCssFill, RiCopilotFill } from 'react-icons/ri'
-import { FaJava, FaPython, FaPhp, FaServer, FaDocker, FaLaravel } from 'react-icons/fa'
+import { RiCopilotFill, RiNextjsFill, RiTailwindCssFill } from 'react-icons/ri'
+import {
+  FaDocker,
+  FaJava,
+  FaLaravel,
+  FaPhp,
+  FaPython,
+  FaServer,
+} from 'react-icons/fa'
 import { FaFlutter } from 'react-icons/fa6'
 import { BiLogoSpringBoot } from 'react-icons/bi'
-import { SiClaude } from 'react-icons/si'
 import { FcLinux } from 'react-icons/fc'
+import type {CSSProperties, MouseEvent, ReactElement} from 'react';
 
 const iconSize = 24
 
-type TechItem = { id: string; label: string; icon: ReactElement; category: string; color: string }
+type TechItem = {
+  id: string
+  label: string
+  icon: ReactElement
+  category: string
+  color: string
+}
 
-const techStack: TechItem[] = [
-  { id: 'html', label: 'HTML', icon: <PiFileHtmlFill size={iconSize} />, category: 'Frontend', color: '#E34F26' },
-  { id: 'css', label: 'CSS', icon: <SiCss size={iconSize} />, category: 'Frontend', color: '#1572B6' },
-  { id: 'javascript', label: 'JavaScript', icon: <SiJavascript size={iconSize} />, category: 'Languages', color: '#F7DF1E' },
-  { id: 'typescript', label: 'TypeScript', icon: <SiTypescript size={iconSize} />, category: 'Languages', color: '#3178C6' },
-  { id: 'java', label: 'Java', icon: <FaJava size={iconSize} />, category: 'Languages', color: '#ED8B00' },
-  { id: 'python', label: 'Python', icon: <FaPython size={iconSize} />, category: 'Languages', color: '#3776AB' },
-  { id: 'php', label: 'PHP', icon: <FaPhp size={iconSize} />, category: 'Languages', color: '#777BB4' },
-  { id: 'react', label: 'React', icon: <TbBrandReact size={iconSize} />, category: 'Frontend', color: '#61DAFB' },
-  { id: 'redux', label: 'Redux', icon: <TbBrandRedux size={iconSize} />, category: 'Frontend', color: '#764ABC' },
-  { id: 'next', label: 'Next.js', icon: <RiNextjsFill size={iconSize} />, category: 'Frontend', color: '#38BDF8' },
-  { id: 'tailwind', label: 'Tailwind CSS', icon: <RiTailwindCssFill size={iconSize} />, category: 'Frontend', color: '#06B6D4' },
-  { id: 'flutter', label: 'Flutter', icon: <FaFlutter size={iconSize} />, category: 'Frontend', color: '#02569B' },
-  { id: 'spring', label: 'Spring Boot', icon: <BiLogoSpringBoot size={iconSize} />, category: 'Backend', color: '#6DB33F' },
-  { id: 'laravel', label: 'Laravel', icon: <FaLaravel size={iconSize} />, category: 'Backend', color: '#FF2D20' },
-  { id: 'claude', label: 'Claude AI', icon: <SiClaude size={iconSize} />, category: 'AI/DevOps', color: '#D97757' },
-  { id: 'copilot', label: 'Copilot', icon: <RiCopilotFill size={iconSize} />, category: 'AI/DevOps', color: '#8957E5' },
-  { id: 'langchain', label: 'Langchain', icon: <SiLangchain size={iconSize} />, category: 'AI/DevOps', color: '#3FCF8E' },
-  { id: 'server', label: 'Ubuntu Server', icon: <FaServer size={iconSize} />, category: 'AI/DevOps', color: '#E95420' },
-  { id: 'docker', label: 'Docker', icon: <FaDocker size={iconSize} />, category: 'AI/DevOps', color: '#2496ED' },
-  { id: 'kubernetes', label: 'Kubernetes', icon: <SiKubernetes size={iconSize} />, category: 'AI/DevOps', color: '#326CE5' },
-  { id: 'linux', label: 'Linux', icon: <FcLinux size={iconSize} />, category: 'AI/DevOps', color: '#F0B000' },
+const techStack: Array<TechItem> = [
+  {
+    id: 'html',
+    label: 'HTML',
+    icon: <PiFileHtmlFill size={iconSize} />,
+    category: 'Frontend',
+    color: '#E34F26',
+  },
+  {
+    id: 'css',
+    label: 'CSS',
+    icon: <SiCss size={iconSize} />,
+    category: 'Frontend',
+    color: '#1572B6',
+  },
+  {
+    id: 'javascript',
+    label: 'JavaScript',
+    icon: <SiJavascript size={iconSize} />,
+    category: 'Languages',
+    color: '#F7DF1E',
+  },
+  {
+    id: 'typescript',
+    label: 'TypeScript',
+    icon: <SiTypescript size={iconSize} />,
+    category: 'Languages',
+    color: '#3178C6',
+  },
+  {
+    id: 'java',
+    label: 'Java',
+    icon: <FaJava size={iconSize} />,
+    category: 'Languages',
+    color: '#ED8B00',
+  },
+  {
+    id: 'python',
+    label: 'Python',
+    icon: <FaPython size={iconSize} />,
+    category: 'Languages',
+    color: '#3776AB',
+  },
+  {
+    id: 'php',
+    label: 'PHP',
+    icon: <FaPhp size={iconSize} />,
+    category: 'Languages',
+    color: '#777BB4',
+  },
+  {
+    id: 'react',
+    label: 'React',
+    icon: <TbBrandReact size={iconSize} />,
+    category: 'Frontend',
+    color: '#61DAFB',
+  },
+  {
+    id: 'redux',
+    label: 'Redux',
+    icon: <TbBrandRedux size={iconSize} />,
+    category: 'Frontend',
+    color: '#764ABC',
+  },
+  {
+    id: 'next',
+    label: 'Next.js',
+    icon: <RiNextjsFill size={iconSize} />,
+    category: 'Frontend',
+    color: '#38BDF8',
+  },
+  {
+    id: 'tailwind',
+    label: 'Tailwind CSS',
+    icon: <RiTailwindCssFill size={iconSize} />,
+    category: 'Frontend',
+    color: '#06B6D4',
+  },
+  {
+    id: 'flutter',
+    label: 'Flutter',
+    icon: <FaFlutter size={iconSize} />,
+    category: 'Frontend',
+    color: '#02569B',
+  },
+  {
+    id: 'spring',
+    label: 'Spring Boot',
+    icon: <BiLogoSpringBoot size={iconSize} />,
+    category: 'Backend',
+    color: '#6DB33F',
+  },
+  {
+    id: 'laravel',
+    label: 'Laravel',
+    icon: <FaLaravel size={iconSize} />,
+    category: 'Backend',
+    color: '#FF2D20',
+  },
+  {
+    id: 'claude',
+    label: 'Claude AI',
+    icon: <SiClaude size={iconSize} />,
+    category: 'AI/DevOps',
+    color: '#D97757',
+  },
+  {
+    id: 'copilot',
+    label: 'Copilot',
+    icon: <RiCopilotFill size={iconSize} />,
+    category: 'AI/DevOps',
+    color: '#8957E5',
+  },
+  {
+    id: 'langchain',
+    label: 'Langchain',
+    icon: <SiLangchain size={iconSize} />,
+    category: 'AI/DevOps',
+    color: '#3FCF8E',
+  },
+  {
+    id: 'server',
+    label: 'Ubuntu Server',
+    icon: <FaServer size={iconSize} />,
+    category: 'AI/DevOps',
+    color: '#E95420',
+  },
+  {
+    id: 'docker',
+    label: 'Docker',
+    icon: <FaDocker size={iconSize} />,
+    category: 'AI/DevOps',
+    color: '#2496ED',
+  },
+  {
+    id: 'kubernetes',
+    label: 'Kubernetes',
+    icon: <SiKubernetes size={iconSize} />,
+    category: 'AI/DevOps',
+    color: '#326CE5',
+  },
+  {
+    id: 'linux',
+    label: 'Linux',
+    icon: <FcLinux size={iconSize} />,
+    category: 'AI/DevOps',
+    color: '#F0B000',
+  },
 ]
 
-const CATEGORIES = ['All', 'Languages', 'Frontend', 'Backend', 'AI/DevOps'] as const
-type Category = typeof CATEGORIES[number]
+const CATEGORIES = [
+  'All',
+  'Languages',
+  'Frontend',
+  'Backend',
+  'AI/DevOps',
+] as const
+type Category = (typeof CATEGORIES)[number]
 
 /* Single-responsibility: pill is purely presentational */
-function CategoryPill({ label, active, onClick }: { label: string; active: boolean; onClick: () => void }) {
+function CategoryPill({
+  label,
+  active,
+  onClick,
+}: {
+  label: string
+  active: boolean
+  onClick: () => void
+}) {
   return (
     <motion.button
       whileHover={{ scale: 1.05 }}
@@ -64,8 +229,14 @@ function TechCard({ tech }: { tech: TechItem }) {
   const cardRef = useRef<HTMLDivElement>(null)
   const mouseX = useMotionValue(0)
   const mouseY = useMotionValue(0)
-  const rotateX = useSpring(useTransform(mouseY, [-0.5, 0.5], [12, -12]), { stiffness: 200, damping: 20 })
-  const rotateY = useSpring(useTransform(mouseX, [-0.5, 0.5], [-12, 12]), { stiffness: 200, damping: 20 })
+  const rotateX = useSpring(useTransform(mouseY, [-0.5, 0.5], [12, -12]), {
+    stiffness: 200,
+    damping: 20,
+  })
+  const rotateY = useSpring(useTransform(mouseX, [-0.5, 0.5], [-12, 12]), {
+    stiffness: 200,
+    damping: 20,
+  })
   const glowX = useTransform(mouseX, [-0.5, 0.5], ['0%', '100%'])
   const glowY = useTransform(mouseY, [-0.5, 0.5], ['0%', '100%'])
 
@@ -119,7 +290,10 @@ function TechCard({ tech }: { tech: TechItem }) {
 export default function AboutSection() {
   const [activeCategory, setActiveCategory] = useState<Category>('All')
 
-  const filtered = activeCategory === 'All' ? techStack : techStack.filter((t) => t.category === activeCategory)
+  const filtered =
+    activeCategory === 'All'
+      ? techStack
+      : techStack.filter((t) => t.category === activeCategory)
 
   return (
     <section
@@ -151,7 +325,8 @@ export default function AboutSection() {
             Tech <span className="text-cyan-500">Stack</span>
           </h3>
           <p className="text-slate-500 dark:text-slate-400 text-sm italic mt-2">
-            &quot;An investment in knowledge always pays the best interest.&quot;
+            &quot;An investment in knowledge always pays the best
+            interest.&quot;
           </p>
         </motion.div>
 

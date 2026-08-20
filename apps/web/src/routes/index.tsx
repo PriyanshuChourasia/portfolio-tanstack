@@ -32,11 +32,12 @@ const websiteSchema = {
 }
 
 export const Route = createFileRoute('/')({
-  head: () => buildMeta({
-    title: DEFAULT_TITLE,
-    description: DEFAULT_DESCRIPTION,
-    url: SITE_URL,
-  }),
+  head: () =>
+    buildMeta({
+      title: DEFAULT_TITLE,
+      description: DEFAULT_DESCRIPTION,
+      url: SITE_URL,
+    }),
   component: RouteComponent,
 })
 

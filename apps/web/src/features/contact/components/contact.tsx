@@ -1,12 +1,46 @@
 import { motion } from 'framer-motion'
-import { Github, Linkedin, Mail, MessageCircle, Phone, Rocket, Search, Twitter } from 'lucide-react'
+import {
+  Github,
+  Linkedin,
+  Mail,
+  MessageCircle,
+  Phone,
+  Rocket,
+  Search,
+  Twitter,
+} from 'lucide-react'
 
 const socialLinks = [
-  { icon: Mail, label: 'Email', href: 'mailto:priaynshuchourasia916@gmail.com', color: 'from-red-500 to-pink-500' },
-  { icon: Phone, label: 'Phone', href: 'tel:+916203163193', color: 'from-emerald-500 to-teal-500' },
-  { icon: Linkedin, label: 'LinkedIn', href: 'https://www.linkedin.com/in/priyanshu-chourasia-17833120a/', color: 'from-blue-500 to-cyan-500' },
-  { icon: Github, label: 'GitHub', href: 'https://github.com/PriyanshuChourasia', color: 'from-gray-500 to-slate-600' },
-  { icon: Twitter, label: 'Twitter', href: 'https://x.com/CoderPriye', color: 'from-cyan-500 to-blue-500' },
+  {
+    icon: Mail,
+    label: 'Email',
+    href: 'mailto:priaynshuchourasia916@gmail.com',
+    color: 'from-red-500 to-pink-500',
+  },
+  {
+    icon: Phone,
+    label: 'Phone',
+    href: 'tel:+916203163193',
+    color: 'from-emerald-500 to-teal-500',
+  },
+  {
+    icon: Linkedin,
+    label: 'LinkedIn',
+    href: 'https://www.linkedin.com/in/priyanshu-chourasia-17833120a/',
+    color: 'from-blue-500 to-cyan-500',
+  },
+  {
+    icon: Github,
+    label: 'GitHub',
+    href: 'https://github.com/PriyanshuChourasia',
+    color: 'from-gray-500 to-slate-600',
+  },
+  {
+    icon: Twitter,
+    label: 'Twitter',
+    href: 'https://x.com/CoderPriye',
+    color: 'from-cyan-500 to-blue-500',
+  },
 ]
 
 const workProcess = [
@@ -64,8 +98,8 @@ export default function ContactSection() {
           </span>
 
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-6 leading-tight text-slate-900 dark:text-white">
-            Feel free to reach out — whether you&apos;re looking for a developer, have a query,
-            or simply want to connect.
+            Feel free to reach out — whether you&apos;re looking for a
+            developer, have a query, or simply want to connect.
           </h2>
 
           <p className="text-base sm:text-lg font-medium text-slate-600 dark:text-slate-300 mb-6">
@@ -164,7 +198,9 @@ export default function ContactSection() {
           <p className="text-sm text-slate-400 dark:text-slate-500">
             © Priyanshu Chourasia 2025. All rights reserved.
           </p>
-          <span className="hidden sm:inline text-slate-300 dark:text-slate-700">•</span>
+          <span className="hidden sm:inline text-slate-300 dark:text-slate-700">
+            •
+          </span>
           <a
             href="tel:+916203163193"
             className="text-sm text-slate-400 dark:text-slate-500 hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors"

@@ -1,11 +1,11 @@
+import { Plus, Trash2 } from 'lucide-react'
 import type { ChangeEvent } from 'react'
+import type { ResumeData } from './resume-template'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
-import { Plus, Trash2 } from 'lucide-react'
-import type { ResumeData } from './resume-template'
 
 interface EditorPanelProps {
   data: ResumeData
@@ -41,7 +41,10 @@ export function EditorPanel({ data, onChange }: EditorPanelProps) {
   const addExperience = () => {
     onChange({
       ...data,
-      experience: [...data.experience, { period: '', title: '', company: '', desc: '' }],
+      experience: [
+        ...data.experience,
+        { period: '', title: '', company: '', desc: '' },
+      ],
     })
   }
 
@@ -61,7 +64,10 @@ export function EditorPanel({ data, onChange }: EditorPanelProps) {
   const addEducation = () => {
     onChange({
       ...data,
-      education: [...data.education, { period: '', title: '', company: '', desc: '' }],
+      education: [
+        ...data.education,
+        { period: '', title: '', company: '', desc: '' },
+      ],
     })
   }
 
@@ -72,7 +78,11 @@ export function EditorPanel({ data, onChange }: EditorPanelProps) {
     })
   }
 
-  const updateSkill = (index: number, field: string, value: string | number) => {
+  const updateSkill = (
+    index: number,
+    field: string,
+    value: string | number,
+  ) => {
     const updated = [...data.skills]
     updated[index] = { ...updated[index], [field]: value }
     onChange({ ...data, skills: updated })
@@ -92,7 +102,11 @@ export function EditorPanel({ data, onChange }: EditorPanelProps) {
     })
   }
 
-  const updateLanguage = (index: number, field: string, value: string | number) => {
+  const updateLanguage = (
+    index: number,
+    field: string,
+    value: string | number,
+  ) => {
     const updated = [...data.languages]
     updated[index] = { ...updated[index], [field]: value }
     onChange({ ...data, languages: updated })
@@ -122,15 +136,26 @@ export function EditorPanel({ data, onChange }: EditorPanelProps) {
             <div className="flex items-center gap-3 mt-1.5">
               <div className="w-16 h-16 rounded-full overflow-hidden bg-slate-800 border border-slate-700 flex items-center justify-center shrink-0">
                 {data.personal.photo ? (
-                  <img src={data.personal.photo} alt="Profile preview" className="w-full h-full object-cover" />
+                  <img
+                    src={data.personal.photo}
+                    alt="Profile preview"
+                    className="w-full h-full object-cover"
+                  />
                 ) : (
-                  <span className="text-[10px] text-slate-500 text-center px-1">No photo</span>
+                  <span className="text-[10px] text-slate-500 text-center px-1">
+                    No photo
+                  </span>
                 )}
               </div>
               <div className="flex flex-col gap-1.5">
                 <label className="cursor-pointer text-xs px-3 py-1.5 rounded-md border border-cyan-500/50 text-cyan-400 hover:bg-cyan-500/10 transition-colors text-center">
                   Upload
-                  <input type="file" accept="image/*" onChange={handlePhotoUpload} className="hidden" />
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handlePhotoUpload}
+                    className="hidden"
+                  />
                 </label>
                 {data.personal.photo && (
                   <button
@@ -209,7 +234,10 @@ export function EditorPanel({ data, onChange }: EditorPanelProps) {
           </Button>
         </div>
         {data.experience.map((exp, i) => (
-          <div key={i} className="p-4 rounded-lg bg-slate-800/30 border border-slate-700/50 space-y-3">
+          <div
+            key={i}
+            className="p-4 rounded-lg bg-slate-800/30 border border-slate-700/50 space-y-3"
+          >
             <div className="flex justify-between items-center">
               <span className="text-sm text-slate-500">#{i + 1}</span>
               <Button
@@ -272,7 +300,10 @@ export function EditorPanel({ data, onChange }: EditorPanelProps) {
           </Button>
         </div>
         {data.education.map((edu, i) => (
-          <div key={i} className="p-4 rounded-lg bg-slate-800/30 border border-slate-700/50 space-y-3">
+          <div
+            key={i}
+            className="p-4 rounded-lg bg-slate-800/30 border border-slate-700/50 space-y-3"
+          >
             <div className="flex justify-between items-center">
               <span className="text-sm text-slate-500">#{i + 1}</span>
               <Button
@@ -347,7 +378,9 @@ export function EditorPanel({ data, onChange }: EditorPanelProps) {
               min={0}
               max={100}
               value={skill.value}
-              onChange={(e) => updateSkill(i, 'value', parseInt(e.target.value) || 0)}
+              onChange={(e) =>
+                updateSkill(i, 'value', parseInt(e.target.value) || 0)
+              }
               className="bg-slate-800/50 border-slate-700 text-white w-20"
             />
             <Button
@@ -389,7 +422,9 @@ export function EditorPanel({ data, onChange }: EditorPanelProps) {
               min={1}
               max={10}
               value={lang.level}
-              onChange={(e) => updateLanguage(i, 'level', parseInt(e.target.value) || 5)}
+              onChange={(e) =>
+                updateLanguage(i, 'level', parseInt(e.target.value) || 5)
+              }
               className="bg-slate-800/50 border-slate-700 text-white w-20"
             />
             <Button

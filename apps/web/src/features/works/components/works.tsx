@@ -5,7 +5,10 @@ import { ParallaxCards } from './ProjectCard'
 
 export function Projects() {
   return (
-    <section id="projects" className="relative w-full bg-slate-50 dark:bg-slate-950">
+    <section
+      id="projects"
+      className="relative w-full bg-slate-50 dark:bg-slate-950"
+    >
       {/* Section heading */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-16 pb-4 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
         <motion.div

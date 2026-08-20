@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { MessageCircle, Heart } from 'lucide-react'
+import { Heart, MessageCircle } from 'lucide-react'
 
 export default function BlogCommentsSection() {
   const [liked, setLiked] = useState(false)
@@ -9,8 +9,18 @@ export default function BlogCommentsSection() {
   const [comments, setComments] = useState<
     Array<{ id: number; name: string; text: string; createdAt: string }>
   >([
-    { id: 1, name: 'Ava', text: 'Great write-up. The practical examples are really helpful.', createdAt: '2h ago' },
-    { id: 2, name: 'Noah', text: 'Loved the structure of this post. Looking forward to more.', createdAt: '45m ago' },
+    {
+      id: 1,
+      name: 'Ava',
+      text: 'Great write-up. The practical examples are really helpful.',
+      createdAt: '2h ago',
+    },
+    {
+      id: 2,
+      name: 'Noah',
+      text: 'Loved the structure of this post. Looking forward to more.',
+      createdAt: '45m ago',
+    },
   ])
 
   const toggleLike = () => {
@@ -26,7 +36,10 @@ export default function BlogCommentsSection() {
     const name = commentName.trim()
     const text = commentText.trim()
     if (!name || !text) return
-    setComments((prev) => [{ id: Date.now(), name, text, createdAt: 'Just now' }, ...prev])
+    setComments((prev) => [
+      { id: Date.now(), name, text, createdAt: 'Just now' },
+      ...prev,
+    ])
     setCommentName('')
     setCommentText('')
   }
@@ -55,8 +68,13 @@ export default function BlogCommentsSection() {
       </div>
 
       {/* Comment form */}
-      <form onSubmit={addComment} className="px-6 py-6 border-b border-slate-100 dark:border-slate-700/50">
-        <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-4">Leave a comment</h3>
+      <form
+        onSubmit={addComment}
+        className="px-6 py-6 border-b border-slate-100 dark:border-slate-700/50"
+      >
+        <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-4">
+          Leave a comment
+        </h3>
         <div className="space-y-3">
           <input
             type="text"
@@ -84,20 +102,23 @@ export default function BlogCommentsSection() {
       {/* Comment list */}
       <div className="px-6 py-4 space-y-4">
         {comments.map((comment) => (
-          <div
-            key={comment.id}
-            className="flex gap-3"
-          >
+          <div key={comment.id} className="flex gap-3">
             {/* Avatar */}
             <div className="shrink-0 w-9 h-9 rounded-full bg-linear-to-br from-cyan-400 to-blue-500 flex items-center justify-center text-white text-sm font-bold">
               {comment.name[0].toUpperCase()}
             </div>
             <div className="flex-1 rounded-xl border border-slate-100 dark:border-slate-700/50 bg-slate-50 dark:bg-slate-800/40 px-4 py-3">
               <div className="flex items-center justify-between gap-3 mb-1.5">
-                <p className="text-sm font-semibold text-slate-900 dark:text-white">{comment.name}</p>
-                <p className="text-xs text-slate-400 dark:text-slate-500">{comment.createdAt}</p>
+                <p className="text-sm font-semibold text-slate-900 dark:text-white">
+                  {comment.name}
+                </p>
+                <p className="text-xs text-slate-400 dark:text-slate-500">
+                  {comment.createdAt}
+                </p>
               </div>
-              <p className="text-sm leading-6 text-slate-600 dark:text-slate-300">{comment.text}</p>
+              <p className="text-sm leading-6 text-slate-600 dark:text-slate-300">
+                {comment.text}
+              </p>
             </div>
           </div>
         ))}

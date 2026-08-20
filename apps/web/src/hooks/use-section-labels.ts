@@ -1,13 +1,13 @@
-import { useCallback, useState } from "react"
+import { useCallback, useState } from 'react'
 
-const STORAGE_KEY = "portfolio-section-labels"
+const STORAGE_KEY = 'portfolio-section-labels'
 
 const DEFAULT_LABELS: Record<string, string> = {
-  ABOUT: "ABOUT",
-  RESUME: "RESUME",
-  WORKS: "WORKS",
-  BLOG: "BLOG",
-  CONTACT: "CONTACT",
+  ABOUT: 'ABOUT',
+  RESUME: 'RESUME',
+  WORKS: 'WORKS',
+  BLOG: 'BLOG',
+  CONTACT: 'CONTACT',
 }
 
 function loadLabels(): Record<string, string> {

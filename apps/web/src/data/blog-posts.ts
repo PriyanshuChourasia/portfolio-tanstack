@@ -12,7 +12,7 @@ export interface BlogPost {
   content: string
   codeSnippet?: string
   footer?: string
-  tags?: string[]
+  tags?: Array<string>
 }
 
 export interface BlogPostDraft {
@@ -30,7 +30,7 @@ export interface BlogPostDraft {
 
 const STORAGE_KEY = 'portfolio-tanstack.blog-posts'
 
-const seedPosts = blogData.posts as BlogPost[]
+const seedPosts = blogData.posts as Array<BlogPost>
 
 function hasWindow() {
   return typeof window !== 'undefined'
@@ -43,18 +43,19 @@ function formatPostDate(date: Date) {
     year: 'numeric',
   }).format(date)
 
-  return formatted.replace(/\b([a-z])([a-z]+)\b/gi, (_, firstLetter: string, rest: string) => {
-    return `${firstLetter.toUpperCase()}${rest.toLowerCase()}`
-  })
+  return formatted.replace(
+    /\b([a-z])([a-z]+)\b/gi,
+    (_, firstLetter: string, rest: string) => {
+      return `${firstLetter.toUpperCase()}${rest.toLowerCase()}`
+    },
+  )
 }
 
-function normalizeTags(tags: string[] | undefined) {
-  return (tags ?? [])
-    .map((tag) => tag.trim())
-    .filter(Boolean)
+function normalizeTags(tags: Array<string> | undefined) {
+  return (tags ?? []).map((tag) => tag.trim()).filter(Boolean)
 }
 
-function readStoredPosts(): BlogPost[] {
+function readStoredPosts(): Array<BlogPost> {
   if (!hasWindow()) {
     return []
   }
@@ -65,7 +66,7 @@ function readStoredPosts(): BlogPost[] {
       return []
     }
 
-    const parsed = JSON.parse(rawValue) as BlogPost[]
+    const parsed = JSON.parse(rawValue) as Array<BlogPost>
     if (!Array.isArray(parsed)) {
       return []
     }
@@ -88,7 +89,7 @@ function readStoredPosts(): BlogPost[] {
   }
 }
 
-function writeStoredPosts(posts: BlogPost[]) {
+function writeStoredPosts(posts: Array<BlogPost>) {
   if (!hasWindow()) {
     return
   }

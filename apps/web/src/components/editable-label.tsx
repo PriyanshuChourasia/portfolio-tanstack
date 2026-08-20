@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState } from "react"
-import { Pencil } from "lucide-react"
-import { cn } from "@/lib/utils"
+import { useEffect, useRef, useState } from 'react'
+import { Pencil } from 'lucide-react'
+import { cn } from '@/lib/utils'
 
 interface EditableLabelProps {
   value: string
@@ -8,7 +8,11 @@ interface EditableLabelProps {
   className?: string
 }
 
-export function EditableLabel({ value, onChange, className }: EditableLabelProps) {
+export function EditableLabel({
+  value,
+  onChange,
+  className,
+}: EditableLabelProps) {
   const [editing, setEditing] = useState(false)
   const [draft, setDraft] = useState(value)
   const inputRef = useRef<HTMLInputElement>(null)
@@ -33,16 +37,16 @@ export function EditableLabel({ value, onChange, className }: EditableLabelProps
         onChange={(e) => setDraft(e.target.value)}
         onBlur={commit}
         onKeyDown={(e) => {
-          if (e.key === "Enter") commit()
-          if (e.key === "Escape") {
+          if (e.key === 'Enter') commit()
+          if (e.key === 'Escape') {
             setDraft(value)
             setEditing(false)
           }
         }}
         onClick={(e) => e.stopPropagation()}
         className={cn(
-          "bg-transparent border-b border-primary/50 outline-none text-center w-full",
-          className
+          'bg-transparent border-b border-primary/50 outline-none text-center w-full',
+          className,
         )}
       />
     )
@@ -50,7 +54,7 @@ export function EditableLabel({ value, onChange, className }: EditableLabelProps
 
   return (
     <span
-      className={cn("group/edit relative cursor-pointer", className)}
+      className={cn('group/edit relative cursor-pointer', className)}
       onClick={(e) => {
         e.stopPropagation()
         setDraft(value)

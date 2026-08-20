@@ -1,1 +1,1 @@
-export { Projects as Works } from "./components/works"
+export { Projects as Works } from './components/works'

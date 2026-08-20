@@ -1,9 +1,4 @@
-import {
-  AnimatePresence,
-  motion,
-  useScroll,
-  useTransform,
-} from 'framer-motion'
+import { AnimatePresence, motion, useScroll, useTransform } from 'framer-motion'
 import { useEffect, useRef, useState } from 'react'
 import { ArrowUpRight, Plus, Rocket, Sparkles } from 'lucide-react'
 import { useTheme } from 'next-themes'
@@ -141,8 +136,21 @@ export function Hero() {
       <motion.div
         role="link"
         tabIndex={0}
-        onClick={() => window.open('https://github.com/PriyanshuChourasia/account_erp', '_blank', 'noopener,noreferrer')}
-        onKeyDown={(e) => { if (e.key === 'Enter') window.open('https://github.com/PriyanshuChourasia/account_erp', '_blank', 'noopener,noreferrer') }}
+        onClick={() =>
+          window.open(
+            'https://github.com/PriyanshuChourasia/account_erp',
+            '_blank',
+            'noopener,noreferrer',
+          )
+        }
+        onKeyDown={(e) => {
+          if (e.key === 'Enter')
+            window.open(
+              'https://github.com/PriyanshuChourasia/account_erp',
+              '_blank',
+              'noopener,noreferrer',
+            )
+        }}
         initial={{ opacity: 0, x: -20 }}
         whileInView={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.6, delay: 0.5 }}
@@ -154,7 +162,12 @@ export function Hero() {
             aria-hidden
             className="absolute inset-0 bg-linear-to-r from-transparent via-white/30 to-transparent"
             animate={{ x: ['-120%', '220%'] }}
-            transition={{ duration: 2.2, repeat: Infinity, repeatDelay: 1.6, ease: 'easeInOut' }}
+            transition={{
+              duration: 2.2,
+              repeat: Infinity,
+              repeatDelay: 1.6,
+              ease: 'easeInOut',
+            }}
           />
           <span className="relative flex h-2 w-2 shrink-0">
             <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-white opacity-75" />
@@ -171,7 +184,8 @@ export function Hero() {
               Account ERP
             </p>
             <p className="text-xs text-slate-400 mt-1 leading-relaxed">
-              Accounting &amp; finance ERP module — part of the OPD ERP &amp; CodyERP product suite. In active development
+              Accounting &amp; finance ERP module — part of the OPD ERP &amp;
+              CodyERP product suite. In active development
             </p>
           </div>
           <span className="flex items-center justify-center h-8 w-8 rounded-lg bg-white/5 border border-white/10 shrink-0 group-hover:bg-cyan-500/10 group-hover:border-cyan-500/20 transition-colors mt-0.5">
@@ -194,7 +208,12 @@ export function Hero() {
             aria-hidden
             className="absolute inset-0 bg-linear-to-r from-transparent via-white/30 to-transparent"
             animate={{ x: ['-120%', '220%'] }}
-            transition={{ duration: 2.4, repeat: Infinity, repeatDelay: 1.8, ease: 'easeInOut' }}
+            transition={{
+              duration: 2.4,
+              repeat: Infinity,
+              repeatDelay: 1.8,
+              ease: 'easeInOut',
+            }}
           />
           <Sparkles className="relative h-3 w-3 text-white shrink-0" />
           <span className="relative text-[10px] font-bold uppercase tracking-widest text-white">

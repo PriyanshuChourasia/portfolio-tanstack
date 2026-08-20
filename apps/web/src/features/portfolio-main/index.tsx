@@ -1,1 +1,1 @@
-export { PortfolioLayout as PortfolioMain } from "./components/portfoliolayout"
+export { PortfolioLayout as PortfolioMain } from './components/portfoliolayout'

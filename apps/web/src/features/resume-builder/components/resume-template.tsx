@@ -1,11 +1,20 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
-import { ChevronLeft, ChevronRight, Download, LayoutGrid, Pause, Play, Shuffle } from 'lucide-react'
+import {
+  ChevronLeft,
+  ChevronRight,
+  Download,
+  LayoutGrid,
+  Pause,
+  Play,
+  Shuffle,
+} from 'lucide-react'
 import { EditorPanel } from './editor-panel'
 import { ResumePreview } from './resume-preview'
 import { TemplateShowcase } from './template-showcase'
 
-export type ResumeLayout = 'classic' | 'modern' | 'minimal' | 'professional' | 'creative' | 'mech'
+export type ResumeLayout =
+  'classic' | 'modern' | 'minimal' | 'professional' | 'creative' | 'mech'
 
 export interface ResumePersonal {
   name: string
@@ -43,13 +52,13 @@ export interface ResumeLanguage {
 
 export interface ResumeData {
   personal: ResumePersonal
-  experience: ResumeExperience[]
-  education: ResumeEducation[]
-  skills: ResumeSkill[]
-  languages: ResumeLanguage[]
+  experience: Array<ResumeExperience>
+  education: Array<ResumeEducation>
+  skills: Array<ResumeSkill>
+  languages: Array<ResumeLanguage>
 }
 
-const layouts: { id: ResumeLayout; label: string }[] = [
+const layouts: Array<{ id: ResumeLayout; label: string }> = [
   { id: 'classic', label: 'Classic' },
   { id: 'modern', label: 'Modern' },
   { id: 'minimal', label: 'Minimal' },
@@ -58,7 +67,7 @@ const layouts: { id: ResumeLayout; label: string }[] = [
   { id: 'mech', label: 'Mech' },
 ]
 
-const demoProfiles: { name: string; data: ResumeData }[] = [
+const demoProfiles: Array<{ name: string; data: ResumeData }> = [
   {
     name: 'Developer',
     data: {
@@ -96,7 +105,7 @@ const demoProfiles: { name: string; data: ResumeData }[] = [
           period: '2019 - 2023',
           title: 'B.Tech Computer Science',
           company: 'IIT Bombay',
-          desc: 'Focused on software engineering, distributed systems, and machine learning. Dean\'s list all semesters.',
+          desc: "Focused on software engineering, distributed systems, and machine learning. Dean's list all semesters.",
         },
         {
           period: '2017 - 2019',
@@ -455,9 +464,15 @@ export function ResumeTemplate() {
               onClick={() => setSidebarOpen(!sidebarOpen)}
               className="hidden md:flex p-1.5 rounded-md hover:bg-slate-800 text-slate-400 hover:text-white transition-colors"
             >
-              {sidebarOpen ? <ChevronLeft className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
+              {sidebarOpen ? (
+                <ChevronLeft className="w-4 h-4" />
+              ) : (
+                <ChevronRight className="w-4 h-4" />
+              )}
             </button>
-            <span className="text-sm font-semibold text-white truncate">Resume Builder</span>
+            <span className="text-sm font-semibold text-white truncate">
+              Resume Builder
+            </span>
           </div>
 
           {/* Desktop layout tabs */}
@@ -513,11 +528,19 @@ export function ResumeTemplate() {
               <button
                 onClick={toggleCycle}
                 className={`p-1 rounded transition-colors ${
-                  isCycling ? 'text-cyan-400 bg-cyan-500/10' : 'text-slate-400 hover:text-white hover:bg-slate-700/50'
+                  isCycling
+                    ? 'text-cyan-400 bg-cyan-500/10'
+                    : 'text-slate-400 hover:text-white hover:bg-slate-700/50'
                 }`}
-                title={isCycling ? 'Stop cycling' : 'Cycle through all templates'}
+                title={
+                  isCycling ? 'Stop cycling' : 'Cycle through all templates'
+                }
               >
-                {isCycling ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5" />}
+                {isCycling ? (
+                  <Pause className="w-3.5 h-3.5" />
+                ) : (
+                  <Play className="w-3.5 h-3.5" />
+                )}
               </button>
             </div>
 
@@ -554,7 +577,9 @@ export function ResumeTemplate() {
           className={`overflow-hidden border-r border-slate-800 bg-slate-900/50 shrink-0 ${isMobile ? 'w-full' : ''}`}
           transition={{ type: 'spring', stiffness: 300, damping: 30 }}
         >
-          <div className={`h-full overflow-hidden ${isMobile ? 'w-full' : 'w-[380px]'}`}>
+          <div
+            className={`h-full overflow-hidden ${isMobile ? 'w-full' : 'w-[380px]'}`}
+          >
             <EditorPanel data={data} onChange={setData} />
           </div>
         </motion.aside>

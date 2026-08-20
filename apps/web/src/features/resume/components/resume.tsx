@@ -132,7 +132,8 @@ export function ResumeSection() {
           className="text-center mb-20"
         >
           <h2 className="text-4xl md:text-5xl font-bold text-slate-900 dark:text-white">
-            Career <span className="text-cyan-600 dark:text-cyan-400">Overview</span>
+            Career{' '}
+            <span className="text-cyan-600 dark:text-cyan-400">Overview</span>
           </h2>
           <p className="text-slate-600 dark:text-slate-400 text-lg max-w-2xl mx-auto mt-4">
             Experience and the skills I use to ship products.

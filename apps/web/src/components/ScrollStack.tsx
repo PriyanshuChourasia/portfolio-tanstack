@@ -1,10 +1,8 @@
-  
-
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { useRef } from 'react'
 
 interface ScrollStackProps {
-  children: React.ReactNode[]
+  children: Array<React.ReactNode>
 }
 
 const ScrollStack = ({ children }: ScrollStackProps) => {
@@ -24,18 +22,13 @@ const StackCard = ({ children }: any) => {
 
   const { scrollYProgress } = useScroll({
     target: ref,
-    offset: ['start end', 'start center']
+    offset: ['start end', 'start center'],
   })
 
-  const scale = useTransform(
-    scrollYProgress,
-    [0, 1],
-    [1, 0.9]
-  )
+  const scale = useTransform(scrollYProgress, [0, 1], [1, 0.9])
 
   return (
     <div ref={ref} className="h-[120vh]">
-      
       <motion.div
         style={{ scale }}
         className="sticky top-[15vh] h-80 w-full max-w-3xl mx-auto
@@ -44,7 +37,6 @@ const StackCard = ({ children }: any) => {
       >
         {children}
       </motion.div>
-
     </div>
   )
 }

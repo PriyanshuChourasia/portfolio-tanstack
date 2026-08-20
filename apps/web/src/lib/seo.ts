@@ -10,7 +10,8 @@ export const SOCIAL_LINKS = {
   twitter: 'https://x.com/CoderPriye',
 }
 
-export const DEFAULT_TITLE = 'Priyanshu Chourasia | Full Stack Developer Portfolio'
+export const DEFAULT_TITLE =
+  'Priyanshu Chourasia | Full Stack Developer Portfolio'
 export const DEFAULT_DESCRIPTION =
   'Portfolio of Priyanshu Chourasia, a Full Stack Developer building modern, performant web applications. Explore projects, blog posts, and experience.'
 export const DEFAULT_IMAGE = `${SITE_URL}/hero-person.png`
@@ -32,7 +33,13 @@ interface MetaOptions {
  * Centralized so og:type / twitter:card can't silently get dropped
  * on a per-route basis the way they were before this existed.
  */
-export function buildMeta({ title, description, url, image = DEFAULT_IMAGE, type = 'website' }: MetaOptions) {
+export function buildMeta({
+  title,
+  description,
+  url,
+  image = DEFAULT_IMAGE,
+  type = 'website',
+}: MetaOptions) {
   return {
     meta: [
       { title },

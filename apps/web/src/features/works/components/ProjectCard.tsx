@@ -13,15 +13,17 @@ interface WorkCardData {
   link: string
 }
 
-const cards: Array<WorkCardData> = worksData.items.slice(0, 6).map((item, index) => ({
-  id: index + 1,
-  title: item.title,
-  client: item.client,
-  category: item.category,
-  description: item.description,
-  image: item.image,
-  link: item.link,
-}))
+const cards: Array<WorkCardData> = worksData.items
+  .slice(0, 6)
+  .map((item, index) => ({
+    id: index + 1,
+    title: item.title,
+    client: item.client,
+    category: item.category,
+    description: item.description,
+    image: item.image,
+    link: item.link,
+  }))
 
 interface CardProps {
   i: number
@@ -104,7 +106,10 @@ const Card = ({ i, card, progress, range, targetScale }: CardProps) => {
 
           <div className="flex w-full items-center justify-center lg:w-[55%]">
             <div className="relative h-72 w-full overflow-hidden rounded-[26px] border border-slate-200 dark:border-white/10 bg-slate-100 dark:bg-slate-900/40 shadow-lg sm:h-80 lg:h-92">
-              <motion.div style={{ scale: imageScale }} className="h-full w-full">
+              <motion.div
+                style={{ scale: imageScale }}
+                className="h-full w-full"
+              >
                 <img
                   src={card.image}
                   alt={card.title}

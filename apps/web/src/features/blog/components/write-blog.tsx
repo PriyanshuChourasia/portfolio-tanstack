@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react'
-import { addBlogPost, type BlogPostDraft } from '@/data/blog-posts'
 import { ImageUp, X } from 'lucide-react'
+import type {BlogPostDraft} from '@/data/blog-posts';
+import {  addBlogPost } from '@/data/blog-posts'
 
 export function BlogWritePage() {
   const initialDraft: BlogPostDraft = {
@@ -45,7 +46,7 @@ export function BlogWritePage() {
       .join('\n')
   }
 
-  function renderBlocksAsHtml(blocks: ContentBlock[]) {
+  function renderBlocksAsHtml(blocks: Array<ContentBlock>) {
     return blocks
       .map((block) => {
         if (block.type === 'image') {
@@ -67,7 +68,7 @@ export function BlogWritePage() {
   }
   const [draft, setDraft] = useState(initialDraft)
   const [savedPostId, setSavedPostId] = useState<number | null>(null)
-  const [blocks, setBlocks] = useState<ContentBlock[]>([
+  const [blocks, setBlocks] = useState<Array<ContentBlock>>([
     { id: createBlockId(), type: 'text', value: '' },
   ])
   const [coverImagePreview, setCoverImagePreview] = useState<string>('')
@@ -80,7 +81,9 @@ export function BlogWritePage() {
     }))
   }
 
-  const handleCoverImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleCoverImageUpload = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
     const file = event.target.files?.[0]
     if (!file) return
     const reader = new FileReader()
@@ -147,7 +150,7 @@ export function BlogWritePage() {
 
         return block.value.trim() ? block : null
       })
-      .filter(Boolean) as ContentBlock[]
+      .filter(Boolean) as Array<ContentBlock>
 
     const post = addBlogPost({
       ...draft,
@@ -162,7 +165,13 @@ export function BlogWritePage() {
   }
 
   /* ─── Helper: image upload button rendered inside content blocks ─── */
-  function ImageBlockUploader({ blockId, updateBlock: onUpdateBlock }: { blockId: string; updateBlock: typeof updateBlock }) {
+  function ImageBlockUploader({
+    blockId,
+    updateBlock: onUpdateBlock,
+  }: {
+    blockId: string
+    updateBlock: typeof updateBlock
+  }) {
     const inputRef = useRef<HTMLInputElement>(null)
 
     const handleFile = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -299,8 +308,12 @@ export function BlogWritePage() {
                       >
                         <ImageUp size={24} />
                         <div className="text-left">
-                          <p className="text-sm font-semibold">Upload cover image</p>
-                          <p className="text-xs mt-0.5">PNG, JPG, WebP, or GIF</p>
+                          <p className="text-sm font-semibold">
+                            Upload cover image
+                          </p>
+                          <p className="text-xs mt-0.5">
+                            PNG, JPG, WebP, or GIF
+                          </p>
                         </div>
                       </button>
                     )}
@@ -508,8 +521,9 @@ export function BlogWritePage() {
                 </label>
 
                 <div className="rounded-2xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 px-4 py-3 text-sm leading-6 text-slate-600 dark:text-slate-300">
-                  Upload a cover image or leave empty for a placeholder.
-                  Add images to content blocks for inline placement throughout the blog body.
+                  Upload a cover image or leave empty for a placeholder. Add
+                  images to content blocks for inline placement throughout the
+                  blog body.
                 </div>
 
                 {savedPostId ? (

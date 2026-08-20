@@ -22,7 +22,7 @@ function hashSeed(value: string | number): number {
   return Math.abs(hash)
 }
 
-const GRADIENTS: [string, string, string][] = [
+const GRADIENTS: Array<[string, string, string]> = [
   ['from-cyan-500/15', 'via-indigo-900/80', 'to-blue-950/85'],
   ['from-emerald-500/15', 'via-teal-900/80', 'to-cyan-950/85'],
   ['from-violet-500/15', 'via-purple-900/80', 'to-slate-950/85'],
@@ -33,7 +33,7 @@ const GRADIENTS: [string, string, string][] = [
   ['from-lime-500/15', 'via-green-900/80', 'to-emerald-950/85'],
 ]
 
-const ICON_COLORS: [string, string, string][] = [
+const ICON_COLORS: Array<[string, string, string]> = [
   ['border-cyan-400/15', 'bg-cyan-400/10', 'text-cyan-300/70'],
   ['border-emerald-400/15', 'bg-emerald-400/10', 'text-emerald-300/70'],
   ['border-violet-400/15', 'bg-violet-400/10', 'text-violet-300/70'],

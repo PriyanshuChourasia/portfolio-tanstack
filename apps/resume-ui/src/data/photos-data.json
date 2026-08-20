@@ -1,0 +1,113 @@
+{
+  "categories": ["All", "Landscape", "Street", "Portrait", "Architecture", "Nature"],
+  "photos": [
+    {
+      "id": 1,
+      "title": "Mountain Sunrise",
+      "category": "Landscape",
+      "image": "https://picsum.photos/seed/mountain/800/600",
+      "description": "Golden hour light breaking over distant peaks",
+      "camera": "Canon EOS R5",
+      "lens": "24-70mm f/2.8",
+      "iso": 100,
+      "aperture": "f/8",
+      "shutter": "1/250s"
+    },
+    {
+      "id": 2,
+      "title": "Urban Rhythm",
+      "category": "Street",
+      "image": "https://picsum.photos/seed/urban/800/600",
+      "description": "City life captured in motion",
+      "camera": "Sony A7IV",
+      "lens": "35mm f/1.4",
+      "iso": 400,
+      "aperture": "f/2.8",
+      "shutter": "1/500s"
+    },
+    {
+      "id": 3,
+      "title": "Quiet Moment",
+      "category": "Portrait",
+      "image": "https://picsum.photos/seed/portrait/800/600",
+      "description": "Natural light portrait study",
+      "camera": "Nikon Z6 III",
+      "lens": "85mm f/1.4",
+      "iso": 200,
+      "aperture": "f/1.8",
+      "shutter": "1/320s"
+    },
+    {
+      "id": 4,
+      "title": "Lines & Light",
+      "category": "Architecture",
+      "image": "https://picsum.photos/seed/arch/800/600",
+      "description": "Geometric patterns in modern architecture",
+      "camera": "Canon EOS R5",
+      "lens": "16-35mm f/2.8",
+      "iso": 100,
+      "aperture": "f/11",
+      "shutter": "1/125s"
+    },
+    {
+      "id": 5,
+      "title": "Misty Forest",
+      "category": "Nature",
+      "image": "https://picsum.photos/seed/forest/800/600",
+      "description": "Early morning fog weaving through tall pines",
+      "camera": "Sony A7RV",
+      "lens": "70-200mm f/2.8",
+      "iso": 800,
+      "aperture": "f/4",
+      "shutter": "1/60s"
+    },
+    {
+      "id": 6,
+      "title": "Reflections",
+      "category": "Landscape",
+      "image": "https://picsum.photos/seed/lake/800/600",
+      "description": "Perfect mirror reflections on still water",
+      "camera": "Nikon Z8",
+      "lens": "24-120mm f/4",
+      "iso": 100,
+      "aperture": "f/8",
+      "shutter": "1/200s"
+    },
+    {
+      "id": 7,
+      "title": "City Lights",
+      "category": "Street",
+      "image": "https://picsum.photos/seed/city/800/600",
+      "description": "Neon reflections on rain-soaked streets",
+      "camera": "Fujifilm X-T5",
+      "lens": "23mm f/1.4",
+      "iso": 1600,
+      "aperture": "f/2",
+      "shutter": "1/100s"
+    },
+    {
+      "id": 8,
+      "title": "Golden Hour",
+      "category": "Portrait",
+      "image": "https://picsum.photos/seed/golden/800/600",
+      "description": "Warm light portrait at sunset",
+      "camera": "Sony A7IV",
+      "lens": "50mm f/1.2",
+      "iso": 100,
+      "aperture": "f/1.4",
+      "shutter": "1/1000s"
+    },
+    {
+      "id": 9,
+      "title": "Concrete Jungle",
+      "category": "Architecture",
+      "image": "https://picsum.photos/seed/building/800/600",
+      "description": "Brutalist architecture from below",
+      "camera": "Canon EOS R5",
+      "lens": "14mm f/2.8",
+      "iso": 200,
+      "aperture": "f/8",
+      "shutter": "1/250s"
+    }
+  ]
+}

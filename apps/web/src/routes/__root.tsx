@@ -1,4 +1,8 @@
-import { HeadContent, Outlet, createRootRouteWithContext } from '@tanstack/react-router'
+import {
+  HeadContent,
+  Outlet,
+  createRootRouteWithContext,
+} from '@tanstack/react-router'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 import { TanStackDevtools } from '@tanstack/react-devtools'
 
@@ -7,7 +11,12 @@ import TanStackQueryDevtools from '../integrations/tanstack-query/devtools'
 import type { QueryClient } from '@tanstack/react-query'
 import { ScrollToTop } from '@/components/ScrollToTop'
 import { Toaster } from '@/components/ui/sonner'
-import { DEFAULT_DESCRIPTION, DEFAULT_TITLE, SITE_URL, buildMeta } from '@/lib/seo'
+import {
+  DEFAULT_DESCRIPTION,
+  DEFAULT_TITLE,
+  SITE_URL,
+  buildMeta,
+} from '@/lib/seo'
 
 interface MyRouterContext {
   queryClient: QueryClient

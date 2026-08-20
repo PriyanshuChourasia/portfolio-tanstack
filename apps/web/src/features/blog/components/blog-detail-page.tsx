@@ -1,9 +1,9 @@
 import { Link } from '@tanstack/react-router'
 import { motion } from 'framer-motion'
-import { BookOpen, Calendar, User, Tag } from 'lucide-react'
+import { BookOpen, Calendar, Tag, User } from 'lucide-react'
 import { useState } from 'react'
-import { getBlogPosts } from '@/data/blog-posts'
 import BlogCommentsSection from './blog-comments-section'
+import { getBlogPosts } from '@/data/blog-posts'
 import { Navbar } from '@/components/Navbar'
 
 export function BlogPostDetailPage({ postId }: { postId: number }) {

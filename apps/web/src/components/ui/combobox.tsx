@@ -1,4 +1,5 @@
 import { Check, ChevronsUpDown } from 'lucide-react'
+import { useState } from 'react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import {
@@ -14,7 +15,6 @@ import {
   CommandItem,
   CommandList,
 } from '@/components/ui/command'
-import { useState } from 'react'
 
 export interface ComboboxOption {
   value: string
@@ -22,7 +22,7 @@ export interface ComboboxOption {
 }
 
 interface ComboboxProps {
-  options: ComboboxOption[]
+  options: Array<ComboboxOption>
   value?: string
   onValueChange?: (value: string) => void
   placeholder?: string
@@ -72,15 +72,21 @@ export function Combobox({
                   key={option.value}
                   value={option.label}
                   onSelect={() => {
-                    setSelectedValue(option.value === selectedValue ? '' : option.value)
-                    onValueChange?.(option.value === selectedValue ? '' : option.value)
+                    setSelectedValue(
+                      option.value === selectedValue ? '' : option.value,
+                    )
+                    onValueChange?.(
+                      option.value === selectedValue ? '' : option.value,
+                    )
                     setOpen(false)
                   }}
                 >
                   <Check
                     className={cn(
                       'mr-2 size-4',
-                      selectedValue === option.value ? 'opacity-100' : 'opacity-0',
+                      selectedValue === option.value
+                        ? 'opacity-100'
+                        : 'opacity-0',
                     )}
                   />
                   {option.label}

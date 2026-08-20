@@ -11,8 +11,12 @@ function ClassicPreview({ data }: { data: ResumeData }) {
   return (
     <div className="bg-white text-slate-900 p-8 shadow-lg rounded-sm min-h-[1056px]">
       <div className="border-b-2 border-cyan-600 pb-4 mb-6">
-        <h1 className="text-3xl font-bold text-slate-900">{data.personal.name || 'Your Name'}</h1>
-        <p className="text-lg text-cyan-700 font-medium mt-1">{data.personal.title || 'Professional Title'}</p>
+        <h1 className="text-3xl font-bold text-slate-900">
+          {data.personal.name || 'Your Name'}
+        </h1>
+        <p className="text-lg text-cyan-700 font-medium mt-1">
+          {data.personal.title || 'Professional Title'}
+        </p>
         <div className="flex flex-wrap gap-4 text-sm text-slate-600 mt-2">
           {data.personal.email && <span>{data.personal.email}</span>}
           {data.personal.phone && <span>{data.personal.phone}</span>}
@@ -22,22 +26,32 @@ function ClassicPreview({ data }: { data: ResumeData }) {
 
       {data.personal.summary && (
         <div className="mb-6">
-          <h2 className="text-sm font-bold uppercase tracking-widest text-slate-500 mb-2">Summary</h2>
-          <p className="text-sm text-slate-700 leading-relaxed">{data.personal.summary}</p>
+          <h2 className="text-sm font-bold uppercase tracking-widest text-slate-500 mb-2">
+            Summary
+          </h2>
+          <p className="text-sm text-slate-700 leading-relaxed">
+            {data.personal.summary}
+          </p>
         </div>
       )}
 
       {data.experience.length > 0 && (
         <div className="mb-6">
-          <h2 className="text-sm font-bold uppercase tracking-widest text-slate-500 mb-3">Experience</h2>
+          <h2 className="text-sm font-bold uppercase tracking-widest text-slate-500 mb-3">
+            Experience
+          </h2>
           {data.experience.map((exp, i) => (
             <div key={i} className="mb-4">
               <div className="flex justify-between items-baseline">
-                <h3 className="font-semibold text-slate-900">{exp.title || 'Position'}</h3>
+                <h3 className="font-semibold text-slate-900">
+                  {exp.title || 'Position'}
+                </h3>
                 <span className="text-sm text-slate-500">{exp.period}</span>
               </div>
               <p className="text-sm text-cyan-700">{exp.company}</p>
-              {exp.desc && <p className="text-sm text-slate-600 mt-1">{exp.desc}</p>}
+              {exp.desc && (
+                <p className="text-sm text-slate-600 mt-1">{exp.desc}</p>
+              )}
             </div>
           ))}
         </div>
@@ -45,15 +59,21 @@ function ClassicPreview({ data }: { data: ResumeData }) {
 
       {data.education.length > 0 && (
         <div className="mb-6">
-          <h2 className="text-sm font-bold uppercase tracking-widest text-slate-500 mb-3">Education</h2>
+          <h2 className="text-sm font-bold uppercase tracking-widest text-slate-500 mb-3">
+            Education
+          </h2>
           {data.education.map((edu, i) => (
             <div key={i} className="mb-3">
               <div className="flex justify-between items-baseline">
-                <h3 className="font-semibold text-slate-900">{edu.title || 'Degree'}</h3>
+                <h3 className="font-semibold text-slate-900">
+                  {edu.title || 'Degree'}
+                </h3>
                 <span className="text-sm text-slate-500">{edu.period}</span>
               </div>
               <p className="text-sm text-cyan-700">{edu.company}</p>
-              {edu.desc && <p className="text-sm text-slate-600 mt-1">{edu.desc}</p>}
+              {edu.desc && (
+                <p className="text-sm text-slate-600 mt-1">{edu.desc}</p>
+              )}
             </div>
           ))}
         </div>
@@ -61,11 +81,15 @@ function ClassicPreview({ data }: { data: ResumeData }) {
 
       {data.skills.length > 0 && (
         <div className="mb-6">
-          <h2 className="text-sm font-bold uppercase tracking-widest text-slate-500 mb-3">Skills</h2>
+          <h2 className="text-sm font-bold uppercase tracking-widest text-slate-500 mb-3">
+            Skills
+          </h2>
           <div className="grid grid-cols-2 gap-x-6 gap-y-2">
             {data.skills.map((skill, i) => (
               <div key={i} className="flex items-center gap-2">
-                <span className="text-sm text-slate-700 w-28">{skill.name}</span>
+                <span className="text-sm text-slate-700 w-28">
+                  {skill.name}
+                </span>
                 <div className="flex-1 h-2 bg-slate-200 rounded-full overflow-hidden">
                   <div
                     className="h-full bg-cyan-600 rounded-full transition-all"
@@ -80,7 +104,9 @@ function ClassicPreview({ data }: { data: ResumeData }) {
 
       {data.languages.length > 0 && (
         <div>
-          <h2 className="text-sm font-bold uppercase tracking-widest text-slate-500 mb-3">Languages</h2>
+          <h2 className="text-sm font-bold uppercase tracking-widest text-slate-500 mb-3">
+            Languages
+          </h2>
           <div className="flex flex-wrap gap-4">
             {data.languages.map((lang, i) => (
               <div key={i} className="flex items-center gap-2">
@@ -109,8 +135,12 @@ function ModernPreview({ data }: { data: ResumeData }) {
     <div className="bg-white text-slate-900 p-0 shadow-lg rounded-sm min-h-[1056px] flex">
       <div className="w-[35%] bg-slate-900 text-white p-6 flex flex-col gap-6">
         <div>
-          <h1 className="text-xl font-bold">{data.personal.name || 'Your Name'}</h1>
-          <p className="text-sm text-cyan-400 mt-1">{data.personal.title || 'Professional Title'}</p>
+          <h1 className="text-xl font-bold">
+            {data.personal.name || 'Your Name'}
+          </h1>
+          <p className="text-sm text-cyan-400 mt-1">
+            {data.personal.title || 'Professional Title'}
+          </p>
         </div>
 
         <div className="space-y-2 text-sm text-slate-300">
@@ -121,7 +151,9 @@ function ModernPreview({ data }: { data: ResumeData }) {
 
         {data.skills.length > 0 && (
           <div>
-            <h2 className="text-xs font-bold uppercase tracking-widest text-cyan-400 mb-3">Skills</h2>
+            <h2 className="text-xs font-bold uppercase tracking-widest text-cyan-400 mb-3">
+              Skills
+            </h2>
             <div className="space-y-2">
               {data.skills.map((skill, i) => (
                 <div key={i}>
@@ -143,12 +175,20 @@ function ModernPreview({ data }: { data: ResumeData }) {
 
         {data.languages.length > 0 && (
           <div>
-            <h2 className="text-xs font-bold uppercase tracking-widest text-cyan-400 mb-3">Languages</h2>
+            <h2 className="text-xs font-bold uppercase tracking-widest text-cyan-400 mb-3">
+              Languages
+            </h2>
             <div className="space-y-1">
               {data.languages.map((lang, i) => (
-                <div key={i} className="flex justify-between text-xs text-slate-300">
+                <div
+                  key={i}
+                  className="flex justify-between text-xs text-slate-300"
+                >
                   <span>{lang.name}</span>
-                  <span>{'●'.repeat(Math.ceil(lang.level / 2))}{'○'.repeat(5 - Math.ceil(lang.level / 2))}</span>
+                  <span>
+                    {'●'.repeat(Math.ceil(lang.level / 2))}
+                    {'○'.repeat(5 - Math.ceil(lang.level / 2))}
+                  </span>
                 </div>
               ))}
             </div>
@@ -159,22 +199,37 @@ function ModernPreview({ data }: { data: ResumeData }) {
       <div className="w-[65%] p-6 space-y-6">
         {data.personal.summary && (
           <div>
-            <h2 className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-2">About</h2>
-            <p className="text-sm text-slate-700 leading-relaxed">{data.personal.summary}</p>
+            <h2 className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-2">
+              About
+            </h2>
+            <p className="text-sm text-slate-700 leading-relaxed">
+              {data.personal.summary}
+            </p>
           </div>
         )}
 
         {data.experience.length > 0 && (
           <div>
-            <h2 className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-3">Experience</h2>
+            <h2 className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-3">
+              Experience
+            </h2>
             {data.experience.map((exp, i) => (
-              <div key={i} className="mb-4 pb-4 border-b border-slate-100 last:border-0">
+              <div
+                key={i}
+                className="mb-4 pb-4 border-b border-slate-100 last:border-0"
+              >
                 <div className="flex justify-between items-baseline">
-                  <h3 className="text-sm font-semibold text-slate-900">{exp.title || 'Position'}</h3>
+                  <h3 className="text-sm font-semibold text-slate-900">
+                    {exp.title || 'Position'}
+                  </h3>
                   <span className="text-xs text-slate-400">{exp.period}</span>
                 </div>
-                <p className="text-xs text-cyan-600 font-medium">{exp.company}</p>
-                {exp.desc && <p className="text-xs text-slate-600 mt-1">{exp.desc}</p>}
+                <p className="text-xs text-cyan-600 font-medium">
+                  {exp.company}
+                </p>
+                {exp.desc && (
+                  <p className="text-xs text-slate-600 mt-1">{exp.desc}</p>
+                )}
               </div>
             ))}
           </div>
@@ -182,15 +237,26 @@ function ModernPreview({ data }: { data: ResumeData }) {
 
         {data.education.length > 0 && (
           <div>
-            <h2 className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-3">Education</h2>
+            <h2 className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-3">
+              Education
+            </h2>
             {data.education.map((edu, i) => (
-              <div key={i} className="mb-3 pb-3 border-b border-slate-100 last:border-0">
+              <div
+                key={i}
+                className="mb-3 pb-3 border-b border-slate-100 last:border-0"
+              >
                 <div className="flex justify-between items-baseline">
-                  <h3 className="text-sm font-semibold text-slate-900">{edu.title || 'Degree'}</h3>
+                  <h3 className="text-sm font-semibold text-slate-900">
+                    {edu.title || 'Degree'}
+                  </h3>
                   <span className="text-xs text-slate-400">{edu.period}</span>
                 </div>
-                <p className="text-xs text-cyan-600 font-medium">{edu.company}</p>
-                {edu.desc && <p className="text-xs text-slate-600 mt-1">{edu.desc}</p>}
+                <p className="text-xs text-cyan-600 font-medium">
+                  {edu.company}
+                </p>
+                {edu.desc && (
+                  <p className="text-xs text-slate-600 mt-1">{edu.desc}</p>
+                )}
               </div>
             ))}
           </div>
@@ -204,7 +270,9 @@ function MinimalPreview({ data }: { data: ResumeData }) {
   return (
     <div className="bg-white text-slate-900 p-10 shadow-lg rounded-sm min-h-[1056px]">
       <div className="text-center mb-8">
-        <h1 className="text-4xl font-light text-slate-900">{data.personal.name || 'Your Name'}</h1>
+        <h1 className="text-4xl font-light text-slate-900">
+          {data.personal.name || 'Your Name'}
+        </h1>
         <p className="text-sm text-slate-400 mt-2 tracking-widest uppercase">
           {data.personal.title || 'Professional Title'}
         </p>
@@ -217,7 +285,9 @@ function MinimalPreview({ data }: { data: ResumeData }) {
 
       {data.personal.summary && (
         <div className="mb-8 text-center">
-          <p className="text-sm text-slate-600 leading-relaxed max-w-xl mx-auto">{data.personal.summary}</p>
+          <p className="text-sm text-slate-600 leading-relaxed max-w-xl mx-auto">
+            {data.personal.summary}
+          </p>
         </div>
       )}
 
@@ -229,9 +299,15 @@ function MinimalPreview({ data }: { data: ResumeData }) {
           {data.experience.map((exp, i) => (
             <div key={i} className="mb-5 text-center">
               <span className="text-xs text-slate-400">{exp.period}</span>
-              <h3 className="text-sm font-medium text-slate-900 mt-1">{exp.title || 'Position'}</h3>
+              <h3 className="text-sm font-medium text-slate-900 mt-1">
+                {exp.title || 'Position'}
+              </h3>
               <p className="text-xs text-slate-500">{exp.company}</p>
-              {exp.desc && <p className="text-xs text-slate-600 mt-2 max-w-md mx-auto">{exp.desc}</p>}
+              {exp.desc && (
+                <p className="text-xs text-slate-600 mt-2 max-w-md mx-auto">
+                  {exp.desc}
+                </p>
+              )}
             </div>
           ))}
         </div>
@@ -245,9 +321,15 @@ function MinimalPreview({ data }: { data: ResumeData }) {
           {data.education.map((edu, i) => (
             <div key={i} className="mb-4 text-center">
               <span className="text-xs text-slate-400">{edu.period}</span>
-              <h3 className="text-sm font-medium text-slate-900 mt-1">{edu.title || 'Degree'}</h3>
+              <h3 className="text-sm font-medium text-slate-900 mt-1">
+                {edu.title || 'Degree'}
+              </h3>
               <p className="text-xs text-slate-500">{edu.company}</p>
-              {edu.desc && <p className="text-xs text-slate-600 mt-2 max-w-md mx-auto">{edu.desc}</p>}
+              {edu.desc && (
+                <p className="text-xs text-slate-600 mt-2 max-w-md mx-auto">
+                  {edu.desc}
+                </p>
+              )}
             </div>
           ))}
         </div>
@@ -295,8 +377,12 @@ function ProfessionalPreview({ data }: { data: ResumeData }) {
   return (
     <div className="bg-white text-slate-900 p-0 shadow-lg rounded-sm min-h-[1056px]">
       <div className="bg-cyan-700 text-white px-8 py-6">
-        <h1 className="text-2xl font-bold">{data.personal.name || 'Your Name'}</h1>
-        <p className="text-sm text-cyan-100 mt-1">{data.personal.title || 'Professional Title'}</p>
+        <h1 className="text-2xl font-bold">
+          {data.personal.name || 'Your Name'}
+        </h1>
+        <p className="text-sm text-cyan-100 mt-1">
+          {data.personal.title || 'Professional Title'}
+        </p>
         <div className="flex flex-wrap gap-x-6 gap-y-1 text-xs text-cyan-100 mt-3">
           {data.personal.email && <span>{data.personal.email}</span>}
           {data.personal.phone && <span>{data.personal.phone}</span>}
@@ -307,26 +393,36 @@ function ProfessionalPreview({ data }: { data: ResumeData }) {
       <div className="p-8 space-y-6">
         {data.personal.summary && (
           <div>
-            <h2 className="text-xs font-bold uppercase tracking-widest text-cyan-700 mb-2">Professional Summary</h2>
-            <p className="text-sm text-slate-700 leading-relaxed">{data.personal.summary}</p>
+            <h2 className="text-xs font-bold uppercase tracking-widest text-cyan-700 mb-2">
+              Professional Summary
+            </h2>
+            <p className="text-sm text-slate-700 leading-relaxed">
+              {data.personal.summary}
+            </p>
           </div>
         )}
 
         {data.experience.length > 0 && (
           <div>
-            <h2 className="text-xs font-bold uppercase tracking-widest text-cyan-700 mb-3">Experience</h2>
+            <h2 className="text-xs font-bold uppercase tracking-widest text-cyan-700 mb-3">
+              Experience
+            </h2>
             {data.experience.map((exp, i) => (
               <div key={i} className="mb-4">
                 <div className="flex justify-between items-baseline">
                   <div>
-                    <h3 className="text-sm font-semibold text-slate-900">{exp.title || 'Position'}</h3>
+                    <h3 className="text-sm font-semibold text-slate-900">
+                      {exp.title || 'Position'}
+                    </h3>
                     <p className="text-xs text-cyan-600">{exp.company}</p>
                   </div>
                   <span className="text-xs text-slate-400 bg-slate-100 px-2 py-0.5 rounded">
                     {exp.period}
                   </span>
                 </div>
-                {exp.desc && <p className="text-xs text-slate-600 mt-2">{exp.desc}</p>}
+                {exp.desc && (
+                  <p className="text-xs text-slate-600 mt-2">{exp.desc}</p>
+                )}
               </div>
             ))}
           </div>
@@ -334,19 +430,25 @@ function ProfessionalPreview({ data }: { data: ResumeData }) {
 
         {data.education.length > 0 && (
           <div>
-            <h2 className="text-xs font-bold uppercase tracking-widest text-cyan-700 mb-3">Education</h2>
+            <h2 className="text-xs font-bold uppercase tracking-widest text-cyan-700 mb-3">
+              Education
+            </h2>
             {data.education.map((edu, i) => (
               <div key={i} className="mb-3">
                 <div className="flex justify-between items-baseline">
                   <div>
-                    <h3 className="text-sm font-semibold text-slate-900">{edu.title || 'Degree'}</h3>
+                    <h3 className="text-sm font-semibold text-slate-900">
+                      {edu.title || 'Degree'}
+                    </h3>
                     <p className="text-xs text-cyan-600">{edu.company}</p>
                   </div>
                   <span className="text-xs text-slate-400 bg-slate-100 px-2 py-0.5 rounded">
                     {edu.period}
                   </span>
                 </div>
-                {edu.desc && <p className="text-xs text-slate-600 mt-1">{edu.desc}</p>}
+                {edu.desc && (
+                  <p className="text-xs text-slate-600 mt-1">{edu.desc}</p>
+                )}
               </div>
             ))}
           </div>
@@ -355,7 +457,9 @@ function ProfessionalPreview({ data }: { data: ResumeData }) {
         <div className="grid grid-cols-2 gap-8">
           {data.skills.length > 0 && (
             <div>
-              <h2 className="text-xs font-bold uppercase tracking-widest text-cyan-700 mb-3">Skills</h2>
+              <h2 className="text-xs font-bold uppercase tracking-widest text-cyan-700 mb-3">
+                Skills
+              </h2>
               <div className="space-y-2">
                 {data.skills.map((skill, i) => (
                   <div key={i}>
@@ -377,14 +481,21 @@ function ProfessionalPreview({ data }: { data: ResumeData }) {
 
           {data.languages.length > 0 && (
             <div>
-              <h2 className="text-xs font-bold uppercase tracking-widest text-cyan-700 mb-3">Languages</h2>
+              <h2 className="text-xs font-bold uppercase tracking-widest text-cyan-700 mb-3">
+                Languages
+              </h2>
               <div className="space-y-1">
                 {data.languages.map((lang, i) => (
-                  <div key={i} className="flex justify-between text-xs text-slate-600">
+                  <div
+                    key={i}
+                    className="flex justify-between text-xs text-slate-600"
+                  >
                     <span>{lang.name}</span>
                     <span className="text-cyan-600">
                       {Array.from({ length: 5 }, (_, j) => (
-                        <span key={j}>{j < Math.ceil(lang.level / 2) ? '●' : '○'}</span>
+                        <span key={j}>
+                          {j < Math.ceil(lang.level / 2) ? '●' : '○'}
+                        </span>
                       ))}
                     </span>
                   </div>
@@ -402,17 +513,27 @@ function CreativePreview({ data }: { data: ResumeData }) {
   return (
     <div className="bg-white text-slate-900 p-0 shadow-lg rounded-sm min-h-[1056px]">
       <div className="bg-linear-to-r from-cyan-500 to-blue-600 text-white px-8 py-10">
-        <h1 className="text-3xl font-black tracking-tight">{data.personal.name || 'Your Name'}</h1>
-        <p className="text-sm text-white/80 mt-2 font-medium">{data.personal.title || 'Professional Title'}</p>
+        <h1 className="text-3xl font-black tracking-tight">
+          {data.personal.name || 'Your Name'}
+        </h1>
+        <p className="text-sm text-white/80 mt-2 font-medium">
+          {data.personal.title || 'Professional Title'}
+        </p>
         <div className="flex flex-wrap gap-4 text-xs text-white/70 mt-4">
           {data.personal.email && (
-            <span className="bg-white/10 px-3 py-1 rounded-full">{data.personal.email}</span>
+            <span className="bg-white/10 px-3 py-1 rounded-full">
+              {data.personal.email}
+            </span>
           )}
           {data.personal.phone && (
-            <span className="bg-white/10 px-3 py-1 rounded-full">{data.personal.phone}</span>
+            <span className="bg-white/10 px-3 py-1 rounded-full">
+              {data.personal.phone}
+            </span>
           )}
           {data.personal.location && (
-            <span className="bg-white/10 px-3 py-1 rounded-full">{data.personal.location}</span>
+            <span className="bg-white/10 px-3 py-1 rounded-full">
+              {data.personal.location}
+            </span>
           )}
         </div>
       </div>
@@ -421,22 +542,34 @@ function CreativePreview({ data }: { data: ResumeData }) {
         <div className="col-span-2 space-y-6">
           {data.personal.summary && (
             <div>
-              <h2 className="text-xs font-bold uppercase tracking-widest text-cyan-600 mb-2">About</h2>
-              <p className="text-sm text-slate-700 leading-relaxed">{data.personal.summary}</p>
+              <h2 className="text-xs font-bold uppercase tracking-widest text-cyan-600 mb-2">
+                About
+              </h2>
+              <p className="text-sm text-slate-700 leading-relaxed">
+                {data.personal.summary}
+              </p>
             </div>
           )}
 
           {data.experience.length > 0 && (
             <div>
-              <h2 className="text-xs font-bold uppercase tracking-widest text-cyan-600 mb-3">Experience</h2>
+              <h2 className="text-xs font-bold uppercase tracking-widest text-cyan-600 mb-3">
+                Experience
+              </h2>
               {data.experience.map((exp, i) => (
                 <div key={i} className="mb-4 pl-4 border-l-2 border-cyan-200">
                   <div className="flex justify-between items-baseline">
-                    <h3 className="text-sm font-semibold text-slate-900">{exp.title || 'Position'}</h3>
+                    <h3 className="text-sm font-semibold text-slate-900">
+                      {exp.title || 'Position'}
+                    </h3>
                     <span className="text-xs text-slate-400">{exp.period}</span>
                   </div>
-                  <p className="text-xs text-cyan-600 font-medium">{exp.company}</p>
-                  {exp.desc && <p className="text-xs text-slate-600 mt-1">{exp.desc}</p>}
+                  <p className="text-xs text-cyan-600 font-medium">
+                    {exp.company}
+                  </p>
+                  {exp.desc && (
+                    <p className="text-xs text-slate-600 mt-1">{exp.desc}</p>
+                  )}
                 </div>
               ))}
             </div>
@@ -444,15 +577,23 @@ function CreativePreview({ data }: { data: ResumeData }) {
 
           {data.education.length > 0 && (
             <div>
-              <h2 className="text-xs font-bold uppercase tracking-widest text-cyan-600 mb-3">Education</h2>
+              <h2 className="text-xs font-bold uppercase tracking-widest text-cyan-600 mb-3">
+                Education
+              </h2>
               {data.education.map((edu, i) => (
                 <div key={i} className="mb-3 pl-4 border-l-2 border-cyan-200">
                   <div className="flex justify-between items-baseline">
-                    <h3 className="text-sm font-semibold text-slate-900">{edu.title || 'Degree'}</h3>
+                    <h3 className="text-sm font-semibold text-slate-900">
+                      {edu.title || 'Degree'}
+                    </h3>
                     <span className="text-xs text-slate-400">{edu.period}</span>
                   </div>
-                  <p className="text-xs text-cyan-600 font-medium">{edu.company}</p>
-                  {edu.desc && <p className="text-xs text-slate-600 mt-1">{edu.desc}</p>}
+                  <p className="text-xs text-cyan-600 font-medium">
+                    {edu.company}
+                  </p>
+                  {edu.desc && (
+                    <p className="text-xs text-slate-600 mt-1">{edu.desc}</p>
+                  )}
                 </div>
               ))}
             </div>
@@ -462,7 +603,9 @@ function CreativePreview({ data }: { data: ResumeData }) {
         <div className="space-y-6">
           {data.skills.length > 0 && (
             <div>
-              <h2 className="text-xs font-bold uppercase tracking-widest text-cyan-600 mb-3">Skills</h2>
+              <h2 className="text-xs font-bold uppercase tracking-widest text-cyan-600 mb-3">
+                Skills
+              </h2>
               <div className="space-y-2">
                 {data.skills.map((skill, i) => (
                   <div key={i}>
@@ -484,7 +627,9 @@ function CreativePreview({ data }: { data: ResumeData }) {
 
           {data.languages.length > 0 && (
             <div>
-              <h2 className="text-xs font-bold uppercase tracking-widest text-cyan-600 mb-3">Languages</h2>
+              <h2 className="text-xs font-bold uppercase tracking-widest text-cyan-600 mb-3">
+                Languages
+              </h2>
               <div className="space-y-1">
                 {data.languages.map((lang, i) => (
                   <div key={i} className="text-xs text-slate-600">
@@ -494,7 +639,9 @@ function CreativePreview({ data }: { data: ResumeData }) {
                         <div
                           key={j}
                           className={`w-2 h-2 rounded-full ${
-                            j < Math.ceil(lang.level / 2) ? 'bg-cyan-500' : 'bg-slate-200'
+                            j < Math.ceil(lang.level / 2)
+                              ? 'bg-cyan-500'
+                              : 'bg-slate-200'
                           }`}
                         />
                       ))}
@@ -516,13 +663,19 @@ function MechPreview({ data }: { data: ResumeData }) {
       <div className="bg-slate-800 text-white px-8 py-8 flex items-center gap-6">
         <div className="w-28 h-28 rounded-full overflow-hidden border-4 border-white/10 bg-slate-700 flex items-center justify-center shrink-0">
           {data.personal.photo ? (
-            <img src={data.personal.photo} alt={data.personal.name || 'Profile photo'} className="w-full h-full object-cover" />
+            <img
+              src={data.personal.photo}
+              alt={data.personal.name || 'Profile photo'}
+              className="w-full h-full object-cover"
+            />
           ) : (
             <User className="w-12 h-12 text-slate-400" />
           )}
         </div>
         <div>
-          <h1 className="text-3xl font-bold tracking-wide uppercase">{data.personal.name || 'Your Name'}</h1>
+          <h1 className="text-3xl font-bold tracking-wide uppercase">
+            {data.personal.name || 'Your Name'}
+          </h1>
           <p className="text-sm text-cyan-300 tracking-[0.3em] uppercase mt-2">
             {data.personal.title || 'Professional Title'}
           </p>
@@ -531,9 +684,13 @@ function MechPreview({ data }: { data: ResumeData }) {
 
       <div className="flex">
         <div className="w-[32%] bg-slate-100 p-6 space-y-6">
-          {(data.personal.phone || data.personal.email || data.personal.location) && (
+          {(data.personal.phone ||
+            data.personal.email ||
+            data.personal.location) && (
             <div>
-              <h2 className="text-sm font-bold tracking-widest text-slate-800 mb-3">CONTACT</h2>
+              <h2 className="text-sm font-bold tracking-widest text-slate-800 mb-3">
+                CONTACT
+              </h2>
               <div className="space-y-2 text-xs text-slate-600">
                 {data.personal.phone && (
                   <div className="flex items-start gap-2">
@@ -559,7 +716,9 @@ function MechPreview({ data }: { data: ResumeData }) {
 
           {data.skills.length > 0 && (
             <div>
-              <h2 className="text-sm font-bold tracking-widest text-slate-800 mb-3">SKILLS</h2>
+              <h2 className="text-sm font-bold tracking-widest text-slate-800 mb-3">
+                SKILLS
+              </h2>
               <ul className="space-y-1.5 text-xs text-slate-600">
                 {data.skills.map((skill, i) => (
                   <li key={i} className="flex items-center gap-2">
@@ -573,7 +732,9 @@ function MechPreview({ data }: { data: ResumeData }) {
 
           {data.languages.length > 0 && (
             <div>
-              <h2 className="text-sm font-bold tracking-widest text-slate-800 mb-3">LANGUAGES</h2>
+              <h2 className="text-sm font-bold tracking-widest text-slate-800 mb-3">
+                LANGUAGES
+              </h2>
               <ul className="space-y-1.5 text-xs text-slate-600">
                 {data.languages.map((lang, i) => (
                   <li key={i} className="flex items-center gap-2">
@@ -591,10 +752,14 @@ function MechPreview({ data }: { data: ResumeData }) {
             <div>
               <div className="flex items-center gap-3 mb-3">
                 <span className="w-3 h-3 rounded-full bg-slate-800 shrink-0" />
-                <h2 className="text-sm font-bold tracking-widest text-slate-800">PROFILE</h2>
+                <h2 className="text-sm font-bold tracking-widest text-slate-800">
+                  PROFILE
+                </h2>
               </div>
               <div className="border-t border-slate-200 pt-3 pl-6">
-                <p className="text-sm text-slate-600 leading-relaxed">{data.personal.summary}</p>
+                <p className="text-sm text-slate-600 leading-relaxed">
+                  {data.personal.summary}
+                </p>
               </div>
             </div>
           )}
@@ -603,7 +768,9 @@ function MechPreview({ data }: { data: ResumeData }) {
             <div>
               <div className="flex items-center gap-3 mb-4">
                 <span className="w-3 h-3 rounded-full bg-slate-800 shrink-0" />
-                <h2 className="text-sm font-bold tracking-widest text-slate-800">WORK EXPERIENCE</h2>
+                <h2 className="text-sm font-bold tracking-widest text-slate-800">
+                  WORK EXPERIENCE
+                </h2>
               </div>
               <div className="border-t border-slate-200 pt-4 pl-6 relative">
                 <div className="absolute left-[7px] top-4 bottom-4 w-px bg-slate-200" />
@@ -611,10 +778,20 @@ function MechPreview({ data }: { data: ResumeData }) {
                   {data.experience.map((exp, i) => (
                     <div key={i} className="relative pl-6">
                       <span className="absolute left-0 top-1 w-2.5 h-2.5 rounded-full border-2 border-slate-800 bg-white" />
-                      <h3 className="text-sm font-semibold text-slate-900">{exp.title || 'Position'}</h3>
-                      <p className="text-xs text-cyan-700 font-medium">{exp.company}</p>
-                      <p className="text-xs text-slate-400 mt-0.5">{exp.period}</p>
-                      {exp.desc && <p className="text-xs text-slate-600 mt-1.5 leading-relaxed">{exp.desc}</p>}
+                      <h3 className="text-sm font-semibold text-slate-900">
+                        {exp.title || 'Position'}
+                      </h3>
+                      <p className="text-xs text-cyan-700 font-medium">
+                        {exp.company}
+                      </p>
+                      <p className="text-xs text-slate-400 mt-0.5">
+                        {exp.period}
+                      </p>
+                      {exp.desc && (
+                        <p className="text-xs text-slate-600 mt-1.5 leading-relaxed">
+                          {exp.desc}
+                        </p>
+                      )}
                     </div>
                   ))}
                 </div>
@@ -626,7 +803,9 @@ function MechPreview({ data }: { data: ResumeData }) {
             <div>
               <div className="flex items-center gap-3 mb-4">
                 <span className="w-3 h-3 rounded-full bg-slate-800 shrink-0" />
-                <h2 className="text-sm font-bold tracking-widest text-slate-800">EDUCATION</h2>
+                <h2 className="text-sm font-bold tracking-widest text-slate-800">
+                  EDUCATION
+                </h2>
               </div>
               <div className="border-t border-slate-200 pt-4 pl-6 relative">
                 <div className="absolute left-[7px] top-4 bottom-4 w-px bg-slate-200" />
@@ -634,10 +813,20 @@ function MechPreview({ data }: { data: ResumeData }) {
                   {data.education.map((edu, i) => (
                     <div key={i} className="relative pl-6">
                       <span className="absolute left-0 top-1 w-2.5 h-2.5 rounded-full border-2 border-slate-800 bg-white" />
-                      <h3 className="text-sm font-semibold text-slate-900">{edu.title || 'Degree'}</h3>
-                      <p className="text-xs text-cyan-700 font-medium">{edu.company}</p>
-                      <p className="text-xs text-slate-400 mt-0.5">{edu.period}</p>
-                      {edu.desc && <p className="text-xs text-slate-600 mt-1.5 leading-relaxed">{edu.desc}</p>}
+                      <h3 className="text-sm font-semibold text-slate-900">
+                        {edu.title || 'Degree'}
+                      </h3>
+                      <p className="text-xs text-cyan-700 font-medium">
+                        {edu.company}
+                      </p>
+                      <p className="text-xs text-slate-400 mt-0.5">
+                        {edu.period}
+                      </p>
+                      {edu.desc && (
+                        <p className="text-xs text-slate-600 mt-1.5 leading-relaxed">
+                          {edu.desc}
+                        </p>
+                      )}
                     </div>
                   ))}
                 </div>
@@ -650,7 +839,10 @@ function MechPreview({ data }: { data: ResumeData }) {
   )
 }
 
-export const previewComponents: Record<ResumeLayout, React.ComponentType<{ data: ResumeData }>> = {
+export const previewComponents: Record<
+  ResumeLayout,
+  React.ComponentType<{ data: ResumeData }>
+> = {
   classic: ClassicPreview,
   modern: ModernPreview,
   minimal: MinimalPreview,
@@ -706,7 +898,10 @@ export function ResumePreview({ data, layout }: ResumePreviewProps) {
       <div ref={measureRef} className="w-full flex justify-center">
         <div
           className="relative shrink-0"
-          style={{ width: PREVIEW_WIDTH * scale, height: contentHeight * scale }}
+          style={{
+            width: PREVIEW_WIDTH * scale,
+            height: contentHeight * scale,
+          }}
         >
           <div
             ref={contentRef}

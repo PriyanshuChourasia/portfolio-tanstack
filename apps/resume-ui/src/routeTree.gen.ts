@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as ResumeToPortfolioRouteImport } from './routes/resume-to-portfolio'
 import { Route as ResumeRouteImport } from './routes/resume'
 import { Route as PortfolioRouteImport } from './routes/portfolio'
+import { Route as PhotofolioRouteImport } from './routes/photofolio'
 import { Route as ClassicRouteImport } from './routes/classic'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as PolandFrontendRouteImport } from './routes/poland/frontend'
@@ -31,6 +32,11 @@ const ResumeRoute = ResumeRouteImport.update({
 const PortfolioRoute = PortfolioRouteImport.update({
   id: '/portfolio',
   path: '/portfolio',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PhotofolioRoute = PhotofolioRouteImport.update({
+  id: '/photofolio',
+  path: '/photofolio',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ClassicRoute = ClassicRouteImport.update({
@@ -62,6 +68,7 @@ const GermanyBackendRoute = GermanyBackendRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/classic': typeof ClassicRoute
+  '/photofolio': typeof PhotofolioRoute
   '/portfolio': typeof PortfolioRoute
   '/resume': typeof ResumeRoute
   '/resume-to-portfolio': typeof ResumeToPortfolioRoute
@@ -72,6 +79,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/classic': typeof ClassicRoute
+  '/photofolio': typeof PhotofolioRoute
   '/portfolio': typeof PortfolioRoute
   '/resume': typeof ResumeRoute
   '/resume-to-portfolio': typeof ResumeToPortfolioRoute
@@ -83,6 +91,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/classic': typeof ClassicRoute
+  '/photofolio': typeof PhotofolioRoute
   '/portfolio': typeof PortfolioRoute
   '/resume': typeof ResumeRoute
   '/resume-to-portfolio': typeof ResumeToPortfolioRoute
@@ -95,6 +104,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/classic'
+    | '/photofolio'
     | '/portfolio'
     | '/resume'
     | '/resume-to-portfolio'
@@ -105,6 +115,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/classic'
+    | '/photofolio'
     | '/portfolio'
     | '/resume'
     | '/resume-to-portfolio'
@@ -115,6 +126,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/classic'
+    | '/photofolio'
     | '/portfolio'
     | '/resume'
     | '/resume-to-portfolio'
@@ -126,6 +138,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ClassicRoute: typeof ClassicRoute
+  PhotofolioRoute: typeof PhotofolioRoute
   PortfolioRoute: typeof PortfolioRoute
   ResumeRoute: typeof ResumeRoute
   ResumeToPortfolioRoute: typeof ResumeToPortfolioRoute
@@ -155,6 +168,13 @@ declare module '@tanstack/react-router' {
       path: '/portfolio'
       fullPath: '/portfolio'
       preLoaderRoute: typeof PortfolioRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/photofolio': {
+      id: '/photofolio'
+      path: '/photofolio'
+      fullPath: '/photofolio'
+      preLoaderRoute: typeof PhotofolioRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/classic': {
@@ -198,6 +218,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ClassicRoute: ClassicRoute,
+  PhotofolioRoute: PhotofolioRoute,
   PortfolioRoute: PortfolioRoute,
   ResumeRoute: ResumeRoute,
   ResumeToPortfolioRoute: ResumeToPortfolioRoute,

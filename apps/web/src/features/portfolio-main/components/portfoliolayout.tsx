@@ -1,4 +1,3 @@
-  
 import HomePage from './HomePage'
 
 export function PortfolioLayout() {

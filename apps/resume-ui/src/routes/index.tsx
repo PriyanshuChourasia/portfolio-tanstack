@@ -81,6 +81,10 @@ function FloatingNav() {
     { label: 'How It Works', href: '#how-it-works' },
   ]
 
+  const externalLinks = [
+    { label: 'Photofolio', to: '/photofolio' as const },
+  ]
+
   return (
     <motion.nav
       initial={{ y: -80, opacity: 0 }}
@@ -101,6 +105,12 @@ function FloatingNav() {
             <a key={l.label} href={l.href} className="rounded-full px-3 py-1.5 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground">
               {l.label}
             </a>
+          ))}
+          {externalLinks.map((l) => (
+            <Link key={l.label} to={l.to} className="group relative rounded-full px-3 py-1.5 text-sm font-semibold text-blue-600 transition-colors hover:text-blue-500 dark:text-blue-400 dark:hover:text-blue-300">
+              <span className="relative z-10">{l.label}</span>
+              <span className="absolute inset-x-1 -bottom-px h-px bg-gradient-to-r from-blue-600 via-indigo-500 to-violet-500 opacity-60 transition-opacity group-hover:opacity-100 dark:from-blue-400 dark:via-indigo-400 dark:to-violet-400" />
+            </Link>
           ))}
         </div>
 
@@ -139,6 +149,11 @@ function FloatingNav() {
               <a key={l.label} href={l.href} onClick={() => setMobileOpen(false)} className="block rounded-xl px-4 py-3 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground">
                 {l.label}
               </a>
+            ))}
+            {externalLinks.map((l) => (
+              <Link key={l.label} to={l.to} onClick={() => setMobileOpen(false)} className="block rounded-xl px-4 py-3 text-sm font-semibold text-blue-600 transition-colors hover:bg-blue-500/10 hover:text-blue-500 dark:text-blue-400 dark:hover:bg-blue-400/10 dark:hover:text-blue-300">
+                {l.label}
+              </Link>
             ))}
             <div className="my-1 h-px bg-border/60" />
             <Button asChild className="w-full rounded-xl">

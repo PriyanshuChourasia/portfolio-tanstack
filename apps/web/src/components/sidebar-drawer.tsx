@@ -1,8 +1,16 @@
-" "
-import { AtSign, Briefcase, FileText, MessageSquare, Search, User, X } from "lucide-react"
-import { EditableLabel } from "./editable-label"
-import { useSectionLabels } from "@/hooks/use-section-labels"
-import { cn } from "@/lib/utils"
+' '
+import {
+  AtSign,
+  Briefcase,
+  FileText,
+  MessageSquare,
+  Search,
+  User,
+  X,
+} from 'lucide-react'
+import { EditableLabel } from './editable-label'
+import { useSectionLabels } from '@/hooks/use-section-labels'
+import { cn } from '@/lib/utils'
 
 interface SidebarDrawerProps {
   isOpen: boolean
@@ -11,10 +19,15 @@ interface SidebarDrawerProps {
   onTabChange?: (tab: string) => void
 }
 
-const NAV_KEYS = ["ABOUT", "RESUME", "WORKS", "BLOG", "CONTACT"] as const
+const NAV_KEYS = ['ABOUT', 'RESUME', 'WORKS', 'BLOG', 'CONTACT'] as const
 const NAV_ICONS = [User, FileText, Briefcase, MessageSquare, AtSign]
 
-export function SidebarDrawer({ isOpen, onClose, activeTab = 'ABOUT', onTabChange }: SidebarDrawerProps) {
+export function SidebarDrawer({
+  isOpen,
+  onClose,
+  activeTab = 'ABOUT',
+  onTabChange,
+}: SidebarDrawerProps) {
   const { getLabel, updateLabel } = useSectionLabels()
 
   const navItems = NAV_KEYS.map((key, i) => ({
@@ -24,26 +37,26 @@ export function SidebarDrawer({ isOpen, onClose, activeTab = 'ABOUT', onTabChang
   }))
 
   const categories = [
-    { name: "Design", count: 2 },
-    { name: "Mobile", count: 1 },
-    { name: "Music", count: 2 },
-    { name: "Video", count: 1 },
+    { name: 'Design', count: 2 },
+    { name: 'Mobile', count: 1 },
+    { name: 'Music', count: 2 },
+    { name: 'Video', count: 1 },
   ]
 
   const tags = [
-    { name: "jekyll", count: 1 },
-    { name: "app", count: 1 },
-    { name: "mobile", count: 1 },
-    { name: "code", count: 1 },
-    { name: "rock", count: 1 },
-    { name: "Jekyll", count: 1 },
+    { name: 'jekyll', count: 1 },
+    { name: 'app', count: 1 },
+    { name: 'mobile', count: 1 },
+    { name: 'code', count: 1 },
+    { name: 'rock', count: 1 },
+    { name: 'Jekyll', count: 1 },
   ]
 
   const latestPosts = [
-    "Welcome to Jekyll!",
-    "By spite about do of do allow blush",
-    "Two Before Arrow Not Relied",
-    "Design in Mobile Application",
+    'Welcome to Jekyll!',
+    'By spite about do of do allow blush',
+    'Two Before Arrow Not Relied',
+    'Design in Mobile Application',
   ]
 
   const handleTabChange = (tab: string) => {
@@ -57,16 +70,16 @@ export function SidebarDrawer({ isOpen, onClose, activeTab = 'ABOUT', onTabChang
     <>
       <div
         className={cn(
-          "fixed inset-0 bg-black/60 backdrop-blur-sm z-[60] transition-opacity duration-300 pointer-events-none",
-          isOpen ? "opacity-100 pointer-events-auto" : "opacity-0",
+          'fixed inset-0 bg-black/60 backdrop-blur-sm z-[60] transition-opacity duration-300 pointer-events-none',
+          isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0',
         )}
         onClick={onClose}
       />
 
       <div
         className={cn(
-          "fixed top-0 left-0 h-full w-[280px] sm:w-[300px] bg-white dark:bg-gradient-to-b dark:from-[#1a2332] dark:to-[#141b27] z-[70] transition-transform duration-300 transform overflow-y-auto custom-scrollbar border-r border-slate-200 dark:border-[#2a3f5f]",
-          isOpen ? "translate-x-0" : "-translate-x-full",
+          'fixed top-0 left-0 h-full w-[280px] sm:w-[300px] bg-white dark:bg-gradient-to-b dark:from-[#1a2332] dark:to-[#141b27] z-[70] transition-transform duration-300 transform overflow-y-auto custom-scrollbar border-r border-slate-200 dark:border-[#2a3f5f]',
+          isOpen ? 'translate-x-0' : '-translate-x-full',
         )}
       >
         <button
@@ -88,10 +101,10 @@ export function SidebarDrawer({ isOpen, onClose, activeTab = 'ABOUT', onTabChang
                   key={item.key}
                   onClick={() => handleTabChange(item.key)}
                   className={cn(
-                    "w-full flex items-center gap-3 px-3 py-2 rounded-lg transition-all duration-300",
-                    activeTab === item.key 
-                      ? "bg-gradient-to-r from-[#00d4ff]/20 to-[#0ea5e9]/20 border border-[#00d4ff]/50 text-[#00d4ff]" 
-                      : "text-muted-foreground hover:text-[#00d4ff] hover:bg-[#00d4ff]/10 border border-transparent hover:border-[#00d4ff]/30"
+                    'w-full flex items-center gap-3 px-3 py-2 rounded-lg transition-all duration-300',
+                    activeTab === item.key
+                      ? 'bg-gradient-to-r from-[#00d4ff]/20 to-[#0ea5e9]/20 border border-[#00d4ff]/50 text-[#00d4ff]'
+                      : 'text-muted-foreground hover:text-[#00d4ff] hover:bg-[#00d4ff]/10 border border-transparent hover:border-[#00d4ff]/30',
                   )}
                 >
                   <item.icon className="w-4 h-4" />
@@ -146,7 +159,9 @@ export function SidebarDrawer({ isOpen, onClose, activeTab = 'ABOUT', onTabChang
                   className="flex justify-between items-center text-xs sm:text-xs text-muted-foreground hover:text-[#00d4ff] cursor-pointer transition-all border-b border-[#2a3f5f] pb-2 sm:pb-3 last:border-0 hover:pl-1"
                 >
                   <span>{cat.name}</span>
-                  <span className="text-[10px] text-slate-400/60 dark:text-muted-foreground/60 bg-slate-100 dark:bg-[#0f1419]/50 px-2 py-1 rounded">({cat.count})</span>
+                  <span className="text-[10px] text-slate-400/60 dark:text-muted-foreground/60 bg-slate-100 dark:bg-[#0f1419]/50 px-2 py-1 rounded">
+                    ({cat.count})
+                  </span>
                 </li>
               ))}
             </ul>
@@ -165,7 +180,9 @@ export function SidebarDrawer({ isOpen, onClose, activeTab = 'ABOUT', onTabChang
                   className="flex justify-between items-center text-xs sm:text-xs text-muted-foreground hover:text-[#00d4ff] cursor-pointer transition-all border-b border-[#2a3f5f] pb-2 sm:pb-3 last:border-0 hover:pl-1"
                 >
                   <span>{tag.name}</span>
-                  <span className="text-[10px] text-slate-400/60 dark:text-muted-foreground/60 bg-slate-100 dark:bg-[#0f1419]/50 px-2 py-1 rounded">({tag.count})</span>
+                  <span className="text-[10px] text-slate-400/60 dark:text-muted-foreground/60 bg-slate-100 dark:bg-[#0f1419]/50 px-2 py-1 rounded">
+                    ({tag.count})
+                  </span>
                 </li>
               ))}
             </ul>

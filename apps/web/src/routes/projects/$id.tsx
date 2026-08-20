@@ -2,7 +2,13 @@ import { createFileRoute } from '@tanstack/react-router'
 import { ProjectDetailPage } from '@/features/works/components/project-detail-page'
 import { JsonLd } from '@/components/JsonLd'
 import worksData from '@/data/works-data.json'
-import { AUTHOR_NAME, DEFAULT_IMAGE, SITE_URL, absoluteUrl, buildMeta } from '@/lib/seo'
+import {
+  AUTHOR_NAME,
+  DEFAULT_IMAGE,
+  SITE_URL,
+  absoluteUrl,
+  buildMeta,
+} from '@/lib/seo'
 
 export const Route = createFileRoute('/projects/$id')({
   head: ({ params }) => {

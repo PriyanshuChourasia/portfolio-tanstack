@@ -7,7 +7,12 @@ interface ScrollCircularProgressProps {
   color: string
 }
 
-export function ScrollCircularProgress({ percentage, label, progress, color }: ScrollCircularProgressProps) {
+export function ScrollCircularProgress({
+  percentage,
+  label,
+  progress,
+  color,
+}: ScrollCircularProgressProps) {
   const clamp01 = (v: number) => Math.max(0, Math.min(1, v))
 
   const radius = 58
@@ -20,14 +25,20 @@ export function ScrollCircularProgress({ percentage, label, progress, color }: S
   })
 
   return (
-    <motion.div className="group flex w-full flex-col items-center gap-4" whileHover={{ scale: 1.05 }}>
+    <motion.div
+      className="group flex w-full flex-col items-center gap-4"
+      whileHover={{ scale: 1.05 }}
+    >
       {/* Fluid circle so the fixed 140px ring never overflows narrow screens */}
       <div className="relative aspect-square w-full max-w-[140px]">
         <div
           className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 blur-xl transition-opacity duration-300"
           style={{ backgroundColor: color }}
         />
-        <svg viewBox="0 0 140 140" className="relative h-full w-full -rotate-90">
+        <svg
+          viewBox="0 0 140 140"
+          className="relative h-full w-full -rotate-90"
+        >
           <circle
             cx="70"
             cy="70"
@@ -44,7 +55,11 @@ export function ScrollCircularProgress({ percentage, label, progress, color }: S
             strokeWidth="6"
             strokeDasharray={circumference}
             strokeLinecap="round"
-            style={{ strokeDashoffset: dashOffset, stroke: color, filter: `drop-shadow(0 0 12px ${color}59)` }}
+            style={{
+              strokeDashoffset: dashOffset,
+              stroke: color,
+              filter: `drop-shadow(0 0 12px ${color}59)`,
+            }}
           />
         </svg>
         <div className="absolute inset-0 flex items-center justify-center">

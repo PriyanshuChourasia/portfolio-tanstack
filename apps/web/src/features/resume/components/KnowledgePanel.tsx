@@ -2,7 +2,7 @@ import { Trophy } from 'lucide-react'
 import { motion } from 'framer-motion'
 
 interface KnowledgePanelProps {
-  items: string[]
+  items: Array<string>
 }
 
 export function KnowledgePanel({ items }: KnowledgePanelProps) {
@@ -14,7 +14,9 @@ export function KnowledgePanel({ items }: KnowledgePanelProps) {
     >
       <div className="flex items-center gap-3 mb-6">
         <Trophy className="w-5 h-5 text-amber-600 dark:text-amber-400" />
-        <h3 className="text-base font-bold text-slate-900 dark:text-white">Knowledge</h3>
+        <h3 className="text-base font-bold text-slate-900 dark:text-white">
+          Knowledge
+        </h3>
       </div>
       <div className="flex flex-wrap gap-3">
         {items.map((item, i) => (

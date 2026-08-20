@@ -112,8 +112,8 @@ export function TemplateShowcase({ onSelect }: TemplateShowcaseProps) {
           className="relative max-w-3xl mx-auto"
         >
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-xs font-medium mb-6">
-            <Sparkles className="w-3.5 h-3.5" />
-            5 Professionally Designed Templates
+            <Sparkles className="w-3.5 h-3.5" />5 Professionally Designed
+            Templates
           </div>
           <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-4">
             Templates That Get You{' '}
@@ -122,8 +122,9 @@ export function TemplateShowcase({ onSelect }: TemplateShowcaseProps) {
             </span>
           </h1>
           <p className="text-lg text-slate-400 max-w-xl mx-auto">
-            Each template is optimized for ATS scanners and designed to make your experience stand out.
-            Pick one, customize it, and land your dream job.
+            Each template is optimized for ATS scanners and designed to make
+            your experience stand out. Pick one, customize it, and land your
+            dream job.
           </p>
         </motion.div>
       </div>
@@ -183,7 +184,9 @@ export function TemplateShowcase({ onSelect }: TemplateShowcaseProps) {
                   {/* Info */}
                   <div className="p-5">
                     <div className="flex items-center justify-between mb-1">
-                      <h3 className="text-lg font-semibold text-white">{tpl.label}</h3>
+                      <h3 className="text-lg font-semibold text-white">
+                        {tpl.label}
+                      </h3>
                       <span className="text-[11px] px-2.5 py-0.5 rounded-full bg-slate-800 text-slate-400 border border-slate-700">
                         {tpl.bestFor}
                       </span>

@@ -12,13 +12,7 @@
       "content": "<p><b class=\"text-lg font-bold\">Why another ERP module?</b>. OPD ERP handles the clinical side of the CodyMitra suite — registration, queues, consultations, pharmacy. Money still needed a home. <b>Account ERP</b> is the accounting and finance module for the same product family: ledgers, invoicing, expense tracking, and financial reporting that the other apps in the suite can eventually plug into.</p> </br> <p class=\"py-4\">It's a standalone repo right now, deliberately scoped small so I can get the core accounting primitives — chart of accounts, journal entries, double-entry balancing — right before wiring it into OPD ERP's billing data or CodyERP's restaurant POS.</p> </br> <p class=\"py-4\"><b class=\"text-lg font-bold\">What's being built</b></p> <ul class=\"list-disc pl-6 py-2\"><li><b>Chart of accounts</b> — configurable account hierarchy per business type.</li><li><b>Journal entries</b> — double-entry bookkeeping with automatic balancing checks.</li><li><b>Invoicing</b> — generate, send, and track invoice status.</li><li><b>Reports</b> — P&amp;L, balance sheet, and cash flow rolled up from the ledger.</li></ul> </br> <p class=\"py-4\">Same stack discipline as the rest of the suite — TypeScript end to end, Postgres as the source of truth, and a schema I'm trying hard not to have to migrate twice.</p>",
       "codeSnippet": "function assertBalanced(entries) {\n  const total = entries.reduce(\n    (sum, e) => sum + (e.type === 'DEBIT' ? e.amount : -e.amount),\n    0,\n  )\n  if (total !== 0) throw new Error('Journal entry is not balanced')\n}",
       "footer": "<p>Account ERP is in active development — code and progress live on <a href=\"https://github.com/PriyanshuChourasia/account_erp\" target=\"_blank\" rel=\"noopener noreferrer\" className=\"text-primary\">GitHub</a>.</p>",
-      "tags": [
-        "ERP",
-        "Accounting",
-        "Finance",
-        "TypeScript",
-        "PostgreSQL"
-      ]
+      "tags": ["ERP", "Accounting", "Finance", "TypeScript", "PostgreSQL"]
     },
     {
       "id": 2,
@@ -32,14 +26,7 @@
       "content": "<p><b class=\"text-lg font-bold\">One system, whole patient journey</b>. OPD ERP is a full-stack clinic and hospital management system that digitizes the complete patient journey — from walk-in registration and appointment booking to live token queues, doctor consultation, smart prescriptions, POS billing, and pharmacy dispensing — in a single application.</p> </br> <p class=\"py-4\">No context-switching between five different tools. Reception, doctors, nurses, and the pharmacy counter all read and write the same state.</p> </br> <p class=\"py-4\"><b class=\"text-lg font-bold\">The journey</b></p> <p class=\"py-4\">Walk-in / Scheduled → Registration → Appointment → Token Queue → Consultation → Prescription → Billing / POS → Pharmacy Dispensing.</p> </br> <p class=\"py-4\"><b class=\"text-lg font-bold\">Five role-native interfaces</b></p> <ul class=\"list-disc pl-6 py-2\"><li><b>Admin</b> — users, roles &amp; permissions, master data, audit logs.</li><li><b>Doctor</b> — vitals, diagnosis, smart prescriptions and order generation.</li><li><b>Receptionist</b> — registration, appointments, and the live waiting-room token board.</li><li><b>Pharmacist</b> — a full-width POS terminal for dispensing, billing, and receipts.</li><li><b>Nurse</b> — token flow and vitals capture between consultation and pharmacy.</li></ul> </br> <p class=\"py-4\"><b class=\"text-lg font-bold\">Under the hood</b></p> <p class=\"py-4\">NestJS 11, Prisma 5, and PostgreSQL on the backend; React 19, TanStack Router/Query, Redux Toolkit, and Tailwind CSS v4 on the frontend — all inside a Turborepo monorepo with a shared UI package. Every endpoint sits behind granular resource:action RBAC, with JWT refresh-token rotation and theft detection.</p> </br> <p class=\"py-4\">The token queue was the fun part — it has to stay real-time and consistent across reception, nurses, and doctors, transitioning through WAITING → IN_PROGRESS → COMPLETED / SKIPPED / NO_SHOW without anyone refreshing a page.</p>",
       "codeSnippet": "enum TokenStatus {\n  WAITING\n  IN_PROGRESS\n  COMPLETED\n  SKIPPED\n  NO_SHOW\n}",
       "footer": "<p>OPD ERP is live at <a href=\"https://opd.codymitra.com\" target=\"_blank\" rel=\"noopener noreferrer\" className=\"text-primary\">opd.codymitra.com</a> — part of the same CodyMitra product suite as Account ERP and CodyERP.</p>",
-      "tags": [
-        "ERP",
-        "Healthcare",
-        "NestJS",
-        "PostgreSQL",
-        "React",
-        "RBAC"
-      ]
+      "tags": ["ERP", "Healthcare", "NestJS", "PostgreSQL", "React", "RBAC"]
     },
     {
       "id": 1,
@@ -53,12 +40,7 @@
       "content": "<p><b class=\"text-lg font-bold\">ERP, before I built one</b>. Before OPD ERP, 'ERP' was just a word from business-school slides — Enterprise Resource Planning, some big SAP-shaped thing companies bought and complained about. After building two of them, I understand it very differently.</p> </br> <p class=\"py-4\"><b class=\"text-lg font-bold\">It's not one app — it's a shared source of truth</b></p> <p class=\"py-4\">An ERP isn't a CRUD app with more tables. It's several apps — registration, billing, inventory, pharmacy, accounting — that all have to agree on the same state at the same time. The hard part was never the forms; it was making sure a token status change in the queue, a stock decrement in the pharmacy, and a line item in an invoice all stay consistent without three separate services quietly disagreeing.</p> </br> <p class=\"py-4\"><b class=\"text-lg font-bold\">What actually makes it 'enterprise'</b></p> <ul class=\"list-disc pl-6 py-2\"><li><b>Role-native interfaces</b> — a receptionist, a doctor, and a pharmacist should never see the same screen. Each role needs its own workflow, not a shared dashboard with permissions hiding buttons.</li><li><b>Granular access control</b> — resource:action permissions on every endpoint, not a single admin/user toggle.</li><li><b>Auditability</b> — every state change (a prescription edit, a refund, a journal entry) needs a trail, because someone will eventually ask 'who changed this and when.'</li><li><b>Module boundaries that don't leak</b> — Account ERP has to be able to read OPD ERP's billing data someday without becoming tightly coupled to it.</li></ul> </br> <p class=\"py-4\"><b class=\"text-lg font-bold\">What I got wrong at first</b></p> <p class=\"py-4\">I started OPD ERP thinking the schema was the whole job. It's maybe a third of it. The rest is workflow — modelling a token that moves through five real-world states, or a prescription that can be partially dispensed and later returned. That's where most of my redesigns happened, not in the database.</p> </br> <p class=\"py-4\">Account ERP is where I'm applying that lesson from day one — smaller scope, double-entry correctness before features, and a schema I'm trying not to migrate twice.</p>",
       "codeSnippet": "if (!user.can('prescription:edit')) {\n  throw new ForbiddenException()\n}",
       "footer": "<p>Case studies: OPD ERP Project and Account ERP Project.</p>",
-      "tags": [
-        "ERP",
-        "Software Architecture",
-        "Learning",
-        "RBAC"
-      ]
+      "tags": ["ERP", "Software Architecture", "Learning", "RBAC"]
     }
   ]
 }

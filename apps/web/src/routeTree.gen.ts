@@ -9,13 +9,21 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as BuilderRouteImport } from './routes/builder'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ProjectsIndexRouteImport } from './routes/projects/index'
 import { Route as ResumeTemplateRouteImport } from './routes/resume/template'
 import { Route as ProjectsIdRouteImport } from './routes/projects/$id'
+import { Route as PortfolioNewRouteImport } from './routes/portfolio/new'
+import { Route as PortfolioIdRouteImport } from './routes/portfolio/$id'
 import { Route as BlogWriteRouteImport } from './routes/blog/write'
 import { Route as BlogIdRouteImport } from './routes/blog/$id'
 
+const BuilderRoute = BuilderRouteImport.update({
+  id: '/builder',
+  path: '/builder',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -36,6 +44,16 @@ const ProjectsIdRoute = ProjectsIdRouteImport.update({
   path: '/projects/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PortfolioNewRoute = PortfolioNewRouteImport.update({
+  id: '/portfolio/new',
+  path: '/portfolio/new',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PortfolioIdRoute = PortfolioIdRouteImport.update({
+  id: '/portfolio/$id',
+  path: '/portfolio/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const BlogWriteRoute = BlogWriteRouteImport.update({
   id: '/blog/write',
   path: '/blog/write',
@@ -49,16 +67,22 @@ const BlogIdRoute = BlogIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/builder': typeof BuilderRoute
   '/blog/$id': typeof BlogIdRoute
   '/blog/write': typeof BlogWriteRoute
+  '/portfolio/$id': typeof PortfolioIdRoute
+  '/portfolio/new': typeof PortfolioNewRoute
   '/projects/$id': typeof ProjectsIdRoute
   '/resume/template': typeof ResumeTemplateRoute
   '/projects/': typeof ProjectsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/builder': typeof BuilderRoute
   '/blog/$id': typeof BlogIdRoute
   '/blog/write': typeof BlogWriteRoute
+  '/portfolio/$id': typeof PortfolioIdRoute
+  '/portfolio/new': typeof PortfolioNewRoute
   '/projects/$id': typeof ProjectsIdRoute
   '/resume/template': typeof ResumeTemplateRoute
   '/projects': typeof ProjectsIndexRoute
@@ -66,8 +90,11 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/builder': typeof BuilderRoute
   '/blog/$id': typeof BlogIdRoute
   '/blog/write': typeof BlogWriteRoute
+  '/portfolio/$id': typeof PortfolioIdRoute
+  '/portfolio/new': typeof PortfolioNewRoute
   '/projects/$id': typeof ProjectsIdRoute
   '/resume/template': typeof ResumeTemplateRoute
   '/projects/': typeof ProjectsIndexRoute
@@ -76,24 +103,33 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/builder'
     | '/blog/$id'
     | '/blog/write'
+    | '/portfolio/$id'
+    | '/portfolio/new'
     | '/projects/$id'
     | '/resume/template'
     | '/projects/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/builder'
     | '/blog/$id'
     | '/blog/write'
+    | '/portfolio/$id'
+    | '/portfolio/new'
     | '/projects/$id'
     | '/resume/template'
     | '/projects'
   id:
     | '__root__'
     | '/'
+    | '/builder'
     | '/blog/$id'
     | '/blog/write'
+    | '/portfolio/$id'
+    | '/portfolio/new'
     | '/projects/$id'
     | '/resume/template'
     | '/projects/'
@@ -101,8 +137,11 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  BuilderRoute: typeof BuilderRoute
   BlogIdRoute: typeof BlogIdRoute
   BlogWriteRoute: typeof BlogWriteRoute
+  PortfolioIdRoute: typeof PortfolioIdRoute
+  PortfolioNewRoute: typeof PortfolioNewRoute
   ProjectsIdRoute: typeof ProjectsIdRoute
   ResumeTemplateRoute: typeof ResumeTemplateRoute
   ProjectsIndexRoute: typeof ProjectsIndexRoute
@@ -110,6 +149,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/builder': {
+      id: '/builder'
+      path: '/builder'
+      fullPath: '/builder'
+      preLoaderRoute: typeof BuilderRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -138,6 +184,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProjectsIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/portfolio/new': {
+      id: '/portfolio/new'
+      path: '/portfolio/new'
+      fullPath: '/portfolio/new'
+      preLoaderRoute: typeof PortfolioNewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/portfolio/$id': {
+      id: '/portfolio/$id'
+      path: '/portfolio/$id'
+      fullPath: '/portfolio/$id'
+      preLoaderRoute: typeof PortfolioIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/blog/write': {
       id: '/blog/write'
       path: '/blog/write'
@@ -157,8 +217,11 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  BuilderRoute: BuilderRoute,
   BlogIdRoute: BlogIdRoute,
   BlogWriteRoute: BlogWriteRoute,
+  PortfolioIdRoute: PortfolioIdRoute,
+  PortfolioNewRoute: PortfolioNewRoute,
   ProjectsIdRoute: ProjectsIdRoute,
   ResumeTemplateRoute: ResumeTemplateRoute,
   ProjectsIndexRoute: ProjectsIndexRoute,

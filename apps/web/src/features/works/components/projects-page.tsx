@@ -14,7 +14,15 @@ const CornerMark = ({ className }: { className: string }) => (
   />
 )
 
-function CategoryPill({ label, active, onClick }: { label: string; active: boolean; onClick: () => void }) {
+function CategoryPill({
+  label,
+  active,
+  onClick,
+}: {
+  label: string
+  active: boolean
+  onClick: () => void
+}) {
   return (
     <motion.button
       whileHover={{ scale: 1.05 }}
@@ -31,7 +39,15 @@ function CategoryPill({ label, active, onClick }: { label: string; active: boole
   )
 }
 
-function ProjectCard({ project, index, id }: { project: typeof worksData.items[0]; index: number; id: number }) {
+function ProjectCard({
+  project,
+  index,
+  id,
+}: {
+  project: (typeof worksData.items)[0]
+  index: number
+  id: number
+}) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 30 }}
@@ -105,9 +121,10 @@ export function ProjectsPage() {
 
   const categories = ['All', ...worksData.categories.filter((c) => c !== 'All')]
 
-  const filtered = activeCategory === 'All'
-    ? worksData.items
-    : worksData.items.filter((p) => p.category === activeCategory)
+  const filtered =
+    activeCategory === 'All'
+      ? worksData.items
+      : worksData.items.filter((p) => p.category === activeCategory)
 
   return (
     <div className="h-screen flex flex-col overflow-hidden bg-white dark:bg-slate-950">
@@ -149,7 +166,8 @@ export function ProjectsPage() {
             My Projects
           </h1>
           <p className="text-slate-300 text-sm sm:text-base">
-            A selection of products and systems I&apos;ve built — from web portals to mobile apps and backend services.
+            A selection of products and systems I&apos;ve built — from web
+            portals to mobile apps and backend services.
           </p>
         </motion.div>
       </section>
