@@ -5,10 +5,10 @@ export const Route = createFileRoute('/photofolio')({
   component: PhotofolioPage,
   head: () => ({
     meta: [
-      { title: 'Photofolio — Create Your Personal Photo Gallery' },
+      { title: 'Photofolio — Create Your Visual Portfolio' },
       {
         name: 'description',
-        content: 'Build a stunning personal photo gallery with customizable grids, category filters, and a drag-and-drop canvas editor.',
+        content: 'Build a stunning visual portfolio to showcase your work with customizable layouts and photo management.',
       },
     ],
   }),

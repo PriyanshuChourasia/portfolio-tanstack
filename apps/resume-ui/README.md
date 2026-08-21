@@ -27,7 +27,8 @@ The goal is simple: make the best free resume builder on the web. Not freemium. 
 - **PDF import** — upload an existing PDF resume, parse and populate the form
 - **JSON export / import** — backup and restore resume data
 - **Print support** — one-click print with perfect A4 formatting
-- **Responsive** — works on desktop, laptop, tablet, and mobile
+- **Responsive** — works on desktop, laptop, tablet, and mobile (optimized for 320px to 4K)
+- **Mobile-first** — touch-friendly targets (44px min), iOS safe-area insets, reduced-motion support
 - **Zero tracking** — no analytics, no accounts, no servers, no cookies
 
 ## Tech Stack
@@ -45,6 +46,15 @@ The goal is simple: make the best free resume builder on the web. Not freemium. 
 | PDF | html2canvas + jsPDF (native print fallback) |
 | PDF Parsing | pdf.js |
 | Drag & Drop | @dnd-kit |
+
+## Responsive Design
+
+Every screen in the app is built mobile-first with Tailwind responsive utilities (`sm:`, `md:`, `lg:`, `xl:`):
+
+- **Landing page**: Stacked layouts on mobile, side-by-side grids on desktop. Hero title scales from `text-3xl` to `text-6xl`. CTA buttons go full-width on mobile. Template cards use horizontal snap-scroll on mobile, vertical list on desktop.
+- **Builder**: Toggle between Edit/Preview tabs on mobile (`<md`), side-by-side split view on desktop. Header collapses non-essential actions. Sidebar and accordion items use tighter padding on small screens.
+- **Templates**: Render inside a constrained preview pane (`max-w-[850px]` portrait, `max-w-[1100px]` landscape) with `overflow-x: auto` for any overflow.
+- **Global**: 44px minimum touch targets on mobile, `overflow-x: hidden` to prevent horizontal scroll, `prefers-reduced-motion` to disable animations for accessibility, iOS `safe-area-inset-bottom` for notch devices.
 
 ## Architecture
 
@@ -236,14 +246,15 @@ Dark/light mode uses:
 
 The landing page (`/`) is a 12-section premium design with:
 
-- Floating glass navigation bar
+- Floating glass navigation bar with mobile hamburger menu
 - Hero with animated typing headline + interactive resume mockup with mouse parallax
 - Trusted-by social proof strip
-- Template showcase with 6 gradient cards
-- 9-card feature grid with hover glow effects
-- 4-step "How It Works" timeline
+- Template showcase with 6 gradient cards (horizontal scroll on mobile, sidebar on desktop)
+- 9-card feature grid with hover glow effects (1-col mobile → 3-col desktop)
+- 4-step "How It Works" timeline (2-col tablet → 4-col desktop)
 - Interactive builder preview with tab switching
 - ATS optimization section with animated SVG score ring
+- Resume-to-Portfolio showcase with animated conversion mockup
 - Testimonials with star ratings
 - FAQ accordion with height animations
 - Final CTA with gradient background
@@ -274,7 +285,9 @@ Based on the original product spec, here is what's built and what's next:
 - [x] Undo / redo (100 levels)
 - [x] Multi-resume management
 - [x] Dark / light mode
-- [x] Responsive design (mobile + desktop)
+- [x] Responsive design (mobile + tablet + desktop, 320px–4K)
+- [x] Mobile-first touch targets and iOS safe-area support
+- [x] Reduced-motion accessibility support
 - [x] 14 section forms
 - [x] Section search in sidebar
 - [x] Premium landing page with animations

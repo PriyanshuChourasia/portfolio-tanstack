@@ -138,7 +138,7 @@ export function TemplatePicker({ selectedId, onSelect }: TemplatePickerProps) {
           ref={listRef}
           role="listbox"
           aria-label="Resume templates"
-          className="bg-popover text-popover-foreground absolute left-0 top-full z-50 mt-1 w-60 origin-top-right rounded-lg border shadow-lg dark:shadow-2xl"
+          className="bg-popover text-popover-foreground absolute left-0 top-full z-50 mt-1 w-60 max-w-[calc(100vw-2rem)] origin-top-right rounded-lg border shadow-lg dark:shadow-2xl"
         >
           <div className="max-h-72 overflow-y-auto p-1">
             {resumeTemplates.map((template) => {

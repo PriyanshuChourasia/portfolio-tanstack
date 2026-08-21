@@ -70,7 +70,7 @@ export function BuilderHeader({
       transition={{ duration: 0.45, ease: 'easeOut' }}
       className="sticky top-0 z-30 border-b bg-background/80 backdrop-blur-xl dark:bg-background/90 print:hidden"
     >
-      <div className="flex items-center justify-between gap-1.5 px-3 py-2 sm:gap-2 sm:px-4 sm:py-2.5">
+      <div className="flex items-center justify-between gap-1 px-2 py-1.5 sm:gap-2 sm:px-4 sm:py-2.5">
         {/* Left group: logo + template + resume name + manager */}
         <div className="flex min-w-0 items-center gap-2 sm:gap-3">
           {/* Logo — links to landing page */}

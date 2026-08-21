@@ -210,7 +210,7 @@ export function BuilderLayout() {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.45, ease: 'easeOut' }}
-            className="flex-1 min-h-0 overflow-y-auto p-3 pb-8 sm:p-4 sm:pb-32 md:p-6 md:pb-28 print:overflow-visible print:bg-transparent print:p-0 dark:bg-muted/20 bg-muted/30"
+            className="flex-1 min-h-0 overflow-y-auto p-2 pb-24 sm:p-4 sm:pb-32 md:p-6 md:pb-28 print:overflow-visible print:bg-transparent print:p-0 dark:bg-muted/20 bg-muted/30"
           >
             <div className="flex flex-col items-center gap-4 print:block">
               {/* Collapsed to zero height on screen when paginated (kept in
@@ -262,7 +262,7 @@ export function BuilderLayout() {
       </div>
 
       {/* Mobile toggle bar — visible below md breakpoint */}
-      <div className="fixed inset-x-0 bottom-0 z-50 border-t bg-card/95 backdrop-blur-md md:hidden print:hidden">
+      <div className="fixed inset-x-0 bottom-0 z-50 border-t bg-card/95 backdrop-blur-md md:hidden print:hidden safe-area-inset-bottom">
         <div className="mx-auto flex max-w-xs gap-2 p-2">
           <button
             onClick={() => setMobileTab('edit')}

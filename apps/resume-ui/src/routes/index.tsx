@@ -327,7 +327,7 @@ function ResumeMockup() {
 
 function Hero() {
   return (
-    <section className="relative overflow-hidden pt-32 pb-20 sm:pt-40 sm:pb-28">
+    <section className="relative overflow-hidden pt-28 pb-16 sm:pt-40 sm:pb-28">
       {/* Background effects */}
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute left-1/2 top-0 h-[600px] w-[900px] -translate-x-1/2 rounded-full bg-gradient-to-b from-blue-500/[0.06] to-transparent blur-3xl" />
@@ -337,7 +337,7 @@ function Hero() {
         <div className="absolute inset-0 opacity-[0.03] dark:opacity-[0.05]" style={{ backgroundImage: 'radial-gradient(circle, currentColor 1px, transparent 1px)', backgroundSize: '32px 32px' }} />
       </div>
 
-      <div className="relative mx-auto max-w-7xl px-6">
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
         <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
           {/* Left */}
           <div className="max-w-2xl">
@@ -348,7 +348,7 @@ function Hero() {
               </Badge>
             </motion.div>
 
-            <motion.h1 initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.4, ease }} className="text-4xl font-black leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl xl:text-[4.25rem]">
+            <motion.h1 initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.4, ease }} className="text-3xl font-black leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl xl:text-[4.25rem]">
               Build{' '}
               <AnimatedHeadline />
               <br />
@@ -360,9 +360,9 @@ function Hero() {
               Create ATS-optimized, recruiter-ready resumes in minutes. Choose a template, fill in your story, and download as PDF. Completely free.
             </motion.p>
 
-            <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.7, ease }} className="mt-8 flex flex-wrap items-center gap-3">
+            <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.7, ease }} className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:gap-3">
               <div className="w-full sm:w-auto">
-                <Button asChild size="lg" className="gap-2 rounded-full px-6 text-sm font-semibold shadow-lg shadow-blue-500/20">
+                <Button asChild size="lg" className="w-full gap-2 rounded-full px-6 text-sm font-semibold shadow-lg shadow-blue-500/20 sm:w-auto">
                   <Link to="/resume">
                     Start Building Free
                     <ArrowRight className="size-4" />
@@ -370,7 +370,7 @@ function Hero() {
                 </Button>
               </div>
               <div className="w-full sm:w-auto">
-                <Button asChild variant="outline" size="lg" className="gap-2 rounded-full px-6 text-sm font-semibold">
+                <Button asChild variant="outline" size="lg" className="w-full gap-2 rounded-full px-6 text-sm font-semibold sm:w-auto">
                   <a href="#templates">
                     View Templates
                     <ChevronDown className="size-4" />
@@ -380,7 +380,7 @@ function Hero() {
             </motion.div>
 
             {/* Trust badges */}
-            <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.85, ease }} className="mt-10 flex flex-wrap items-center gap-3 sm:gap-6 text-sm text-muted-foreground">
+            <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.85, ease }} className="mt-8 flex flex-wrap items-center gap-2 text-xs text-muted-foreground sm:gap-6 sm:text-sm">
               <div className="flex items-center gap-1.5">
                 <div className="flex gap-0.5">
                   {[...Array(5)].map((_, i) => <Star key={i} className="size-3.5 fill-amber-400 text-amber-400" />)}
@@ -419,7 +419,7 @@ const TRUSTED = ['Students', 'Developers', 'Designers', 'Engineers', 'Recruiters
 function TrustedBy() {
   return (
     <Reveal className="border-y border-border/40 bg-muted/20 py-12">
-      <div className="mx-auto max-w-7xl px-6">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <p className="mb-8 text-center text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground/60">Trusted by professionals worldwide</p>
         <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-8 lg:gap-12">
           {TRUSTED.map((name, i) => (
@@ -524,8 +524,8 @@ function TemplateShowcase() {
   const [active, setActive] = useState(1) // Modern default
 
   return (
-    <section id="templates" className="py-24 sm:py-32">
-      <div className="mx-auto max-w-7xl px-6">
+    <section id="templates" className="py-16 sm:py-24 md:py-32">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <Reveal className="mx-auto mb-16 max-w-2xl text-center">
           <Badge variant="secondary" className="mb-4 rounded-full px-3 py-1 text-xs">Templates</Badge>
           <h2 className="text-3xl font-black tracking-tight sm:text-4xl lg:text-5xl">Templates That Get You Hired</h2>
@@ -544,7 +544,7 @@ function TemplateShowcase() {
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.04, duration: 0.4, ease }}
                 onClick={() => setActive(i)}
-                className={`group flex snap-start shrink-0 items-center gap-3 rounded-xl border px-3.5 py-3 text-left transition-all lg:shrink ${
+                className={`group flex snap-start shrink-0 items-center gap-3 rounded-xl border px-3 py-3 text-left transition-all lg:w-full lg:shrink ${
                   active === i
                     ? 'border-primary/30 bg-primary/5 shadow-sm'
                     : 'border-transparent hover:border-border/60 hover:bg-muted/30'
@@ -584,13 +584,13 @@ function TemplateShowcase() {
                       <div className="size-2.5 rounded-full bg-yellow-400/80" />
                       <div className="size-2.5 rounded-full bg-green-400/80" />
                     </div>
-                    <div className="ml-2 flex min-w-0 items-center gap-1.5 rounded-lg border border-border/40 bg-background/60 px-2.5 py-1">
+                    <div className="ml-2 hidden min-w-0 items-center gap-1.5 rounded-lg border border-border/40 bg-background/60 px-2.5 py-1 sm:flex">
                       <Lock className="size-3 text-emerald-500" />
                       <span className="overflow-hidden text-ellipsis whitespace-nowrap text-[11px] text-muted-foreground">resumeio.codymitra.com/builder</span>
                     </div>
                   </div>
                   <div className="flex items-center gap-1">
-                    <div className="rounded-md bg-muted/40 px-2 py-1 text-[10px] font-medium text-muted-foreground">
+                    <div className="hidden rounded-md bg-muted/40 px-2 py-1 text-[10px] font-medium text-muted-foreground sm:block">
                       <AnimatePresence mode="wait">
                         <motion.span
                           key={TEMPLATES[active].id}
@@ -607,7 +607,7 @@ function TemplateShowcase() {
                 </div>
 
                 {/* Content — split: sidebar + preview */}
-                <div className="flex min-h-[280px] sm:min-h-[380px] lg:min-h-[440px]">
+                <div className="flex min-h-[240px] sm:min-h-[380px] lg:min-h-[440px]">
                   {/* Sidebar mockup */}
                   <div className="hidden w-48 border-r border-border/40 bg-muted/10 p-3 sm:block lg:w-56">
                     <div className="mb-2 h-7 w-full rounded-lg bg-muted/50" />
@@ -707,8 +707,8 @@ function FeatureCard({ feature, index }: { feature: typeof FEATURES[0]; index: n
 
 function FeatureGrid() {
   return (
-    <section id="features" className="py-24 sm:py-32">
-      <div className="mx-auto max-w-7xl px-6">
+    <section id="features" className="py-16 sm:py-24 md:py-32">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <Reveal className="mx-auto mb-16 max-w-2xl text-center">
           <Badge variant="secondary" className="mb-4 rounded-full px-3 py-1 text-xs">Features</Badge>
           <h2 className="text-3xl font-black tracking-tight sm:text-4xl lg:text-5xl">Everything You Need</h2>
@@ -733,8 +733,8 @@ const STEPS = [
 
 function HowItWorks() {
   return (
-    <section id="how-it-works" className="py-24 sm:py-32">
-      <div className="mx-auto max-w-7xl px-6">
+    <section id="how-it-works" className="py-16 sm:py-24 md:py-32">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <Reveal className="mx-auto mb-16 max-w-2xl text-center">
           <Badge variant="secondary" className="mb-4 rounded-full px-3 py-1 text-xs">How It Works</Badge>
           <h2 className="text-3xl font-black tracking-tight sm:text-4xl lg:text-5xl">Four Steps to Your Dream Job</h2>
@@ -776,8 +776,8 @@ function BuilderPreview() {
   const sections = ['Personal Info', 'Experience', 'Education', 'Skills', 'Projects']
 
   return (
-    <Reveal className="py-24 sm:py-32">
-      <div className="mx-auto max-w-7xl px-6">
+    <Reveal className="py-16 sm:py-24 md:py-32">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <div className="mx-auto mb-16 max-w-2xl text-center">
           <Badge variant="secondary" className="mb-4 rounded-full px-3 py-1 text-xs">Live Preview</Badge>
           <h2 className="text-3xl font-black tracking-tight sm:text-4xl lg:text-5xl">See Every Change, Instantly</h2>
@@ -804,7 +804,7 @@ function BuilderPreview() {
             </div>
           </div>
 
-          <div className="flex min-h-[400px]">
+          <div className="flex min-h-[300px] sm:min-h-[400px]">
             {/* Sidebar mockup */}
             <div className="hidden w-64 border-r border-border/40 bg-muted/10 p-4 sm:block">
               <div className="mb-3 h-8 w-full rounded-lg bg-muted/60" />
@@ -887,8 +887,8 @@ const ATS_CHECKLIST = [
 
 function ATSSection() {
   return (
-    <Reveal className="py-24 sm:py-32">
-      <div className="mx-auto max-w-7xl px-6">
+    <Reveal className="py-16 sm:py-24 md:py-32">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-20">
           {/* Left - illustration */}
           <motion.div
@@ -1010,8 +1010,8 @@ function TestimonialCard({ testimonial, index }: { testimonial: typeof TESTIMONI
 
 function Testimonials() {
   return (
-    <section className="py-24 sm:py-32">
-      <div className="mx-auto max-w-7xl px-6">
+    <section className="py-16 sm:py-24 md:py-32">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <Reveal className="mx-auto mb-16 max-w-2xl text-center">
           <Badge variant="secondary" className="mb-4 rounded-full px-3 py-1 text-xs">Testimonials</Badge>
           <h2 className="text-3xl font-black tracking-tight sm:text-4xl lg:text-5xl">Loved by Professionals</h2>
@@ -1046,8 +1046,8 @@ function FAQItem({ faq, index }: { faq: typeof FAQS[0]; index: number }) {
       transition={{ delay: index * 0.06, duration: 0.4, ease }}
       className="border-b border-border/40"
     >
-      <button type="button" onClick={() => setOpen(!open)} className="flex w-full items-center justify-between py-5 text-left">
-        <span className="text-base font-semibold pr-4">{faq.q}</span>
+      <button type="button" onClick={() => setOpen(!open)} className="flex w-full items-center justify-between py-4 text-left sm:py-5">
+        <span className="text-sm font-semibold pr-4 sm:text-base">{faq.q}</span>
         <motion.div animate={{ rotate: open ? 180 : 0 }} transition={{ duration: 0.2 }}>
           <ChevronDown className="size-5 shrink-0 text-muted-foreground" />
         </motion.div>
@@ -1071,8 +1071,8 @@ function FAQItem({ faq, index }: { faq: typeof FAQS[0]; index: number }) {
 
 function FAQ() {
   return (
-    <section className="py-24 sm:py-32">
-      <div className="mx-auto max-w-3xl px-6">
+    <section className="py-16 sm:py-24 md:py-32">
+      <div className="mx-auto max-w-3xl px-4 sm:px-6">
         <Reveal className="mb-12 text-center">
           <Badge variant="secondary" className="mb-4 rounded-full px-3 py-1 text-xs">FAQ</Badge>
           <h2 className="text-3xl font-black tracking-tight sm:text-4xl">Frequently Asked Questions</h2>
@@ -1120,13 +1120,13 @@ function ResumeToPortfolio() {
   const { x, y } = useMouseParallax(mockupRef, 6)
 
   return (
-    <section className="relative overflow-hidden py-24 sm:py-32">
+    <section className="relative overflow-hidden py-16 sm:py-24 md:py-32">
       {/* Background glow */}
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute left-1/2 top-1/2 h-[600px] w-[800px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-r from-blue-500/[0.04] via-indigo-500/[0.06] to-violet-500/[0.04] blur-3xl" />
       </div>
 
-      <div className="relative mx-auto max-w-7xl px-6">
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
         <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-20">
           {/* Left — copy + features */}
           <div>
@@ -1194,12 +1194,12 @@ function ResumeToPortfolio() {
 
             {/* CTA buttons */}
             <Reveal delay={0.4}>
-              <div className="mt-8 flex flex-wrap gap-3">
-                <Button size="lg" className="gap-2 rounded-full px-6 text-sm font-semibold shadow-lg shadow-indigo-500/20">
+              <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+                <Button size="lg" className="w-full gap-2 rounded-full px-6 text-sm font-semibold shadow-lg shadow-indigo-500/20 sm:w-auto">
                   <span className="inline-block size-1.5 rounded-full bg-indigo-500 animate-pulse" />
-                  Notify Me When It's Available
+                  Notify Me When It&apos;s Available
                 </Button>
-                <Button asChild variant="outline" size="lg" className="gap-2 rounded-full px-6 text-sm font-semibold">
+                <Button asChild variant="outline" size="lg" className="w-full gap-2 rounded-full px-6 text-sm font-semibold sm:w-auto">
                   <Link to="/resume">
                     Continue Building My Resume
                     <ArrowRight className="size-4" />
@@ -1371,10 +1371,10 @@ function ResumeToPortfolio() {
 
 function FinalCTA() {
   return (
-    <section className="py-24 sm:py-32">
-      <div className="mx-auto max-w-7xl px-6">
+    <section className="py-16 sm:py-24 md:py-32">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <Reveal>
-          <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-8 text-center sm:p-12 lg:p-16">
+          <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-6 text-center sm:p-12 lg:p-16">
             {/* Glow effects */}
             <div className="pointer-events-none absolute inset-0">
               <div className="absolute -left-20 -top-20 h-[300px] w-[300px] rounded-full bg-blue-500/20 blur-3xl" />
@@ -1388,7 +1388,7 @@ function FinalCTA() {
               <p className="mx-auto mt-4 max-w-lg text-base text-slate-300/80">
                 Join 10,000+ professionals who built resumes that got them interviews. Start for free — no account needed.
               </p>
-              <Button asChild size="lg" className="mt-8 gap-2 rounded-full bg-white px-8 text-sm font-semibold text-slate-900 shadow-xl shadow-black/20 hover:bg-slate-100">
+              <Button asChild size="lg" className="mt-8 w-full gap-2 rounded-full bg-white px-8 text-sm font-semibold text-slate-900 shadow-xl shadow-black/20 hover:bg-slate-100 sm:w-auto">
                 <Link to="/resume">
                   Start Building Free
                   <ArrowRight className="size-4" />
@@ -1406,8 +1406,8 @@ function FinalCTA() {
 
 function Footer() {
   return (
-    <footer className="border-t border-border/40 py-12">
-      <div className="mx-auto max-w-7xl px-6">
+    <footer className="border-t border-border/40 py-8 sm:py-12">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <div className="flex flex-col items-center justify-between gap-6 sm:flex-row">
           <div className="flex items-center gap-2">
             <FileText className="size-4 text-foreground/60" />

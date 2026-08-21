@@ -218,7 +218,7 @@ export function BuilderSidebar({ templateId }: BuilderSidebarProps) {
       className="flex w-full flex-col bg-background md:h-full md:w-[45%] md:min-h-0 lg:w-[420px] md:border-r print:hidden"
     >
       {/* Search */}
-      <div className="border-b px-3 py-2.5 sm:px-4 sm:py-3">
+      <div className="border-b px-2 py-2 sm:px-4 sm:py-3">
         <div className="relative">
           <Search className="pointer-events-none absolute left-2.5 top-1/2 size-3.5 -translate-y-1/2 text-muted-foreground/50" />
           <Input
@@ -232,7 +232,7 @@ export function BuilderSidebar({ templateId }: BuilderSidebarProps) {
 
       {/* Sections */}
       <div className="flex-1 min-h-0 overflow-y-auto overscroll-contain">
-        <div className="space-y-0.5 p-3 pb-4 sm:p-4 sm:pb-4">
+        <div className="space-y-0.5 p-2 pb-4 sm:p-4 sm:pb-4">
           <Accordion
             type="multiple"
             defaultValue={defaultOpenValues}
@@ -320,7 +320,7 @@ function SortableSectionItem({
         value={meta.id}
         className={`overflow-hidden rounded-lg border bg-card shadow-sm transition-shadow hover:shadow-md ${isDragging ? 'scale-[1.02] shadow-lg' : ''}`}
       >
-        <AccordionTrigger className="group px-3 py-2.5 hover:no-underline sm:px-4 sm:py-3 [&[data-state=open]>svg]:rotate-180">
+        <AccordionTrigger className="group px-2 py-2 hover:no-underline sm:px-4 sm:py-3 [&[data-state=open]>svg]:rotate-180">
           <span className="flex items-center gap-2 sm:gap-2.5">
             <span
               {...(draggable ? { ...attributes, ...listeners } : {})}
@@ -372,7 +372,7 @@ function SortableSectionItem({
             </span>
           </span>
         </AccordionTrigger>
-        <AccordionContent className="border-t px-3 pb-3 pt-2 sm:px-4 sm:pb-4 sm:pt-3">
+        <AccordionContent className="border-t px-2 pb-3 pt-2 sm:px-4 sm:pb-4 sm:pt-3">
           {children}
         </AccordionContent>
       </AccordionItem>

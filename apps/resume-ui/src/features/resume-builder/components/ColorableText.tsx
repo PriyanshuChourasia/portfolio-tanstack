@@ -74,7 +74,7 @@ export function ColorableText({ as: Tag = 'span', className, style, color, onCha
 
       {open && (
         <div
-          className="bg-popover text-popover-foreground absolute left-0 top-full z-50 mt-1.5 w-44 rounded-lg border p-2.5 shadow-lg dark:shadow-2xl"
+          className="bg-popover text-popover-foreground absolute left-0 top-full z-50 mt-1.5 w-44 max-w-[calc(100vw-2rem)] rounded-lg border p-2.5 shadow-lg dark:shadow-2xl"
           onClick={(e) => e.stopPropagation()}
         >
           <div className="mb-2 flex flex-wrap gap-1.5">
