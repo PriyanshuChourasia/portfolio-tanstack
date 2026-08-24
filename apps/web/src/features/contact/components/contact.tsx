@@ -149,7 +149,7 @@ export default function ContactSection() {
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="mb-12"
+          className="mb-12 flex flex-col sm:flex-row items-center justify-center gap-4"
         >
           <motion.a
             href="mailto:priaynshuchourasia916@gmail.com"
@@ -159,6 +159,15 @@ export default function ContactSection() {
           >
             <Mail className="w-5 h-5 shrink-0" />
             <span className="break-all">priaynshuchourasia916@gmail.com</span>
+          </motion.a>
+          <motion.a
+            href="tel:+916203163193"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="inline-flex max-w-full items-center gap-2.5 sm:gap-3 rounded-full bg-linear-to-r from-emerald-600 to-teal-600 px-5 sm:px-8 py-3.5 sm:py-4 text-sm sm:text-lg font-semibold text-white hover:shadow-2xl hover:shadow-emerald-500/40 transition-shadow"
+          >
+            <Phone className="w-5 h-5 shrink-0" />
+            <span>+91 6203163193</span>
           </motion.a>
         </motion.div>
 

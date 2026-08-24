@@ -173,12 +173,12 @@
       "link": "https://restaurant.codymitra.com/"
     },
     {
-      "title": "Account ERP",
+      "title": "OPD ERP",
       "category": "Full Stack",
       "client": "Independent Product",
-      "image": "/opderp.png",
+      "image": "/opderpdashboard.png",
       "icon": "ImageIcon",
-      "description": "An accounting and finance ERP module — part of the same product suite as OPD ERP and CodyERP. In active development.",
+      "description": "The accounting and finance module of the OPD ERP suite — ledgers, invoicing, and expense tracking that plug into the same clinic management system. In active development.",
       "link": "https://github.com/PriyanshuChourasia/account_erp"
     }
   ]

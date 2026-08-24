@@ -181,11 +181,11 @@ export function Hero() {
         <div className="relative flex items-start gap-3 p-4">
           <div className="flex-1 min-w-0">
             <p className="text-sm font-semibold text-white leading-snug">
-              Account ERP
+              OPD ERP
             </p>
             <p className="text-xs text-slate-400 mt-1 leading-relaxed">
-              Accounting &amp; finance ERP module — part of the OPD ERP &amp;
-              CodyERP product suite. In active development
+              Accounting &amp; finance module of the OPD ERP suite — ledgers,
+              invoicing, and expense tracking. In active development
             </p>
           </div>
           <span className="flex items-center justify-center h-8 w-8 rounded-lg bg-white/5 border border-white/10 shrink-0 group-hover:bg-cyan-500/10 group-hover:border-cyan-500/20 transition-colors mt-0.5">
