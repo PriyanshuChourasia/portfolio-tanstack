@@ -17,7 +17,7 @@ import {
 } from 'lucide-react'
 import { useBuilder } from '../../store/portfolio-store'
 import { SECTION_LABELS } from '../../data/defaults'
-import type { ContentPanel, SectionId } from '../../types/portfolio'
+import type { SectionId } from '../../types/portfolio'
 import type { LucideIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { ScrollArea } from '@/components/ui/scroll-area'
