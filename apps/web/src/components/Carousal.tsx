@@ -1,12 +1,14 @@
 import { AnimatePresence, motion, useScroll, useTransform } from 'framer-motion'
 import { useEffect, useRef, useState } from 'react'
-import { ArrowUpRight, Plus, Rocket, Sparkles } from 'lucide-react'
+import { ArrowUpRight, BookOpen, Plus, Rocket, Sparkles } from 'lucide-react'
 import { useTheme } from 'next-themes'
 import worksData from '../data/works-data.json'
+import { getBlogPosts } from '@/data/blog-posts'
 import { ThreeScene } from './ThreeScene'
 
 const allWorks = (worksData as { items: Array<any> }).items
 const featuredWorks = [...allWorks].reverse().slice(0, 3)
+const latestPost = getBlogPosts()[0]
 
 const CornerMark = ({ className }: { className: string }) => (
   <Plus
@@ -262,6 +264,50 @@ export function Hero() {
           ))}
         </div>
       </motion.a>
+
+      {/* New blog post highlight */}
+      {latestPost && (
+        <motion.a
+          href={`/blog/${latestPost.id}`}
+          initial={{ opacity: 0, y: -10 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.45 }}
+          whileHover={{ scale: 1.03 }}
+          className="group relative z-20 block mx-6 sm:mx-10 mt-4 lg:mx-0 lg:mt-0 lg:absolute lg:top-[26rem] lg:right-10 lg:w-72 rounded-2xl border border-white/10 bg-slate-900/80 backdrop-blur-md shadow-2xl shadow-black/40 overflow-hidden transition-colors hover:border-cyan-400/40"
+        >
+          <div className="relative flex items-center gap-1.5 overflow-hidden bg-linear-to-r from-purple-500 to-fuchsia-600 px-3 py-1.5">
+            <motion.div
+              aria-hidden
+              className="absolute inset-0 bg-linear-to-r from-transparent via-white/30 to-transparent"
+              animate={{ x: ['-120%', '220%'] }}
+              transition={{
+                duration: 2.6,
+                repeat: Infinity,
+                repeatDelay: 2,
+                ease: 'easeInOut',
+              }}
+            />
+            <BookOpen className="relative h-3 w-3 text-white shrink-0" />
+            <span className="relative text-[10px] font-bold uppercase tracking-widest text-white">
+              New Blog Post
+            </span>
+          </div>
+
+          <div className="relative flex items-start gap-3 p-4">
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-semibold text-white leading-snug line-clamp-2">
+                {latestPost.title}
+              </p>
+              <p className="text-xs text-slate-400 mt-1 leading-relaxed line-clamp-2">
+                {latestPost.intro}
+              </p>
+            </div>
+            <span className="flex items-center justify-center h-8 w-8 rounded-lg bg-white/5 border border-white/10 shrink-0 group-hover:bg-fuchsia-500/10 group-hover:border-fuchsia-500/20 transition-colors mt-0.5">
+              <ArrowUpRight className="h-3.5 w-3.5 text-slate-400 group-hover:text-fuchsia-400 transition-colors" />
+            </span>
+          </div>
+        </motion.a>
+      )}
 
       {/* Floating contact card */}
       <motion.a

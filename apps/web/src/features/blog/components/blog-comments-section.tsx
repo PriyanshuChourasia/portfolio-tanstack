@@ -8,20 +8,7 @@ export default function BlogCommentsSection() {
   const [commentText, setCommentText] = useState('')
   const [comments, setComments] = useState<
     Array<{ id: number; name: string; text: string; createdAt: string }>
-  >([
-    {
-      id: 1,
-      name: 'Ava',
-      text: 'Great write-up. The practical examples are really helpful.',
-      createdAt: '2h ago',
-    },
-    {
-      id: 2,
-      name: 'Noah',
-      text: 'Loved the structure of this post. Looking forward to more.',
-      createdAt: '45m ago',
-    },
-  ])
+  >([])
 
   const toggleLike = () => {
     setLiked((prev) => {

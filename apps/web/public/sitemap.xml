@@ -55,12 +55,6 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://codymitra.com/blog/2</loc>
-    <lastmod>2026-08-02</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
     <loc>https://codymitra.com/blog/3</loc>
     <lastmod>2026-08-02</lastmod>
     <changefreq>monthly</changefreq>
@@ -68,7 +62,7 @@
   </url>
   <url>
     <loc>https://codymitra.com/blog/4</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
