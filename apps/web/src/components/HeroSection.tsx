@@ -44,15 +44,9 @@ export function HeroSection() {
   return (
     <section
       id="home"
-      className="relative h-screen w-full overflow-hidden bg-background"
+      className="relative h-screen w-full overflow-hidden"
+      style={{ backgroundColor: '#060810' }}
     >
-      <div
-        className="pointer-events-none absolute inset-0"
-        style={{
-          background:
-            'radial-gradient(circle at 12% 15%, color-mix(in oklab, var(--primary-accent) 16%, transparent), transparent 45%), radial-gradient(circle at 88% 85%, color-mix(in oklab, var(--secondary-accent) 22%, transparent), transparent 50%), linear-gradient(135deg, var(--background) 0%, var(--card-dark) 55%, var(--background) 100%)',
-        }}
-      />
       <div className="h-full grid grid-cols-[1fr_auto_1fr] grid-rows-2 gap-8 p-12 relative">
         {/* Column 1 — Top: Profile image */}
         <div
@@ -211,7 +205,7 @@ export function HeroSection() {
         {/* Column 1 — Bottom: Quadrant 3 */}
         <div
           className="relative rounded-2xl border border-border overflow-hidden card-shadow"
-          style={{ backgroundColor: '#F2A25C' }}
+          style={{ backgroundColor: '#060810' }}
         >
           <span className="absolute inset-0 flex items-center justify-center text-sm font-semibold uppercase tracking-wider text-[#3C0100]">
             Quadrant 3
@@ -221,7 +215,7 @@ export function HeroSection() {
         {/* Column 3 — Bottom: Quadrant 4 */}
         <div
           className="relative rounded-2xl border border-border overflow-hidden card-shadow"
-          style={{ backgroundColor: '#F2A25C' }}
+          style={{ backgroundColor: '#060810' }}
         >
           <span className="absolute inset-0 flex items-center justify-center text-sm font-semibold uppercase tracking-wider text-[#3C0100]">
             Quadrant 4

@@ -179,7 +179,7 @@
       "image": "/opderpdashboard.png",
       "icon": "ImageIcon",
       "description": "The accounting and finance module of the OPD ERP suite — ledgers, invoicing, and expense tracking that plug into the same clinic management system. In active development.",
-      "link": "https://github.com/PriyanshuChourasia/account_erp"
+      "link": "https://opd.codymitra.com"
     }
   ]
 }
