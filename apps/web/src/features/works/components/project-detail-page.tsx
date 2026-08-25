@@ -111,15 +111,15 @@ function SectionHeading({
 }) {
   return (
     <div className="max-w-3xl">
-      <span className="inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.25em] text-cyan-600 dark:text-cyan-400">
-        <span className="h-px w-6 bg-cyan-500/60" />
+      <span className="inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.25em] text-primary text-primary-accent">
+        <span className="h-px w-6 bg-primary-accent/60" />
         {label}
       </span>
-      <h2 className="mt-3 text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white">
+      <h2 className="mt-3 text-2xl sm:text-3xl font-bold text-slate-900 text-foreground">
         {title}
       </h2>
       {sub && (
-        <p className="mt-3 text-sm sm:text-base text-slate-500 dark:text-slate-400">
+        <p className="mt-3 text-sm sm:text-base text-slate-500 text-muted-foreground">
           {sub}
         </p>
       )}
@@ -132,19 +132,19 @@ export function ProjectDetailPage({ projectId }: { projectId: number }) {
 
   if (!project) {
     return (
-      <div className="min-h-screen bg-white dark:bg-slate-950">
+      <div className="min-h-screen bg-white dark:bg-background">
         <Navbar />
         <div className="flex items-center justify-center min-h-screen px-4">
           <div className="max-w-md text-center">
-            <p className="text-sm uppercase tracking-widest text-cyan-500 mb-4">
+            <p className="text-sm uppercase tracking-widest text-primary-accent mb-4">
               404
             </p>
-            <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-6">
+            <h1 className="text-3xl font-bold text-slate-900 text-foreground mb-6">
               Project not found
             </h1>
             <Link
               to="/projects"
-              className="inline-flex items-center gap-2 rounded-full bg-cyan-500 px-6 py-3 text-sm font-semibold text-white hover:bg-cyan-600 transition-colors"
+              className="inline-flex items-center gap-2 rounded-full bg-primary-accent px-6 py-3 text-sm font-semibold text-white hover:bg-primary-accent transition-colors"
             >
               <ArrowLeft size={16} />
               All projects
@@ -168,7 +168,7 @@ export function ProjectDetailPage({ projectId }: { projectId: number }) {
       : undefined
 
   return (
-    <div className="min-h-screen bg-white dark:bg-slate-950">
+    <div className="min-h-screen bg-white dark:bg-background">
       <Navbar />
 
       <motion.main
@@ -178,11 +178,11 @@ export function ProjectDetailPage({ projectId }: { projectId: number }) {
         className="pt-20"
       >
         {/* Hero */}
-        <section className="relative overflow-hidden bg-slate-950">
+        <section className="relative overflow-hidden bg-background">
           {/* Background */}
           <div className="absolute inset-0 bg-linear-to-b from-slate-900 via-slate-950 to-slate-950" />
-          <div className="absolute -top-40 -right-24 h-96 w-96 rounded-full bg-cyan-500/10 blur-3xl" />
-          <div className="absolute -bottom-48 -left-24 h-96 w-96 rounded-full bg-blue-500/10 blur-3xl" />
+          <div className="absolute -top-40 -right-24 h-96 w-96 rounded-full bg-primary-accent/10 blur-3xl" />
+          <div className="absolute -bottom-48 -left-24 h-96 w-96 rounded-full bg-primary/10 blur-3xl" />
           <div className="hidden sm:block absolute inset-6 lg:inset-10 pointer-events-none">
             <div className="absolute left-1/3 top-0 bottom-0 w-px bg-white/5" />
             <div className="absolute left-2/3 top-0 bottom-0 w-px bg-white/5" />
@@ -204,7 +204,7 @@ export function ProjectDetailPage({ projectId }: { projectId: number }) {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.1 }}
               >
-                <span className="inline-flex items-center gap-1.5 rounded-full border border-cyan-400/30 bg-cyan-400/10 px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.25em] text-cyan-300">
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-primary-accent/30 bg-primary-accent/10 px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.25em] text-primary-accent">
                   <Tag size={10} />
                   {project.category}
                 </span>
@@ -215,8 +215,8 @@ export function ProjectDetailPage({ projectId }: { projectId: number }) {
 
                 {project.client && (
                   <div className="mt-5 flex items-center gap-2">
-                    <Briefcase size={14} className="text-cyan-400 shrink-0" />
-                    <span className="text-sm font-semibold text-cyan-400">
+                    <Briefcase size={14} className="text-primary-accent shrink-0" />
+                    <span className="text-sm font-semibold text-primary-accent">
                       {project.client}
                     </span>
                   </div>
@@ -233,7 +233,7 @@ export function ProjectDetailPage({ projectId }: { projectId: number }) {
                       href={project.link}
                       target="_blank"
                       rel="noreferrer"
-                      className="inline-flex items-center gap-2 rounded-full bg-linear-to-r from-blue-600 to-cyan-600 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-cyan-500/25 transition-shadow hover:shadow-xl hover:shadow-cyan-500/40"
+                      className="inline-flex items-center gap-2 rounded-full bg-linear-to-r from-primary to-primary-accent px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-primary-accent/25 transition-shadow hover:shadow-xl hover:shadow-primary-accent/40"
                     >
                       <ExternalLink size={15} />
                       View live project
@@ -249,9 +249,9 @@ export function ProjectDetailPage({ projectId }: { projectId: number }) {
                 transition={{ duration: 0.7, delay: 0.2 }}
                 className="relative"
               >
-                <div className="absolute -inset-4 rounded-3xl bg-linear-to-br from-cyan-500/25 via-transparent to-fuchsia-500/15 blur-2xl opacity-70" />
+                <div className="absolute -inset-4 rounded-3xl bg-linear-to-br from-primary-accent/25 via-transparent to-fuchsia-500/15 blur-2xl opacity-70" />
 
-                <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-slate-900/80 shadow-2xl shadow-black/50 backdrop-blur-xl">
+                <div className="relative overflow-hidden rounded-2xl border border-border bg-card/80 shadow-2xl shadow-card backdrop-blur-xl">
                   {/* Browser chrome */}
                   <div className="flex items-center gap-1.5 border-b border-white/5 px-4 py-3">
                     <span className="h-2.5 w-2.5 rounded-full bg-red-400/70" />
@@ -289,7 +289,7 @@ export function ProjectDetailPage({ projectId }: { projectId: number }) {
                 title="A real-time operating system for clinics"
                 sub="Replaces scattered spreadsheets, paper registers, and legacy software with one unified application."
               />
-              <p className="mt-5 max-w-3xl text-base leading-8 text-slate-600 dark:text-slate-300">
+              <p className="mt-5 max-w-3xl text-base leading-8 text-slate-600 text-foreground">
                 {project.description}
               </p>
             </div>
@@ -315,15 +315,15 @@ export function ProjectDetailPage({ projectId }: { projectId: number }) {
                       <motion.div
                         key={step}
                         variants={staggerItem}
-                        className="group relative rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4 sm:p-5 transition-colors hover:border-cyan-400/60 hover:shadow-lg hover:shadow-cyan-500/5"
+                        className="group relative rounded-xl border border-slate-200 border-border bg-white dark:bg-card p-4 sm:p-5 transition-colors hover:border-primary-accent/60 hover:shadow-lg hover:shadow-primary-accent/5"
                       >
                         <span className="absolute right-3 top-3 text-[10px] font-black tracking-widest text-slate-300 dark:text-slate-600">
                           {String(i + 1).padStart(2, '0')}
                         </span>
-                        <div className="flex h-9 w-9 items-center justify-center rounded-lg border border-cyan-400/20 bg-cyan-50 dark:bg-cyan-400/10">
-                          <Icon className="h-4 w-4 text-cyan-600 dark:text-cyan-400" />
+                        <div className="flex h-9 w-9 items-center justify-center rounded-lg border border-primary-accent/20 bg-primary-accent/5 dark:bg-primary-accent/10">
+                          <Icon className="h-4 w-4 text-primary text-primary-accent" />
                         </div>
-                        <p className="mt-3 text-sm font-semibold leading-snug text-slate-700 dark:text-slate-200">
+                        <p className="mt-3 text-sm font-semibold leading-snug text-slate-700 text-foreground">
                           {step}
                         </p>
                       </motion.div>
@@ -354,15 +354,15 @@ export function ProjectDetailPage({ projectId }: { projectId: number }) {
                       <motion.div
                         key={role.name}
                         variants={staggerItem}
-                        className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4 sm:p-5 transition-colors hover:border-cyan-400/60 hover:shadow-lg hover:shadow-cyan-500/5"
+                        className="rounded-xl border border-slate-200 border-border bg-white dark:bg-card p-4 sm:p-5 transition-colors hover:border-primary-accent/60 hover:shadow-lg hover:shadow-primary-accent/5"
                       >
-                        <div className="flex h-9 w-9 items-center justify-center rounded-lg border border-cyan-400/20 bg-cyan-50 dark:bg-cyan-400/10">
-                          <Icon className="h-4 w-4 text-cyan-600 dark:text-cyan-400" />
+                        <div className="flex h-9 w-9 items-center justify-center rounded-lg border border-primary-accent/20 bg-primary-accent/5 dark:bg-primary-accent/10">
+                          <Icon className="h-4 w-4 text-primary text-primary-accent" />
                         </div>
-                        <p className="mt-3 text-xs font-bold uppercase tracking-widest text-slate-900 dark:text-white">
+                        <p className="mt-3 text-xs font-bold uppercase tracking-widest text-slate-900 text-foreground">
                           {role.name}
                         </p>
-                        <p className="mt-1.5 text-xs leading-relaxed text-slate-500 dark:text-slate-400">
+                        <p className="mt-1.5 text-xs leading-relaxed text-slate-500 text-muted-foreground">
                           {role.blurb}
                         </p>
                       </motion.div>
@@ -392,15 +392,15 @@ export function ProjectDetailPage({ projectId }: { projectId: number }) {
                       <motion.div
                         key={h.title}
                         variants={staggerItem}
-                        className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 transition-colors hover:border-cyan-400/60 hover:shadow-lg hover:shadow-cyan-500/5"
+                        className="rounded-2xl border border-slate-200 border-border bg-white dark:bg-card p-6 transition-colors hover:border-primary-accent/60 hover:shadow-lg hover:shadow-primary-accent/5"
                       >
-                        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-linear-to-br from-blue-600 to-cyan-600 text-white shadow-lg shadow-cyan-500/20">
+                        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-linear-to-br from-primary to-primary-accent text-white shadow-lg shadow-primary-accent/20">
                           <Icon className="h-5 w-5" />
                         </div>
-                        <h3 className="mt-4 text-base font-bold text-slate-900 dark:text-white">
+                        <h3 className="mt-4 text-base font-bold text-slate-900 text-foreground">
                           {h.title}
                         </h3>
-                        <p className="mt-2 text-sm leading-relaxed text-slate-500 dark:text-slate-400">
+                        <p className="mt-2 text-sm leading-relaxed text-slate-500 text-muted-foreground">
                           {h.description}
                         </p>
                       </motion.div>
@@ -431,13 +431,13 @@ export function ProjectDetailPage({ projectId }: { projectId: number }) {
                       <motion.div
                         key={m.name}
                         variants={staggerItem}
-                        className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 transition-colors hover:border-cyan-400/60 hover:shadow-lg hover:shadow-cyan-500/5"
+                        className="rounded-xl border border-slate-200 border-border bg-white dark:bg-card p-5 transition-colors hover:border-primary-accent/60 hover:shadow-lg hover:shadow-primary-accent/5"
                       >
-                        <Icon className="h-5 w-5 text-cyan-600 dark:text-cyan-400" />
-                        <h3 className="mt-3 text-sm font-bold text-slate-900 dark:text-white">
+                        <Icon className="h-5 w-5 text-primary text-primary-accent" />
+                        <h3 className="mt-3 text-sm font-bold text-slate-900 text-foreground">
                           {m.name}
                         </h3>
-                        <p className="mt-1.5 text-xs leading-relaxed text-slate-500 dark:text-slate-400">
+                        <p className="mt-1.5 text-xs leading-relaxed text-slate-500 text-muted-foreground">
                           {m.description}
                         </p>
                       </motion.div>
@@ -466,16 +466,16 @@ export function ProjectDetailPage({ projectId }: { projectId: number }) {
                     <motion.div
                       key={group.group}
                       variants={staggerItem}
-                      className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5"
+                      className="rounded-xl border border-slate-200 border-border bg-white dark:bg-card p-5"
                     >
-                      <p className="text-[11px] font-bold uppercase tracking-widest text-cyan-600 dark:text-cyan-400">
+                      <p className="text-[11px] font-bold uppercase tracking-widest text-primary text-primary-accent">
                         {group.group}
                       </p>
                       <div className="mt-3 flex flex-wrap gap-2">
                         {group.items.map((item) => (
                           <span
                             key={item}
-                            className="rounded-full border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/60 px-3 py-1 text-xs font-medium text-slate-600 dark:text-slate-300"
+                            className="rounded-full border border-slate-200 border-border bg-slate-50 bg-card/60 px-3 py-1 text-xs font-medium text-slate-600 text-foreground"
                           >
                             {item}
                           </span>
@@ -501,16 +501,16 @@ export function ProjectDetailPage({ projectId }: { projectId: number }) {
                 <Link
                   to="/projects/$id"
                   params={{ id: String(projectId - 1) }}
-                  className="group flex items-center gap-4 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 transition-all hover:-translate-y-0.5 hover:border-cyan-400/60 hover:shadow-lg hover:shadow-cyan-500/5"
+                  className="group flex items-center gap-4 rounded-2xl border border-slate-200 border-border bg-white dark:bg-card p-6 transition-all hover:-translate-y-0.5 hover:border-primary-accent/60 hover:shadow-lg hover:shadow-primary-accent/5"
                 >
-                  <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-slate-200 dark:border-slate-700 text-slate-400 group-hover:border-cyan-400/50 group-hover:text-cyan-400 transition-colors">
+                  <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-slate-200 border-border text-slate-400 group-hover:border-primary-accent/50 group-hover:text-primary-accent transition-colors">
                     <ArrowLeft size={16} />
                   </span>
                   <span className="min-w-0">
                     <span className="block text-[11px] font-semibold uppercase tracking-widest text-slate-400 dark:text-slate-500">
                       Previous project
                     </span>
-                    <span className="mt-1 block truncate text-sm font-semibold text-slate-700 dark:text-slate-200 group-hover:text-cyan-600 dark:group-hover:text-cyan-400 transition-colors">
+                    <span className="mt-1 block truncate text-sm font-semibold text-slate-700 text-foreground group-hover:text-primary dark:group-hover:text-primary-accent transition-colors">
                       {prevProject.title}
                     </span>
                   </span>
@@ -529,17 +529,17 @@ export function ProjectDetailPage({ projectId }: { projectId: number }) {
                 <Link
                   to="/projects/$id"
                   params={{ id: String(projectId + 1) }}
-                  className="group flex items-center justify-end gap-4 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 text-right transition-all hover:-translate-y-0.5 hover:border-cyan-400/60 hover:shadow-lg hover:shadow-cyan-500/5"
+                  className="group flex items-center justify-end gap-4 rounded-2xl border border-slate-200 border-border bg-white dark:bg-card p-6 text-right transition-all hover:-translate-y-0.5 hover:border-primary-accent/60 hover:shadow-lg hover:shadow-primary-accent/5"
                 >
                   <span className="min-w-0">
                     <span className="block text-[11px] font-semibold uppercase tracking-widest text-slate-400 dark:text-slate-500">
                       Next project
                     </span>
-                    <span className="mt-1 block truncate text-sm font-semibold text-slate-700 dark:text-slate-200 group-hover:text-cyan-600 dark:group-hover:text-cyan-400 transition-colors">
+                    <span className="mt-1 block truncate text-sm font-semibold text-slate-700 text-foreground group-hover:text-primary dark:group-hover:text-primary-accent transition-colors">
                       {nextProject.title}
                     </span>
                   </span>
-                  <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-slate-200 dark:border-slate-700 text-slate-400 group-hover:border-cyan-400/50 group-hover:text-cyan-400 transition-colors">
+                  <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-slate-200 border-border text-slate-400 group-hover:border-primary-accent/50 group-hover:text-primary-accent transition-colors">
                     <ArrowRight size={16} />
                   </span>
                 </Link>

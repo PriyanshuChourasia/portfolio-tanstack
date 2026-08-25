@@ -148,7 +148,7 @@ export function EditorPanel({ data, onChange }: EditorPanelProps) {
                 )}
               </div>
               <div className="flex flex-col gap-1.5">
-                <label className="cursor-pointer text-xs px-3 py-1.5 rounded-md border border-cyan-500/50 text-cyan-400 hover:bg-cyan-500/10 transition-colors text-center">
+                <label className="cursor-pointer text-xs px-3 py-1.5 rounded-md border border-primary-accent/50 text-primary-accent hover:bg-primary-accent/10 transition-colors text-center">
                   Upload
                   <input
                     type="file"
@@ -228,7 +228,7 @@ export function EditorPanel({ data, onChange }: EditorPanelProps) {
             variant="outline"
             size="sm"
             onClick={addExperience}
-            className="border-cyan-500/50 text-cyan-400 hover:bg-cyan-500/10"
+            className="border-primary-accent/50 text-primary-accent hover:bg-primary-accent/10"
           >
             <Plus className="w-4 h-4 mr-1" /> Add
           </Button>
@@ -294,7 +294,7 @@ export function EditorPanel({ data, onChange }: EditorPanelProps) {
             variant="outline"
             size="sm"
             onClick={addEducation}
-            className="border-cyan-500/50 text-cyan-400 hover:bg-cyan-500/10"
+            className="border-primary-accent/50 text-primary-accent hover:bg-primary-accent/10"
           >
             <Plus className="w-4 h-4 mr-1" /> Add
           </Button>
@@ -360,7 +360,7 @@ export function EditorPanel({ data, onChange }: EditorPanelProps) {
             variant="outline"
             size="sm"
             onClick={addSkill}
-            className="border-cyan-500/50 text-cyan-400 hover:bg-cyan-500/10"
+            className="border-primary-accent/50 text-primary-accent hover:bg-primary-accent/10"
           >
             <Plus className="w-4 h-4 mr-1" /> Add
           </Button>
@@ -404,7 +404,7 @@ export function EditorPanel({ data, onChange }: EditorPanelProps) {
             variant="outline"
             size="sm"
             onClick={addLanguage}
-            className="border-cyan-500/50 text-cyan-400 hover:bg-cyan-500/10"
+            className="border-primary-accent/50 text-primary-accent hover:bg-primary-accent/10"
           >
             <Plus className="w-4 h-4 mr-1" /> Add
           </Button>

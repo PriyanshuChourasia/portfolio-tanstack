@@ -59,33 +59,33 @@ const Card = ({ i, card, progress, range, targetScale }: CardProps) => {
           rotate,
           top: `calc(-5vh + ${i * 25}px)`,
         }}
-        className="relative flex w-[92%] max-w-[90%] flex-col overflow-hidden rounded-[30px] p-5 sm:p-8 lg:h-125 lg:flex-row lg:p-12 border border-slate-200 dark:border-white/10 bg-white dark:bg-slate-900/90 shadow-xl dark:shadow-black/40 backdrop-blur-xl"
+        className="relative flex w-[92%] max-w-[90%] flex-col overflow-hidden rounded-[30px] p-5 sm:p-8 lg:h-125 lg:flex-row lg:p-12 border border-slate-200 border-border bg-white dark:bg-card/90 shadow-xl shadow-card backdrop-blur-xl"
       >
         {/* Light mode accent */}
-        <div className="absolute inset-0 bg-linear-to-br from-cyan-50/60 via-transparent to-blue-50/40 dark:from-cyan-400/10 dark:via-transparent dark:to-fuchsia-400/10 pointer-events-none" />
+        <div className="absolute inset-0 bg-linear-to-br from-primary-accent/5/60 via-transparent to-primary/5/40 dark:from-primary-accent/10 dark:via-transparent dark:to-fuchsia-400/10 pointer-events-none" />
 
         {/* Oversized index number */}
-        <span className="absolute right-5 top-3 select-none text-6xl sm:text-7xl font-black text-slate-900/[0.04] dark:text-white/[0.06] leading-none pointer-events-none">
+        <span className="absolute right-5 top-3 select-none text-6xl sm:text-7xl font-black text-slate-900/[0.04] text-foreground/[0.06] leading-none pointer-events-none">
           {String(i + 1).padStart(2, '0')}
         </span>
 
         <div className="relative z-10 flex h-full w-full flex-col gap-6 lg:flex-row lg:gap-10">
           <div className="flex w-full flex-col justify-between lg:w-[45%]">
             <div className="space-y-4 sm:space-y-5">
-              <div className="inline-flex w-fit rounded-full border border-cyan-400/30 bg-cyan-50 dark:bg-cyan-400/10 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.28em] text-cyan-600 dark:text-cyan-200">
+              <div className="inline-flex w-fit rounded-full border border-primary-accent/30 bg-primary-accent/5 dark:bg-primary-accent/10 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.28em] text-primary text-primary-accent/80">
                 {card.category}
               </div>
 
               <div className="space-y-3">
-                <h1 className="text-2xl font-bold leading-tight text-slate-900 dark:text-white sm:text-3xl">
+                <h1 className="text-2xl font-bold leading-tight text-slate-900 text-foreground sm:text-3xl">
                   {card.title}
                 </h1>
                 {card.client && (
-                  <h4 className="text-base font-semibold text-slate-600 dark:text-slate-300">
+                  <h4 className="text-base font-semibold text-slate-600 text-foreground">
                     {card.client}
                   </h4>
                 )}
-                <p className="text-sm leading-7 text-slate-600 dark:text-slate-300 sm:text-[15px]">
+                <p className="text-sm leading-7 text-slate-600 text-foreground sm:text-[15px]">
                   {card.description}
                 </p>
               </div>
@@ -96,7 +96,7 @@ const Card = ({ i, card, progress, range, targetScale }: CardProps) => {
               <Link
                 to="/projects/$id"
                 params={{ id: String(card.id) }}
-                className="inline-flex w-full items-center justify-center rounded-full border border-cyan-400/30 bg-cyan-50 dark:bg-cyan-400/12 px-5 py-3 text-sm font-semibold text-cyan-600 dark:text-cyan-100 transition-all hover:border-cyan-400 hover:bg-cyan-100 dark:hover:border-cyan-300/40 dark:hover:bg-cyan-400/20 sm:w-fit"
+                className="inline-flex w-full items-center justify-center rounded-full border border-primary-accent/30 bg-primary-accent/5 dark:bg-primary-accent/12 px-5 py-3 text-sm font-semibold text-primary text-primary-accent/60 transition-all hover:border-primary-accent hover:bg-primary-accent/10 hover:border-primary-accent/30/40 hover:bg-primary-accent/20 sm:w-fit"
                 aria-label={`View project ${card.title}`}
               >
                 View the project
@@ -105,7 +105,7 @@ const Card = ({ i, card, progress, range, targetScale }: CardProps) => {
           </div>
 
           <div className="flex w-full items-center justify-center lg:w-[55%]">
-            <div className="relative h-72 w-full overflow-hidden rounded-[26px] border border-slate-200 dark:border-white/10 bg-slate-100 dark:bg-slate-900/40 shadow-lg sm:h-80 lg:h-92">
+            <div className="relative h-72 w-full overflow-hidden rounded-[26px] border border-slate-200 border-border bg-slate-100 dark:bg-card/40 shadow-lg sm:h-80 lg:h-92">
               <motion.div
                 style={{ scale: imageScale }}
                 className="h-full w-full"

@@ -65,8 +65,8 @@ export function SidebarNav({
               className={cn(
                 'w-5 h-5 transition-all duration-300 relative z-10',
                 activeTab === item.key
-                  ? 'text-primary drop-shadow-[0_0_8px_rgba(0,212,255,0.4)]'
-                  : 'text-muted-foreground group-hover:text-primary group-hover:drop-shadow-[0_0_8px_rgba(0,212,255,0.3)]',
+                  ? 'text-primary drop-shadow-[0_0_8px_rgba(242,162,92,0.4)]'
+                  : 'text-muted-foreground group-hover:text-primary group-hover:drop-shadow-[0_0_8px_rgba(242,162,92,0.3)]',
               )}
             />
             <span

@@ -55,7 +55,7 @@ export function BlogWritePage() {
             : ''
 
           return `
-          <figure class="my-6 overflow-hidden rounded-3xl border border-white/10 bg-slate-900/70">
+          <figure class="my-6 overflow-hidden rounded-3xl border border-border bg-card/70">
             <img src="${escapeHtml(block.src.trim())}" alt="${escapeHtml(block.alt.trim() || 'Blog image')}" class="h-full w-full object-cover" />
             ${captionHtml}
           </figure>
@@ -197,7 +197,7 @@ export function BlogWritePage() {
         <button
           type="button"
           onClick={() => inputRef.current?.click()}
-          className="flex w-full items-center justify-center gap-3 rounded-2xl border-2 border-dashed border-slate-300 dark:border-white/15 bg-slate-50 dark:bg-slate-950/40 px-4 py-6 text-slate-500 dark:text-slate-400 hover:border-cyan-400/50 hover:text-cyan-600 dark:hover:text-cyan-300 transition-colors"
+          className="flex w-full items-center justify-center gap-3 rounded-2xl border-2 border-dashed border-slate-300 border-border bg-slate-50 dark:bg-background/40 px-4 py-6 text-slate-500 text-muted-foreground hover:border-primary-accent/50 hover:text-primary hover:text-primary-accent transition-colors"
         >
           <ImageUp size={22} />
           <div className="text-left">
@@ -211,17 +211,17 @@ export function BlogWritePage() {
 
   return (
     <>
-      <main className="min-h-screen bg-slate-50 dark:bg-slate-950 px-4 py-6 text-slate-900 dark:text-white sm:px-6 sm:py-8">
+      <main className="min-h-screen bg-slate-50 dark:bg-background px-4 py-6 text-slate-900 text-foreground sm:px-6 sm:py-8">
         <div className="mx-auto max-w-5xl space-y-6">
-          <section className="overflow-hidden rounded-3xl border border-slate-200 dark:border-white/10 bg-white dark:bg-linear-to-br dark:from-slate-900/95 dark:via-slate-900/80 dark:to-cyan-950/35 shadow-lg dark:shadow-2xl dark:shadow-cyan-950/20 backdrop-blur-xl">
-            <div className="border-b border-slate-200 dark:border-white/10 px-5 py-6 sm:px-8 sm:py-8">
-              <p className="text-xs uppercase tracking-[0.35em] text-cyan-600 dark:text-cyan-300">
+          <section className="overflow-hidden rounded-3xl border border-slate-200 border-border bg-white bg-linear-to-br from-card/95 via-card/80 to-primary/35 shadow-lg shadow-2xl shadow-primary/20 backdrop-blur-xl">
+            <div className="border-b border-slate-200 border-border px-5 py-6 sm:px-8 sm:py-8">
+              <p className="text-xs uppercase tracking-[0.35em] text-primary dark:text-primary-accent">
                 Private write route
               </p>
-              <h1 className="mt-3 text-3xl font-bold sm:text-4xl text-slate-900 dark:text-white">
+              <h1 className="mt-3 text-3xl font-bold sm:text-4xl text-slate-900 text-foreground">
                 Write a new blog post
               </h1>
-              <p className="mt-4 max-w-3xl text-sm leading-7 text-slate-600 dark:text-slate-300 sm:text-base">
+              <p className="mt-4 max-w-3xl text-sm leading-7 text-slate-600 text-foreground sm:text-base">
                 This route is for your own posts. Publish here and the entry
                 will appear in the public blog section on the same browser.
               </p>
@@ -233,7 +233,7 @@ export function BlogWritePage() {
             >
               <div className="space-y-5">
                 <div className="grid gap-4 sm:grid-cols-2">
-                  <label className="space-y-2 text-sm text-slate-600 dark:text-slate-300">
+                  <label className="space-y-2 text-sm text-slate-600 text-foreground">
                     <span>Title</span>
                     <input
                       type="text"
@@ -242,11 +242,11 @@ export function BlogWritePage() {
                         updateField('title', event.target.value)
                       }
                       placeholder="A fresh blog title"
-                      className="w-full rounded-2xl border border-slate-300 dark:border-white/15 bg-white dark:bg-slate-950/80 px-4 py-3 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:border-cyan-400/40 focus:outline-none"
+                      className="w-full rounded-2xl border border-slate-300 border-border bg-white dark:bg-background/80 px-4 py-3 text-slate-900 text-foreground placeholder:text-slate-400 placeholder:text-muted-foreground focus:border-primary-accent/40 focus:outline-none"
                     />
                   </label>
 
-                  <label className="space-y-2 text-sm text-slate-600 dark:text-slate-300">
+                  <label className="space-y-2 text-sm text-slate-600 text-foreground">
                     <span>Author</span>
                     <input
                       type="text"
@@ -255,11 +255,11 @@ export function BlogWritePage() {
                         updateField('author', event.target.value)
                       }
                       placeholder="Admin"
-                      className="w-full rounded-2xl border border-slate-300 dark:border-white/15 bg-white dark:bg-slate-950/80 px-4 py-3 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:border-cyan-400/40 focus:outline-none"
+                      className="w-full rounded-2xl border border-slate-300 border-border bg-white dark:bg-background/80 px-4 py-3 text-slate-900 text-foreground placeholder:text-slate-400 placeholder:text-muted-foreground focus:border-primary-accent/40 focus:outline-none"
                     />
                   </label>
 
-                  <label className="space-y-2 text-sm text-slate-600 dark:text-slate-300">
+                  <label className="space-y-2 text-sm text-slate-600 text-foreground">
                     <span>Category</span>
                     <input
                       type="text"
@@ -268,11 +268,11 @@ export function BlogWritePage() {
                         updateField('category', event.target.value)
                       }
                       placeholder="Development"
-                      className="w-full rounded-2xl border border-slate-300 dark:border-white/15 bg-white dark:bg-slate-950/80 px-4 py-3 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:border-cyan-400/40 focus:outline-none"
+                      className="w-full rounded-2xl border border-slate-300 border-border bg-white dark:bg-background/80 px-4 py-3 text-slate-900 text-foreground placeholder:text-slate-400 placeholder:text-muted-foreground focus:border-primary-accent/40 focus:outline-none"
                     />
                   </label>
 
-                  <label className="space-y-2 text-sm text-slate-600 dark:text-slate-300">
+                  <label className="space-y-2 text-sm text-slate-600 text-foreground">
                     <span>
                       Cover image{' '}
                       <span className="text-slate-500">(optional)</span>
@@ -285,7 +285,7 @@ export function BlogWritePage() {
                       className="hidden"
                     />
                     {coverImagePreview ? (
-                      <div className="relative w-full rounded-2xl overflow-hidden border border-slate-300 dark:border-white/15 bg-slate-100 dark:bg-slate-950/80">
+                      <div className="relative w-full rounded-2xl overflow-hidden border border-slate-300 border-border bg-slate-100 dark:bg-background/80">
                         <img
                           src={coverImagePreview}
                           alt="Cover preview"
@@ -304,7 +304,7 @@ export function BlogWritePage() {
                       <button
                         type="button"
                         onClick={() => coverInputRef.current?.click()}
-                        className="flex w-full items-center justify-center gap-3 rounded-2xl border-2 border-dashed border-slate-300 dark:border-white/15 bg-slate-50 dark:bg-slate-950/40 px-4 py-8 text-slate-500 dark:text-slate-400 hover:border-cyan-400/50 hover:text-cyan-600 dark:hover:text-cyan-300 transition-colors"
+                        className="flex w-full items-center justify-center gap-3 rounded-2xl border-2 border-dashed border-slate-300 border-border bg-slate-50 dark:bg-background/40 px-4 py-8 text-slate-500 text-muted-foreground hover:border-primary-accent/50 hover:text-primary hover:text-primary-accent transition-colors"
                       >
                         <ImageUp size={24} />
                         <div className="text-left">
@@ -320,7 +320,7 @@ export function BlogWritePage() {
                   </label>
                 </div>
 
-                <label className="space-y-2 text-sm text-slate-600 dark:text-slate-300">
+                <label className="space-y-2 text-sm text-slate-600 text-foreground">
                   <span>Description</span>
                   <textarea
                     value={draft.desc}
@@ -329,11 +329,11 @@ export function BlogWritePage() {
                     }
                     rows={3}
                     placeholder="Short summary for the blog cards"
-                    className="w-full rounded-2xl border border-slate-300 dark:border-white/15 bg-white dark:bg-slate-950/80 px-4 py-3 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:border-cyan-400/40 focus:outline-none"
+                    className="w-full rounded-2xl border border-slate-300 border-border bg-white dark:bg-background/80 px-4 py-3 text-slate-900 text-foreground placeholder:text-slate-400 placeholder:text-muted-foreground focus:border-primary-accent/40 focus:outline-none"
                   />
                 </label>
 
-                <label className="space-y-2 text-sm text-slate-600 dark:text-slate-300">
+                <label className="space-y-2 text-sm text-slate-600 text-foreground">
                   <span>Intro</span>
                   <textarea
                     value={draft.intro}
@@ -342,17 +342,17 @@ export function BlogWritePage() {
                     }
                     rows={3}
                     placeholder="Short intro shown at the top of the detail page"
-                    className="w-full rounded-2xl border border-slate-300 dark:border-white/15 bg-white dark:bg-slate-950/80 px-4 py-3 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:border-cyan-400/40 focus:outline-none"
+                    className="w-full rounded-2xl border border-slate-300 border-border bg-white dark:bg-background/80 px-4 py-3 text-slate-900 text-foreground placeholder:text-slate-400 placeholder:text-muted-foreground focus:border-primary-accent/40 focus:outline-none"
                   />
                 </label>
 
-                <div className="space-y-3 rounded-3xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 p-4 sm:p-5">
+                <div className="space-y-3 rounded-3xl border border-slate-200 border-border bg-slate-50 bg-card/5 p-4 sm:p-5">
                   <div className="flex flex-wrap items-center justify-between gap-3">
                     <div>
-                      <p className="text-sm font-semibold text-slate-900 dark:text-white">
+                      <p className="text-sm font-semibold text-slate-900 text-foreground">
                         Content blocks
                       </p>
-                      <p className="mt-1 text-xs leading-5 text-slate-500 dark:text-slate-400">
+                      <p className="mt-1 text-xs leading-5 text-slate-500 text-muted-foreground">
                         Add text and image blocks in the order you want them to
                         appear.
                       </p>
@@ -361,14 +361,14 @@ export function BlogWritePage() {
                       <button
                         type="button"
                         onClick={addTextBlock}
-                        className="rounded-full border border-slate-300 dark:border-white/15 bg-white dark:bg-slate-950/80 px-3 py-2 text-xs font-semibold text-slate-600 dark:text-slate-200 transition-colors hover:border-cyan-400/40 hover:text-cyan-600 dark:hover:border-cyan-300/40 dark:hover:text-cyan-200"
+                        className="rounded-full border border-slate-300 border-border bg-white dark:bg-background/80 px-3 py-2 text-xs font-semibold text-slate-600 text-foreground transition-colors hover:border-primary-accent/40 hover:text-primary hover:border-primary-accent/30/40 dark:hover:text-primary-accent/80"
                       >
                         + Text
                       </button>
                       <button
                         type="button"
                         onClick={addImageBlock}
-                        className="rounded-full border border-slate-300 dark:border-white/15 bg-white dark:bg-slate-950/80 px-3 py-2 text-xs font-semibold text-slate-600 dark:text-slate-200 transition-colors hover:border-cyan-400/40 hover:text-cyan-600 dark:hover:border-cyan-300/40 dark:hover:text-cyan-200"
+                        className="rounded-full border border-slate-300 border-border bg-white dark:bg-background/80 px-3 py-2 text-xs font-semibold text-slate-600 text-foreground transition-colors hover:border-primary-accent/40 hover:text-primary hover:border-primary-accent/30/40 dark:hover:text-primary-accent/80"
                       >
                         + Image
                       </button>
@@ -379,17 +379,17 @@ export function BlogWritePage() {
                     {blocks.map((block, index) => (
                       <div
                         key={block.id}
-                        className="space-y-3 rounded-2xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-slate-950/70 p-4"
+                        className="space-y-3 rounded-2xl border border-slate-200 border-border bg-slate-50 dark:bg-background/70 p-4"
                       >
                         <div className="flex items-center justify-between gap-3">
-                          <p className="text-xs uppercase tracking-[0.3em] text-cyan-600 dark:text-cyan-300">
+                          <p className="text-xs uppercase tracking-[0.3em] text-primary dark:text-primary-accent">
                             Block {index + 1}{' '}
                             {block.type === 'image' ? 'image' : 'text'}
                           </p>
                           <button
                             type="button"
                             onClick={() => removeBlock(block.id)}
-                            className="text-xs font-semibold text-slate-500 dark:text-slate-400 transition-colors hover:text-rose-600 dark:hover:text-rose-300"
+                            className="text-xs font-semibold text-slate-500 text-muted-foreground transition-colors hover:text-rose-600 dark:hover:text-rose-300"
                           >
                             Remove
                           </button>
@@ -405,12 +405,12 @@ export function BlogWritePage() {
                             }
                             rows={7}
                             placeholder="Write a text section here"
-                            className="w-full rounded-2xl border border-slate-300 dark:border-white/15 bg-white dark:bg-slate-950/80 px-4 py-3 text-sm text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:border-cyan-400/40 focus:outline-none"
+                            className="w-full rounded-2xl border border-slate-300 border-border bg-white dark:bg-background/80 px-4 py-3 text-sm text-slate-900 text-foreground placeholder:text-slate-400 placeholder:text-muted-foreground focus:border-primary-accent/40 focus:outline-none"
                           />
                         ) : (
                           <div className="space-y-3">
                             {block.src ? (
-                              <div className="relative w-full rounded-2xl overflow-hidden border border-slate-300 dark:border-white/15 bg-slate-100 dark:bg-slate-950/80">
+                              <div className="relative w-full rounded-2xl overflow-hidden border border-slate-300 border-border bg-slate-100 dark:bg-background/80">
                                 <img
                                   src={block.src}
                                   alt={block.alt || 'Uploaded image'}
@@ -445,7 +445,7 @@ export function BlogWritePage() {
                                   })
                                 }
                                 placeholder="Alt text"
-                                className="w-full rounded-2xl border border-slate-300 dark:border-white/15 bg-white dark:bg-slate-950/80 px-4 py-3 text-sm text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:border-cyan-400/40 focus:outline-none"
+                                className="w-full rounded-2xl border border-slate-300 border-border bg-white dark:bg-background/80 px-4 py-3 text-sm text-slate-900 text-foreground placeholder:text-slate-400 placeholder:text-muted-foreground focus:border-primary-accent/40 focus:outline-none"
                               />
                             </div>
                             <textarea
@@ -457,7 +457,7 @@ export function BlogWritePage() {
                               }
                               rows={2}
                               placeholder="Optional caption"
-                              className="w-full rounded-2xl border border-slate-300 dark:border-white/15 bg-white dark:bg-slate-950/80 px-4 py-3 text-sm text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:border-cyan-400/40 focus:outline-none"
+                              className="w-full rounded-2xl border border-slate-300 border-border bg-white dark:bg-background/80 px-4 py-3 text-sm text-slate-900 text-foreground placeholder:text-slate-400 placeholder:text-muted-foreground focus:border-primary-accent/40 focus:outline-none"
                             />
                           </div>
                         )}
@@ -466,7 +466,7 @@ export function BlogWritePage() {
                   </div>
                 </div>
 
-                <label className="space-y-2 text-sm text-slate-600 dark:text-slate-300">
+                <label className="space-y-2 text-sm text-slate-600 text-foreground">
                   <span>Raw content intro</span>
                   <textarea
                     value={draft.content}
@@ -475,13 +475,13 @@ export function BlogWritePage() {
                     }
                     rows={4}
                     placeholder="This text appears before the ordered blocks"
-                    className="w-full rounded-2xl border border-slate-300 dark:border-white/15 bg-white dark:bg-slate-950/80 px-4 py-3 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:border-cyan-400/40 focus:outline-none"
+                    className="w-full rounded-2xl border border-slate-300 border-border bg-white dark:bg-background/80 px-4 py-3 text-slate-900 text-foreground placeholder:text-slate-400 placeholder:text-muted-foreground focus:border-primary-accent/40 focus:outline-none"
                   />
                 </label>
               </div>
 
               <div className="space-y-6 pt-1 lg:pt-0">
-                <label className="space-y-2 text-sm text-slate-600 dark:text-slate-300">
+                <label className="space-y-2 text-sm text-slate-600 text-foreground">
                   <span>Code snippet</span>
                   <textarea
                     value={draft.codeSnippet}
@@ -490,11 +490,11 @@ export function BlogWritePage() {
                     }
                     rows={7}
                     placeholder="Optional code block"
-                    className="w-full rounded-2xl border border-slate-300 dark:border-white/15 bg-white dark:bg-slate-950/80 px-4 py-3 font-mono text-sm text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:border-cyan-400/40 focus:outline-none"
+                    className="w-full rounded-2xl border border-slate-300 border-border bg-white dark:bg-background/80 px-4 py-3 font-mono text-sm text-slate-900 text-foreground placeholder:text-slate-400 placeholder:text-muted-foreground focus:border-primary-accent/40 focus:outline-none"
                   />
                 </label>
 
-                <label className="space-y-2 text-sm text-slate-600 dark:text-slate-300">
+                <label className="space-y-2 text-sm text-slate-600 text-foreground">
                   <span>Footer</span>
                   <textarea
                     value={draft.footer}
@@ -503,11 +503,11 @@ export function BlogWritePage() {
                     }
                     rows={5}
                     placeholder="Optional footer HTML"
-                    className="w-full rounded-2xl border border-slate-300 dark:border-white/15 bg-white dark:bg-slate-950/80 px-4 py-3 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:border-cyan-400/40 focus:outline-none"
+                    className="w-full rounded-2xl border border-slate-300 border-border bg-white dark:bg-background/80 px-4 py-3 text-slate-900 text-foreground placeholder:text-slate-400 placeholder:text-muted-foreground focus:border-primary-accent/40 focus:outline-none"
                   />
                 </label>
 
-                <label className="space-y-2 text-sm text-slate-600 dark:text-slate-300">
+                <label className="space-y-2 text-sm text-slate-600 text-foreground">
                   <span>Tags</span>
                   <input
                     type="text"
@@ -516,11 +516,11 @@ export function BlogWritePage() {
                       updateField('tags', event.target.value)
                     }
                     placeholder="React, Design, Writing"
-                    className="w-full rounded-2xl border border-slate-300 dark:border-white/15 bg-white dark:bg-slate-950/80 px-4 py-3 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:border-cyan-400/40 focus:outline-none"
+                    className="w-full rounded-2xl border border-slate-300 border-border bg-white dark:bg-background/80 px-4 py-3 text-slate-900 text-foreground placeholder:text-slate-400 placeholder:text-muted-foreground focus:border-primary-accent/40 focus:outline-none"
                   />
                 </label>
 
-                <div className="rounded-2xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 px-4 py-3 text-sm leading-6 text-slate-600 dark:text-slate-300">
+                <div className="rounded-2xl border border-slate-200 border-border bg-slate-50 bg-card/5 px-4 py-3 text-sm leading-6 text-slate-600 text-foreground">
                   Upload a cover image or leave empty for a placeholder. Add
                   images to content blocks for inline placement throughout the
                   blog body.
@@ -536,7 +536,7 @@ export function BlogWritePage() {
 
                 <button
                   type="submit"
-                  className="w-full rounded-2xl border border-cyan-400/30 bg-cyan-500/10 dark:bg-cyan-500/15 px-5 py-3 text-sm font-semibold text-cyan-700 dark:text-cyan-100 transition-colors hover:border-cyan-400/60 hover:bg-cyan-500/20 dark:hover:border-cyan-300/50 dark:hover:bg-cyan-500/25"
+                  className="w-full rounded-2xl border border-primary-accent/30 bg-primary-accent/10 dark:bg-primary-accent/15 px-5 py-3 text-sm font-semibold text-primary text-primary-accent/60 transition-colors hover:border-primary-accent/60 hover:bg-primary-accent/20 hover:border-primary-accent/30/50 hover:bg-primary-accent/25"
                 >
                   Post blog
                 </button>

@@ -53,7 +53,7 @@ export function Combobox({
           role="combobox"
           aria-expanded={open}
           className={cn(
-            'w-[220px] justify-between border-cyan-500/30 bg-white/80 text-slate-700 hover:bg-cyan-50 hover:border-cyan-400 dark:border-cyan-500/30 dark:bg-slate-800/80 dark:text-slate-200 dark:hover:bg-slate-700 dark:hover:border-cyan-400',
+            'w-[220px] justify-between border-primary-accent/30 bg-white/80 text-slate-700 hover:bg-primary-accent/5 hover:border-primary-accent dark:border-primary-accent/30 bg-card/80 text-foreground hover:bg-card dark:hover:border-primary-accent',
             className,
           )}
         >

@@ -45,7 +45,7 @@ export function ScrollCircularProgress({
             r={radius}
             fill="none"
             strokeWidth="6"
-            className="stroke-slate-300 dark:stroke-[#2a3f5f]"
+            className="stroke-border"
           />
           <motion.circle
             cx="70"
@@ -68,7 +68,7 @@ export function ScrollCircularProgress({
           </span>
         </div>
       </div>
-      <p className="text-xs text-center text-slate-500 dark:text-slate-400 font-medium max-w-30 group-hover:text-slate-900 dark:group-hover:text-white transition-colors">
+      <p className="text-xs text-center text-slate-500 text-muted-foreground font-medium max-w-30 group-hover:text-slate-900 dark:group-hover:text-white transition-colors">
         {label}
       </p>
     </motion.div>

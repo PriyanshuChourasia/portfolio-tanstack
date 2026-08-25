@@ -27,7 +27,7 @@ const socialLinks = [
     icon: Linkedin,
     label: 'LinkedIn',
     href: 'https://www.linkedin.com/in/priyanshu-chourasia-17833120a/',
-    color: 'from-blue-500 to-cyan-500',
+    color: 'from-primary to-primary-accent',
   },
   {
     icon: Github,
@@ -39,7 +39,7 @@ const socialLinks = [
     icon: Twitter,
     label: 'Twitter',
     href: 'https://x.com/CoderPriye',
-    color: 'from-cyan-500 to-blue-500',
+    color: 'from-primary-accent to-primary',
   },
 ]
 
@@ -65,14 +65,14 @@ export default function ContactSection() {
   return (
     <section
       id="contact"
-      className="relative min-h-screen w-full overflow-x-clip bg-white dark:bg-slate-950 flex items-center justify-center py-16"
+      className="relative min-h-screen w-full overflow-x-clip bg-white dark:bg-background flex items-center justify-center py-16"
     >
       {/* Animated background blobs */}
       <motion.div className="absolute inset-0 pointer-events-none">
         <motion.div
           animate={{ x: [0, 80, 0], y: [0, -40, 0] }}
           transition={{ duration: 14, repeat: Infinity, ease: 'easeInOut' }}
-          className="absolute top-1/4 left-1/4 w-80 h-80 bg-blue-200/40 dark:bg-blue-600/20 rounded-full blur-3xl"
+          className="absolute top-1/4 left-1/4 w-80 h-80 bg-primary/20/40 dark:bg-primary/20 rounded-full blur-3xl"
         />
         <motion.div
           animate={{ x: [0, -80, 0], y: [0, 40, 0] }}
@@ -82,7 +82,7 @@ export default function ContactSection() {
         <motion.div
           animate={{ x: [0, 40, 0], y: [0, 60, 0] }}
           transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
-          className="absolute top-1/2 right-1/3 w-64 h-64 bg-cyan-200/30 dark:bg-cyan-600/10 rounded-full blur-3xl"
+          className="absolute top-1/2 right-1/3 w-64 h-64 bg-primary-accent/20/30 dark:bg-primary-accent/10 rounded-full blur-3xl"
         />
       </motion.div>
 
@@ -93,16 +93,16 @@ export default function ContactSection() {
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
         >
-          <span className="inline-block mb-6 px-4 py-2 rounded-full border border-cyan-400/30 bg-cyan-50 dark:bg-cyan-400/10 text-xs font-semibold uppercase tracking-widest text-cyan-600 dark:text-cyan-300">
+          <span className="inline-block mb-6 px-4 py-2 rounded-full border border-primary-accent/30 bg-primary-accent/5 dark:bg-primary-accent/10 text-xs font-semibold uppercase tracking-widest text-primary dark:text-primary-accent">
             Get in Touch
           </span>
 
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-6 leading-tight text-slate-900 dark:text-white">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-6 leading-tight text-slate-900 text-foreground">
             Feel free to reach out — whether you&apos;re looking for a
             developer, have a query, or simply want to connect.
           </h2>
 
-          <p className="text-base sm:text-lg font-medium text-slate-600 dark:text-slate-300 mb-6">
+          <p className="text-base sm:text-lg font-medium text-slate-600 text-foreground mb-6">
             I am always open to hearing about new projects and opportunities.
           </p>
 
@@ -125,17 +125,17 @@ export default function ContactSection() {
             const Icon = step.icon
             return (
               <div key={step.title} className="flex sm:flex-col gap-3">
-                <span className="flex items-center justify-center h-10 w-10 shrink-0 rounded-full bg-cyan-50 dark:bg-cyan-400/10 text-cyan-600 dark:text-cyan-300">
+                <span className="flex items-center justify-center h-10 w-10 shrink-0 rounded-full bg-primary-accent/5 dark:bg-primary-accent/10 text-primary dark:text-primary-accent">
                   <Icon className="w-5 h-5" />
                 </span>
                 <div>
                   <p className="text-xs font-semibold text-slate-400 dark:text-slate-500 mb-0.5">
                     Step {index + 1}
                   </p>
-                  <p className="text-sm font-semibold text-slate-900 dark:text-white mb-1">
+                  <p className="text-sm font-semibold text-slate-900 text-foreground mb-1">
                     {step.title}
                   </p>
-                  <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
+                  <p className="text-sm text-slate-500 text-muted-foreground leading-relaxed">
                     {step.desc}
                   </p>
                 </div>
@@ -155,7 +155,7 @@ export default function ContactSection() {
             href="mailto:priaynshuchourasia916@gmail.com"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="inline-flex max-w-full items-center gap-2.5 sm:gap-3 rounded-full bg-linear-to-r from-blue-600 to-cyan-600 px-5 sm:px-8 py-3.5 sm:py-4 text-sm sm:text-lg font-semibold text-white hover:shadow-2xl hover:shadow-blue-500/40 transition-shadow"
+            className="inline-flex max-w-full items-center gap-2.5 sm:gap-3 rounded-full bg-linear-to-r from-primary to-primary-accent px-5 sm:px-8 py-3.5 sm:py-4 text-sm sm:text-lg font-semibold text-white hover:shadow-2xl hover:shadow-primary-accent/40 transition-shadow"
           >
             <Mail className="w-5 h-5 shrink-0" />
             <span className="break-all">priaynshuchourasia916@gmail.com</span>
@@ -202,7 +202,7 @@ export default function ContactSection() {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8, delay: 0.6 }}
-          className="mt-20 pt-8 border-t border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4"
+          className="mt-20 pt-8 border-t border-slate-200 border-border flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4"
         >
           <p className="text-sm text-slate-400 dark:text-slate-500">
             © Priyanshu Chourasia 2025. All rights reserved.
@@ -212,7 +212,7 @@ export default function ContactSection() {
           </span>
           <a
             href="tel:+916203163193"
-            className="text-sm text-slate-400 dark:text-slate-500 hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors"
+            className="text-sm text-slate-400 dark:text-slate-500 hover:text-primary-accent hover:text-primary-accent transition-colors"
           >
             +91 6203163193
           </a>

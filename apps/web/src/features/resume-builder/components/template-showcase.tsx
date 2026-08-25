@@ -101,23 +101,23 @@ export function TemplateShowcase({ onSelect }: TemplateShowcaseProps) {
   const [hoveredId, setHoveredId] = useState<ResumeLayout | null>(null)
 
   return (
-    <div className="min-h-screen bg-slate-950 text-white">
+    <div className="min-h-screen bg-background text-white">
       {/* Hero */}
       <div className="relative pt-20 pb-16 px-6 text-center overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-cyan-900/20 via-transparent to-transparent" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary/90/20 via-transparent to-transparent" />
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           className="relative max-w-3xl mx-auto"
         >
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-xs font-medium mb-6">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary-accent/10 border border-primary-accent/20 text-primary-accent text-xs font-medium mb-6">
             <Sparkles className="w-3.5 h-3.5" />5 Professionally Designed
             Templates
           </div>
           <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-4">
             Templates That Get You{' '}
-            <span className="bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-primary-accent to-primary bg-clip-text text-transparent">
               Hired
             </span>
           </h1>
@@ -147,9 +147,9 @@ export function TemplateShowcase({ onSelect }: TemplateShowcaseProps) {
                 <div
                   className={`relative rounded-xl overflow-hidden border transition-all duration-300 ${
                     hoveredId === tpl.id
-                      ? 'border-cyan-500/50 shadow-[0_0_30px_-5px_rgba(6,182,212,0.15)]'
+                      ? 'border-primary-accent/50 shadow-[0_0_30px_-5px_rgba(242,162,92,0.15)]'
                       : 'border-slate-800 hover:border-slate-700'
-                  } bg-slate-900/50 backdrop-blur`}
+                  } bg-card/50 backdrop-blur`}
                 >
                   {/* Preview thumbnail — renders the real template with demo data */}
                   <div className="relative h-[380px] overflow-hidden bg-slate-800">
@@ -171,7 +171,7 @@ export function TemplateShowcase({ onSelect }: TemplateShowcaseProps) {
                         >
                           <button
                             onClick={() => onSelect(tpl.id)}
-                            className="flex items-center gap-2 px-5 py-2.5 bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-semibold text-sm rounded-lg transition-colors"
+                            className="flex items-center gap-2 px-5 py-2.5 bg-primary-accent hover:bg-primary-accent text-slate-950 font-semibold text-sm rounded-lg transition-colors"
                           >
                             Use This Template
                             <ArrowRight className="w-4 h-4" />
@@ -195,7 +195,7 @@ export function TemplateShowcase({ onSelect }: TemplateShowcaseProps) {
                     {/* Always-visible CTA so templates are selectable on touch devices */}
                     <button
                       onClick={() => onSelect(tpl.id)}
-                      className="mt-4 flex w-full items-center justify-center gap-2 rounded-lg bg-cyan-500 px-5 py-2.5 text-sm font-semibold text-slate-950 transition-colors hover:bg-cyan-400"
+                      className="mt-4 flex w-full items-center justify-center gap-2 rounded-lg bg-primary-accent px-5 py-2.5 text-sm font-semibold text-slate-950 transition-colors hover:bg-primary-accent"
                     >
                       Use This Template
                       <ArrowRight className="w-4 h-4" />

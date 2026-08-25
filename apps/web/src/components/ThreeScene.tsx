@@ -10,7 +10,7 @@ const CONNECTION_DISTANCE = 130
 const SPREAD = 480
 const MAX_LINES = PARTICLE_COUNT * 4
 
-export function ThreeScene({ isDark }: ThreeSceneProps) {
+export function ThreeScene({ isDark: _isDark }: ThreeSceneProps) {
   const mountRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -32,9 +32,9 @@ export function ThreeScene({ isDark }: ThreeSceneProps) {
     renderer.setClearColor(0x000000, 0)
     mount.appendChild(renderer.domElement)
 
-    const particleColor = isDark ? 0x22d3ee : 0x3b82f6
-    const lineColor = isDark ? 0x22d3ee : 0x6366f1
-    const particleOpacity = isDark ? 0.75 : 0.55
+    const particleColor = 0x703611
+    const lineColor = 0xF2A25C
+    const particleOpacity = 0.75
 
     // --- Particles via Points (fast) ---
     const posArr = new Float32Array(PARTICLE_COUNT * 3)
@@ -73,7 +73,7 @@ export function ThreeScene({ isDark }: ThreeSceneProps) {
     const lMat = new THREE.LineBasicMaterial({
       color: lineColor,
       transparent: true,
-      opacity: isDark ? 0.18 : 0.12,
+      opacity: 0.18,
     })
     const lineSegments = new THREE.LineSegments(lGeo, lMat)
     scene.add(lineSegments)
@@ -162,7 +162,7 @@ export function ThreeScene({ isDark }: ThreeSceneProps) {
       pMat.dispose()
       lMat.dispose()
     }
-  }, [isDark])
+  }, [])
 
   return <div ref={mountRef} className="absolute inset-0 pointer-events-none" />
 }

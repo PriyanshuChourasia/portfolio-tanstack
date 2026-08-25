@@ -44,7 +44,7 @@ export function Hero() {
     <section
       id="home"
       ref={sectionRef}
-      className="relative flex w-full min-h-screen flex-col overflow-hidden bg-slate-950"
+      className="relative flex w-full min-h-screen flex-col overflow-hidden bg-background"
     >
       {/* Full-bleed background image, centered */}
       <motion.div style={{ y: imageY }} className="absolute inset-0">
@@ -93,7 +93,7 @@ export function Hero() {
         transition={{ duration: 0.6 }}
         className="relative z-20 pt-28 px-6 sm:px-10 lg:pt-0 lg:absolute lg:top-28 lg:left-14 lg:max-w-sm lg:px-0"
       >
-        <div className="rounded-3xl border border-white/10 bg-slate-900/60 backdrop-blur-xl shadow-2xl shadow-black/40 text-center lg:text-left overflow-hidden">
+        <div className="rounded-3xl border border-border bg-card/60 backdrop-blur-xl shadow-2xl shadow-card text-center lg:text-left overflow-hidden">
           <div className="flex items-center justify-center gap-2 bg-linear-to-r from-emerald-500 to-teal-500 px-6 py-2.5">
             <Rocket className="w-4 h-4 text-white shrink-0" />
             <span className="text-xs sm:text-sm font-bold text-white tracking-wide">
@@ -102,7 +102,7 @@ export function Hero() {
           </div>
 
           <div className="p-6 sm:p-7">
-            <p className="text-cyan-400 text-xs font-semibold tracking-[0.2em] uppercase mb-2">
+            <p className="text-primary-accent text-xs font-semibold tracking-[0.2em] uppercase mb-2">
               Welcome to my portfolio
             </p>
 
@@ -117,7 +117,7 @@ export function Hero() {
                 download
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="px-4 sm:px-6 py-2.5 rounded-full bg-linear-to-r from-blue-600 to-cyan-600 text-white text-xs sm:text-sm font-semibold whitespace-nowrap hover:shadow-xl hover:shadow-cyan-500/30 transition-shadow"
+                className="px-4 sm:px-6 py-2.5 rounded-full bg-linear-to-r from-primary to-primary-accent text-white text-xs sm:text-sm font-semibold whitespace-nowrap hover:shadow-xl hover:shadow-primary-accent/30 transition-shadow"
               >
                 Download CV
               </motion.a>
@@ -125,7 +125,7 @@ export function Hero() {
                 href="#contact"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="px-4 sm:px-6 py-2.5 rounded-full border border-cyan-400/50 text-white text-xs sm:text-sm font-semibold whitespace-nowrap hover:bg-cyan-500/10 hover:border-cyan-400 transition-all"
+                className="px-4 sm:px-6 py-2.5 rounded-full border border-primary-accent/50 text-white text-xs sm:text-sm font-semibold whitespace-nowrap hover:bg-primary-accent/10 hover:border-primary-accent transition-all"
               >
                 Get in Touch
               </motion.a>
@@ -157,9 +157,9 @@ export function Hero() {
         whileInView={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.6, delay: 0.5 }}
         whileHover={{ scale: 1.02, x: 4 }}
-        className="group relative z-20 mx-6 sm:mx-10 mt-6 lg:mx-0 lg:absolute lg:left-14 lg:bottom-44 lg:max-w-sm w-auto rounded-2xl border border-white/10 bg-slate-900/70 backdrop-blur-md overflow-hidden shadow-2xl shadow-black/40 transition-colors hover:border-cyan-400/40 cursor-pointer"
+        className="group relative z-20 mx-6 sm:mx-10 mt-6 lg:mx-0 lg:absolute lg:left-14 lg:bottom-44 lg:max-w-sm w-auto rounded-2xl border border-border bg-card/70 backdrop-blur-md overflow-hidden shadow-2xl shadow-card transition-colors hover:border-primary-accent/40 cursor-pointer"
       >
-        <div className="relative flex items-center gap-2 overflow-hidden bg-linear-to-r from-blue-600 to-cyan-500 px-4 py-2">
+        <div className="relative flex items-center gap-2 overflow-hidden bg-linear-to-r from-primary to-primary-accent px-4 py-2">
           <motion.div
             aria-hidden
             className="absolute inset-0 bg-linear-to-r from-transparent via-white/30 to-transparent"
@@ -190,8 +190,8 @@ export function Hero() {
               invoicing, and expense tracking. In active development
             </p>
           </div>
-          <span className="flex items-center justify-center h-8 w-8 rounded-lg bg-white/5 border border-white/10 shrink-0 group-hover:bg-cyan-500/10 group-hover:border-cyan-500/20 transition-colors mt-0.5">
-            <ArrowUpRight className="h-3.5 w-3.5 text-slate-400 group-hover:text-cyan-400 transition-colors" />
+          <span className="flex items-center justify-center h-8 w-8 rounded-lg bg-white/5 border border-border shrink-0 group-hover:bg-primary-accent/10 group-hover:border-primary-accent/20 transition-colors mt-0.5">
+            <ArrowUpRight className="h-3.5 w-3.5 text-slate-400 group-hover:text-primary-accent transition-colors" />
           </span>
         </div>
       </motion.div>
@@ -203,9 +203,9 @@ export function Hero() {
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.3 }}
         whileHover={{ scale: 1.03 }}
-        className="group relative z-20 block mx-6 sm:mx-10 mt-4 lg:mx-0 lg:mt-0 lg:absolute lg:top-32 lg:right-10 lg:w-72 rounded-2xl border border-white/10 bg-slate-900/80 backdrop-blur-md shadow-2xl shadow-black/40 overflow-hidden transition-colors hover:border-cyan-400/40"
+        className="group relative z-20 block mx-6 sm:mx-10 mt-4 lg:mx-0 lg:mt-0 lg:absolute lg:top-32 lg:right-10 lg:w-72 rounded-2xl border border-border bg-card/80 backdrop-blur-md shadow-2xl shadow-card overflow-hidden transition-colors hover:border-primary-accent/40"
       >
-        <div className="relative flex items-center gap-1.5 overflow-hidden bg-linear-to-r from-cyan-500 to-blue-600 px-3 py-1.5">
+        <div className="relative flex items-center gap-1.5 overflow-hidden bg-linear-to-r from-primary-accent to-primary px-3 py-1.5">
           <motion.div
             aria-hidden
             className="absolute inset-0 bg-linear-to-r from-transparent via-white/30 to-transparent"
@@ -251,14 +251,14 @@ export function Hero() {
               {featuredWork?.title}
             </motion.span>
           </AnimatePresence>
-          <ArrowUpRight className="h-4 w-4 text-slate-500 shrink-0 group-hover:text-cyan-400 transition-colors" />
+          <ArrowUpRight className="h-4 w-4 text-slate-500 shrink-0 group-hover:text-primary-accent transition-colors" />
         </div>
         <div className="flex items-center justify-center gap-1 pb-2.5">
           {featuredWorks.map((w, i) => (
             <span
               key={w.title}
               className={`h-1 rounded-full transition-all duration-300 ${
-                i === featuredIndex ? 'w-3 bg-cyan-400' : 'w-1 bg-white/20'
+                i === featuredIndex ? 'w-3 bg-primary-accent' : 'w-1 bg-white/20'
               }`}
             />
           ))}
@@ -273,7 +273,7 @@ export function Hero() {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.45 }}
           whileHover={{ scale: 1.03 }}
-          className="group relative z-20 block mx-6 sm:mx-10 mt-4 lg:mx-0 lg:mt-0 lg:absolute lg:top-[26rem] lg:right-10 lg:w-72 rounded-2xl border border-white/10 bg-slate-900/80 backdrop-blur-md shadow-2xl shadow-black/40 overflow-hidden transition-colors hover:border-cyan-400/40"
+          className="group relative z-20 block mx-6 sm:mx-10 mt-4 lg:mx-0 lg:mt-0 lg:absolute lg:top-[26rem] lg:right-10 lg:w-72 rounded-2xl border border-border bg-card/80 backdrop-blur-md shadow-2xl shadow-card overflow-hidden transition-colors hover:border-primary-accent/40"
         >
           <div className="relative flex items-center gap-1.5 overflow-hidden bg-linear-to-r from-purple-500 to-fuchsia-600 px-3 py-1.5">
             <motion.div
@@ -302,7 +302,7 @@ export function Hero() {
                 {latestPost.intro}
               </p>
             </div>
-            <span className="flex items-center justify-center h-8 w-8 rounded-lg bg-white/5 border border-white/10 shrink-0 group-hover:bg-fuchsia-500/10 group-hover:border-fuchsia-500/20 transition-colors mt-0.5">
+            <span className="flex items-center justify-center h-8 w-8 rounded-lg bg-white/5 border border-border shrink-0 group-hover:bg-fuchsia-500/10 group-hover:border-fuchsia-500/20 transition-colors mt-0.5">
               <ArrowUpRight className="h-3.5 w-3.5 text-slate-400 group-hover:text-fuchsia-400 transition-colors" />
             </span>
           </div>
@@ -316,16 +316,16 @@ export function Hero() {
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.4 }}
         whileHover={{ scale: 1.03 }}
-        className="relative z-20 flex items-center justify-between gap-3 mx-6 sm:mx-10 mt-4 lg:mx-0 lg:mt-0 lg:absolute lg:bottom-28 lg:right-10 rounded-2xl border border-cyan-400/20 bg-slate-900/90 backdrop-blur-md shadow-xl px-4 py-3"
+        className="relative z-20 flex items-center justify-between gap-3 mx-6 sm:mx-10 mt-4 lg:mx-0 lg:mt-0 lg:absolute lg:bottom-28 lg:right-10 rounded-2xl border border-primary-accent/20 bg-card/90 backdrop-blur-md shadow-xl px-4 py-3"
       >
         <div className="flex min-w-0 items-center gap-3">
           <img
             src="/myprofile.jpeg"
             alt="Priyanshu Chourasia"
-            className="h-10 w-10 shrink-0 rounded-full object-cover border border-cyan-400/30"
+            className="h-10 w-10 shrink-0 rounded-full object-cover border border-primary-accent/30"
           />
           <div className="min-w-0 pr-2">
-            <p className="text-[11px] text-cyan-400 font-medium leading-none mb-1">
+            <p className="text-[11px] text-primary-accent font-medium leading-none mb-1">
               Let&apos;s Talk
             </p>
             <p className="text-sm text-white font-semibold leading-none">

@@ -7,21 +7,21 @@ const previewPosts = getBlogPosts().slice(0, 3)
 
 export default function ArticlePreviewSection() {
   return (
-    <section className="relative w-full overflow-hidden bg-white dark:bg-slate-950 py-2 sm:py-4 md:py-6">
+    <section className="relative w-full overflow-hidden bg-white dark:bg-background py-2 sm:py-4 md:py-6">
       <div className="relative z-10 mx-auto max-w-[88rem] px-4 sm:px-6">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="rounded-3xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-gradient-to-br dark:from-slate-900/95 dark:via-slate-800/90 dark:to-slate-700/80 p-4 sm:p-5 md:p-8 shadow-lg dark:shadow-2xl dark:shadow-black/30 backdrop-blur-xl"
+          className="rounded-3xl border border-slate-200 border-border bg-slate-50 dark:bg-gradient-to-br from-card/95 via-card/90 to-card/80 p-4 sm:p-5 md:p-8 shadow-lg shadow-2xl shadow-card backdrop-blur-xl"
         >
           <div className="grid gap-5 lg:grid-cols-[0.9fr_1.1fr] lg:items-start xl:gap-8">
             <div className="space-y-6">
               <div className="space-y-4">
-                <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-slate-900 dark:text-white">
+                <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-slate-900 text-foreground">
                   See my blogs
                 </h2>
-                <p className="max-w-xl text-sm leading-7 text-slate-600 dark:text-slate-300 md:text-base">
+                <p className="max-w-xl text-sm leading-7 text-slate-600 text-foreground md:text-base">
                   Short reads and notes on design, development, and the thinking
                   behind the work.
                 </p>
@@ -29,7 +29,7 @@ export default function ArticlePreviewSection() {
 
               <a
                 href="#articles"
-                className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-cyan-400/30 bg-white dark:bg-white/5 px-5 py-3 text-sm font-semibold text-cyan-600 dark:text-cyan-200 transition-colors hover:border-cyan-400 hover:bg-cyan-50 dark:hover:border-cyan-300/40 dark:hover:bg-cyan-400/10 sm:w-auto"
+                className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-primary-accent/30 bg-white bg-card/5 px-5 py-3 text-sm font-semibold text-primary text-primary-accent/80 transition-colors hover:border-primary-accent hover:bg-primary-accent/5 hover:border-primary-accent/30/40 hover:bg-primary-accent/10 sm:w-auto"
               >
                 Explore the full section
                 <span aria-hidden="true">→</span>
@@ -43,7 +43,7 @@ export default function ArticlePreviewSection() {
                   initial={{ opacity: 0, y: 24 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: index * 0.08 }}
-                  className="group relative flex flex-col overflow-hidden rounded-2xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 transition-all duration-300 hover:-translate-y-1 hover:border-cyan-400/40 hover:shadow-xl hover:shadow-cyan-500/10 dark:hover:border-cyan-400/30"
+                  className="group relative flex flex-col overflow-hidden rounded-2xl border border-slate-200 border-border bg-white bg-card/5 transition-all duration-300 hover:-translate-y-1 hover:border-primary-accent/40 hover:shadow-xl hover:shadow-primary-accent/10 dark:hover:border-primary-accent/30"
                 >
                   <div className="relative h-36 w-full shrink-0 overflow-hidden sm:h-40">
                     <BlogArtwork
@@ -59,7 +59,7 @@ export default function ArticlePreviewSection() {
 
                   <div className="flex grow flex-col gap-3 p-4 sm:p-5">
                     <div className="flex flex-wrap items-center gap-2">
-                      <span className="rounded-full border border-cyan-200 bg-cyan-50 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-cyan-600 dark:border-cyan-500/25 dark:bg-cyan-500/15 dark:text-cyan-300">
+                      <span className="rounded-full border border-primary-accent/20 bg-primary-accent/5 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-primary dark:border-primary-accent/25 dark:bg-primary-accent/15 dark:text-primary-accent">
                         {post.category}
                       </span>
                       <span className="text-[11px] text-slate-400 dark:text-slate-500">
@@ -67,15 +67,15 @@ export default function ArticlePreviewSection() {
                       </span>
                     </div>
 
-                    <h3 className="line-clamp-2 text-base font-bold leading-snug text-slate-900 transition-colors group-hover:text-cyan-600 dark:text-white dark:group-hover:text-cyan-300">
+                    <h3 className="line-clamp-2 text-base font-bold leading-snug text-slate-900 transition-colors group-hover:text-primary text-foreground dark:group-hover:text-primary-accent">
                       {post.title}
                     </h3>
 
-                    <p className="line-clamp-2 grow text-sm leading-6 text-slate-500 dark:text-slate-400">
+                    <p className="line-clamp-2 grow text-sm leading-6 text-slate-500 text-muted-foreground">
                       {post.desc}
                     </p>
 
-                    <div className="mt-1 flex items-center gap-2 text-sm font-semibold text-cyan-600 dark:text-cyan-300">
+                    <div className="mt-1 flex items-center gap-2 text-sm font-semibold text-primary dark:text-primary-accent">
                       Read article
                       <span
                         aria-hidden="true"

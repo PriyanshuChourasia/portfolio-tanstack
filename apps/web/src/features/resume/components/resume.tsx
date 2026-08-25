@@ -35,11 +35,6 @@ export function ResumeSection() {
     damping: 24,
     mass: 0.25,
   })
-  const smoothSkillsProgress = useSpring(skillsScrollYProgress, {
-    stiffness: 90,
-    damping: 26,
-    mass: 0.25,
-  })
 
   const titleY = useTransform(smoothProgress, [0, 0.3], [80, 0])
   const titleOpacity = useTransform(smoothProgress, [0, 0.2], [0, 1])
@@ -68,7 +63,7 @@ export function ResumeSection() {
     <section
       id="experience"
       ref={containerRef}
-      className="relative min-h-screen w-full overflow-hidden bg-white py-24 sm:py-32 dark:bg-black"
+      className="relative min-h-screen w-full overflow-hidden bg-white py-24 sm:py-32 bg-background"
     >
       {/* Anime portrait background */}
       <div className="absolute inset-y-0 right-0 w-full sm:w-3/4 lg:w-1/2 pointer-events-none overflow-hidden">
@@ -89,11 +84,11 @@ export function ResumeSection() {
         style={{ opacity: bgOpacity }}
       >
         <motion.div
-          className="absolute -top-40 -left-40 w-125 h-125 bg-linear-to-br from-cyan-500/14 to-transparent rounded-full blur-3xl"
+          className="absolute -top-40 -left-40 w-125 h-125 bg-linear-to-br from-primary-accent/14 to-transparent rounded-full blur-3xl"
           style={{ x: deepX1, y: deepY1, scale: midScale }}
         />
         <motion.div
-          className="absolute top-24 -right-44 w-125 h-125 bg-linear-to-bl from-blue-500/12 to-transparent rounded-full blur-3xl"
+          className="absolute top-24 -right-44 w-125 h-125 bg-linear-to-bl from-primary/12 to-transparent rounded-full blur-3xl"
           style={{ x: deepX2, y: deepY2, scale: midScale }}
         />
         <motion.div
@@ -101,29 +96,29 @@ export function ResumeSection() {
           style={{ x: midX, y: midY }}
         />
         <motion.div
-          className="absolute top-[35%] right-[18%] w-96 h-96 bg-linear-to-tl from-cyan-500/10 to-transparent rounded-full blur-3xl"
+          className="absolute top-[35%] right-[18%] w-96 h-96 bg-linear-to-tl from-primary-accent/10 to-transparent rounded-full blur-3xl"
           style={{ x: midX, y: deepY2 }}
         />
         <motion.div
-          className="absolute -bottom-44 left-[10%] w-125 h-125 bg-linear-to-tr from-blue-500/10 to-transparent rounded-full blur-3xl"
+          className="absolute -bottom-44 left-[10%] w-125 h-125 bg-linear-to-tr from-primary/10 to-transparent rounded-full blur-3xl"
           style={{ x: deepX1, y: deepY2, rotate: midRotate }}
         />
         <motion.div
-          className="absolute -bottom-48 -right-48 w-140 h-140 bg-linear-to-tl from-cyan-500/12 to-transparent rounded-full blur-3xl"
+          className="absolute -bottom-48 -right-48 w-140 h-140 bg-linear-to-tl from-primary-accent/12 to-transparent rounded-full blur-3xl"
           style={{ x: deepX2, y: deepY1, rotate: midRotate }}
         />
 
         <motion.div
-          className="absolute top-[18%] left-[52%] w-md h-28 -rotate-12 rounded-full bg-linear-to-r from-blue-500/8 via-cyan-500/10 to-transparent blur-2xl"
+          className="absolute top-[18%] left-[52%] w-md h-28 -rotate-12 rounded-full bg-linear-to-r from-primary/8 via-primary-accent/10 to-transparent blur-2xl"
           style={{ x: deepX2, y: midY, rotate: midRotate }}
         />
         <motion.div
-          className="absolute bottom-[22%] left-[12%] w-120 h-24 rotate-12 rounded-full bg-linear-to-r from-transparent via-emerald-500/10 to-cyan-500/8 blur-2xl"
+          className="absolute bottom-[22%] left-[12%] w-120 h-24 rotate-12 rounded-full bg-linear-to-r from-transparent via-emerald-500/10 to-primary-accent/8 blur-2xl"
           style={{ x: deepX1, y: midY, rotate: midRotate }}
         />
 
-        <div className="absolute inset-x-0 top-0 h-24 bg-white dark:bg-black" />
-        <div className="absolute inset-x-0 bottom-0 h-24 bg-white dark:bg-black" />
+        <div className="absolute inset-x-0 top-0 h-24 bg-white bg-background" />
+        <div className="absolute inset-x-0 bottom-0 h-24 bg-white bg-background" />
       </motion.div>
 
       <div className="relative z-10 w-full mx-auto px-6">
@@ -131,11 +126,11 @@ export function ResumeSection() {
           style={{ y: titleY, opacity: titleOpacity }}
           className="text-center mb-20"
         >
-          <h2 className="text-4xl md:text-5xl font-bold text-slate-900 dark:text-white">
+          <h2 className="text-4xl md:text-5xl font-bold text-slate-900 text-foreground">
             Career{' '}
-            <span className="text-cyan-600 dark:text-cyan-400">Overview</span>
+            <span className="text-primary text-primary-accent">Overview</span>
           </h2>
-          <p className="text-slate-600 dark:text-slate-400 text-lg max-w-2xl mx-auto mt-4">
+          <p className="text-slate-600 text-muted-foreground text-lg max-w-2xl mx-auto mt-4">
             Experience and the skills I use to ship products.
           </p>
           <div className="mt-6 flex flex-wrap justify-center items-center gap-4">
@@ -156,7 +151,7 @@ export function ResumeSection() {
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
             viewport={{ once: true, margin: '100px' }}
-            className="relative rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700/60 shadow-xl aspect-4/3 md:aspect-auto"
+            className="relative rounded-2xl overflow-hidden border border-slate-200 border-border/60 shadow-xl aspect-4/3 md:aspect-auto"
           >
             <img
               src="/myprofile.jpeg"
@@ -164,7 +159,7 @@ export function ResumeSection() {
               className="absolute inset-0 h-full w-full object-cover object-[65%_35%]"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-slate-950/5 to-transparent" />
-            <div className="absolute inset-0 rounded-2xl ring-1 ring-inset ring-cyan-400/20" />
+            <div className="absolute inset-0 rounded-2xl ring-1 ring-inset ring-primary-accent/20" />
           </motion.div>
 
           <motion.div
@@ -186,7 +181,6 @@ export function ResumeSection() {
           >
             <CodingSkillsPanel
               codingSkills={codingSkills}
-              progress={smoothSkillsProgress}
             />
           </motion.div>
         </div>

@@ -30,8 +30,8 @@ function CategoryPill({
       onClick={onClick}
       className={`px-4 py-1.5 rounded-full text-sm font-medium border transition-colors ${
         active
-          ? 'bg-cyan-500 border-cyan-500 text-white shadow-lg shadow-cyan-500/25'
-          : 'border-slate-300 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:border-cyan-400 hover:text-cyan-600 dark:hover:text-cyan-400'
+          ? 'bg-primary-accent border-primary-accent text-white shadow-lg shadow-primary-accent/25'
+          : 'border-slate-300 border-border text-slate-600 text-muted-foreground hover:border-primary-accent hover:text-primary hover:text-primary-accent'
       }`}
     >
       {label}
@@ -54,10 +54,10 @@ function ProjectCard({
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: index * 0.08 }}
       viewport={{ once: true }}
-      className="group flex flex-col rounded-2xl border border-slate-200 dark:border-slate-700/50 bg-white dark:bg-slate-900 overflow-hidden hover:border-cyan-400/50 dark:hover:border-cyan-500/40 hover:shadow-lg dark:hover:shadow-cyan-500/5 transition-all duration-300"
+      className="group flex flex-col rounded-2xl border border-slate-200 border-border bg-white dark:bg-card overflow-hidden hover:border-primary-accent/50 dark:hover:border-primary-accent/40 hover:shadow-lg dark:hover:shadow-primary-accent/5 transition-all duration-300"
     >
       {/* Image */}
-      <div className="relative h-52 overflow-hidden bg-slate-100 dark:bg-slate-800 shrink-0">
+      <div className="relative h-52 overflow-hidden bg-slate-100 bg-card shrink-0">
         <img
           src={project.image}
           alt={project.title}
@@ -67,7 +67,7 @@ function ProjectCard({
 
         {/* Category badge */}
         <div className="absolute top-3 left-3">
-          <span className="px-3 py-1 rounded-full text-[11px] font-semibold uppercase tracking-wider bg-white/90 dark:bg-slate-900/90 backdrop-blur border border-slate-200/80 dark:border-slate-700/80 text-slate-700 dark:text-slate-300">
+          <span className="px-3 py-1 rounded-full text-[11px] font-semibold uppercase tracking-wider bg-white/90 dark:bg-card/90 backdrop-blur border border-slate-200/80 border-border/80 text-slate-700 text-foreground">
             {project.category}
           </span>
         </div>
@@ -76,24 +76,24 @@ function ProjectCard({
       {/* Content */}
       <div className="flex flex-col flex-1 p-5">
         {project.client && (
-          <p className="text-[11px] uppercase tracking-widest text-cyan-600 dark:text-cyan-400 font-semibold mb-2">
+          <p className="text-[11px] uppercase tracking-widest text-primary text-primary-accent font-semibold mb-2">
             {project.client}
           </p>
         )}
 
-        <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-3 group-hover:text-cyan-600 dark:group-hover:text-cyan-300 transition-colors">
+        <h3 className="text-lg font-bold text-slate-900 text-foreground mb-3 group-hover:text-primary dark:group-hover:text-primary-accent transition-colors">
           {project.title}
         </h3>
 
-        <p className="text-sm leading-6 text-slate-500 dark:text-slate-400 flex-1 mb-5">
+        <p className="text-sm leading-6 text-slate-500 text-muted-foreground flex-1 mb-5">
           {project.description}
         </p>
 
-        <div className="flex items-center gap-3 pt-4 border-t border-slate-100 dark:border-slate-800">
+        <div className="flex items-center gap-3 pt-4 border-t border-slate-100 border-border">
           <Link
             to="/projects/$id"
             params={{ id: String(id) }}
-            className="inline-flex items-center gap-1.5 text-sm font-semibold text-cyan-600 dark:text-cyan-400 hover:text-cyan-700 dark:hover:text-cyan-300 transition-colors"
+            className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary text-primary-accent hover:text-primary hover:text-primary-accent transition-colors"
           >
             View details
             <ArrowRight size={14} />
@@ -127,11 +127,11 @@ export function ProjectsPage() {
       : worksData.items.filter((p) => p.category === activeCategory)
 
   return (
-    <div className="h-screen flex flex-col overflow-hidden bg-white dark:bg-slate-950">
+    <div className="h-screen flex flex-col overflow-hidden bg-white dark:bg-background">
       <Navbar />
 
       {/* Banner */}
-      <section className="relative w-full shrink-0 overflow-hidden bg-slate-950 pt-28 pb-16 px-6 sm:px-10">
+      <section className="relative w-full shrink-0 overflow-hidden bg-background pt-28 pb-16 px-6 sm:px-10">
         <div className="absolute inset-0 bg-linear-to-b from-slate-900 via-slate-950 to-slate-950" />
 
         <div className="hidden sm:block absolute inset-6 lg:inset-10 pointer-events-none">
@@ -159,7 +159,7 @@ export function ProjectsPage() {
           transition={{ duration: 0.6 }}
           className="relative z-10 text-center max-w-2xl mx-auto"
         >
-          <span className="inline-block mb-4 px-4 py-2 rounded-full border border-cyan-400/30 bg-cyan-400/10 text-xs font-semibold uppercase tracking-widest text-cyan-300">
+          <span className="inline-block mb-4 px-4 py-2 rounded-full border border-primary-accent/30 bg-primary-accent/10 text-xs font-semibold uppercase tracking-widest text-primary-accent">
             Portfolio
           </span>
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black uppercase tracking-tight leading-[0.9] text-white mb-4">
@@ -179,7 +179,7 @@ export function ProjectsPage() {
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, delay: 0.2 }}
-            className="relative z-10 -mt-6 mb-8 flex flex-wrap justify-center gap-3 rounded-2xl border border-slate-200 dark:border-white/10 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md shadow-xl py-3 px-4"
+            className="relative z-10 -mt-6 mb-8 flex flex-wrap justify-center gap-3 rounded-2xl border border-slate-200 border-border bg-white/95 dark:bg-card/95 backdrop-blur-md shadow-xl py-3 px-4"
           >
             {categories.map((cat) => (
               <CategoryPill
@@ -217,7 +217,7 @@ export function ProjectsPage() {
           <div className="mt-10 text-center">
             <Link
               to="/"
-              className="inline-flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 transition-colors"
+              className="inline-flex items-center gap-2 text-sm text-slate-500 text-muted-foreground hover:text-slate-700 dark:hover:text-slate-200 transition-colors"
             >
               ← Back to home
             </Link>

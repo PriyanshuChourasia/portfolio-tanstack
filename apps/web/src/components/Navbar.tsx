@@ -84,7 +84,7 @@ export function Navbar() {
         transition={{ duration: 0.5 }}
         className={`fixed top-0 w-full z-50 transition-all duration-300 ${
           scrolled
-            ? 'bg-white/70 dark:bg-slate-900/70 backdrop-blur-md border-b border-slate-200/60 dark:border-slate-800/60 shadow-sm'
+            ? 'bg-white/70 dark:bg-card/70 backdrop-blur-md border-b border-slate-200/60 border-border/60 shadow-sm'
             : 'bg-transparent'
         }`}
       >
@@ -99,9 +99,9 @@ export function Navbar() {
                 <img
                   src="/myprofile.jpeg"
                   alt="Priyanshu Chourasia"
-                  className="h-9 w-9 rounded-full object-cover border-2 border-cyan-400/60"
+                  className="h-9 w-9 rounded-full object-cover border-2 border-primary-accent/60"
                 />
-                <span className="text-xl font-bold bg-linear-to-r from-blue-500 to-cyan-500 bg-clip-text text-transparent">
+                <span className="text-xl font-bold bg-linear-to-r from-primary to-primary-accent bg-clip-text text-transparent">
                   CodyMitra
                 </span>
               </motion.div>
@@ -113,14 +113,14 @@ export function Navbar() {
                 const active = item.to === '/projects' && isProjectsActive
                 const linkClass = `text-sm transition-colors relative group ${
                   active
-                    ? 'text-cyan-500 dark:text-cyan-400'
+                    ? 'text-primary-accent text-primary-accent'
                     : scrolled
-                      ? 'text-slate-700 dark:text-slate-200'
+                      ? 'text-slate-700 text-foreground'
                       : 'text-slate-300'
                 }`
                 const underline = (
                   <span
-                    className={`absolute bottom-0 left-0 h-0.5 bg-linear-to-r from-blue-500 to-cyan-500 transition-all duration-300 ${
+                    className={`absolute bottom-0 left-0 h-0.5 bg-linear-to-r from-primary to-primary-accent transition-all duration-300 ${
                       active ? 'w-full' : 'w-0 group-hover:w-full'
                     }`}
                   />
@@ -134,7 +134,7 @@ export function Navbar() {
                   <motion.a
                     key={item.id}
                     href={navHref(item.id)}
-                    whileHover={{ color: '#22d3ee' }}
+                    whileHover={{ color: '#F2A25C' }}
                     className={linkClass}
                   >
                     {item.label}
@@ -156,8 +156,8 @@ export function Navbar() {
                     whileHover={{ scale: 1.1 }}
                     className={`transition-colors ${
                       scrolled
-                        ? 'text-slate-500 dark:text-slate-400 hover:text-cyan-500'
-                        : 'text-slate-300 hover:text-cyan-400'
+                        ? 'text-slate-500 text-muted-foreground hover:text-primary-accent'
+                        : 'text-slate-300 hover:text-primary-accent'
                     }`}
                   >
                     {link.icon}
@@ -169,7 +169,7 @@ export function Navbar() {
               <motion.button
                 whileTap={{ scale: 0.9 }}
                 onClick={() => setMobileOpen((o) => !o)}
-                className="md:hidden flex items-center justify-center w-10 h-10 rounded-full border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300"
+                className="md:hidden flex items-center justify-center w-10 h-10 rounded-full border border-slate-200 border-border bg-slate-100 bg-card text-slate-600 text-foreground"
                 aria-label="Toggle mobile menu"
               >
                 <AnimatePresence mode="wait" initial={false}>
@@ -209,7 +209,7 @@ export function Navbar() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.2 }}
-            className="fixed top-[4.5rem] left-0 right-0 z-40 md:hidden bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-slate-200 dark:border-slate-700 shadow-xl"
+            className="fixed top-[4.5rem] left-0 right-0 z-40 md:hidden bg-white/95 dark:bg-card/95 backdrop-blur-md border-b border-slate-200 border-border shadow-xl"
           >
             <div className="max-w-7xl mx-auto px-4 py-4 flex flex-col gap-1">
               {navItems.map((item) => {
@@ -217,8 +217,8 @@ export function Navbar() {
                 const active = item.to === '/projects' && isProjectsActive
                 const linkClass = `flex items-center gap-3 px-4 py-3 rounded-xl transition-colors text-sm font-medium ${
                   active
-                    ? 'bg-cyan-50 dark:bg-slate-800 text-cyan-600 dark:text-cyan-400'
-                    : 'text-slate-700 dark:text-slate-300 hover:bg-cyan-50 dark:hover:bg-slate-800 hover:text-cyan-600 dark:hover:text-cyan-400'
+                    ? 'bg-primary-accent/5 bg-card text-primary text-primary-accent'
+                    : 'text-slate-700 text-foreground hover:bg-primary-accent/5 hover:bg-card hover:text-primary hover:text-primary-accent'
                 }`
                 return item.to ? (
                   <Link
@@ -242,14 +242,14 @@ export function Navbar() {
                   </a>
                 )
               })}
-              <div className="flex items-center gap-4 px-4 pt-3 mt-1 border-t border-slate-200 dark:border-slate-700">
+              <div className="flex items-center gap-4 px-4 pt-3 mt-1 border-t border-slate-200 border-border">
                 {socialLinks.map((link) => (
                   <a
                     key={link.name}
                     href={link.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-slate-500 dark:text-slate-400 hover:text-cyan-500 transition-colors"
+                    className="text-slate-500 text-muted-foreground hover:text-primary-accent transition-colors"
                   >
                     {link.icon}
                   </a>
@@ -268,10 +268,10 @@ export function Navbar() {
         {navItems.map((item) => {
           const Icon = item.icon
           const active = item.to === '/projects' && isProjectsActive
-          const linkClass = `relative flex items-center justify-center w-11 h-11 rounded-full border bg-white/80 dark:bg-slate-900/80 shadow-lg transition-all ${
+          const linkClass = `relative flex items-center justify-center w-11 h-11 rounded-full border bg-white/80 dark:bg-card/80 shadow-lg transition-all ${
             active
-              ? 'border-cyan-500/70 text-cyan-500 dark:text-cyan-300'
-              : 'border-cyan-500/30 text-cyan-600 dark:text-cyan-300 hover:text-cyan-500 hover:border-cyan-500/70'
+              ? 'border-primary-accent/70 text-primary-accent dark:text-primary-accent'
+              : 'border-primary-accent/30 text-primary dark:text-primary-accent hover:text-primary-accent hover:border-primary-accent/70'
           }`
           return (
             <motion.div
@@ -300,7 +300,7 @@ export function Navbar() {
                 </motion.a>
               )}
               {/* Tooltip */}
-              <span className="absolute right-14 top-1/2 -translate-y-1/2 px-2 py-1 rounded-md bg-slate-900 dark:bg-slate-700 text-white text-xs whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+              <span className="absolute right-14 top-1/2 -translate-y-1/2 px-2 py-1 rounded-md bg-card bg-card text-white text-xs whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
                 {item.label}
               </span>
             </motion.div>

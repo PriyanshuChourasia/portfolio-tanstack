@@ -448,9 +448,9 @@ export function ResumeTemplate() {
   }
 
   return (
-    <div className="w-full bg-slate-950 flex flex-col md:h-screen md:overflow-hidden">
+    <div className="w-full bg-background flex flex-col md:h-screen md:overflow-hidden">
       {/* Header with layout names */}
-      <header className="shrink-0 bg-slate-900/80 border-b border-slate-800 backdrop-blur-md z-20">
+      <header className="shrink-0 bg-card/80 border-b border-slate-800 backdrop-blur-md z-20">
         <div className="h-14 flex items-center justify-between px-3 sm:px-4 gap-2">
           <div className="flex items-center gap-2 min-w-0">
             <button
@@ -490,7 +490,7 @@ export function ResumeTemplate() {
                 {activeLayout === layout.id && (
                   <motion.div
                     layoutId="activeLayout"
-                    className="absolute inset-0 bg-cyan-500/15 border border-cyan-500/30 rounded-md"
+                    className="absolute inset-0 bg-primary-accent/15 border border-primary-accent/30 rounded-md"
                     transition={{ type: 'spring', stiffness: 380, damping: 30 }}
                   />
                 )}
@@ -509,7 +509,7 @@ export function ResumeTemplate() {
                     onClick={() => selectProfile(i)}
                     className={`px-2 py-1 text-xs rounded transition-colors ${
                       activeProfileIdx === i
-                        ? 'bg-cyan-500/20 text-cyan-400'
+                        ? 'bg-primary-accent/20 text-primary-accent'
                         : 'text-slate-400 hover:text-white'
                     }`}
                   >
@@ -529,7 +529,7 @@ export function ResumeTemplate() {
                 onClick={toggleCycle}
                 className={`p-1 rounded transition-colors ${
                   isCycling
-                    ? 'text-cyan-400 bg-cyan-500/10'
+                    ? 'text-primary-accent bg-primary-accent/10'
                     : 'text-slate-400 hover:text-white hover:bg-slate-700/50'
                 }`}
                 title={
@@ -544,7 +544,7 @@ export function ResumeTemplate() {
               </button>
             </div>
 
-            <button className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-cyan-400 hover:text-cyan-300 border border-cyan-500/30 rounded-md hover:bg-cyan-500/10 transition-colors">
+            <button className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-primary-accent hover:text-primary-accent border border-primary-accent/30 rounded-md hover:bg-primary-accent/10 transition-colors">
               <Download className="w-4 h-4" />
               Export
             </button>
@@ -559,7 +559,7 @@ export function ResumeTemplate() {
               onClick={() => setActiveLayout(layout.id)}
               className={`shrink-0 px-4 py-1.5 text-sm rounded-md border transition-all ${
                 activeLayout === layout.id
-                  ? 'bg-cyan-500/15 text-white border-cyan-500/30'
+                  ? 'bg-primary-accent/15 text-white border-primary-accent/30'
                   : 'text-slate-400 hover:text-white hover:bg-slate-800/50 border-transparent'
               }`}
             >
@@ -574,7 +574,7 @@ export function ResumeTemplate() {
         {/* Editor — full-width block on mobile, collapsible sidebar on desktop */}
         <motion.aside
           animate={isMobile ? {} : { width: sidebarOpen ? 380 : 0 }}
-          className={`overflow-hidden border-r border-slate-800 bg-slate-900/50 shrink-0 ${isMobile ? 'w-full' : ''}`}
+          className={`overflow-hidden border-r border-slate-800 bg-card/50 shrink-0 ${isMobile ? 'w-full' : ''}`}
           transition={{ type: 'spring', stiffness: 300, damping: 30 }}
         >
           <div
@@ -585,7 +585,7 @@ export function ResumeTemplate() {
         </motion.aside>
 
         {/* Preview panel */}
-        <main className="flex-1 overflow-y-auto bg-slate-950">
+        <main className="flex-1 overflow-y-auto bg-background">
           <ResumePreview data={data} layout={activeLayout} />
         </main>
       </div>

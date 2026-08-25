@@ -23,18 +23,18 @@ function hashSeed(value: string | number): number {
 }
 
 const GRADIENTS: Array<[string, string, string]> = [
-  ['from-cyan-500/15', 'via-indigo-900/80', 'to-blue-950/85'],
-  ['from-emerald-500/15', 'via-teal-900/80', 'to-cyan-950/85'],
+  ['from-primary-accent/15', 'via-indigo-900/80', 'to-primary/95/85'],
+  ['from-emerald-500/15', 'via-teal-900/80', 'to-primary/95/85'],
   ['from-violet-500/15', 'via-purple-900/80', 'to-slate-950/85'],
   ['from-rose-500/15', 'via-pink-900/80', 'to-stone-950/85'],
   ['from-amber-500/15', 'via-orange-900/80', 'to-slate-950/85'],
-  ['from-sky-500/15', 'via-blue-900/80', 'to-indigo-950/85'],
+  ['from-sky-500/15', 'via-primary/90/80', 'to-indigo-950/85'],
   ['from-fuchsia-500/15', 'via-pink-900/80', 'to-violet-950/85'],
   ['from-lime-500/15', 'via-green-900/80', 'to-emerald-950/85'],
 ]
 
 const ICON_COLORS: Array<[string, string, string]> = [
-  ['border-cyan-400/15', 'bg-cyan-400/10', 'text-cyan-300/70'],
+  ['border-primary-accent/15', 'bg-primary-accent/10', 'text-primary-accent/70'],
   ['border-emerald-400/15', 'bg-emerald-400/10', 'text-emerald-300/70'],
   ['border-violet-400/15', 'bg-violet-400/10', 'text-violet-300/70'],
   ['border-rose-400/15', 'bg-rose-400/10', 'text-rose-300/70'],
