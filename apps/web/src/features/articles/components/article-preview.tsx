@@ -36,51 +36,62 @@ export default function ArticlePreviewSection() {
               </a>
             </div>
 
-            <div className="space-y-4">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5">
               {previewPosts.map((post, index) => (
                 <motion.article
                   key={post.id}
-                  initial={{ opacity: 0, x: 30 }}
-                  whileInView={{ opacity: 1, x: 0 }}
+                  initial={{ opacity: 0, y: 24 }}
+                  whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: index * 0.08 }}
-                  className="group flex flex-col gap-4 rounded-2xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 p-4 transition-colors hover:border-cyan-400/40 dark:hover:border-cyan-400/30 hover:bg-slate-50 dark:hover:bg-white/10 sm:flex-row sm:items-center"
+                  className="group relative flex flex-col overflow-hidden rounded-2xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 transition-all duration-300 hover:-translate-y-1 hover:border-cyan-400/40 hover:shadow-xl hover:shadow-cyan-500/10 dark:hover:border-cyan-400/30"
                 >
-                  <div className="h-40 w-full shrink-0 overflow-hidden rounded-xl border border-slate-200 dark:border-white/10 sm:h-20 sm:w-20">
+                  <div className="relative h-36 w-full shrink-0 overflow-hidden sm:h-40">
                     <BlogArtwork
                       src={post.image}
                       alt={post.title}
                       placeholderLabel="Blog cover"
                       showPlaceholder={true}
-                      compact
                       seed={post.id}
                       className="transition-transform duration-500 group-hover:scale-105"
                     />
+                    <div className="pointer-events-none absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-black/40 to-transparent" />
                   </div>
 
-                  <div className="min-w-0 grow space-y-2">
-                    <div className="flex flex-wrap items-center gap-2 text-[10px] uppercase tracking-[0.28em] text-cyan-500 dark:text-cyan-300">
-                      <span>{post.category}</span>
-                      <span className="text-slate-300 dark:text-slate-500">
-                        •
+                  <div className="flex grow flex-col gap-3 p-4 sm:p-5">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <span className="rounded-full border border-cyan-200 bg-cyan-50 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-cyan-600 dark:border-cyan-500/25 dark:bg-cyan-500/15 dark:text-cyan-300">
+                        {post.category}
                       </span>
-                      <span>{post.date}</span>
+                      <span className="text-[11px] text-slate-400 dark:text-slate-500">
+                        {post.date}
+                      </span>
                     </div>
-                    <h3 className="truncate text-base font-semibold text-slate-900 dark:text-white">
+
+                    <h3 className="line-clamp-2 text-base font-bold leading-snug text-slate-900 transition-colors group-hover:text-cyan-600 dark:text-white dark:group-hover:text-cyan-300">
                       {post.title}
                     </h3>
-                    <p className="line-clamp-2 text-sm leading-6 text-slate-500 dark:text-slate-400">
+
+                    <p className="line-clamp-2 grow text-sm leading-6 text-slate-500 dark:text-slate-400">
                       {post.desc}
                     </p>
+
+                    <div className="mt-1 flex items-center gap-2 text-sm font-semibold text-cyan-600 dark:text-cyan-300">
+                      Read article
+                      <span
+                        aria-hidden="true"
+                        className="transition-transform duration-300 group-hover:translate-x-1"
+                      >
+                        →
+                      </span>
+                    </div>
                   </div>
 
                   <Link
                     to="/blog/$id"
                     params={{ id: String(post.id) }}
-                    className="shrink-0 self-start rounded-full border border-cyan-400/30 bg-cyan-50 dark:bg-cyan-400/10 px-4 py-3 text-sm font-semibold text-cyan-600 dark:text-cyan-200 transition-colors hover:border-cyan-400 hover:bg-cyan-100 dark:hover:border-cyan-300/40 dark:hover:bg-cyan-400/20"
+                    className="absolute inset-0"
                     aria-label={`Open ${post.title}`}
-                  >
-                    →
-                  </Link>
+                  />
                 </motion.article>
               ))}
             </div>
