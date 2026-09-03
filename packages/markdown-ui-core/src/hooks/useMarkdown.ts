@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 
-export function useMarkdown(_markdown: string) {
+export function useMarkdown() {
   const getWordCount = useCallback((text: string) => {
     return text.trim().split(/\s+/).filter(Boolean).length
   }, [])
