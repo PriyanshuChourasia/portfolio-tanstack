@@ -38,14 +38,14 @@ type NavItem = {
   label: string
   id: string
   icon: LucideIcon
-  to?: '/projects'
+  to?: string
 }
 
 const navItems: Array<NavItem> = [
   { label: 'Home', id: 'home', icon: Home },
   { label: 'About', id: 'about', icon: FileText },
   { label: 'Experience', id: 'experience', icon: Briefcase },
-  { label: 'Projects', id: 'projects', icon: FolderKanban, to: '/projects' },
+  { label: 'Projects', id: 'projects', icon: FolderKanban, to: '#projects' },
   { label: 'Blogs', id: 'articles', icon: Newspaper },
   { label: 'Contact', id: 'contact', icon: Mail },
 ]
@@ -56,8 +56,10 @@ export function Navbar() {
   const { location } = useRouterState()
   const isHome = location.pathname === '/'
   const isProjectsActive =
-    location.pathname === '/projects' ||
-    location.pathname.startsWith('/projects/')
+    location.pathname === '/' ||
+    typeof window !== 'undefined' && window.location.hash === '#projects'
+  const isBlogsActive =
+    location.pathname.startsWith('/blog')
   const navHref = (id: string) => (isHome ? `#${id}` : `/#${id}`)
 
   useEffect(() => {
@@ -110,7 +112,9 @@ export function Navbar() {
             {/* Desktop nav links */}
             <div className="hidden md:flex items-center gap-8">
               {navItems.map((item) => {
-                const active = item.to === '/projects' && isProjectsActive
+                const active =
+                  (item.id === 'projects' && isProjectsActive) ||
+                  (item.id === 'articles' && isBlogsActive)
                 const linkClass = `text-sm transition-colors relative group ${
                   active
                     ? 'text-primary-accent text-primary-accent'
@@ -126,16 +130,17 @@ export function Navbar() {
                   />
                 )
                 return item.to ? (
-                  <Link key={item.id} to={item.to} className={linkClass}>
+                  <a key={item.id} href={item.to} className={linkClass} onClick={handleNavClick}>
                     {item.label}
                     {underline}
-                  </Link>
+                  </a>
                 ) : (
                   <motion.a
                     key={item.id}
                     href={navHref(item.id)}
                     whileHover={{ color: '#F2A25C' }}
                     className={linkClass}
+                    onClick={handleNavClick}
                   >
                     {item.label}
                     {underline}
@@ -214,22 +219,24 @@ export function Navbar() {
             <div className="max-w-7xl mx-auto px-4 py-4 flex flex-col gap-1">
               {navItems.map((item) => {
                 const Icon = item.icon
-                const active = item.to === '/projects' && isProjectsActive
+                const active =
+                  (item.id === 'projects' && isProjectsActive) ||
+                  (item.id === 'articles' && isBlogsActive)
                 const linkClass = `flex items-center gap-3 px-4 py-3 rounded-xl transition-colors text-sm font-medium ${
                   active
                     ? 'bg-primary-accent/5 bg-card text-primary text-primary-accent'
                     : 'text-slate-700 text-foreground hover:bg-primary-accent/5 hover:bg-card hover:text-primary hover:text-primary-accent'
                 }`
                 return item.to ? (
-                  <Link
+                  <a
                     key={item.id}
-                    to={item.to}
+                    href={item.to}
                     onClick={handleNavClick}
                     className={linkClass}
                   >
                     <Icon size={16} />
                     {item.label}
-                  </Link>
+                  </a>
                 ) : (
                   <a
                     key={item.id}
@@ -264,10 +271,11 @@ export function Navbar() {
       <motion.div
         style={{ y: menuYOffset, opacity: menuOpacity }}
         className="fixed right-6 top-1/2 -translate-y-1/2 z-40 hidden lg:flex flex-col gap-4 pointer-events-auto"
-      >
-        {navItems.map((item) => {
+      >          {navItems.map((item) => {
           const Icon = item.icon
-          const active = item.to === '/projects' && isProjectsActive
+          const active =
+            (item.id === 'projects' && isProjectsActive) ||
+            (item.id === 'articles' && isBlogsActive)
           const linkClass = `relative flex items-center justify-center w-11 h-11 rounded-full border bg-white/80 dark:bg-card/80 shadow-lg transition-all ${
             active
               ? 'border-primary-accent/70 text-primary-accent dark:text-primary-accent'
@@ -281,14 +289,14 @@ export function Navbar() {
               className="relative group"
             >
               {item.to ? (
-                <Link
-                  to={item.to}
+                <a
+                  href={item.to}
                   aria-label={item.label}
                   title={item.label}
                   className={linkClass}
                 >
                   <Icon size={18} strokeWidth={1.75} />
-                </Link>
+                </a>
               ) : (
                 <motion.a
                   href={navHref(item.id)}

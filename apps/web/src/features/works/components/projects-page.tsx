@@ -1,18 +1,28 @@
-import { Link } from '@tanstack/react-router'
-import { motion } from 'framer-motion'
 import { useState } from 'react'
-import { ArrowRight, ExternalLink, Plus } from 'lucide-react'
+import { motion } from 'framer-motion'
+import { ArrowRight, ArrowUpRight } from 'lucide-react'
 import { Navbar } from '@/components/Navbar'
 import worksData from '@/data/works-data.json'
 
 type Category = string
 
-const CornerMark = ({ className }: { className: string }) => (
-  <Plus
-    className={`absolute h-4 w-4 text-white/40 ${className}`}
-    strokeWidth={1.5}
-  />
-)
+const categories = ['All', 'Web Dev', 'Mobile Dev', 'Full Stack', 'Frontend', 'Backend']
+
+const containerVariants = {
+  hidden: {},
+  show: {
+    transition: { staggerChildren: 0.1, delayChildren: 0.2 },
+  },
+}
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 16 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.5 },
+  },
+}
 
 function CategoryPill({
   label,
@@ -24,90 +34,77 @@ function CategoryPill({
   onClick: () => void
 }) {
   return (
-    <motion.button
-      whileHover={{ scale: 1.05 }}
-      whileTap={{ scale: 0.95 }}
+    <button
       onClick={onClick}
-      className={`px-4 py-1.5 rounded-full text-sm font-medium border transition-colors ${
-        active
-          ? 'bg-primary-accent border-primary-accent text-white shadow-lg shadow-primary-accent/25'
-          : 'border-slate-300 border-border text-slate-600 text-muted-foreground hover:border-primary-accent hover:text-primary hover:text-primary-accent'
-      }`}
+      className={`px-4 py-1.5 rounded-full text-sm font-medium border transition-all duration-200 ${active
+          ? 'bg-[#EF1D25] border-[#EF1D25] text-white shadow-sm'
+          : 'border-[#252525] text-[#858585] hover:border-[#4A1717] hover:text-[#F5F5F5]'
+        }`}
     >
       {label}
-    </motion.button>
+    </button>
   )
 }
 
-function ProjectCard({
+function FeaturedProject({
   project,
   index,
-  id,
 }: {
   project: (typeof worksData.items)[0]
   index: number
-  id: number
 }) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, delay: index * 0.08 }}
-      viewport={{ once: true }}
-      className="group flex flex-col rounded-2xl border border-slate-200 border-border bg-white dark:bg-card overflow-hidden hover:border-primary-accent/50 dark:hover:border-primary-accent/40 hover:shadow-lg dark:hover:shadow-primary-accent/5 transition-all duration-300"
+      variants={containerVariants}
+      initial="hidden"
+      whileInView="show"
+      viewport={{ once: true, margin: '-80px' }}
+      className="relative rounded-2xl border border-[#252525] bg-[#0B0B0B] overflow-hidden"
     >
-      {/* Image */}
-      <div className="relative h-52 overflow-hidden bg-slate-100 bg-card shrink-0">
-        <img
-          src={project.image}
-          alt={project.title}
-          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-        />
-        <div className="absolute inset-0 bg-linear-to-t from-slate-900/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-
-        {/* Category badge */}
-        <div className="absolute top-3 left-3">
-          <span className="px-3 py-1 rounded-full text-[11px] font-semibold uppercase tracking-wider bg-white/90 dark:bg-card/90 backdrop-blur border border-slate-200/80 border-border/80 text-slate-700 text-foreground">
-            {project.category}
-          </span>
+      <div className="grid grid-cols-1 md:grid-cols-2">
+        {/* Image — 55-60% visual area */}
+        <div className="relative aspect-[4/3] md:aspect-auto overflow-hidden bg-[#050505]">
+          <motion.img
+            src={project.image}
+            alt={project.title}
+            initial={{ opacity: 0, scale: 1.05 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7 }}
+            className="absolute inset-0 h-full w-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0B0B0B] via-transparent to-transparent" />
         </div>
-      </div>
 
-      {/* Content */}
-      <div className="flex flex-col flex-1 p-5">
-        {project.client && (
-          <p className="text-[11px] uppercase tracking-widest text-primary text-primary-accent font-semibold mb-2">
-            {project.client}
+        {/* Info */}
+        <div className="flex flex-col justify-center p-8 md:p-10 lg:p-12 bg-[#0B0B0B]">
+          <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-[#EF1D25]">
+            0{index + 1}
+          </span>
+
+          {project.client && (
+            <p className="mt-2 text-xs font-semibold uppercase tracking-wider text-[#EF1D25]">
+              {project.client}
+            </p>
+          )}
+
+          <h2 className="mt-4 text-2xl sm:text-3xl lg:text-4xl font-bold text-[#F5F5F5] leading-tight">
+            {project.title}
+          </h2>
+
+          <p className="mt-4 text-sm leading-relaxed text-[#858585] line-clamp-3">
+            {project.description}
           </p>
-        )}
-
-        <h3 className="text-lg font-bold text-slate-900 text-foreground mb-3 group-hover:text-primary dark:group-hover:text-primary-accent transition-colors">
-          {project.title}
-        </h3>
-
-        <p className="text-sm leading-6 text-slate-500 text-muted-foreground flex-1 mb-5">
-          {project.description}
-        </p>
-
-        <div className="flex items-center gap-3 pt-4 border-t border-slate-100 border-border">
-          <Link
-            to="/projects/$id"
-            params={{ id: String(id) }}
-            className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary text-primary-accent hover:text-primary hover:text-primary-accent transition-colors"
-          >
-            View details
-            <ArrowRight size={14} />
-          </Link>
 
           {project.link && project.link !== '#' && (
             <a
               href={project.link}
               target="_blank"
-              rel="noreferrer"
-              className="ml-auto inline-flex items-center gap-1.5 text-sm text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors"
+              rel="noopener noreferrer"
+              className="mt-6 flex items-center gap-2 text-sm font-semibold text-[#EF1D25] hover:gap-3 transition-all duration-200"
             >
-              <ExternalLink size={13} />
-              Live
+              View project
+              <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" />
             </a>
           )}
         </div>
@@ -116,71 +113,120 @@ function ProjectCard({
   )
 }
 
+function ProjectCard({
+  project,
+  index,
+}: {
+  project: (typeof worksData.items)[0]
+  index: number
+}) {
+  return (
+    <motion.div
+      variants={itemVariants}
+      whileHover={{ y: -2 }}
+      className="group relative flex flex-col rounded-xl border border-[#252525] bg-[#0B0B0B] overflow-hidden transition-all duration-200 hover:border-[#4A1717]"
+    >
+      {/* Image */}
+      <div className="relative aspect-[4/3] overflow-hidden bg-[#050505] shrink-0">
+        <motion.img
+          src={project.image}
+          alt={project.title}
+          initial={{ opacity: 0, scale: 1.05 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="absolute inset-0 h-full w-full object-cover transition-transform duration-300 group-hover:scale-103"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0B0B0B] via-transparent to-transparent" />
+      </div>
+
+      {/* Info */}
+      <div className="flex flex-col p-5 bg-[#0B0B0B]">
+        <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-[#EF1D25]">
+          0{index + 1}
+        </span>
+
+        {project.client && (
+          <p className="mt-1 text-[10px] font-semibold uppercase tracking-wider text-[#EF1D25]">
+            {project.client}
+          </p>
+        )}
+
+        <h3 className="mt-2 text-base font-bold text-[#F5F5F5] leading-snug group-hover:text-[#EF1D25] transition-colors duration-200">
+          {project.title}
+        </h3>
+
+        <p className="mt-2 text-xs leading-relaxed text-[#858585] line-clamp-2 flex-1">
+          {project.description}
+        </p>
+
+        <p className="mt-3 text-[10px] font-mono text-[#555555]">
+          {project.category}
+        </p>
+
+        {project.link && project.link !== '#' && (
+          <a
+            href={project.link}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-4 flex items-center gap-2 text-xs font-semibold text-[#EF1D25] hover:gap-3 transition-all duration-200"
+          >
+            View project
+            <ArrowUpRight className="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-0.5" />
+          </a>
+        )}
+      </div>
+    </motion.div>
+  )
+}
+
 export function ProjectsPage() {
   const [activeCategory, setActiveCategory] = useState<Category>('All')
-
-  const categories = ['All', ...worksData.categories.filter((c) => c !== 'All')]
 
   const filtered =
     activeCategory === 'All'
       ? worksData.items
       : worksData.items.filter((p) => p.category === activeCategory)
 
+  const featured = filtered[0]
+  const remaining = filtered.slice(1)
+
   return (
-    <div className="h-screen flex flex-col overflow-hidden bg-white dark:bg-background">
+    <div className="min-h-screen bg-[#050505] text-[#F5F5F5]">
       <Navbar />
 
-      {/* Banner */}
-      <section className="relative w-full shrink-0 overflow-hidden bg-background pt-28 pb-16 px-6 sm:px-10">
-        <div className="absolute inset-0 bg-linear-to-b from-slate-900 via-slate-950 to-slate-950" />
+      {/* Header */}
+      <section className="relative overflow-hidden bg-[#050505] pt-16 pb-12 px-6 sm:px-10">
+        {/* Subtle background glow */}
+        <div className="absolute top-0 right-0 h-96 w-96 rounded-full bg-[#EF1D25]/[0.04] blur-3xl pointer-events-none" />
 
-        <div className="hidden sm:block absolute inset-6 lg:inset-10 pointer-events-none">
-          <div className="absolute left-1/3 top-0 bottom-0 w-px bg-white/10" />
-          <div className="absolute left-2/3 top-0 bottom-0 w-px bg-white/10" />
-          <div className="absolute top-1/2 left-0 right-0 h-px bg-white/10" />
-          <CornerMark className="-left-2 -top-2" />
-          <CornerMark className="-right-2 -top-2" />
-          <CornerMark className="-left-2 -bottom-2" />
-          <CornerMark className="-right-2 -bottom-2" />
+        <div className="relative z-10 max-w-6xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+            className="text-center mb-10"
+          >
+            <span className="inline-block text-[10px] font-semibold uppercase tracking-[0.3em] text-[#EF1D25]">
+              Portfolio / Selected Work
+            </span>
+
+            <h1 className="mt-3 text-4xl sm:text-5xl lg:text-6xl font-black uppercase tracking-tight leading-[0.9] text-[#F5F5F5]">
+              My Projects
+            </h1>
+
+            <p className="mt-4 text-sm text-[#858585] max-w-xl mx-auto">
+              A selection of products and systems I&apos;ve built — from web portals and mobile applications to backend services.
+            </p>
+          </motion.div>
         </div>
-
-        <div
-          aria-hidden
-          className="hidden lg:flex absolute inset-0 items-center justify-center select-none pointer-events-none"
-        >
-          <span className="text-[9rem] xl:text-[11rem] font-black uppercase tracking-tight text-white/[0.06] leading-none">
-            Projects
-          </span>
-        </div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="relative z-10 text-center max-w-2xl mx-auto"
-        >
-          <span className="inline-block mb-4 px-4 py-2 rounded-full border border-primary-accent/30 bg-primary-accent/10 text-xs font-semibold uppercase tracking-widest text-primary-accent">
-            Portfolio
-          </span>
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black uppercase tracking-tight leading-[0.9] text-white mb-4">
-            My Projects
-          </h1>
-          <p className="text-slate-300 text-sm sm:text-base">
-            A selection of products and systems I&apos;ve built — from web
-            portals to mobile apps and backend services.
-          </p>
-        </motion.div>
       </section>
 
-      {/* Scrollable content */}
-      <main className="flex-1 overflow-y-auto px-4 sm:px-6 pb-10 custom-scrollbar">
-        <div className="max-w-7xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: 0.2 }}
-            className="relative z-10 -mt-6 mb-8 flex flex-wrap justify-center gap-3 rounded-2xl border border-slate-200 border-border bg-white/95 dark:bg-card/95 backdrop-blur-md shadow-xl py-3 px-4"
-          >
+      {/* Filters */}
+      <section className="px-6 sm:px-10 pb-8">
+        <div className="max-w-6xl mx-auto">
+          <div className="flex flex-wrap justify-center gap-2">
             {categories.map((cat) => (
               <CategoryPill
                 key={cat}
@@ -189,41 +235,41 @@ export function ProjectsPage() {
                 onClick={() => setActiveCategory(cat)}
               />
             ))}
-          </motion.div>
-
-          {filtered.length === 0 ? (
-            <div className="text-center py-24 text-slate-400 dark:text-slate-500">
-              No projects in this category yet.
-            </div>
-          ) : (
-            <motion.div
-              layout
-              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
-            >
-              {filtered.map((project, index) => {
-                const originalIndex = worksData.items.indexOf(project)
-                return (
-                  <ProjectCard
-                    key={project.title}
-                    project={project}
-                    index={index}
-                    id={originalIndex + 1}
-                  />
-                )
-              })}
-            </motion.div>
-          )}
-
-          <div className="mt-10 text-center">
-            <Link
-              to="/"
-              className="inline-flex items-center gap-2 text-sm text-slate-500 text-muted-foreground hover:text-slate-700 dark:hover:text-slate-200 transition-colors"
-            >
-              ← Back to home
-            </Link>
           </div>
         </div>
-      </main>
+      </section>
+
+      {/* Projects */}
+      <section className="px-6 sm:px-10 pb-16">
+        <div className="max-w-6xl mx-auto">
+          {/* Featured project */}
+          {featured && filtered.length > 0 && (
+            <FeaturedProject project={featured} index={0} />
+          )}
+
+          {/* Remaining projects — 2 column grid */}
+          {remaining.length > 0 && (
+            <div className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-5">
+              {remaining.map((project, index) => (
+                <ProjectCard
+                  key={project.title}
+                  project={project}
+                  index={index}
+                />
+              ))}
+            </div>
+          )}
+
+          {/* Empty state */}
+          {filtered.length === 0 && (
+            <div className="mt-16 text-center">
+              <p className="text-sm text-[#858585]">
+                No projects in this category yet.
+              </p>
+            </div>
+          )}
+        </div>
+      </section>
     </div>
   )
 }

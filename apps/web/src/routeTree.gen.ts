@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as BuilderRouteImport } from './routes/builder'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ProjectsIndexRouteImport } from './routes/projects/index'
+import { Route as BlogIndexRouteImport } from './routes/blog/index'
 import { Route as ResumeTemplateRouteImport } from './routes/resume/template'
 import { Route as ProjectsIdRouteImport } from './routes/projects/$id'
 import { Route as PortfolioNewRouteImport } from './routes/portfolio/new'
@@ -32,6 +33,11 @@ const IndexRoute = IndexRouteImport.update({
 const ProjectsIndexRoute = ProjectsIndexRouteImport.update({
   id: '/projects/',
   path: '/projects/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BlogIndexRoute = BlogIndexRouteImport.update({
+  id: '/blog/',
+  path: '/blog/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ResumeTemplateRoute = ResumeTemplateRouteImport.update({
@@ -74,6 +80,7 @@ export interface FileRoutesByFullPath {
   '/portfolio/new': typeof PortfolioNewRoute
   '/projects/$id': typeof ProjectsIdRoute
   '/resume/template': typeof ResumeTemplateRoute
+  '/blog/': typeof BlogIndexRoute
   '/projects/': typeof ProjectsIndexRoute
 }
 export interface FileRoutesByTo {
@@ -85,6 +92,7 @@ export interface FileRoutesByTo {
   '/portfolio/new': typeof PortfolioNewRoute
   '/projects/$id': typeof ProjectsIdRoute
   '/resume/template': typeof ResumeTemplateRoute
+  '/blog': typeof BlogIndexRoute
   '/projects': typeof ProjectsIndexRoute
 }
 export interface FileRoutesById {
@@ -97,6 +105,7 @@ export interface FileRoutesById {
   '/portfolio/new': typeof PortfolioNewRoute
   '/projects/$id': typeof ProjectsIdRoute
   '/resume/template': typeof ResumeTemplateRoute
+  '/blog/': typeof BlogIndexRoute
   '/projects/': typeof ProjectsIndexRoute
 }
 export interface FileRouteTypes {
@@ -110,6 +119,7 @@ export interface FileRouteTypes {
     | '/portfolio/new'
     | '/projects/$id'
     | '/resume/template'
+    | '/blog/'
     | '/projects/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -121,6 +131,7 @@ export interface FileRouteTypes {
     | '/portfolio/new'
     | '/projects/$id'
     | '/resume/template'
+    | '/blog'
     | '/projects'
   id:
     | '__root__'
@@ -132,6 +143,7 @@ export interface FileRouteTypes {
     | '/portfolio/new'
     | '/projects/$id'
     | '/resume/template'
+    | '/blog/'
     | '/projects/'
   fileRoutesById: FileRoutesById
 }
@@ -144,6 +156,7 @@ export interface RootRouteChildren {
   PortfolioNewRoute: typeof PortfolioNewRoute
   ProjectsIdRoute: typeof ProjectsIdRoute
   ResumeTemplateRoute: typeof ResumeTemplateRoute
+  BlogIndexRoute: typeof BlogIndexRoute
   ProjectsIndexRoute: typeof ProjectsIndexRoute
 }
 
@@ -168,6 +181,13 @@ declare module '@tanstack/react-router' {
       path: '/projects'
       fullPath: '/projects/'
       preLoaderRoute: typeof ProjectsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/blog/': {
+      id: '/blog/'
+      path: '/blog'
+      fullPath: '/blog/'
+      preLoaderRoute: typeof BlogIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/resume/template': {
@@ -224,6 +244,7 @@ const rootRouteChildren: RootRouteChildren = {
   PortfolioNewRoute: PortfolioNewRoute,
   ProjectsIdRoute: ProjectsIdRoute,
   ResumeTemplateRoute: ResumeTemplateRoute,
+  BlogIndexRoute: BlogIndexRoute,
   ProjectsIndexRoute: ProjectsIndexRoute,
 }
 export const routeTree = rootRouteImport

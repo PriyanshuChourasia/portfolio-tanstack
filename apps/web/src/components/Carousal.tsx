@@ -127,7 +127,7 @@ export function Hero() {
                 whileTap={{ scale: 0.95 }}
                 className="px-4 sm:px-6 py-2.5 rounded-full border border-primary-accent/50 text-white text-xs sm:text-sm font-semibold whitespace-nowrap hover:bg-primary-accent/10 hover:border-primary-accent transition-all"
               >
-                Get in Touch
+                Get in Touch sdsds
               </motion.a>
             </div>
           </div>
@@ -196,9 +196,8 @@ export function Hero() {
         </div>
       </motion.div>
 
-      {/* Floating work-preview card — cycles through featured projects */}
-      <motion.a
-        href="/projects"
+      {/* Floating work-preview card — cycles through featured projects */}        <motion.a
+        href="#projects"
         initial={{ opacity: 0, y: -10 }}
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.3 }}
@@ -257,9 +256,8 @@ export function Hero() {
           {featuredWorks.map((w, i) => (
             <span
               key={w.title}
-              className={`h-1 rounded-full transition-all duration-300 ${
-                i === featuredIndex ? 'w-3 bg-primary-accent' : 'w-1 bg-white/20'
-              }`}
+              className={`h-1 rounded-full transition-all duration-300 ${i === featuredIndex ? 'w-3 bg-primary-accent' : 'w-1 bg-white/20'
+                }`}
             />
           ))}
         </div>

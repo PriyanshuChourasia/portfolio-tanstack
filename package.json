@@ -3,7 +3,7 @@
   "private": true,
   "packageManager": "pnpm@11.9.0",
   "scripts": {
-    "dev": "turbo run dev",
+    "dev": "turbo run dev --filter=!markdown-ui-desktop",
     "build": "turbo run build",
     "serve": "turbo run serve",
     "test": "turbo run test",

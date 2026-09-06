@@ -3,61 +3,34 @@ import {
   Github,
   Linkedin,
   Mail,
-  MessageCircle,
   Phone,
-  Rocket,
-  Search,
   Twitter,
+  ArrowRight,
 } from 'lucide-react'
 
 const socialLinks = [
-  {
-    icon: Mail,
-    label: 'Email',
-    href: 'mailto:priaynshuchourasia916@gmail.com',
-    color: 'from-red-500 to-pink-500',
-  },
-  {
-    icon: Phone,
-    label: 'Phone',
-    href: 'tel:+916203163193',
-    color: 'from-emerald-500 to-teal-500',
-  },
-  {
-    icon: Linkedin,
-    label: 'LinkedIn',
-    href: 'https://www.linkedin.com/in/priyanshu-chourasia-17833120a/',
-    color: 'from-primary to-primary-accent',
-  },
-  {
-    icon: Github,
-    label: 'GitHub',
-    href: 'https://github.com/PriyanshuChourasia',
-    color: 'from-gray-500 to-slate-600',
-  },
-  {
-    icon: Twitter,
-    label: 'Twitter',
-    href: 'https://x.com/CoderPriye',
-    color: 'from-primary-accent to-primary',
-  },
+  { icon: Mail, label: 'Email', href: 'mailto:priyanshuchourasia916@gmail.com' },
+  { icon: Phone, label: 'Phone', href: 'tel:+916203163193' },
+  { icon: Linkedin, label: 'LinkedIn', href: 'https://www.linkedin.com/in/priyanshu-chourasia-17833120a/' },
+  { icon: Github, label: 'GitHub', href: 'https://github.com/PriyanshuChourasia' },
+  { icon: Twitter, label: 'Twitter', href: 'https://x.com/CoderPriye' },
 ]
 
 const workProcess = [
   {
-    icon: MessageCircle,
-    title: 'Discovery Call',
-    desc: 'We talk through your goals, scope, and timeline to see if it’s a good fit.',
+    number: '01',
+    title: 'Discovery',
+    desc: 'Understand the problem, requirements and goals.',
   },
   {
-    icon: Search,
-    title: 'Proposal & Plan',
-    desc: 'You get a clear plan — milestones, timeline, and cost — before any work starts.',
+    number: '02',
+    title: 'Plan',
+    desc: 'Define architecture, scope and timeline.',
   },
   {
-    icon: Rocket,
-    title: 'Build & Deliver',
-    desc: 'Regular updates as I build, with a polished, tested handoff at the end.',
+    number: '03',
+    title: 'Build',
+    desc: 'Develop, test and deliver the product.',
   },
 ]
 
@@ -65,154 +38,193 @@ export default function ContactSection() {
   return (
     <section
       id="contact"
-      className="relative min-h-screen w-full overflow-x-clip bg-white dark:bg-background flex items-center justify-center py-16"
+      className="relative min-h-screen w-full overflow-hidden bg-[#050505] py-12 sm:py-16"
     >
-      {/* Animated background blobs */}
-      <motion.div className="absolute inset-0 pointer-events-none">
-        <motion.div
-          animate={{ x: [0, 80, 0], y: [0, -40, 0] }}
-          transition={{ duration: 14, repeat: Infinity, ease: 'easeInOut' }}
-          className="absolute top-1/4 left-1/4 w-80 h-80 bg-primary/20/40 dark:bg-primary/20 rounded-full blur-3xl"
+      {/* Subtle technical background */}
+      <div className="pointer-events-none absolute inset-0 opacity-[0.04]">
+        <div
+          className="absolute inset-0"
+          style={{
+            backgroundImage:
+              'linear-gradient(rgba(239,29,37,0.12) 1px, transparent 1px), linear-gradient(90deg, rgba(239,29,37,0.12) 1px, transparent 1px)',
+            backgroundSize: '60px 60px',
+          }}
         />
-        <motion.div
-          animate={{ x: [0, -80, 0], y: [0, 40, 0] }}
-          transition={{ duration: 18, repeat: Infinity, ease: 'easeInOut' }}
-          className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-purple-200/40 dark:bg-purple-600/20 rounded-full blur-3xl"
-        />
-        <motion.div
-          animate={{ x: [0, 40, 0], y: [0, 60, 0] }}
-          transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
-          className="absolute top-1/2 right-1/3 w-64 h-64 bg-primary-accent/20/30 dark:bg-primary-accent/10 rounded-full blur-3xl"
-        />
-      </motion.div>
+      </div>
 
-      <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 text-center">
+      <div className="relative z-10 max-w-6xl mx-auto px-5 sm:px-6 lg:px-8">
+        {/* Hero */}
         <motion.div
-          initial={{ opacity: 0, y: 50 }}
+          initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-12"
         >
-          <span className="inline-block mb-6 px-4 py-2 rounded-full border border-primary-accent/30 bg-primary-accent/5 dark:bg-primary-accent/10 text-xs font-semibold uppercase tracking-widest text-primary dark:text-primary-accent">
-            Get in Touch
+          <span className="inline-block text-[10px] font-mono uppercase tracking-[0.3em] text-[#EF1D25]">
+            Get in Touch adjkadhfjas
           </span>
 
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-6 leading-tight text-slate-900 text-foreground">
-            Feel free to reach out — whether you&apos;re looking for a
-            developer, have a query, or simply want to connect.
+          <h2 className="mt-4 text-4xl sm:text-5xl lg:text-6xl font-black leading-tight tracking-tight text-[#F5F5F5]">
+            Let&apos;s build something{' '}
+            <span className="text-[#EF1D25]">great</span>{' '}
+            together.
           </h2>
 
-          <p className="text-base sm:text-lg font-medium text-slate-600 text-foreground mb-6">
-            I am always open to hearing about new projects and opportunities.
+          <p className="mt-4 text-base text-[#8A8A8A] max-w-lg mx-auto">
+            Have a project, idea, or question? I&apos;d love to hear what
+            you&apos;re working on.
           </p>
+        </motion.div>
 
-          <div className="mb-12 -mx-4 sm:mx-0 flex items-center justify-center gap-2.5 sm:rounded-2xl bg-linear-to-r from-emerald-500 to-teal-500 px-6 py-3.5 shadow-lg shadow-emerald-500/25">
-            <Rocket className="w-5 h-5 text-white shrink-0" />
-            <span className="text-sm sm:text-base font-bold text-white tracking-wide">
+        {/* Availability pill */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.1 }}
+          className="flex justify-center mb-14"
+        >
+          <div className="inline-flex items-center gap-3 rounded-lg border border-[#242424] bg-[#0D0D0D] px-5 py-3">
+            <span className="flex h-2.5 w-2.5 shrink-0 items-center justify-center rounded-full bg-[#EF1D25]" />
+            <span className="text-xs font-mono uppercase tracking-[0.2em] text-[#8A8A8A]">
               Available for Freelance Work
             </span>
           </div>
         </motion.div>
 
+        {/* Main content — two columns */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.8, delay: 0.15 }}
-          className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-4 mb-12 text-left"
+          transition={{ duration: 0.6, delay: 0.15 }}
+          className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-14"
         >
-          {workProcess.map((step, index) => {
-            const Icon = step.icon
-            return (
-              <div key={step.title} className="flex sm:flex-col gap-3">
-                <span className="flex items-center justify-center h-10 w-10 shrink-0 rounded-full bg-primary-accent/5 dark:bg-primary-accent/10 text-primary dark:text-primary-accent">
-                  <Icon className="w-5 h-5" />
-                </span>
-                <div>
-                  <p className="text-xs font-semibold text-slate-400 dark:text-slate-500 mb-0.5">
-                    Step {index + 1}
-                  </p>
-                  <p className="text-sm font-semibold text-slate-900 text-foreground mb-1">
-                    {step.title}
-                  </p>
-                  <p className="text-sm text-slate-500 text-muted-foreground leading-relaxed">
-                    {step.desc}
-                  </p>
+          {/* LEFT — Contact */}
+          <div className="rounded-xl border border-[#242424] bg-[#0D0D0D] p-6 sm:p-8">
+            <span className="text-[10px] font-mono uppercase tracking-[0.25em] text-[#555555]">
+              01 / Contact
+            </span>
+
+            <h3 className="mt-3 text-lg font-bold text-[#F5F5F5]">
+              Let&apos;s talk
+            </h3>
+
+            {/* Email */}
+            <div className="mt-6 group">
+              <div className="flex items-center justify-between border-b border-[#242424] pb-4">
+                <div className="flex items-center gap-3">
+                  <span className="text-[10px] font-mono uppercase tracking-wider text-[#555555]">
+                    Email
+                  </span>
+                  <Mail className="h-3.5 w-3.5 text-[#555555] group-hover:text-[#EF1D25] transition-colors duration-200" />
                 </div>
+                <span className="flex items-center gap-1 text-[#8A8A8A] group-hover:text-[#EF1D25] transition-colors duration-200">
+                  <ArrowRight className="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-0.5" />
+                </span>
               </div>
-            )
-          })}
+              <a
+                href="mailto:priyanshuchourasia916@gmail.com"
+                className="block mt-1 text-base font-semibold text-[#F5F5F5] group-hover:text-[#EF1D25] transition-colors duration-200"
+              >
+                priyanshuchourasia916@gmail.com
+              </a>
+            </div>
+
+            {/* Phone */}
+            <div className="mt-5 group">
+              <div className="flex items-center justify-between border-b border-[#242424] pb-4">
+                <div className="flex items-center gap-3">
+                  <span className="text-[10px] font-mono uppercase tracking-wider text-[#555555]">
+                    Phone
+                  </span>
+                  <Phone className="h-3.5 w-3.5 text-[#555555] group-hover:text-[#EF1D25] transition-colors duration-200" />
+                </div>
+                <span className="flex items-center gap-1 text-[#8A8A8A] group-hover:text-[#EF1D25] transition-colors duration-200">
+                  <ArrowRight className="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-0.5" />
+                </span>
+              </div>
+              <a
+                href="tel:+916203163193"
+                className="block mt-1 text-base font-semibold text-[#F5F5F5] group-hover:text-[#EF1D25] transition-colors duration-200"
+              >
+                +91 6203163193
+              </a>
+            </div>
+          </div>
+
+          {/* RIGHT — How I Work */}
+          <div className="rounded-xl border border-[#242424] bg-[#0D0D0D] p-6 sm:p-8">
+            <span className="text-[10px] font-mono uppercase tracking-[0.25em] text-[#555555]">
+              02 / Process
+            </span>
+
+            <h3 className="mt-3 text-lg font-bold text-[#F5F5F5]">
+              How I work
+            </h3>
+
+            <div className="mt-6 space-y-5">
+              {workProcess.map((step) => (
+                <div
+                  key={step.number}
+                  className="flex gap-4 group"
+                >
+                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-[#242424] bg-[#050505] text-[10px] font-mono font-semibold text-[#EF1D25] group-hover:border-[#6B1A1A] transition-colors duration-200">
+                    {step.number}
+                  </span>
+                  <div>
+                    <p className="text-sm font-semibold text-[#F5F5F5] group-hover:text-[#EF1D25] transition-colors duration-200">
+                      {step.title}
+                    </p>
+                    <p className="mt-1 text-xs leading-relaxed text-[#8A8A8A]">
+                      {step.desc}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </motion.div>
 
+        {/* Social links */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          className="mb-12 flex flex-col sm:flex-row items-center justify-center gap-4"
-        >
-          <motion.a
-            href="mailto:priaynshuchourasia916@gmail.com"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="inline-flex max-w-full items-center gap-2.5 sm:gap-3 rounded-full bg-linear-to-r from-primary to-primary-accent px-5 sm:px-8 py-3.5 sm:py-4 text-sm sm:text-lg font-semibold text-white hover:shadow-2xl hover:shadow-primary-accent/40 transition-shadow"
-          >
-            <Mail className="w-5 h-5 shrink-0" />
-            <span className="break-all">priaynshuchourasia916@gmail.com</span>
-          </motion.a>
-          <motion.a
-            href="tel:+916203163193"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="inline-flex max-w-full items-center gap-2.5 sm:gap-3 rounded-full bg-linear-to-r from-emerald-600 to-teal-600 px-5 sm:px-8 py-3.5 sm:py-4 text-sm sm:text-lg font-semibold text-white hover:shadow-2xl hover:shadow-emerald-500/40 transition-shadow"
-          >
-            <Phone className="w-5 h-5 shrink-0" />
-            <span>+91 6203163193</span>
-          </motion.a>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.8, delay: 0.4 }}
-          className="flex items-center justify-center gap-4 sm:gap-5 flex-wrap"
-        >
-          {socialLinks.map((social, index) => {
-            const Icon = social.icon
-            return (
-              <motion.a
-                key={index}
-                href={social.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                whileHover={{ scale: 1.2, y: -4 }}
-                whileTap={{ scale: 0.9 }}
-                className={`p-3 rounded-full bg-linear-to-br ${social.color} text-white shadow-lg hover:shadow-xl transition-shadow`}
-                title={social.label}
-              >
-                <Icon className="w-5 h-5" />
-              </motion.a>
-            )
-          })}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="mt-12 flex flex-wrap items-center justify-center gap-3"
+        >              {socialLinks.map((social) => {
+          const Icon = social.icon
+          return (
+            <a
+              key={social.label}
+              href={social.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              title={social.label}
+              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-[#242424] bg-[#0D0D0D] text-[#8A8A8A] transition-all duration-200 hover:border-[#EF1D25] hover:text-[#EF1D25]"
+            >
+              <Icon className="h-4 w-4" />
+            </a>
+          )
+        })}
         </motion.div>
 
+        {/* Footer */}
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.8, delay: 0.6 }}
-          className="mt-20 pt-8 border-t border-slate-200 border-border flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4"
+          transition={{ duration: 0.6, delay: 0.3 }}
+          className="mt-12 pt-8 border-t border-[#242424] flex flex-col sm:flex-row items-center justify-between gap-3 text-center"
         >
-          <p className="text-sm text-slate-400 dark:text-slate-500">
-            © Priyanshu Chourasia 2025. All rights reserved.
+          <p className="text-xs text-[#555555]">
+            © Priyanshu Chourasia 2026. All rights reserved.
           </p>
-          <span className="hidden sm:inline text-slate-300 dark:text-slate-700">
-            •
-          </span>
           <a
             href="tel:+916203163193"
-            className="text-sm text-slate-400 dark:text-slate-500 hover:text-primary-accent hover:text-primary-accent transition-colors"
+            className="text-xs font-mono text-[#555555] hover:text-[#EF1D25] transition-colors duration-200"
           >
             +91 6203163193
           </a>

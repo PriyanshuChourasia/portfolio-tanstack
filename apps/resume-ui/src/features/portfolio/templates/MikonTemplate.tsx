@@ -90,7 +90,7 @@ export function MikonTemplate({ data }: PortfolioTemplateProps) {
               <motion.div variants={fadeUp} className="flex flex-wrap items-center gap-3 pt-2 md:justify-start">
                 {hero.resumeUrl && (
                   <a href={hero.resumeUrl} className="inline-flex items-center gap-1.5 rounded-lg bg-zinc-900 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-all hover:bg-zinc-800">
-                    <svg className="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                    <svg className="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line x1="12" y1="15" x2="12" y2="3" /></svg>
                     Resume
                   </a>
                 )}
@@ -103,9 +103,9 @@ export function MikonTemplate({ data }: PortfolioTemplateProps) {
                   {hero.socialLinks.map((link, i) => (
                     <a key={i} href={link.url} className="flex size-9 items-center justify-center rounded-full border border-zinc-200 text-zinc-400 transition-all hover:border-blue-200 hover:text-blue-600" title={link.platform}>
                       {link.icon === 'github' ? <Github className="size-3.5" /> :
-                       link.icon === 'linkedin' ? <Linkedin className="size-3.5" /> :
-                       link.icon === 'twitter' ? <Twitter className="size-3.5" /> :
-                       <Globe className="size-3.5" />}
+                        link.icon === 'linkedin' ? <Linkedin className="size-3.5" /> :
+                          link.icon === 'twitter' ? <Twitter className="size-3.5" /> :
+                            <Globe className="size-3.5" />}
                     </a>
                   ))}
                 </motion.div>
@@ -244,9 +244,8 @@ export function MikonTemplate({ data }: PortfolioTemplateProps) {
             <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} className="mb-10 flex flex-wrap justify-center gap-2">
               {categories.map((cat) => (
                 <button key={cat} onClick={() => setActiveFilter(cat)}
-                  className={`rounded-md px-4 py-1.5 text-xs font-medium transition-all ${
-                    activeFilter === cat ? 'bg-zinc-900 text-white shadow-sm' : 'bg-white text-zinc-500 hover:text-zinc-800 border border-zinc-200'
-                  }`}>
+                  className={`rounded-md px-4 py-1.5 text-xs font-medium transition-all ${activeFilter === cat ? 'bg-zinc-900 text-white shadow-sm' : 'bg-white text-zinc-500 hover:text-zinc-800 border border-zinc-200'
+                    }`}>
                   {cat}
                 </button>
               ))}
@@ -349,7 +348,7 @@ export function MikonTemplate({ data }: PortfolioTemplateProps) {
           <div className="mx-auto max-w-5xl px-6">
             <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} className="mb-14 text-center">
               <motion.p variants={fadeUp} className="mb-2 inline-block rounded-full bg-blue-100 px-4 py-1 text-xs font-semibold uppercase tracking-widest text-blue-700">Contact</motion.p>
-              <motion.h2 variants={fadeUp} className="text-3xl font-bold sm:text-4xl">Get In Touch</motion.h2>
+              <motion.h2 variants={fadeUp} className="text-3xl font-bold sm:text-4xl">Get In Touch asjhdfasjdk</motion.h2>
               <div className="mx-auto mt-4 h-0.5 w-12 rounded-full bg-blue-500" />
             </motion.div>
             <div className="grid gap-10 lg:grid-cols-2 lg:gap-14">
@@ -401,9 +400,9 @@ export function MikonTemplate({ data }: PortfolioTemplateProps) {
                 {footer.socialLinks.map((link, i) => (
                   <a key={i} href={link.url} className="flex size-9 items-center justify-center rounded-full border border-zinc-700 text-zinc-500 transition-all hover:border-zinc-500 hover:text-white">
                     {link.icon === 'github' ? <Github className="size-3.5" /> :
-                     link.icon === 'linkedin' ? <Linkedin className="size-3.5" /> :
-                     link.icon === 'twitter' ? <Twitter className="size-3.5" /> :
-                     <Globe className="size-3.5" />}
+                      link.icon === 'linkedin' ? <Linkedin className="size-3.5" /> :
+                        link.icon === 'twitter' ? <Twitter className="size-3.5" /> :
+                          <Globe className="size-3.5" />}
                   </a>
                 ))}
               </div>

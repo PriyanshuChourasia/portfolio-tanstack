@@ -1,4 +1,3 @@
-import { Link } from '@tanstack/react-router'
 import { motion } from 'framer-motion'
 import {
   ArrowLeft,
@@ -142,13 +141,13 @@ export function ProjectDetailPage({ projectId }: { projectId: number }) {
             <h1 className="text-3xl font-bold text-slate-900 text-foreground mb-6">
               Project not found
             </h1>
-            <Link
-              to="/projects"
+            <a
+              href="#projects"
               className="inline-flex items-center gap-2 rounded-full bg-primary-accent px-6 py-3 text-sm font-semibold text-white hover:bg-primary-accent transition-colors"
             >
               <ArrowLeft size={16} />
               All projects
-            </Link>
+            </a>
           </div>
         </div>
       </div>
@@ -180,7 +179,7 @@ export function ProjectDetailPage({ projectId }: { projectId: number }) {
         {/* Hero */}
         <section className="relative overflow-hidden bg-background">
           {/* Background */}
-          <div className="absolute inset-0 bg-linear-to-b from-slate-900 via-slate-950 to-slate-950" />
+          <div className="absolute inset-0 bg-linear-to-b from-background via-background to-background" />
           <div className="absolute -top-40 -right-24 h-96 w-96 rounded-full bg-primary-accent/10 blur-3xl" />
           <div className="absolute -bottom-48 -left-24 h-96 w-96 rounded-full bg-primary/10 blur-3xl" />
           <div className="hidden sm:block absolute inset-6 lg:inset-10 pointer-events-none">
@@ -498,9 +497,8 @@ export function ProjectDetailPage({ projectId }: { projectId: number }) {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.25 }}
               >
-                <Link
-                  to="/projects/$id"
-                  params={{ id: String(projectId - 1) }}
+                <a
+                  href="/#projects"
                   className="group flex items-center gap-4 rounded-2xl border border-slate-200 border-border bg-white dark:bg-card p-6 transition-all hover:-translate-y-0.5 hover:border-primary-accent/60 hover:shadow-lg hover:shadow-primary-accent/5"
                 >
                   <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-slate-200 border-border text-slate-400 group-hover:border-primary-accent/50 group-hover:text-primary-accent transition-colors">
@@ -514,7 +512,7 @@ export function ProjectDetailPage({ projectId }: { projectId: number }) {
                       {prevProject.title}
                     </span>
                   </span>
-                </Link>
+                </a>
               </motion.div>
             ) : (
               <div className="hidden sm:block" />
@@ -526,9 +524,8 @@ export function ProjectDetailPage({ projectId }: { projectId: number }) {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.3 }}
               >
-                <Link
-                  to="/projects/$id"
-                  params={{ id: String(projectId + 1) }}
+                <a
+                  href="/#projects"
                   className="group flex items-center justify-end gap-4 rounded-2xl border border-slate-200 border-border bg-white dark:bg-card p-6 text-right transition-all hover:-translate-y-0.5 hover:border-primary-accent/60 hover:shadow-lg hover:shadow-primary-accent/5"
                 >
                   <span className="min-w-0">
@@ -542,7 +539,7 @@ export function ProjectDetailPage({ projectId }: { projectId: number }) {
                   <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-slate-200 border-border text-slate-400 group-hover:border-primary-accent/50 group-hover:text-primary-accent transition-colors">
                     <ArrowRight size={16} />
                   </span>
-                </Link>
+                </a>
               </motion.div>
             ) : (
               <div className="hidden sm:block" />

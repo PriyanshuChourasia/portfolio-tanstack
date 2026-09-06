@@ -1,122 +1,192 @@
 import { Link } from '@tanstack/react-router'
-import { motion, useScroll, useTransform } from 'framer-motion'
-import { useRef } from 'react'
+import { motion } from 'framer-motion'
+import { ArrowRight } from 'lucide-react'
 import { getBlogPosts } from '@/data/blog-posts'
 
+const articles = getBlogPosts()
+const featured = articles[0]
+const supporting = articles.slice(1, 3)
+
+function CategoryRow({ category, date }: { category: string; date: string }) {
+  return (
+    <div className="flex flex-wrap items-center gap-2 font-mono uppercase">
+      <span className="text-[9px] tracking-[0.25em] text-[#EF1D25]">
+        {category}
+      </span>
+      <span
+        className="h-0.5 w-0.5 rounded-full bg-[#444444]"
+        aria-hidden="true"
+      />
+      <span className="text-[9px] tracking-[0.2em] text-[#555555]">{date}</span>
+    </div>
+  )
+}
+
 export default function Articles() {
-  const sectionRef = useRef<HTMLDivElement>(null)
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ['start center', 'end center'],
-  })
-
-  const articles = getBlogPosts()
-
-  const titleY = useTransform(scrollYProgress, [0, 0.3], [100, 0])
-  const titleOpacity = useTransform(scrollYProgress, [0, 0.2], [0, 1])
-
   return (
     <section
       id="articles"
-      ref={sectionRef}
-      className="relative min-h-screen w-full overflow-hidden bg-slate-50 dark:bg-background pt-6 pb-16 md:pt-8 md:pb-24"
+      className="relative w-full overflow-hidden bg-[#050505]"
     >
-      <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6">
-        <motion.div
-          style={{ y: titleY, opacity: titleOpacity }}
-          className="text-center mb-12 md:mb-20"
-        >
-          <h2 className="text-3xl md:text-5xl font-bold text-slate-900 text-foreground">
-            Featured <span className="text-primary-accent">Blogs</span>
-          </h2>
-        </motion.div>
+      <div className="pointer-events-none absolute inset-0" aria-hidden="true">
+        <div
+          className="absolute inset-0 opacity-[0.05]"
+          style={{
+            backgroundImage:
+              'linear-gradient(rgba(239,68,68,0.12) 1px, transparent 1px), linear-gradient(90deg, rgba(239,68,68,0.12) 1px, transparent 1px)',
+            backgroundSize: '56px 56px',
+          }}
+        />
+        <div className="absolute left-0 right-0 top-0 h-px bg-[#242424]" />
+        <div className="absolute left-0 right-0 bottom-0 h-px bg-[#242424]" />
+        <span className="absolute left-0 top-0 h-6 w-px bg-[#6B1A1A]" />
+        <span className="absolute right-0 top-0 h-px w-6 bg-[#6B1A1A]" />
+      </div>
 
-        <div className="mx-auto grid max-w-6xl grid-cols-1 gap-5 md:grid-cols-2 md:gap-6 lg:grid-cols-3 lg:gap-8">
-          {articles.map((article, index) => {
-            const cardY = useTransform(
-              scrollYProgress,
-              [0, 0.5, 1],
-              [48 + index * 10, 0, -24],
-            )
-            const cardOpacity = useTransform(
-              scrollYProgress,
-              [0, 0.3, 0.7, 1],
-              [0, 1, 1, 0.5],
-            )
+      <div className="relative z-10 mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-24">
+        <div className="mb-10 flex flex-col gap-6 lg:mb-12 lg:flex-row lg:items-end lg:justify-between">
+          <div>
+            <span className="text-[10px] font-semibold uppercase tracking-[0.3em] text-[#EF1D25]">
+              Insights / Writing
+            </span>
+            <h1 className="mt-2 text-4xl font-black uppercase tracking-tight leading-[0.9] text-[#F5F5F5] sm:text-5xl">
+              MY <span className="text-[#EF1D25]">BLOGS</span>
+            </h1>
+            <p className="mt-3 max-w-md text-sm leading-6 text-[#858585]">
+              Notes from building software, designing systems, and learning
+              along the way.
+            </p>
+          </div>
 
-            return (
-              <motion.div
-                key={index}
-                style={{ y: cardY, opacity: cardOpacity }}
-                className="group relative h-full overflow-hidden rounded-3xl border border-slate-200 border-border bg-white dark:bg-card/70 hover:border-primary-accent/50 dark:hover:border-primary-accent/40 transition-colors backdrop-blur-xl"
-              >
-                <div className="absolute inset-0 overflow-hidden">
-                  {article.image ? (
-                    <img
-                      src={article.image}
-                      alt=""
-                      aria-hidden="true"
-                      className="h-full w-full object-cover opacity-0 group-hover:opacity-20 dark:group-hover:opacity-30 transition-opacity duration-500 scale-105 group-hover:scale-100"
-                    />
-                  ) : null}
-                  <div className="absolute inset-0 bg-linear-to-br from-white/90 via-white/95 to-white/90 from-card/95 dark:via-slate-900/90 dark:to-slate-900/95 group-hover:from-white/70 group-hover:via-white/80 group-hover:to-white/70 dark:group-hover:from-slate-900/70 dark:group-hover:via-slate-900/65 dark:group-hover:to-slate-900/70 transition-all duration-500" />
-                </div>
-
-                <div className="relative flex h-full flex-col p-5 sm:p-6 lg:p-8">
-                  <motion.div
-                    initial={{ opacity: 0, y: -10 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ delay: index * 0.1 }}
-                    className="inline-block mb-4 w-fit"
-                  >
-                    <span className="px-3 py-1 text-xs font-semibold rounded-full bg-primary-accent/5 dark:bg-primary-accent/15 text-primary dark:text-primary-accent border border-primary-accent/20 dark:border-primary-accent/25">
-                      {article.category}
-                    </span>
-                  </motion.div>
-
-                  <h3 className="mb-3 text-lg font-bold text-slate-900 text-foreground transition-colors line-clamp-2 group-hover:text-primary dark:group-hover:text-primary-accent sm:text-xl">
-                    {article.title}
-                  </h3>
-
-                  <p className="mb-6 grow text-sm leading-relaxed text-slate-500 text-muted-foreground">
-                    {article.desc}
-                  </p>
-
-                  <div className="flex items-center justify-between pt-4 border-t border-slate-100 border-border">
-                    <div className="text-[11px] text-slate-400 dark:text-slate-500 sm:text-xs">
-                      <p>{article.date}</p>
-                      <p className="mt-1">{article.author}</p>
-                    </div>
-                    <Link
-                      to="/blog/$id"
-                      params={{ id: String(article.id) }}
-                      className="inline-flex items-center gap-2 text-sm font-semibold text-primary-accent transition-transform duration-300 group-hover:translate-x-1"
-                      aria-label={`Open ${article.title}`}
-                    >
-                      Open
-                      <span aria-hidden="true">→</span>
-                    </Link>
-                  </div>
-                </div>
-              </motion.div>
-            )
-          })}
+          <span className="hidden shrink-0 items-center gap-2 font-mono text-[9px] uppercase tracking-[0.3em] text-[#555555] lg:flex">
+            <span
+              className="h-1 w-1 rounded-full bg-[#EF1D25]"
+              aria-hidden="true"
+            />
+            {String(articles.length).padStart(2, '0')} Articles
+          </span>
         </div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="mt-10 text-center md:mt-16"
-        >
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="w-full sm:w-auto rounded-full bg-linear-to-r from-primary to-primary-accent px-8 py-3 font-semibold text-white transition-shadow hover:shadow-2xl hover:shadow-primary-accent/50"
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1.9fr_1fr]">
+          <motion.article
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="group relative flex flex-col overflow-hidden rounded-2xl border border-[#242424] bg-[#0B0B0B] transition-all duration-300 ease-out hover:-translate-y-0.5 hover:border-[#4A1717]"
           >
-            Read All Blogs
-          </motion.button>
-        </motion.div>
+            <div className="relative aspect-[16/7] w-full overflow-hidden">
+              <img
+                src={featured.image}
+                alt={featured.title}
+                className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.02]"
+              />
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#050505]/40 to-transparent" />
+              <span className="absolute left-4 top-4 border border-[#EF1D25]/30 bg-[#050505]/70 px-2 py-1 font-mono text-[9px] uppercase tracking-[0.25em] text-[#EF1D25]">
+                Featured
+              </span>
+            </div>
+
+            <div className="flex grow flex-col p-6 sm:p-8">
+              <CategoryRow category={featured.category} date={featured.date} />
+              <h2 className="mt-4 text-2xl font-bold leading-tight text-[#F5F5F5] transition-colors duration-300 group-hover:text-[#EF1D25] sm:text-3xl">
+                {featured.title}
+              </h2>
+              <p className="mt-3 line-clamp-3 max-w-2xl text-sm leading-7 text-[#858585]">
+                {featured.desc}
+              </p>
+
+              <div className="mt-7 flex items-center justify-between border-t border-[#242424] pt-5">
+                <span className="font-mono text-[10px] uppercase tracking-wider text-[#555555]">
+                  {featured.date}
+                </span>
+                <span className="flex items-center gap-2 text-sm font-semibold text-[#F5F5F5] transition-colors duration-300 group-hover:text-[#EF1D25]">
+                  Read article
+                  <ArrowRight
+                    className="h-4 w-4 text-[#EF1D25] transition-transform duration-300 group-hover:translate-x-1"
+                    aria-hidden="true"
+                  />
+                </span>
+              </div>
+            </div>
+
+            <Link
+              to="/blog/$id"
+              params={{ id: String(featured.id) }}
+              className="absolute inset-0 z-10"
+              aria-label={`Read ${featured.title}`}
+            />
+          </motion.article>
+
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-1 lg:gap-6">
+            {supporting.map((post, index) => (
+              <motion.article
+                key={post.id}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.1 + index * 0.1 }}
+                className="group relative flex flex-col overflow-hidden rounded-2xl border border-[#242424] bg-[#0B0B0B] transition-all duration-300 ease-out hover:-translate-y-0.5 hover:border-[#4A1717]"
+              >
+                <div className="relative aspect-[16/7] w-full overflow-hidden">
+                  <img
+                    src={post.image}
+                    alt={post.title}
+                    className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.02]"
+                  />
+                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#050505]/35 to-transparent" />
+                  <span
+                    className="absolute left-3 top-3 h-1 w-1 rounded-full bg-[#EF1D25]"
+                    aria-hidden="true"
+                  />
+                </div>
+
+                <div className="flex grow flex-col p-5">
+                  <CategoryRow category={post.category} date={post.date} />
+                  <h3 className="mt-3 text-base font-bold leading-snug text-[#F5F5F5] transition-colors duration-300 group-hover:text-[#EF1D25]">
+                    {post.title}
+                  </h3>
+                  <p className="mt-2 line-clamp-1 text-[13px] leading-6 text-[#858585]">
+                    {post.desc}
+                  </p>
+
+                  <div className="mt-5 flex items-center justify-between border-t border-[#242424] pt-4">
+                    <span className="font-mono text-[9px] uppercase tracking-wider text-[#555555]">
+                      {post.date}
+                    </span>
+                    <span className="flex items-center gap-1.5 text-xs font-semibold text-[#F5F5F5] transition-colors duration-300 group-hover:text-[#EF1D25]">
+                      Read
+                      <ArrowRight
+                        className="h-3.5 w-3.5 text-[#EF1D25] transition-transform duration-300 group-hover:translate-x-1"
+                        aria-hidden="true"
+                      />
+                    </span>
+                  </div>
+                </div>
+
+                <Link
+                  to="/blog/$id"
+                  params={{ id: String(post.id) }}
+                  className="absolute inset-0 z-10"
+                  aria-label={`Read ${post.title}`}
+                />
+              </motion.article>
+            ))}
+          </div>
+        </div>
+
+        <div className="mt-10 flex justify-end">
+          <a
+            href="/#articles"
+            className="group inline-flex items-center gap-2 font-mono text-[11px] font-semibold uppercase tracking-[0.3em] text-[#F5F5F5] transition-colors duration-300 hover:text-[#EF1D25]"
+          >
+            View all articles
+            <ArrowRight
+              className="h-3.5 w-3.5 text-[#EF1D25] transition-transform duration-300 group-hover:translate-x-1"
+              aria-hidden="true"
+            />
+          </a>
+        </div>
       </div>
     </section>
   )
