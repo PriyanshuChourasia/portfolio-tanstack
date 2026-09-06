@@ -38,15 +38,15 @@ type NavItem = {
   label: string
   id: string
   icon: LucideIcon
-  to?: string
+  to?: '/projects' | '/blog'
 }
 
 const navItems: Array<NavItem> = [
   { label: 'Home', id: 'home', icon: Home },
   { label: 'About', id: 'about', icon: FileText },
   { label: 'Experience', id: 'experience', icon: Briefcase },
-  { label: 'Projects', id: 'projects', icon: FolderKanban, to: '#projects' },
-  { label: 'Blogs', id: 'articles', icon: Newspaper },
+  { label: 'Projects', id: 'projects', icon: FolderKanban, to: '/projects' },
+  { label: 'Blogs', id: 'articles', icon: Newspaper, to: '/blog' },
   { label: 'Contact', id: 'contact', icon: Mail },
 ]
 
@@ -55,9 +55,7 @@ export function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false)
   const { location } = useRouterState()
   const isHome = location.pathname === '/'
-  const isProjectsActive =
-    location.pathname === '/' ||
-    typeof window !== 'undefined' && window.location.hash === '#projects'
+  const isProjectsActive = location.pathname.startsWith('/projects')
   const isBlogsActive =
     location.pathname.startsWith('/blog')
   const navHref = (id: string) => (isHome ? `#${id}` : `/#${id}`)
@@ -130,10 +128,10 @@ export function Navbar() {
                   />
                 )
                 return item.to ? (
-                  <a key={item.id} href={item.to} className={linkClass} onClick={handleNavClick}>
+                  <Link key={item.id} to={item.to} className={linkClass} onClick={handleNavClick}>
                     {item.label}
                     {underline}
-                  </a>
+                  </Link>
                 ) : (
                   <motion.a
                     key={item.id}
@@ -228,15 +226,15 @@ export function Navbar() {
                     : 'text-slate-700 text-foreground hover:bg-primary-accent/5 hover:bg-card hover:text-primary hover:text-primary-accent'
                 }`
                 return item.to ? (
-                  <a
+                  <Link
                     key={item.id}
-                    href={item.to}
+                    to={item.to}
                     onClick={handleNavClick}
                     className={linkClass}
                   >
                     <Icon size={16} />
                     {item.label}
-                  </a>
+                  </Link>
                 ) : (
                   <a
                     key={item.id}
@@ -289,14 +287,14 @@ export function Navbar() {
               className="relative group"
             >
               {item.to ? (
-                <a
-                  href={item.to}
+                <Link
+                  to={item.to}
                   aria-label={item.label}
                   title={item.label}
                   className={linkClass}
                 >
                   <Icon size={18} strokeWidth={1.75} />
-                </a>
+                </Link>
               ) : (
                 <motion.a
                   href={navHref(item.id)}

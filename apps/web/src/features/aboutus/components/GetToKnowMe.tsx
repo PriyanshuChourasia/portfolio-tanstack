@@ -195,10 +195,7 @@ export default function GetToKnowMe() {
               transition={{ duration: 0.5 }}
               className="mb-6 flex items-center gap-3"
             >
-              <Terminal
-                size={15}
-                className="text-[#EF1D25]"
-              />
+              <Terminal size={15} className="text-[#EF1D25]" />
 
               <span className="font-mono text-xs uppercase tracking-[0.3em] text-red-500">
                 Get to know me
@@ -235,10 +232,7 @@ export default function GetToKnowMe() {
               }}
               className="mt-4 flex flex-wrap items-center gap-x-3 gap-y-2"
             >
-              <Code2
-                size={15}
-                className="text-[#EF1D25]"
-              />
+              <Code2 size={15} className="text-[#EF1D25]" />
 
               <span className="text-sm text-gray-400">
                 Software Engineering
@@ -246,21 +240,15 @@ export default function GetToKnowMe() {
 
               <span className="text-red-800">·</span>
 
-              <span className="text-sm text-gray-400">
-                Systems
-              </span>
+              <span className="text-sm text-gray-400">Systems</span>
 
               <span className="text-red-800">·</span>
 
-              <span className="text-sm text-gray-400">
-                Web
-              </span>
+              <span className="text-sm text-gray-400">Web</span>
 
               <span className="text-red-800">·</span>
 
-              <span className="text-sm text-gray-400">
-                AI
-              </span>
+              <span className="text-sm text-gray-400">AI</span>
             </motion.div>
           </header>
 
@@ -272,11 +260,12 @@ export default function GetToKnowMe() {
                 MY INFORMATION
             ================================================= */}
             <motion.div
+              id="about"
               initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
-              className="border-b border-red-950/70 p-6 md:border-b-0 md:border-r md:p-8 lg:p-10"
+              className="scroll-mt-24 border-b border-red-950/70 p-6 md:border-b-0 md:border-r md:p-8 lg:p-10"
             >
               {/* Section heading */}
               <div className="mb-8">
@@ -320,9 +309,7 @@ export default function GetToKnowMe() {
                     Location
                   </span>
 
-                  <p className="text-sm font-medium text-gray-200">
-                    India
-                  </p>
+                  <p className="text-sm font-medium text-gray-200">India</p>
                 </div>
 
                 {/* Focus */}
@@ -355,11 +342,12 @@ export default function GetToKnowMe() {
                 PROJECTS
             ================================================= */}
             <motion.div
+              id="experience"
               initial={{ opacity: 0, x: 20 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
-              className="p-6 md:p-8 lg:p-10"
+              className="scroll-mt-24 p-6 md:p-8 lg:p-10"
             >
               {/* Section heading */}
               <div className="mb-8 flex items-end justify-between gap-4">
