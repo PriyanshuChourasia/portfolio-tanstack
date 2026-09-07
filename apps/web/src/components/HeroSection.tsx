@@ -578,7 +578,7 @@ export function HeroSection() {
                   <span
                     className="
                       absolute
-                      -right-[15px]
+                      -right-3.75
                       top-1/2
                       h-1
                       w-1
@@ -670,7 +670,7 @@ export function HeroSection() {
                   <span
                     className="
                       absolute
-                      -right-[15px]
+                      -right-3.75
                       top-1/2
                       h-1
                       w-1
@@ -686,7 +686,7 @@ export function HeroSection() {
             {/* =================================================
                 BOTTOM IDENTITY + NAV
             ================================================= */}
-            <div className="absolute inset-x-0 bottom-0 z-20 flex flex-col gap-3.5 bg-gradient-to-t from-black via-black/50 to-transparent px-4 pb-3.5 pt-20 sm:px-5 sm:pb-4">
+            <div className="absolute inset-x-0 bottom-0 z-20 flex flex-col gap-3.5 bg-linear-to-t from-black via-black/50 to-transparent px-4 pb-3.5 pt-20 sm:px-5 sm:pb-4">
               <div className="flex items-end justify-between gap-3">
                 <div>
                   <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-red-400">
@@ -836,7 +836,7 @@ export function HeroSection() {
                   />
                 </AnimatePresence>
 
-                <div className="absolute inset-0 bg-gradient-to-t from-[#050505]/90 via-[#050505]/30 to-transparent" />
+                <div className="absolute inset-0 bg-linear-to-t from-[#050505]/90 via-[#050505]/30 to-transparent" />
 
                 <div className="absolute inset-x-0 bottom-0 p-2">
                   <AnimatePresence mode="wait">
@@ -1011,7 +1011,7 @@ export function HeroSection() {
               className="absolute inset-0 h-full w-full object-cover opacity-60 transition-transform duration-500 ease-out group-hover:scale-[1.02]"
             />
 
-            <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-black/10" />
+            <div className="absolute inset-0 bg-linear-to-t from-black/85 via-black/40 to-black/10" />
 
             <div className="absolute inset-x-0 bottom-0 p-4 sm:p-5">
               <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-red-400">
