@@ -252,6 +252,99 @@ const stars = Array.from(
   }),
 )
 
+const bgDecorIcons: Array<React.ComponentType<any>> = [
+  SiReact,
+  SiTypescript,
+  SiJavascript,
+  SiNodedotjs,
+  SiPython,
+  SiNextdotjs,
+  SiTailwindcss,
+  SiDocker,
+  SiGit,
+  SiHtml5,
+  SiCss,
+  FaJava,
+  SiGo,
+  SiMongodb,
+  SiMysql,
+  SiPostgresql,
+  SiSpringboot,
+  SiLaravel,
+  SiFlutter,
+  SiOpenai,
+  SiAnthropic,
+]
+
+const bgDecorWords = ['Freelancer', 'Developer', 'Engineer']
+
+type BgDecorItem =
+  | { type: 'icon'; Icon: React.ComponentType<any> }
+  | { type: 'word'; label: string }
+
+const bgDecorItems: Array<BgDecorItem> = [
+  ...bgDecorWords.flatMap((label) => [
+    { type: 'word' as const, label },
+    { type: 'word' as const, label },
+    { type: 'word' as const, label },
+  ]),
+  // Icon set duplicated to give the watermark denser coverage.
+  ...bgDecorIcons.map((Icon) => ({
+    type: 'icon' as const,
+    Icon,
+  })),
+  ...bgDecorIcons.map((Icon) => ({
+    type: 'icon' as const,
+    Icon,
+  })),
+]
+
+// Grid-cell distribution over a cell pool larger than the item count, so
+// duplicates/neighbors always land with unused buffer cells between them
+// instead of clumping into one seeded-random hot spot.
+const BG_DECOR_COLS = 9
+const BG_DECOR_CELL_BUFFER = 1.25
+const BG_DECOR_ROWS = Math.ceil(
+  (bgDecorItems.length * BG_DECOR_CELL_BUFFER) / BG_DECOR_COLS,
+)
+const BG_DECOR_TOTAL_CELLS = BG_DECOR_COLS * BG_DECOR_ROWS
+
+const bgDecorCellPool = Array.from(
+  { length: BG_DECOR_TOTAL_CELLS },
+  (_, i) => i,
+).sort(
+  (a, b) =>
+    seeded(a * 61.3 + 211) -
+    seeded(b * 61.3 + 211),
+)
+
+const bgDecorLayout = bgDecorItems.map((_, i) => {
+  const cell = bgDecorCellPool[i]
+
+  const col = cell % BG_DECOR_COLS
+  const row = Math.floor(cell / BG_DECOR_COLS)
+
+  const cellW = 100 / BG_DECOR_COLS
+  const cellH = 100 / BG_DECOR_ROWS
+
+  const jitterX = (seeded(i * 71.3 + 21) - 0.5) * cellW * 0.7
+  const jitterY = (seeded(i * 83.7 + 22) - 0.5) * cellH * 0.7
+
+  return {
+    x: Math.min(
+      95,
+      Math.max(5, col * cellW + cellW / 2 + jitterX),
+    ),
+    y: Math.min(
+      95,
+      Math.max(5, row * cellH + cellH / 2 + jitterY),
+    ),
+    rotate: (seeded(i * 97.1 + 23) - 0.5) * 22,
+    scale: 0.85 + seeded(i * 61.9 + 24) * 0.5,
+    red: i % 2 === 0,
+  }
+})
+
 const chipRadii = [
   {
     py: 'py-0.5 pl-1.5 pr-2',
@@ -357,7 +450,7 @@ function FloatingChip({
       }}
       className={`absolute left-0 top-0 flex items-center gap-1.5 rounded-full border backdrop-blur-sm will-change-transform ${chipRadii[tier].py
         } ${active
-          ? 'z-30 border-primary-accent/70 bg-[#1f0a0a]/95 shadow-[0_0_18px_rgba(225,29,36,0.25)]'
+          ? 'z-30 border-primary-accent/70 bg-[#1f0a0a]/95'
           : 'z-0 border-white/10 bg-[#0D0D0D]/85 hover:border-primary-accent/60 hover:bg-[#161616]'
         }`}
       style={{
@@ -432,7 +525,7 @@ export function HeroSection() {
   return (
     <section
       id="home"
-      className="relative min-h-screen w-full overflow-hidden bg-white lg:h-screen"
+      className="relative min-h-screen w-full overflow-hidden bg-gray-300 lg:h-screen"
     >
       {/* =====================================================
           BACKGROUND
@@ -450,9 +543,47 @@ export function HeroSection() {
           }}
         />
 
-        <div className="absolute -top-28 left-[12%] h-80 w-80 rounded-full bg-red-600/10 blur-3xl" />
+        {/* Tech / role icon-words watermark — outline only, no fills */}
+        {bgDecorItems.map((item, i) => {
+          const layout = bgDecorLayout[i]
 
-        <div className="absolute -bottom-32 right-[8%] h-96 w-96 rounded-full bg-red-500/10 blur-3xl" />
+          return (
+            <div
+              key={i}
+              className="absolute"
+              style={{
+                left: `${layout.x}%`,
+                top: `${layout.y}%`,
+                transform: `translate(-50%, -50%) rotate(${layout.rotate}deg) scale(${layout.scale})`,
+              }}
+            >
+              {item.type === 'icon' ? (
+                <span
+                  className={`flex h-11 w-11 items-center justify-center rounded-full border-2 bg-transparent ${layout.red
+                    ? 'border-red-700/50'
+                    : 'border-black/45'
+                    }`}
+                >
+                  <item.Icon
+                    className={`h-5 w-5 ${layout.red
+                      ? 'text-red-700/55'
+                      : 'text-black/50'
+                      }`}
+                  />
+                </span>
+              ) : (
+                <span
+                  className={`whitespace-nowrap rounded-full border-2 bg-transparent px-3.5 py-1.5 font-mono text-[11px] font-semibold uppercase tracking-[0.2em] ${layout.red
+                    ? 'border-red-700/50 text-red-700/55'
+                    : 'border-black/45 text-black/50'
+                    }`}
+                >
+                  {item.label}
+                </span>
+              )}
+            </div>
+          )
+        })}
       </div>
 
       {/* =====================================================

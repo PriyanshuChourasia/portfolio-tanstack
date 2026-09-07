@@ -160,23 +160,102 @@ export default function GetToKnowMe() {
         {/* =====================================================
             CIRCUIT BACKGROUND
         ===================================================== */}
-        <div className="pointer-events-none absolute inset-0 opacity-40">
-          {/* Horizontal lines */}
-          <div className="absolute left-0 top-[15%] h-px w-[80%] bg-red-900/50" />
-          <div className="absolute right-0 top-[32%] h-px w-[65%] bg-red-900/40" />
-          <div className="absolute left-0 top-[72%] h-px w-[75%] bg-red-900/40" />
-          <div className="absolute bottom-[10%] right-0 h-px w-[55%] bg-red-900/40" />
+        <div className="pointer-events-none absolute inset-0">
+          <svg
+            className="absolute inset-0 h-full w-full"
+            viewBox="0 0 600 700"
+            preserveAspectRatio="xMidYMid slice"
+            fill="none"
+          >
+            <defs>
+              <pattern
+                id="pcbDots"
+                width="40"
+                height="40"
+                patternUnits="userSpaceOnUse"
+              >
+                <circle cx="1" cy="1" r="1.1" fill="#7f1d1d" fillOpacity="0.5" />
+              </pattern>
 
-          {/* Vertical lines */}
-          <div className="absolute left-[18%] top-0 h-[65%] w-px bg-red-900/40" />
-          <div className="absolute left-[72%] top-0 h-[45%] w-px bg-red-900/40" />
-          <div className="absolute right-[12%] bottom-0 h-[55%] w-px bg-red-900/40" />
+              <filter id="pcbGlow" x="-150%" y="-150%" width="400%" height="400%">
+                <feGaussianBlur stdDeviation="3.2" result="blur" />
+                <feMerge>
+                  <feMergeNode in="blur" />
+                  <feMergeNode in="SourceGraphic" />
+                </feMerge>
+              </filter>
+            </defs>
 
-          {/* Circuit nodes */}
-          <div className="absolute left-[18%] top-[15%] h-2 w-2 rounded-full bg-red-600" />
-          <div className="absolute left-[72%] top-[32%] h-2 w-2 rounded-full bg-red-600" />
-          <div className="absolute left-[18%] top-[72%] h-2 w-2 rounded-full bg-red-600" />
-          <div className="absolute right-[12%] bottom-[10%] h-2 w-2 rounded-full bg-red-600" />
+            {/* Perfboard dot substrate */}
+            <rect width="600" height="700" fill="url(#pcbDots)" opacity="0.4" />
+
+            {/* Traces (right-angle wires with 45° chamfered corners) */}
+            <g stroke="#7f1d1d" strokeOpacity="0.55" strokeWidth="1.5" strokeLinecap="round">
+              <path d="M0,90 L136,90 L150,104 L150,246 L164,260 L326,260 L340,246 L340,74 L354,60 L600,60" />
+              <path d="M600,420 L444,420 L430,434 L430,546 L416,560 L234,560 L220,574 L220,700" />
+              <path d="M480,200 L480,286 L494,300 L560,300" />
+              <path d="M60,500 L60,606 L74,620 L180,620" />
+              <path d="M0,470 L90,470 L104,484 L104,560" />
+            </g>
+
+            {/* IC chip footprint */}
+            <g stroke="#991b1b" strokeOpacity="0.7" strokeWidth="1.3">
+              <rect x="450" y="130" width="60" height="40" rx="3" />
+              <path d="M462,130 L462,118 M478,130 L478,118 M494,130 L494,118 M462,170 L462,182 M478,170 L478,182 M494,170 L494,182" />
+            </g>
+
+            {/* Connector pads */}
+            <g fill="#b91c1c" fillOpacity="0.6">
+              <rect x="-3" y="87" width="6" height="6" />
+              <rect x="597" y="57" width="6" height="6" />
+              <rect x="597" y="417" width="6" height="6" />
+              <rect x="217" y="697" width="6" height="6" />
+              <rect x="557" y="297" width="6" height="6" />
+              <rect x="57" y="497" width="6" height="6" />
+              <rect x="177" y="617" width="6" height="6" />
+              <rect x="97" y="397" width="5" height="5" />
+              <rect x="517" y="447" width="5" height="5" />
+              <rect x="297" y="77" width="5" height="5" />
+            </g>
+
+            {/* Glowing vias / signal nodes */}
+            <g filter="url(#pcbGlow)">
+              <circle cx="150" cy="90" r="3" fill="#EF1D25" className="animate-pulse" />
+              <circle cx="150" cy="260" r="2.5" fill="#dc2626" fillOpacity="0.75" />
+              <circle cx="340" cy="260" r="2.5" fill="#dc2626" fillOpacity="0.75" />
+              <circle
+                cx="340"
+                cy="60"
+                r="3"
+                fill="#EF1D25"
+                className="animate-pulse"
+                style={{ animationDelay: '0.6s' }}
+              />
+              <circle cx="430" cy="420" r="2.5" fill="#dc2626" fillOpacity="0.75" />
+              <circle
+                cx="430"
+                cy="560"
+                r="3"
+                fill="#EF1D25"
+                className="animate-pulse"
+                style={{ animationDelay: '1.1s' }}
+              />
+              <circle cx="220" cy="560" r="2.5" fill="#dc2626" fillOpacity="0.75" />
+              <circle
+                cx="480"
+                cy="300"
+                r="3"
+                fill="#EF1D25"
+                className="animate-pulse"
+                style={{ animationDelay: '0.3s' }}
+              />
+              <circle cx="60" cy="620" r="2.5" fill="#dc2626" fillOpacity="0.75" />
+              <circle cx="104" cy="560" r="2.5" fill="#dc2626" fillOpacity="0.6" />
+            </g>
+          </svg>
+
+          {/* Vignette so traces fade near the section edges instead of cutting off hard */}
+          <div className="absolute inset-0 bg-gradient-to-b from-[#050505] via-transparent to-[#050505]" />
         </div>
 
         {/* =====================================================

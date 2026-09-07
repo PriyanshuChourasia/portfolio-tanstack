@@ -174,19 +174,6 @@ export default function Articles() {
             ))}
           </div>
         </div>
-
-        <div className="mt-10 flex justify-end">
-          <a
-            href="/#articles"
-            className="group inline-flex items-center gap-2 font-mono text-[11px] font-semibold uppercase tracking-[0.3em] text-[#F5F5F5] transition-colors duration-300 hover:text-[#EF1D25]"
-          >
-            View all articles
-            <ArrowRight
-              className="h-3.5 w-3.5 text-[#EF1D25] transition-transform duration-300 group-hover:translate-x-1"
-              aria-hidden="true"
-            />
-          </a>
-        </div>
       </div>
     </section>
   )

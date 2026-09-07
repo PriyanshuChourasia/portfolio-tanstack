@@ -98,8 +98,8 @@ export default function ArticlePreviewSection() {
           </div>
 
           {/* View all */}
-          <a
-            href="#articles"
+          <Link
+            to="/blog"
             className="
               group inline-flex shrink-0 items-center gap-2
               font-mono text-[10px] font-semibold uppercase
@@ -119,7 +119,7 @@ export default function ArticlePreviewSection() {
               "
               aria-hidden="true"
             />
-          </a>
+          </Link>
         </motion.div>
 
         {/* =====================================================
