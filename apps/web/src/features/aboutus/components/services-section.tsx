@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { motion } from 'framer-motion'
 import {
   ArrowRight,
@@ -7,9 +8,10 @@ import {
   IndianRupee,
   Layers,
   Monitor,
-  MoveUpRight,
   Server,
 } from 'lucide-react'
+
+import { GetStartedModal } from '@/components/GetStartedModal'
 import { FaAws } from 'react-icons/fa6'
 import { FaDocker, FaPython } from 'react-icons/fa'
 import { PiFileHtmlFill } from 'react-icons/pi'
@@ -20,6 +22,7 @@ import {
   SiFastapi,
   SiGithubactions,
   SiGo,
+  SiJavascript,
   SiKubernetes,
   SiLangchain,
   SiLinux,
@@ -27,7 +30,9 @@ import {
   SiNodedotjs,
   SiOpenai,
   SiPostgresql,
+  SiShadcnui,
   SiTerraform,
+  SiTestinglibrary,
   SiTypescript,
 } from 'react-icons/si'
 import { TbBrandReact } from 'react-icons/tb'
@@ -45,7 +50,6 @@ type Service = {
   description: string
   icon: TechIcon
   technologies: Array<Technology>
-  demo: { title: string; description: string; tag: string }
   rate: string
   featured?: boolean
 }
@@ -61,15 +65,13 @@ const services: Array<Service> = [
       { label: 'React', icon: TbBrandReact },
       { label: 'Next.js', icon: RiNextjsFill },
       { label: 'TypeScript', icon: SiTypescript },
+      { label: 'JavaScript', icon: SiJavascript },
       { label: 'Tailwind', icon: RiTailwindCssFill },
+      { label: 'shadcn/ui', icon: SiShadcnui },
+      { label: 'React Testing', icon: SiTestinglibrary },
       { label: 'HTML5', icon: PiFileHtmlFill },
       { label: 'CSS3', icon: SiCss },
     ],
-    demo: {
-      title: 'E-Commerce UI',
-      description: 'Modern e-commerce frontend with Next.js',
-      tag: 'Frontend App',
-    },
     rate: '₹158',
   },
   {
@@ -86,11 +88,6 @@ const services: Array<Service> = [
       { label: 'PostgreSQL', icon: SiPostgresql },
       { label: 'MongoDB', icon: SiMongodb },
     ],
-    demo: {
-      title: 'Task Management API',
-      description: 'REST API with authentication, roles and real-time features',
-      tag: 'REST API',
-    },
     rate: '₹228',
   },
   {
@@ -107,11 +104,6 @@ const services: Array<Service> = [
       { label: 'Terraform', icon: SiTerraform },
       { label: 'Linux', icon: SiLinux },
     ],
-    demo: {
-      title: 'CI/CD Pipeline',
-      description: 'Automated deployment with GitHub Actions',
-      tag: 'Pipeline',
-    },
     rate: '₹500',
   },
   {
@@ -129,16 +121,17 @@ const services: Array<Service> = [
       { label: 'Pinecone', icon: Layers },
       { label: 'Vector DB', icon: Database },
     ],
-    demo: {
-      title: 'AI Chat Assistant',
-      description: 'Context-aware chatbot using OpenAI + LangChain',
-      tag: 'AI Agent',
-    },
     rate: '₹800',
   },
 ]
 
-function ServiceCard({ service }: { service: Service }) {
+function ServiceCard({
+  service,
+  onGetStarted,
+}: {
+  service: Service
+  onGetStarted: () => void
+}) {
   const Icon = service.icon
 
   return (
@@ -181,35 +174,6 @@ function ServiceCard({ service }: { service: Service }) {
         ))}
       </div>
 
-      <span className="mb-2.5 text-[10px] font-bold uppercase tracking-[0.22em] text-primary-accent/80">
-        Demo Project
-      </span>
-      <div className="mb-5 overflow-hidden rounded-xl border border-[#252525] bg-[#080808]">
-        <div className="flex items-center gap-1.5 border-b border-[#252525] px-3 py-2">
-          <span className="h-1.5 w-1.5 rounded-full bg-[#EF1D25]/70" />
-          <span className="h-1.5 w-1.5 rounded-full bg-white/10" />
-          <span className="h-1.5 w-1.5 rounded-full bg-white/10" />
-          <span className="ml-2 flex-1 truncate rounded-full bg-white/[0.05] px-2 py-0.5 text-[8px] font-medium text-[#8A8A8A]">
-            {service.demo.tag}
-          </span>
-          <MoveUpRight
-            className="h-3 w-3 text-primary-accent/80"
-            aria-hidden="true"
-          />
-        </div>
-        <div className="space-y-2 p-3 transition-transform duration-300 ease-out group-hover:scale-[1.02]">
-          <div className="h-2 w-3/4 rounded-full bg-white/15" />
-          <div className="h-1.5 w-full rounded-full bg-white/10" />
-          <div className="h-1.5 w-11/12 rounded-full bg-white/10" />
-          <p className="pt-1 text-[11px] font-semibold text-[#F5F5F5]">
-            {service.demo.title}
-          </p>
-          <p className="text-[10px] leading-snug text-[#8A8A8A]">
-            {service.demo.description}
-          </p>
-        </div>
-      </div>
-
       <div className="mb-5 mt-auto flex items-center gap-2">
         <IndianRupee
           className="h-5 w-5 text-primary-accent"
@@ -221,18 +185,21 @@ function ServiceCard({ service }: { service: Service }) {
         <span className="text-xs font-medium text-[#555555]">/ hour</span>
       </div>
 
-      <a
-        href="#contact"
+      <button
+        type="button"
+        onClick={onGetStarted}
         className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-primary px-4 py-3 text-sm font-semibold text-white transition-colors duration-300 ease-out hover:bg-primary-accent"
       >
         Get Started
         <ArrowRight className="h-4 w-4" aria-hidden="true" />
-      </a>
+      </button>
     </div>
   )
 }
 
 export default function ServicesSection() {
+  const [getStartedOpen, setGetStartedOpen] = useState(false)
+
   return (
     <section
       id="services"
@@ -282,11 +249,19 @@ export default function ServicesSection() {
               transition={{ duration: 0.5, delay: index * 0.08 }}
               className="h-full"
             >
-              <ServiceCard service={service} />
+              <ServiceCard
+                service={service}
+                onGetStarted={() => setGetStartedOpen(true)}
+              />
             </motion.div>
           ))}
         </div>
       </div>
+
+      <GetStartedModal
+        open={getStartedOpen}
+        onOpenChange={setGetStartedOpen}
+      />
     </section>
   )
 }

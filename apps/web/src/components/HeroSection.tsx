@@ -12,11 +12,15 @@ import {
   Briefcase,
   ChevronDown,
   Folder,
+  Github,
   Home,
+  Linkedin,
   Newspaper,
+  Phone,
+  Plug,
   Shield,
   Sparkles,
-  Terminal,
+  Twitter,
   User,
 } from 'lucide-react'
 import {
@@ -24,6 +28,7 @@ import {
   SiCss,
   SiDocker,
   SiFlutter,
+  SiGin,
   SiGit,
   SiGo,
   SiHtml5,
@@ -45,6 +50,7 @@ import { FaJava } from 'react-icons/fa6'
 
 import worksData from '../data/works-data.json'
 import socialLinks from '../data/social-link.json'
+import { HaveAnIdeaModal } from './HaveAnIdeaModal'
 
 const allWorks = (worksData as { items: Array<any> }).items
 const featuredWorks = [...allWorks].reverse().slice(0, 4)
@@ -95,6 +101,19 @@ const skillGroups: Array<{
       items: [
         { label: 'Git', icon: SiGit },
         { label: 'Docker', icon: SiDocker },
+        { label: 'MySQL', icon: SiMysql },
+        { label: 'PostgreSQL', icon: SiPostgresql },
+        { label: 'MongoDB', icon: SiMongodb },
+      ],
+    },
+    {
+      label: 'Backend',
+      icon: SiSpringboot,
+      items: [
+        { label: 'Laravel', icon: SiLaravel },
+        { label: 'Spring Boot', icon: SiSpringboot },
+        { label: 'Java', icon: FaJava },
+        { label: 'Gin', icon: SiGin },
       ],
     },
   ]
@@ -104,9 +123,8 @@ const aiTools: Array<{
   icon: React.ComponentType<any>
 }> = [
     { label: 'Claude Code', icon: SiAnthropic },
-    { label: 'GPT', icon: SiOpenai },
     { label: 'FreeBuff', icon: Shield },
-    { label: 'Opencode', icon: Terminal },
+    { label: 'MCP', icon: Plug },
   ]
 
 const heroNavItems: Array<{
@@ -509,11 +527,23 @@ export function HeroSection() {
     (l) => l.name === 'Twitter',
   )
 
+  const linkedin = socialLinks.find(
+    (l) => l.name === 'LinkedIn',
+  )
+
+  const contactPhone = {
+    label: '+91 6203163193',
+    href: 'tel:+916203163193',
+  }
+
   const [activeSkill, setActiveSkill] =
     useState<number | null>(null)
 
   const reducedMotion =
     useReducedMotion()
+
+  const [ideaModalOpen, setIdeaModalOpen] =
+    useState(false)
 
   const navItemClasses = (
     active: boolean,
@@ -608,7 +638,7 @@ export function HeroSection() {
               Q1 — PROFILE / IDENTITY
           ================================================= */}
           <div
-            className="
+            className={`
               group
               relative
               order-1
@@ -617,7 +647,28 @@ export function HeroSection() {
               border
               border-primary/25
               bg-[#0A0A0A]
-            "
+              after:content-['']
+              after:absolute
+              after:-left-[2px]
+              after:-top-[2px]
+              after:w-0
+              after:h-0
+              after:rounded-tl-2xl
+              after:rounded-bl-full
+              after:rounded-br-full
+              after:border-t-[1.5px]
+              after:border-t-[#EF1D25]
+              after:border-l-[1.5px]
+              after:border-l-[#EF1D25]
+              after:border-r-0
+              after:border-b-0
+              after:border
+              after:transition-[width,height]
+              after:duration-300
+              after:ease-out
+              has-[[data-contact-trigger]:hover]:after:w-[40%]
+              has-[[data-contact-trigger]:hover]:after:h-[40%]
+            `}
           >
             {/* =================================================
                 PROFILE IMAGE
@@ -635,6 +686,7 @@ export function HeroSection() {
             ================================================= */}
             <div
               className="
+                group/contactdd
                 absolute
                 left-0
                 top-[27%]
@@ -648,6 +700,7 @@ export function HeroSection() {
               <a
                 href="#contact"
                 title="Contact"
+                data-contact-trigger
                 className="group/contact relative block w-max"
               >
                 <div
@@ -720,6 +773,77 @@ export function HeroSection() {
                   />
                 </div>
               </a>
+
+              {/* Contact dropdown — opens above the tag on hover */}
+              <div
+                className="
+                  pointer-events-none
+                  absolute
+                  bottom-full
+                  left-0
+                  z-50
+                  w-48
+                  pb-2
+                  -translate-y-1
+                  opacity-0
+                  transition-[opacity,transform]
+                  duration-300
+                  delay-500
+                  ease-out
+                  group-hover/contactdd:pointer-events-auto
+                  group-hover/contactdd:translate-y-0
+                  group-hover/contactdd:opacity-100
+                  group-hover/contactdd:delay-0
+                "
+              >
+                <div className="flex flex-col gap-1 border border-[#3A1515] bg-[#090909] p-2">
+                  {github && (
+                    <a
+                      href={github.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-2 whitespace-nowrap px-2 py-1.5 font-mono text-[9px] font-semibold uppercase tracking-[0.15em] text-[#888888] transition-colors duration-200 hover:bg-[#151515] hover:text-[#FFD700]"
+                    >
+                      <Github size={12} strokeWidth={1.75} />
+                      GitHub
+                    </a>
+                  )}
+
+                  {linkedin && (
+                    <a
+                      href={linkedin.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-2 whitespace-nowrap px-2 py-1.5 font-mono text-[9px] font-semibold uppercase tracking-[0.15em] text-[#888888] transition-colors duration-200 hover:bg-[#151515] hover:text-[#FFD700]"
+                    >
+                      <Linkedin size={12} strokeWidth={1.75} />
+                      LinkedIn
+                    </a>
+                  )}
+
+                  {twitter && (
+                    <a
+                      href={twitter.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-2 whitespace-nowrap px-2 py-1.5 font-mono text-[9px] font-semibold uppercase tracking-[0.15em] text-[#888888] transition-colors duration-200 hover:bg-[#151515] hover:text-[#FFD700]"
+                    >
+                      <Twitter size={12} strokeWidth={1.75} />
+                      Twitter
+                    </a>
+                  )}
+
+                  <div className="my-0.5 h-px bg-[#3A1515]" />
+
+                  <a
+                    href={contactPhone.href}
+                    className="flex items-center gap-2 whitespace-nowrap px-2 py-1.5 font-mono text-[9px] font-semibold tracking-[0.1em] text-[#888888] transition-colors duration-200 hover:bg-[#151515] hover:text-[#FFD700]"
+                  >
+                    <Phone size={12} strokeWidth={1.75} />
+                    {contactPhone.label}
+                  </a>
+                </div>
+              </div>
             </div>
 
             {/* =================================================
@@ -737,8 +861,9 @@ export function HeroSection() {
                 md:block
               "
             >
-              <a
-                href="#contact"
+              <button
+                type="button"
+                onClick={() => setIdeaModalOpen(true)}
                 title="Have an idea?"
                 className="group/idea relative block w-max"
               >
@@ -811,7 +936,7 @@ export function HeroSection() {
                     "
                   />
                 </div>
-              </a>
+              </button>
             </div>
 
             {/* =================================================
@@ -1106,7 +1231,7 @@ export function HeroSection() {
               {allSkills.map(
                 (skill, i) => (
                   <FloatingChip
-                    key={skill.label}
+                    key={`${skill.label}-${i}`}
                     item={skill}
                     layout={chipLayout[i]}
                     index={i}
@@ -1194,6 +1319,11 @@ export function HeroSection() {
           </motion.div>
         </a>
       </div>
+
+      <HaveAnIdeaModal
+        open={ideaModalOpen}
+        onOpenChange={setIdeaModalOpen}
+      />
     </section>
   )
 }
