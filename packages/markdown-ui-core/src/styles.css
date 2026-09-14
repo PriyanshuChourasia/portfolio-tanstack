@@ -2,6 +2,15 @@
 @import 'tw-animate-css';
 @plugin '@tailwindcss/typography';
 
+/*
+ * Consuming apps (markdown-ui-web) import this file through their pnpm
+ * workspace node_modules symlink, and Tailwind's automatic content
+ * detection excludes anything under node_modules — even a local
+ * workspace package — so it never sees the .tsx files that live
+ * alongside this stylesheet. Declare them explicitly.
+ */
+@source './**/*.{ts,tsx}';
+
 @custom-variant dark (&:is(.dark *));
 
 :root {
@@ -112,7 +121,7 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
-  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  --font-sans: ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
 }
 
 body {

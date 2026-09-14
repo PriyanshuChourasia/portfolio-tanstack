@@ -76,18 +76,16 @@ function MarkdownUIInner() {
       )}
 
       {stage === 'editor' && (
-        <div className="flex-1 flex overflow-hidden min-h-0">
+        <div className="flex-1 flex flex-col sm:flex-row overflow-hidden min-h-0">
           {showEditor && (
-            <div className="w-1/2 border-r border-border flex flex-col min-h-0">
+            <div className="flex-1 border-b sm:border-b-0 sm:border-r border-border flex flex-col min-h-0">
               <div className="px-4 py-2 border-b border-border text-xs font-medium uppercase tracking-wider text-muted-foreground shrink-0">
                 Editor
               </div>
               <EditorPane value={markdown} onChange={handleContentChange} />
             </div>
           )}
-          <div
-            className={`${showEditor ? 'w-1/2' : 'w-full'} flex flex-col min-h-0`}
-          >
+          <div className="flex-1 flex flex-col min-h-0">
             <div className="px-4 py-2 border-b border-border text-xs font-medium uppercase tracking-wider text-muted-foreground shrink-0">
               Preview
             </div>

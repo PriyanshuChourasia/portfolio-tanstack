@@ -1,31 +1,61 @@
 {
-  "name": "markdown-ui-web",
-  "private": true,
+  "name": "@pcoder/markdown-ai",
+  "version": "0.1.1",
+  "description": "A local-first Markdown workspace you run on your own machine — install with npm, no account, no cloud, files stay on your device.",
+  "keywords": [
+    "markdown",
+    "editor",
+    "cli",
+    "local-first",
+    "offline"
+  ],
+  "author": "Priyanshu Chourasia",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PriyanshuChourasia/portfolio-tanstack.git",
+    "directory": "apps/markdown-ui-web"
+  },
+  "private": false,
   "type": "module",
+  "engines": {
+    "node": ">=18"
+  },
   "scripts": {
     "dev": "vite --port 3001",
-    "build": "vite build && tsc",
+    "build": "vite build && tsc && npm run build:server",
+    "build:server": "tsc -p tsconfig.server.json",
     "serve": "vite preview",
     "lint": "eslint",
     "format": "prettier",
-    "check": "prettier --write . && eslint --fix"
+    "check": "prettier --write . && eslint --fix",
+    "prepublishOnly": "npm run build",
+    "postinstall": "node scripts/postinstall.js"
   },
-  "dependencies": {
-    "markdown-ui-core": "workspace:*",
-    "next-themes": "^0.4.6",
-    "react": "^19.2.0",
-    "react-dom": "^19.2.0"
+  "bin": {
+    "markdown-ai": "bin/markdown-ai.js"
   },
+  "files": [
+    "bin",
+    "dist",
+    "dist-server",
+    "scripts"
+  ],
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.16",
     "@tailwindcss/vite": "^4.0.6",
     "@tanstack/eslint-config": "^0.4.0",
+    "@types/node": "^22.20.0",
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",
     "@types/wicg-file-system-access": "^2023.10.7",
     "@vitejs/plugin-react": "^5.0.4",
     "eslint": "^9.0.0",
+    "markdown-ui-core": "workspace:*",
+    "next-themes": "^0.4.6",
     "prettier": "^3.5.3",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
     "tailwindcss": "^4.0.6",
     "tw-animate-css": "^1.3.6",
     "typescript": "^5.7.2",

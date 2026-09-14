@@ -13,19 +13,6 @@ importers:
         version: 2.10.2
 
   apps/markdown-ui-web:
-    dependencies:
-      markdown-ui-core:
-        specifier: workspace:*
-        version: link:../../packages/markdown-ui-core
-      next-themes:
-        specifier: ^0.4.6
-        version: 0.4.6(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
-      react:
-        specifier: ^19.2.0
-        version: 19.2.7
-      react-dom:
-        specifier: ^19.2.0
-        version: 19.2.7(react@19.2.7)
     devDependencies:
       '@tailwindcss/typography':
         specifier: ^0.5.16
@@ -36,6 +23,9 @@ importers:
       '@tanstack/eslint-config':
         specifier: ^0.4.0
         version: 0.4.0(@typescript-eslint/utils@8.62.1(eslint@9.39.4(jiti@2.7.0))(typescript@5.9.3))(eslint@9.39.4(jiti@2.7.0))(typescript@5.9.3)
+      '@types/node':
+        specifier: ^22.20.0
+        version: 22.20.0
       '@types/react':
         specifier: ^19.2.0
         version: 19.2.17
@@ -51,9 +41,21 @@ importers:
       eslint:
         specifier: ^9.0.0
         version: 9.39.4(jiti@2.7.0)
+      markdown-ui-core:
+        specifier: workspace:*
+        version: link:../../packages/markdown-ui-core
+      next-themes:
+        specifier: ^0.4.6
+        version: 0.4.6(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       prettier:
         specifier: ^3.5.3
         version: 3.9.4
+      react:
+        specifier: ^19.2.0
+        version: 19.2.7
+      react-dom:
+        specifier: ^19.2.0
+        version: 19.2.7(react@19.2.7)
       tailwindcss:
         specifier: ^4.0.6
         version: 4.3.2

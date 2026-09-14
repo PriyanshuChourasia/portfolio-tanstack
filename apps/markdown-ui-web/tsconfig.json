@@ -1,5 +1,4 @@
-{
-  "include": ["**/*.ts", "**/*.tsx", "vite.config.ts", "eslint.config.js", "prettier.config.js"],
+{"include": ["**/*.ts", "**/*.tsx", "vite.config.ts", "eslint.config.js", "prettier.config.js", "bin/**/*.js", "dist-server/**/*.js"],
   "compilerOptions": {
     "target": "ES2022",
     "jsx": "react-jsx",

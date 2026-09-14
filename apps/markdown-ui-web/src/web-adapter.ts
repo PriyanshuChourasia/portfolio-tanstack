@@ -1,4 +1,4 @@
-import type { StorageAdapter, ProjectMeta, UserConfig } from 'markdown-ui-core'
+import type { ProjectMeta, StorageAdapter, UserConfig } from 'markdown-ui-core'
 
 const DB_NAME = 'markdown-ui'
 const DB_VERSION = 1
@@ -154,7 +154,7 @@ export const webAdapter: StorageAdapter = {
     await writeFile(h, 'config.json', JSON.stringify(config, null, 2))
   },
 
-  async listProjects(): Promise<ProjectMeta[]> {
+  async listProjects(): Promise<Array<ProjectMeta>> {
     const h = await ensureHandle()
     const index = await readIndex(h)
     return [...index.projects]
