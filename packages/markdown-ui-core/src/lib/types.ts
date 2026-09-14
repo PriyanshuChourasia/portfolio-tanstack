@@ -6,10 +6,7 @@ export interface ProjectMeta {
 }
 
 export interface UserConfig {
-  name: string
-  email?: string
-  github?: string
-  socials: Array<{ label: string; url: string }>
+  locationLabel: string
   createdAt: string
 }
 

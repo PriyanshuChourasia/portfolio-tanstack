@@ -4,8 +4,7 @@ import { useTheme } from 'next-themes'
 import { Button } from './ui/button'
 
 interface AppShellProps {
-  stage: 'setup' | 'home' | 'editor'
-  userName?: string
+  stage: 'home' | 'editor'
   showEditorToggle?: boolean
   editorOpen?: boolean
   onToggleEditor?: () => void
@@ -15,7 +14,6 @@ interface AppShellProps {
 
 export function AppShell({
   stage,
-  userName,
   showEditorToggle = false,
   editorOpen = false,
   onToggleEditor,
@@ -54,12 +52,9 @@ export function AppShell({
               )}
             </>
           )}
-          <h1 className="text-sm font-semibold tracking-tight">Markdown UI</h1>
+          <h1 className="text-sm font-semibold tracking-tight">Markdown-AI</h1>
         </div>
         <div className="flex items-center gap-3">
-          {userName && stage !== 'setup' && (
-            <span className="text-sm text-muted-foreground">{userName}</span>
-          )}
           <Button
             variant="ghost"
             size="icon"

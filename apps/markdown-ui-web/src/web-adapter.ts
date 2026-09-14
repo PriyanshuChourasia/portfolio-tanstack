@@ -135,7 +135,7 @@ export const webAdapter: StorageAdapter = {
   },
 
   getDefaultLocationLabel(): string {
-    return 'Documents/MarkdownUI'
+    return 'Documents/Markdown-AI'
   },
 
   async readConfig(): Promise<UserConfig | null> {

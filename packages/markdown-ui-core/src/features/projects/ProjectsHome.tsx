@@ -3,16 +3,14 @@ import { Plus, FileText, Trash2, FolderOpen } from 'lucide-react'
 import { Button } from '../../components/ui/button'
 import { Dialog } from '../../components/ui/dialog'
 import { useStorage } from '../../lib/context'
-import type { ProjectMeta } from '../../lib/types'
+import type { ProjectMeta, UserConfig } from '../../lib/types'
 
 interface ProjectsHomeProps {
   onSelectProject: (id: string) => void
 }
 
-function timeAgo(iso: string): string {
-  const seconds = Math.floor(
-    (Date.now() - new Date(iso).getTime()) / 1000,
-  )
+const timeAgo = (iso: string): string => {
+  const seconds = Math.floor((Date.now() - new Date(iso).getTime()) / 1000)
   if (seconds < 60) return 'just now'
   const minutes = Math.floor(seconds / 60)
   if (minutes < 60) return `${minutes}m ago`
@@ -20,22 +18,38 @@ function timeAgo(iso: string): string {
   if (hours < 24) return `${hours}h ago`
   const days = Math.floor(hours / 24)
   if (days < 30) return `${days}d ago`
-  const months = Math.floor(days / 30)
-  return `${months}mo ago`
+  return `${Math.floor(days / 30)}mo ago`
 }
 
 export function ProjectsHome({ onSelectProject }: ProjectsHomeProps) {
   const adapter = useStorage()
   const [projects, setProjects] = useState<ProjectMeta[]>([])
+  const [location, setLocation] = useState<string | null>(null)
   const [showDialog, setShowDialog] = useState(false)
   const [newName, setNewName] = useState('')
 
-  const refresh = async () => {
-    setProjects(await adapter.listProjects())
-  }
-
   useEffect(() => {
-    refresh()
+    let cancelled = false
+    ;(async () => {
+      let projects_: ProjectMeta[] = []
+      let cfg: UserConfig | null = null
+      try {
+        projects_ = await adapter.listProjects()
+      } catch {
+        projects_ = []
+      }
+      try {
+        cfg = await adapter.readConfig()
+      } catch {
+        cfg = null
+      }
+      if (cancelled) return
+      setProjects(projects_)
+      setLocation(cfg?.locationLabel ?? adapter.getDefaultLocationLabel())
+    })()
+    return () => {
+      cancelled = true
+    }
   }, [adapter])
 
   const handleCreate = async () => {
@@ -49,59 +63,14 @@ export function ProjectsHome({ onSelectProject }: ProjectsHomeProps) {
   const handleDelete = async (id: string, e: React.MouseEvent) => {
     e.stopPropagation()
     await adapter.deleteProject(id)
-    await refresh()
+    setProjects((prev) => prev.filter((p) => p.id !== id))
   }
 
-  return (
-    <div className="flex-1 overflow-y-auto p-6">
-      <div className="max-w-4xl mx-auto">
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-semibold tracking-tight">Projects</h2>
-          <Button onClick={() => setShowDialog(true)}>
-            <Plus className="h-4 w-4 mr-1" />
-            New Project
-          </Button>
-        </div>
-
-        {projects.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-20 text-center">
-            <FolderOpen className="h-12 w-12 text-muted-foreground mb-4" />
-            <p className="text-muted-foreground mb-4">No projects yet</p>
-            <Button onClick={() => setShowDialog(true)}>
-              <Plus className="h-4 w-4 mr-1" />
-              Create your first project
-            </Button>
-          </div>
-        ) : (
-          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {projects.map((p) => (
-              <button
-                key={p.id}
-                onClick={() => onSelectProject(p.id)}
-                className="group flex items-start gap-3 rounded-lg border border-border bg-card p-4 text-left transition-colors hover:bg-accent/50 cursor-pointer"
-              >
-                <FileText className="h-5 w-5 mt-0.5 shrink-0 text-muted-foreground" />
-                <div className="flex-1 min-w-0">
-                  <p className="font-medium truncate">{p.name}</p>
-                  <p className="text-xs text-muted-foreground mt-0.5">
-                    Updated {timeAgo(p.updatedAt)}
-                  </p>
-                </div>
-                <button
-                  onClick={(e) => handleDelete(p.id, e)}
-                  className="opacity-0 group-hover:opacity-100 transition-opacity p-1 rounded hover:bg-destructive/10 text-muted-foreground hover:text-destructive cursor-pointer"
-                  title="Delete project"
-                >
-                  <Trash2 className="h-4 w-4" />
-                </button>
-              </button>
-            ))}
-          </div>
-        )}
-      </div>
-
+  const addProjectDialog = () => {
+    if (!showDialog) return null
+    return (
       <Dialog open={showDialog} onClose={() => setShowDialog(false)}>
-        <h3 className="text-lg font-semibold mb-4">New Project</h3>
+        <h3 className="text-lg font-semibold mb-4">Add Project</h3>
         <input
           type="text"
           value={newName}
@@ -122,6 +91,108 @@ export function ProjectsHome({ onSelectProject }: ProjectsHomeProps) {
           </Button>
         </div>
       </Dialog>
+    )
+  }
+
+  const emptyStateCard = () => {
+    const nameFilled = newName.trim().length > 0
+    const locationPicked = location !== null && location !== ''
+    const canCreate = nameFilled && locationPicked
+
+    const handleCreateFirstProject = async () => {
+      if (!canCreate) return
+      const cfg: UserConfig = { locationLabel: location, createdAt: new Date().toISOString() }
+      await adapter.writeConfig(cfg)
+      onSelectProject((await adapter.createProject(newName.trim())).id)
+    }
+
+    return (
+      <div className="max-w-md mx-auto rounded-lg border border-border bg-card p-8">
+        <div className="flex flex-col items-center text-center">
+          <FolderOpen className="h-10 w-10 text-muted-foreground mb-4" />
+          <p className="text-muted-foreground mb-6">No projects yet</p>
+          <input
+            type="text"
+            value={newName}
+            onChange={(e) => setNewName(e.target.value)}
+            className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-ring mb-4"
+            placeholder="Project name"
+          />
+          <div className="flex flex-col items-start gap-2 w-full mb-6">
+            <div className="flex items-center justify-between w-full">
+              <label className="text-sm text-muted-foreground">Location</label>
+              <span className="text-xs text-muted-foreground truncate max-w-[60%]">
+                {location ?? '...'}
+              </span>
+            </div>
+            <Button
+              type="button"
+              variant="outline"
+              className="w-full justify-start gap-2"
+              onClick={async () => {
+                const label = await adapter.pickLocation()
+                if (label) setLocation(label)
+              }}
+            >
+              <FolderOpen className="h-4 w-4" />
+              Where should the files be kept?
+            </Button>
+          </div>
+          <Button onClick={handleCreateFirstProject} disabled={!canCreate} className="w-full">
+            Create Project
+          </Button>
+        </div>
+      </div>
+    )
+  }
+
+  const projectGrid = () => (
+    <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+      {projects.map((p) => (
+        <button
+          key={p.id}
+          onClick={() => onSelectProject(p.id)}
+          className="group flex items-start gap-3 rounded-lg border border-border bg-card p-4 text-left transition-colors hover:bg-accent/50 cursor-pointer"
+        >
+          <FileText className="h-5 w-5 mt-0.5 shrink-0 text-muted-foreground" />
+          <div className="flex-1 min-w-0">
+            <p className="font-medium truncate">{p.name}</p>
+            <p className="text-xs text-muted-foreground mt-0.5">Updated {timeAgo(p.updatedAt)}</p>
+          </div>
+          <button
+            onClick={(e) => handleDelete(p.id, e)}
+            className="opacity-0 group-hover:opacity-100 transition-opacity p-1 rounded hover:bg-destructive/10 text-muted-foreground hover:text-destructive cursor-pointer"
+            title="Delete project"
+          >
+            <Trash2 className="h-4 w-4" />
+          </button>
+        </button>
+      ))}
+    </div>
+  )
+
+  return (
+    <div className="flex-1 overflow-y-auto p-6">
+      {projects.length > 0 && (
+        <div className="flex justify-end mb-6">
+          <Button onClick={() => setShowDialog(true)}>
+            <Plus className="h-4 w-4 mr-1" />
+            Add Project
+          </Button>
+        </div>
+      )}
+
+      <div className="max-w-4xl mx-auto">
+        <div className="mb-10 text-center">
+          <h1 className="text-3xl font-semibold tracking-tight">Welcome to Markdown-AI</h1>
+          <p className="text-muted-foreground mt-1">
+            A local-first Markdown workspace — your files stay on this device.
+          </p>
+        </div>
+        {projects.length === 0 ? emptyStateCard() : projectGrid()}
+      </div>
+
+      {addProjectDialog()}
     </div>
   )
 }

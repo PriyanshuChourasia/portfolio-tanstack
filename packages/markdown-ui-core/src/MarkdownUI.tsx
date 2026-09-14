@@ -1,46 +1,21 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { useStorage, StorageProvider } from './lib/context'
-import type { StorageAdapter, UserConfig } from './lib/types'
+import type { StorageAdapter } from './lib/types'
 import { AppShell } from './components/AppShell'
-import { SetupScreen } from './features/setup/SetupScreen'
 import { ProjectsHome } from './features/projects/ProjectsHome'
 import { EditorPane } from './features/editor/EditorPane'
 import { PreviewPane } from './features/preview/PreviewPane'
 
-type Stage = 'loading' | 'setup' | 'home' | 'editor'
+type Stage = 'home' | 'editor'
 
 function MarkdownUIInner() {
   const adapter = useStorage()
-  const [stage, setStage] = useState<Stage>('loading')
-  const [config, setConfig] = useState<UserConfig | null>(null)
+  const [stage, setStage] = useState<Stage>('home')
   const [currentProjectId, setCurrentProjectId] = useState<string | null>(null)
   const [markdown, setMarkdown] = useState('')
   const [showEditor, setShowEditor] = useState(true)
   const saveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const currentContentRef = useRef('')
-
-  const init = useCallback(async () => {
-    try {
-      const cfg = await adapter.readConfig()
-      if (cfg) {
-        setConfig(cfg)
-        setStage('home')
-        return
-      }
-    } catch {
-      // ignore
-    }
-    setStage('setup')
-  }, [adapter])
-
-  useEffect(() => {
-    init()
-  }, [init])
-
-  const handleSetupComplete = useCallback((cfg: UserConfig) => {
-    setConfig(cfg)
-    setStage('home')
-  }, [])
 
   const handleOpenProject = useCallback(
     async (id: string) => {
@@ -88,27 +63,14 @@ function MarkdownUIInner() {
     })()
   }, [stage, currentProjectId, adapter, markdown])
 
-  if (stage === 'loading') {
-    return (
-      <div className="h-screen flex items-center justify-center bg-background text-foreground">
-        <p className="text-muted-foreground text-sm">Loading…</p>
-      </div>
-    )
-  }
-
   return (
     <AppShell
       stage={stage}
-      userName={config?.name}
       showEditorToggle={stage === 'editor'}
       editorOpen={showEditor}
       onToggleEditor={() => setShowEditor(!showEditor)}
       onBackToProjects={handleBackToProjects}
     >
-      {stage === 'setup' && (
-        <SetupScreen onComplete={handleSetupComplete} />
-      )}
-
       {stage === 'home' && (
         <ProjectsHome onSelectProject={handleOpenProject} />
       )}
