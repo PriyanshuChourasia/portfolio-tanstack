@@ -14,7 +14,13 @@ import { ResumePreview } from './resume-preview'
 import { TemplateShowcase } from './template-showcase'
 
 export type ResumeLayout =
-  'classic' | 'modern' | 'minimal' | 'professional' | 'creative' | 'mech'
+  | 'classic'
+  | 'modern'
+  | 'minimal'
+  | 'professional'
+  | 'creative'
+  | 'mech'
+  | 'executive'
 
 export interface ResumePersonal {
   name: string
@@ -24,6 +30,8 @@ export interface ResumePersonal {
   title: string
   summary: string
   photo?: string
+  linkedin?: string
+  website?: string
 }
 
 export interface ResumeExperience {
@@ -56,6 +64,7 @@ export interface ResumeData {
   education: Array<ResumeEducation>
   skills: Array<ResumeSkill>
   languages: Array<ResumeLanguage>
+  certificates?: Array<string>
 }
 
 const layouts: Array<{ id: ResumeLayout; label: string }> = [
@@ -65,6 +74,7 @@ const layouts: Array<{ id: ResumeLayout; label: string }> = [
   { id: 'professional', label: 'Professional' },
   { id: 'creative', label: 'Creative' },
   { id: 'mech', label: 'Mech' },
+  { id: 'executive', label: 'Executive' },
 ]
 
 const demoProfiles: Array<{ name: string; data: ResumeData }> = [
@@ -79,6 +89,8 @@ const demoProfiles: Array<{ name: string; data: ResumeData }> = [
         title: 'Full Stack Developer',
         summary:
           'Passionate full-stack developer with 3+ years of experience building modern web applications using React, Node.js, and TypeScript. Strong background in distributed systems and cloud infrastructure.',
+        linkedin: 'linkedin.com/in/priyanshu-sharma',
+        website: 'priyanshu.dev',
       },
       experience: [
         {
@@ -128,6 +140,10 @@ const demoProfiles: Array<{ name: string; data: ResumeData }> = [
         { name: 'English', level: 9 },
         { name: 'Hindi', level: 10 },
         { name: 'French', level: 4 },
+      ],
+      certificates: [
+        'AWS Certified Solutions Architect – Associate',
+        'Meta Front-End Developer Professional Certificate',
       ],
     },
   },

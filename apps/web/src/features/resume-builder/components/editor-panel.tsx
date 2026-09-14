@@ -126,6 +126,25 @@ export function EditorPanel({ data, onChange }: EditorPanelProps) {
     })
   }
 
+  const certificates = data.certificates ?? []
+
+  const updateCertificate = (index: number, value: string) => {
+    const updated = [...certificates]
+    updated[index] = value
+    onChange({ ...data, certificates: updated })
+  }
+
+  const addCertificate = () => {
+    onChange({ ...data, certificates: [...certificates, ''] })
+  }
+
+  const removeCertificate = (index: number) => {
+    onChange({
+      ...data,
+      certificates: certificates.filter((_, i) => i !== index),
+    })
+  }
+
   return (
     <div className="h-full overflow-y-auto custom-scrollbar p-6 space-y-6 max-h-[70vh] md:max-h-none">
       <div className="space-y-4">
@@ -214,6 +233,24 @@ export function EditorPanel({ data, onChange }: EditorPanelProps) {
               value={data.personal.summary}
               onChange={(e) => updatePersonal('summary', e.target.value)}
               className="bg-slate-800/50 border-slate-700 text-white min-h-[100px]"
+            />
+          </div>
+          <div>
+            <Label className="text-slate-400">LinkedIn</Label>
+            <Input
+              value={data.personal.linkedin ?? ''}
+              onChange={(e) => updatePersonal('linkedin', e.target.value)}
+              placeholder="linkedin.com/in/yourname"
+              className="bg-slate-800/50 border-slate-700 text-white"
+            />
+          </div>
+          <div>
+            <Label className="text-slate-400">Website</Label>
+            <Input
+              value={data.personal.website ?? ''}
+              onChange={(e) => updatePersonal('website', e.target.value)}
+              placeholder="yoursite.com"
+              className="bg-slate-800/50 border-slate-700 text-white"
             />
           </div>
         </div>
@@ -431,6 +468,40 @@ export function EditorPanel({ data, onChange }: EditorPanelProps) {
               variant="ghost"
               size="icon"
               onClick={() => removeLanguage(i)}
+              className="h-8 w-8 text-red-400 hover:text-red-300 hover:bg-red-500/10 shrink-0"
+            >
+              <Trash2 className="w-4 h-4" />
+            </Button>
+          </div>
+        ))}
+      </div>
+
+      <Separator className="bg-slate-700" />
+
+      <div className="space-y-4">
+        <div className="flex items-center justify-between">
+          <h3 className="text-lg font-semibold text-white">Certificates</h3>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={addCertificate}
+            className="border-primary-accent/50 text-primary-accent hover:bg-primary-accent/10"
+          >
+            <Plus className="w-4 h-4 mr-1" /> Add
+          </Button>
+        </div>
+        {certificates.map((cert, i) => (
+          <div key={i} className="flex items-center gap-2">
+            <Input
+              value={cert}
+              onChange={(e) => updateCertificate(i, e.target.value)}
+              placeholder="Certificate name"
+              className="bg-slate-800/50 border-slate-700 text-white flex-1"
+            />
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => removeCertificate(i)}
               className="h-8 w-8 text-red-400 hover:text-red-300 hover:bg-red-500/10 shrink-0"
             >
               <Trash2 className="w-4 h-4" />

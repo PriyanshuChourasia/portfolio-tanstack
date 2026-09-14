@@ -46,6 +46,12 @@ const templateInfo: Array<{
     tagline: 'Photo header with a career timeline',
     bestFor: 'Engineering, Manufacturing, Technical',
   },
+  {
+    id: 'executive',
+    label: 'Executive',
+    tagline: 'Photo, icon contact bar & certificates',
+    bestFor: 'Software, IT, Client-facing roles',
+  },
 ]
 
 const showcaseData: ResumeData = {
@@ -57,6 +63,8 @@ const showcaseData: ResumeData = {
     title: 'Senior Product Engineer',
     summary:
       'Versatile engineer with 5+ years of experience building high-performance web applications and leading cross-functional teams.',
+    linkedin: 'linkedin.com/in/alexmorgan',
+    website: 'alexmorgan.dev',
   },
   experience: [
     {
@@ -91,6 +99,7 @@ const showcaseData: ResumeData = {
     { name: 'English', level: 10 },
     { name: 'Spanish', level: 6 },
   ],
+  certificates: ['AWS Certified Solutions Architect'],
 }
 
 interface TemplateShowcaseProps {
@@ -112,8 +121,8 @@ export function TemplateShowcase({ onSelect }: TemplateShowcaseProps) {
           className="relative max-w-3xl mx-auto"
         >
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary-accent/10 border border-primary-accent/20 text-primary-accent text-xs font-medium mb-6">
-            <Sparkles className="w-3.5 h-3.5" />5 Professionally Designed
-            Templates
+            <Sparkles className="w-3.5 h-3.5" />
+            {templateInfo.length} Professionally Designed Templates
           </div>
           <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-4">
             Templates That Get You{' '}
@@ -140,7 +149,7 @@ export function TemplateShowcase({ onSelect }: TemplateShowcaseProps) {
                 initial={{ opacity: 0, y: 40 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: idx * 0.1 }}
-                className={`group relative ${idx >= 3 ? 'md:col-span-1 lg:col-start-' + (idx - 2) : ''}`}
+                className="group relative"
                 onMouseEnter={() => setHoveredId(tpl.id)}
                 onMouseLeave={() => setHoveredId(null)}
               >

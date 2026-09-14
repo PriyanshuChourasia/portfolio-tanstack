@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { Mail, MapPin, Phone, User } from 'lucide-react'
+import { Globe, Linkedin, Mail, MapPin, Phone, User } from 'lucide-react'
 import type { ResumeData, ResumeLayout } from './resume-template'
 
 interface ResumePreviewProps {
@@ -839,6 +839,163 @@ function MechPreview({ data }: { data: ResumeData }) {
   )
 }
 
+function ExecutivePreview({ data }: { data: ResumeData }) {
+  return (
+    <div className="bg-white text-slate-900 p-8 shadow-lg rounded-sm min-h-[1056px]">
+      <div className="flex items-center gap-4 mb-4">
+        <div className="w-16 h-16 rounded-full overflow-hidden bg-slate-100 border border-slate-200 flex items-center justify-center shrink-0">
+          {data.personal.photo ? (
+            <img
+              src={data.personal.photo}
+              alt={data.personal.name || 'Profile photo'}
+              className="w-full h-full object-cover"
+            />
+          ) : (
+            <User className="w-7 h-7 text-slate-400" />
+          )}
+        </div>
+        <div>
+          <h1 className="text-2xl font-bold text-slate-900">
+            {data.personal.name || 'Your Name'}
+          </h1>
+          <p className="text-sm text-primary font-medium mt-0.5">
+            {data.personal.title || 'Professional Title'}
+          </p>
+        </div>
+      </div>
+
+      <div className="flex flex-wrap gap-x-5 gap-y-1.5 text-xs text-slate-600 mb-4">
+        {data.personal.email && (
+          <span className="flex items-center gap-1.5">
+            <Mail className="w-3.5 h-3.5 text-primary-accent" />
+            {data.personal.email}
+          </span>
+        )}
+        {data.personal.phone && (
+          <span className="flex items-center gap-1.5">
+            <Phone className="w-3.5 h-3.5 text-primary" />
+            {data.personal.phone}
+          </span>
+        )}
+        {data.personal.location && (
+          <span className="flex items-center gap-1.5">
+            <MapPin className="w-3.5 h-3.5 text-primary-accent" />
+            {data.personal.location}
+          </span>
+        )}
+        {data.personal.linkedin && (
+          <span className="flex items-center gap-1.5">
+            <Linkedin className="w-3.5 h-3.5 text-primary" />
+            {data.personal.linkedin}
+          </span>
+        )}
+        {data.personal.website && (
+          <span className="flex items-center gap-1.5">
+            <Globe className="w-3.5 h-3.5 text-primary-accent" />
+            {data.personal.website}
+          </span>
+        )}
+      </div>
+
+      <div className="border-t border-slate-200 mb-4" />
+
+      {data.personal.summary && (
+        <p className="text-sm text-slate-700 leading-relaxed mb-5">
+          {data.personal.summary}
+        </p>
+      )}
+
+      {data.experience.length > 0 && (
+        <div className="mb-5">
+          <h2 className="text-sm font-bold uppercase tracking-wide text-slate-900 mb-3">
+            Work Experience
+          </h2>
+          {data.experience.map((exp, i) => (
+            <div key={i} className="mb-4 last:mb-0">
+              <div className="flex justify-between items-baseline">
+                <h3 className="font-semibold text-slate-900 text-sm">
+                  {exp.title || 'Position'}
+                </h3>
+                <span className="text-xs text-slate-500">{exp.period}</span>
+              </div>
+              <p className="text-xs text-slate-500">{exp.company}</p>
+              {exp.desc && (
+                <ul className="list-disc list-outside pl-4 mt-1.5 space-y-1">
+                  {exp.desc
+                    .split('\n')
+                    .map((line) => line.trim())
+                    .filter(Boolean)
+                    .map((line, j) => (
+                      <li key={j} className="text-xs text-slate-600 leading-relaxed">
+                        {line}
+                      </li>
+                    ))}
+                </ul>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
+
+      <div className="border-t border-slate-200 mb-4" />
+
+      {data.education.length > 0 && (
+        <div className="mb-5">
+          <h2 className="text-sm font-bold uppercase tracking-wide text-slate-900 mb-3">
+            Education
+          </h2>
+          {data.education.map((edu, i) => (
+            <div key={i} className="mb-3 last:mb-0">
+              <div className="flex justify-between items-baseline">
+                <h3 className="font-semibold text-slate-900 text-sm">
+                  {edu.title || 'Degree'}
+                </h3>
+                <span className="text-xs text-slate-500">{edu.period}</span>
+              </div>
+              <p className="text-xs text-slate-500">{edu.company}</p>
+            </div>
+          ))}
+        </div>
+      )}
+
+      <div className="border-t border-slate-200 mb-4" />
+
+      {data.skills.length > 0 && (
+        <div className="mb-5">
+          <h2 className="text-sm font-bold uppercase tracking-wide text-slate-900 mb-3">
+            Skills
+          </h2>
+          <div className="grid grid-cols-3 gap-x-4 gap-y-1.5">
+            {data.skills.map((skill, i) => (
+              <span key={i} className="text-sm text-slate-700">
+                {skill.name}
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {data.certificates && data.certificates.length > 0 && (
+        <>
+          <div className="border-t border-slate-200 mb-4" />
+          <div>
+            <h2 className="text-sm font-bold uppercase tracking-wide text-slate-900 mb-3">
+              Certificates
+            </h2>
+            <div className="space-y-1">
+              {data.certificates.map((cert, i) => (
+                <p key={i} className="text-sm font-medium text-primary">
+                  {cert}
+                </p>
+              ))}
+            </div>
+          </div>
+        </>
+      )}
+    </div>
+  )
+}
+
 export const previewComponents: Record<
   ResumeLayout,
   React.ComponentType<{ data: ResumeData }>
@@ -849,6 +1006,7 @@ export const previewComponents: Record<
   professional: ProfessionalPreview,
   creative: CreativePreview,
   mech: MechPreview,
+  executive: ExecutivePreview,
 }
 
 // The resume templates are fixed-width A4 documents (210mm ≈ 794px). To keep

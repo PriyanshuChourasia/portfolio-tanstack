@@ -2,6 +2,7 @@ import { AccentTemplate } from './AccentTemplate'
 import { BoldTemplate } from './BoldTemplate'
 import { ClassicTemplate } from './ClassicTemplate'
 import { ElegantTemplate } from './ElegantTemplate'
+import { ExecutiveTemplate } from './ExecutiveTemplate'
 import { FreshTemplate } from './FreshTemplate'
 import { MechTemplate } from './MechTemplate'
 import { MinimalTemplate } from './MinimalTemplate'
@@ -102,5 +103,12 @@ export const resumeTemplates: Array<ResumeTemplateDefinition> = [
     description:
       'Dark photo header with a light contact/skills sidebar and a dotted career timeline — built for engineering and technical resumes.',
     component: MechTemplate,
+  },
+  {
+    id: 'executive',
+    name: 'Executive',
+    description:
+      'Single-column layout with a photo, icon contact bar, LinkedIn/website links, and a dedicated certificates section.',
+    component: ExecutiveTemplate,
   },
 ]

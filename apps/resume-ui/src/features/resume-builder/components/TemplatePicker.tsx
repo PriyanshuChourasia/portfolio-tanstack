@@ -21,6 +21,7 @@ const templateColors: Record<string, string> = {
   simple: 'bg-gray-500',
   visual: 'bg-pink-600',
   mech: 'bg-slate-800',
+  executive: 'bg-orange-600',
 }
 
 export function TemplatePicker({ selectedId, onSelect }: TemplatePickerProps) {
