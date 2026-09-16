@@ -13,6 +13,7 @@ import { Route as ResumeToPortfolioRouteImport } from './routes/resume-to-portfo
 import { Route as ResumeRouteImport } from './routes/resume'
 import { Route as PortfolioRouteImport } from './routes/portfolio'
 import { Route as PhotofolioRouteImport } from './routes/photofolio'
+import { Route as InterviewRouteImport } from './routes/interview'
 import { Route as ClassicRouteImport } from './routes/classic'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as PolandFrontendRouteImport } from './routes/poland/frontend'
@@ -37,6 +38,11 @@ const PortfolioRoute = PortfolioRouteImport.update({
 const PhotofolioRoute = PhotofolioRouteImport.update({
   id: '/photofolio',
   path: '/photofolio',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InterviewRoute = InterviewRouteImport.update({
+  id: '/interview',
+  path: '/interview',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ClassicRoute = ClassicRouteImport.update({
@@ -68,6 +74,7 @@ const GermanyBackendRoute = GermanyBackendRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/classic': typeof ClassicRoute
+  '/interview': typeof InterviewRoute
   '/photofolio': typeof PhotofolioRoute
   '/portfolio': typeof PortfolioRoute
   '/resume': typeof ResumeRoute
@@ -79,6 +86,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/classic': typeof ClassicRoute
+  '/interview': typeof InterviewRoute
   '/photofolio': typeof PhotofolioRoute
   '/portfolio': typeof PortfolioRoute
   '/resume': typeof ResumeRoute
@@ -91,6 +99,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/classic': typeof ClassicRoute
+  '/interview': typeof InterviewRoute
   '/photofolio': typeof PhotofolioRoute
   '/portfolio': typeof PortfolioRoute
   '/resume': typeof ResumeRoute
@@ -104,6 +113,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/classic'
+    | '/interview'
     | '/photofolio'
     | '/portfolio'
     | '/resume'
@@ -115,6 +125,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/classic'
+    | '/interview'
     | '/photofolio'
     | '/portfolio'
     | '/resume'
@@ -126,6 +137,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/classic'
+    | '/interview'
     | '/photofolio'
     | '/portfolio'
     | '/resume'
@@ -138,6 +150,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ClassicRoute: typeof ClassicRoute
+  InterviewRoute: typeof InterviewRoute
   PhotofolioRoute: typeof PhotofolioRoute
   PortfolioRoute: typeof PortfolioRoute
   ResumeRoute: typeof ResumeRoute
@@ -175,6 +188,13 @@ declare module '@tanstack/react-router' {
       path: '/photofolio'
       fullPath: '/photofolio'
       preLoaderRoute: typeof PhotofolioRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/interview': {
+      id: '/interview'
+      path: '/interview'
+      fullPath: '/interview'
+      preLoaderRoute: typeof InterviewRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/classic': {
@@ -218,6 +238,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ClassicRoute: ClassicRoute,
+  InterviewRoute: InterviewRoute,
   PhotofolioRoute: PhotofolioRoute,
   PortfolioRoute: PortfolioRoute,
   ResumeRoute: ResumeRoute,

@@ -82,7 +82,8 @@ function FloatingNav() {
   ]
 
   const externalLinks = [
-    { label: 'Photofolio', to: '/photofolio' as const },
+    // { label: 'Photofolio', to: '/photofolio' as const }, // hidden for now
+    { label: 'Interview', to: '/interview' as const },
   ]
 
   return (
@@ -90,17 +91,17 @@ function FloatingNav() {
       initial={{ y: -80, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.6, delay: 0.2, ease }}
-      className="fixed top-4 left-1/2 z-50 -translate-x-1/2"
+      className="fixed top-4 left-1/2 z-50 w-[calc(100%-1.5rem)] max-w-fit -translate-x-1/2 px-1 sm:w-auto sm:px-0"
     >
-      <div className={`flex items-center gap-1 rounded-full border px-2 py-1.5 backdrop-blur-xl transition-all duration-300 sm:gap-2 sm:px-3 sm:py-2 ${scrolled ? 'border-border/60 bg-background/80 shadow-lg shadow-black/5 dark:shadow-black/20' : 'border-transparent bg-background/50'}`}>
+      <div className={`flex flex-nowrap items-center gap-0.5 whitespace-nowrap rounded-full border px-1.5 py-1.5 backdrop-blur-xl transition-all duration-300 sm:gap-1 sm:px-3 sm:py-2 ${scrolled ? 'border-border/60 bg-background/80 shadow-lg shadow-black/5 dark:shadow-black/20' : 'border-transparent bg-background/50'}`}>
         {/* Logo */}
-        <Link to="/" className="flex items-center gap-2 rounded-full px-2.5 py-1.5 transition-colors hover:bg-muted/50">
-          <FileText className="size-4 text-foreground" />
-          <span className="hidden text-sm font-bold tracking-tight sm:inline">Resume Builder</span>
+        <Link to="/" className="flex shrink-0 items-center gap-1.5 rounded-full px-2 py-1.5 transition-colors hover:bg-muted/50 sm:gap-2 sm:px-2.5">
+          <FileText className="size-4 shrink-0 text-foreground" />
+          <span className="hidden text-sm font-bold tracking-tight lg:inline">Resume Builder</span>
         </Link>
 
         {/* Desktop links */}
-        <div className="hidden items-center gap-0.5 md:flex">
+        <div className="hidden items-center gap-0.5 lg:flex">
           {links.map((l) => (
             <a key={l.label} href={l.href} className="rounded-full px-3 py-1.5 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground">
               {l.label}
@@ -114,15 +115,15 @@ function FloatingNav() {
           ))}
         </div>
 
-        <div className="h-5 w-px bg-border/60" />
+        <div className="hidden h-5 w-px shrink-0 bg-border/60 sm:block" />
 
         {/* GitHub */}
-        <a href="https://github.com/PriyanshuChourasia/resume-to-portfolio" target="_blank" rel="noreferrer" className="hidden rounded-full p-2 text-muted-foreground transition-colors hover:text-foreground sm:flex" title="GitHub">
+        <a href="https://github.com/PriyanshuChourasia/resume-to-portfolio" target="_blank" rel="noreferrer" className="hidden shrink-0 rounded-full p-2 text-muted-foreground transition-colors hover:text-foreground md:flex" title="GitHub">
           <Github className="size-4" />
         </a>
 
         {/* Theme toggle */}
-        <button type="button" onClick={toggle} className="rounded-full p-2 text-muted-foreground transition-colors hover:text-foreground" title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}>
+        <button type="button" onClick={toggle} className="shrink-0 rounded-full p-2 text-muted-foreground transition-colors hover:text-foreground" title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}>
           <AnimatePresence mode="wait" initial={false}>
             <motion.span key={theme} initial={{ rotate: -90, opacity: 0, scale: 0.5 }} animate={{ rotate: 0, opacity: 1, scale: 1 }} exit={{ rotate: 90, opacity: 0, scale: 0.5 }} transition={{ type: 'spring', stiffness: 300, damping: 20 }} className="flex">
               {theme === 'dark' ? <Sun className="size-4" /> : <Moon className="size-4" />}
@@ -131,12 +132,12 @@ function FloatingNav() {
         </button>
 
         {/* CTA */}
-        <Button asChild size="sm" className="hidden rounded-full text-xs sm:inline-flex">
+        <Button asChild size="sm" className="hidden shrink-0 rounded-full text-xs sm:inline-flex">
           <Link to="/resume">Open Builder</Link>
         </Button>
 
         {/* Mobile menu */}
-        <button type="button" onClick={() => setMobileOpen(!mobileOpen)} className="rounded-full p-2 text-muted-foreground md:hidden">
+        <button type="button" onClick={() => setMobileOpen(!mobileOpen)} className="shrink-0 rounded-full p-2 text-muted-foreground lg:hidden">
           {mobileOpen ? <X className="size-4" /> : <Menu className="size-4" />}
         </button>
       </div>
