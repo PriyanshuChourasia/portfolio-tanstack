@@ -5,7 +5,7 @@ import { DEFAULT_SECTION_ORDER, type SectionId } from '../types'
 import type { ResumeTemplateProps, ResumeTheme } from './types'
 
 export function ExecutiveTemplate({ data, theme = data.theme, onElementColorChange }: ResumeTemplateProps) {
-  const { personalInfo, summary, experience, education, skills, certifications } = data
+  const { personalInfo, summary, experience, education, skills, projects, certifications } = data
   const elementColors = data.elementColors ?? {}
   const setColor = onElementColorChange
     ? (id: string, color: string) => onElementColorChange(id, color)
@@ -75,7 +75,7 @@ export function ExecutiveTemplate({ data, theme = data.theme, onElementColorChan
       <ExecutiveSection id="heading:education" title="Education" theme={theme} elementColors={elementColors} onElementColorChange={setColor}>
         <div className="space-y-3">
           {education.map((ed) => (
-            <div key={ed.id}>
+            <div key={ed.id} className="break-inside-avoid">
               <div className="flex items-baseline justify-between gap-3">
                 <span className="text-[13.5px] font-semibold" style={{ color: theme.primary }}>
                   {[ed.degree, ed.fieldOfStudy].filter(Boolean).join(' — ') || 'Degree'}
@@ -87,6 +87,45 @@ export function ExecutiveTemplate({ data, theme = data.theme, onElementColorChan
               <p className="text-xs" style={{ color: theme.muted }}>
                 {[ed.institution, ed.state || ed.location].filter(Boolean).join(', ')}
               </p>
+            </div>
+          ))}
+        </div>
+      </ExecutiveSection>
+    ),
+
+    projects: projects.filter((p) => !p.hidden).length > 0 && (
+      <ExecutiveSection id="heading:projects" title="Projects" theme={theme} elementColors={elementColors} onElementColorChange={setColor}>
+        <div className="space-y-4">
+          {projects.filter((p) => !p.hidden).map((proj) => (
+            <div key={proj.id} className="break-inside-avoid">
+              <div className="flex items-baseline justify-between gap-3">
+                <span className="flex items-center gap-1.5 text-[13.5px] font-semibold" style={{ color: theme.primary }}>
+                  {proj.name || 'Project'}
+                  {proj.link && (
+                    <a href={proj.link} target="_blank" rel="noopener noreferrer" aria-label="Project link">
+                      <Globe className="size-3" style={{ color: theme.accent }} />
+                    </a>
+                  )}
+                </span>
+                <span className="shrink-0 text-xs" style={{ color: theme.muted }}>
+                  {proj.startDate ? [proj.startDate, proj.endDate || 'Present'].join(' – ') : ''}
+                </span>
+              </div>
+              {[proj.domain, proj.stack].filter(Boolean).length > 0 && (
+                <p className="text-xs" style={{ color: theme.muted }}>
+                  {[proj.domain, proj.stack].filter(Boolean).join(' · ')}
+                </p>
+              )}
+              {proj.bullets && (
+                <ul className="mt-1.5 list-disc space-y-1 pl-4 text-[12.5px] leading-relaxed" style={{ color: theme.text }}>
+                  {proj.bullets
+                    .split('\n')
+                    .filter(Boolean)
+                    .map((line, i) => (
+                      <li key={i}>{line}</li>
+                    ))}
+                </ul>
+              )}
             </div>
           ))}
         </div>
@@ -212,8 +251,8 @@ function ExecutiveSection({
 }) {
   const color = elementColors[id] || sectionTheme.primary
   return (
-    <section className="break-inside-avoid">
-      <div className="mb-2 border-t pt-3" style={{ borderColor: sectionTheme.muted + '33' }}>
+    <section>
+      <div className="mb-2 break-after-avoid border-t pt-3" style={{ borderColor: sectionTheme.muted + '33' }}>
         <ColorableText
           as="h2"
           className="text-sm font-bold tracking-wide uppercase"

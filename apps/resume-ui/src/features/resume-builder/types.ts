@@ -41,10 +41,13 @@ export interface ProjectEntry {
   id: string
   name: string
   domain: string
+  link: string
   stack: string
   startDate: string
   endDate: string
   bullets: string
+  /** When true, this project is excluded from the rendered resume without deleting it. */
+  hidden?: boolean
 }
 
 export interface CertificationEntry {

@@ -1,5 +1,5 @@
 import { useRef, useState, useCallback } from 'react'
-import { FileText, Plus, Trash2, Pencil, Check, X, ChevronDown, FileImage, File } from 'lucide-react'
+import { FileText, Plus, Trash2, Pencil, Check, X, ChevronDown, FileImage, File, Copy } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -32,6 +32,7 @@ export function ResumeManager() {
   const activeId = useResumeStore((s) => s.activeId)
   const activeName = useResumeStore((s) => s.document.meta.name)
   const createResume = useResumeStore((s) => s.createResume)
+  const duplicateResume = useResumeStore((s) => s.duplicateResume)
   const switchResume = useResumeStore((s) => s.switchResume)
   const deleteResume = useResumeStore((s) => s.deleteResume)
   const renameResume = useResumeStore((s) => s.renameResume)
@@ -42,6 +43,15 @@ export function ResumeManager() {
     const id = createResume('Untitled Resume')
     switchResume(id)
   }, [createResume, switchResume])
+
+  const handleDuplicate = useCallback(
+    (id: string) => {
+      const newId = duplicateResume(id)
+      if (newId) switchResume(newId)
+      setOpen(false)
+    },
+    [duplicateResume, switchResume],
+  )
 
   const handleStartEdit = useCallback((id: string, currentName: string) => {
     setEditingId(id)
@@ -282,6 +292,15 @@ export function ResumeManager() {
                         </button>
 
                         <div className="flex shrink-0 items-center gap-0.5 opacity-70 transition-opacity sm:opacity-0 sm:group-hover:opacity-100">
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="icon-xs"
+                            onClick={() => handleDuplicate(meta.id)}
+                            title="Duplicate"
+                          >
+                            <Copy className="size-3" />
+                          </Button>
                           <Button
                             type="button"
                             variant="ghost"

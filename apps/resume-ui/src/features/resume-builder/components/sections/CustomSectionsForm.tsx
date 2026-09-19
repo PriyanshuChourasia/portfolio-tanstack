@@ -4,6 +4,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { RepeatableCard } from '../RepeatableCard'
+import { SortableList } from '../SortableList'
 import { createEmptyCustomSection } from '../../constants'
 import type { CustomSectionEntry } from '../../types'
 
@@ -12,6 +13,7 @@ interface CustomSectionsFormProps {
   add: (item: CustomSectionEntry) => void
   update: (index: number, patch: Partial<CustomSectionEntry>) => void
   remove: (index: number) => void
+  reorder: (fromIndex: number, toIndex: number) => void
 }
 
 export function CustomSectionsForm({
@@ -19,6 +21,7 @@ export function CustomSectionsForm({
   add,
   update,
   remove,
+  reorder,
 }: CustomSectionsFormProps) {
   return (
     <div className="space-y-4">
@@ -29,8 +32,9 @@ export function CustomSectionsForm({
         </div>
       )}
 
+      <SortableList ids={items.map((section) => section.id)} onReorder={reorder}>
       {items.map((section, index) => (
-        <RepeatableCard key={section.id} onRemove={() => remove(index)} index={index}>
+        <RepeatableCard key={section.id} id={section.id} onRemove={() => remove(index)} index={index}>
           <div className="space-y-1.5">
             <Label className="text-xs font-medium">Section Title</Label>
             <Input
@@ -50,6 +54,7 @@ export function CustomSectionsForm({
           </div>
         </RepeatableCard>
       ))}
+      </SortableList>
       <Button
         type="button"
         variant="outline"

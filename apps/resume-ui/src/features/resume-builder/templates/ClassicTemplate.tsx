@@ -75,14 +75,20 @@ export function ClassicTemplate({ data, theme = data.theme }: ResumeTemplateProp
       </section>
     ),
 
-    projects: projects.length > 0 && (
+    projects: projects.filter((p) => !p.hidden).length > 0 && (
       <section className="ats-section">
         <h2 className="ats-section-title">Projects</h2>
-        {projects.map((p) => (
+        {projects.filter((p) => !p.hidden).map((p) => (
           <div className="ats-entry" key={p.id}>
             <div className="ats-row">
               <span className="ats-row-title">
-                <span className="ats-project-title">{p.name}</span>
+                {p.link ? (
+                  <a className="ats-project-title" href={p.link} target="_blank" rel="noopener noreferrer">
+                    {p.name}
+                  </a>
+                ) : (
+                  <span className="ats-project-title">{p.name}</span>
+                )}
                 {p.stack && (
                   <>
                     {' '}

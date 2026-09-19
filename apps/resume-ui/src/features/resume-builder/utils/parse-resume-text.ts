@@ -527,6 +527,8 @@ export function parseResumeText(rawText: string): Partial<ResumeData> {
           /(?:stack|tech|technologies|built\s*with|using|tools)[:\-]\s*(.+)/i,
         )
         const stack = stackMatch?.[1]?.trim() ?? ''
+        const linkMatch = block.match(/https?:\/\/[^\s)]+/)
+        const link = linkMatch?.[0] ?? ''
 
         const { startDate, endDate } = extractDateRange(block)
 
@@ -540,6 +542,7 @@ export function parseResumeText(rawText: string): Partial<ResumeData> {
           id: createId(),
           name,
           domain: '',
+          link,
           stack,
           startDate,
           endDate,

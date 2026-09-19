@@ -2,9 +2,10 @@ import { Plus } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Textarea } from '@/components/ui/textarea'
+import { BulletPointsEditor } from '../BulletPointsEditor'
 import { DateRangeFields } from '../DateRangeFields'
 import { RepeatableCard } from '../RepeatableCard'
+import { SortableList } from '../SortableList'
 import { createEmptyProject } from '../../constants'
 import type { ProjectEntry } from '../../types'
 
@@ -13,9 +14,10 @@ interface ProjectsFormProps {
   add: (item: ProjectEntry) => void
   update: (index: number, patch: Partial<ProjectEntry>) => void
   remove: (index: number) => void
+  reorder: (fromIndex: number, toIndex: number) => void
 }
 
-export function ProjectsForm({ items, add, update, remove }: ProjectsFormProps) {
+export function ProjectsForm({ items, add, update, remove, reorder }: ProjectsFormProps) {
   return (
     <div className="space-y-4">
       {items.length === 0 && (
@@ -30,8 +32,16 @@ export function ProjectsForm({ items, add, update, remove }: ProjectsFormProps) 
         </div>
       )}
 
+      <SortableList ids={items.map((project) => project.id)} onReorder={reorder}>
       {items.map((project, index) => (
-        <RepeatableCard key={project.id} onRemove={() => remove(index)} index={index}>
+        <RepeatableCard
+          key={project.id}
+          id={project.id}
+          onRemove={() => remove(index)}
+          index={index}
+          hidden={project.hidden}
+          onToggleHidden={() => update(index, { hidden: !project.hidden })}
+        >
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <div className="space-y-1.5 sm:col-span-2">
               <Label className="text-xs font-medium">Project Name</Label>
@@ -52,6 +62,15 @@ export function ProjectsForm({ items, add, update, remove }: ProjectsFormProps) 
             </div>
 
             <div className="space-y-1.5">
+              <Label className="text-xs font-medium">Website / Live Link</Label>
+              <Input
+                placeholder="https://myproject.com"
+                value={project.link}
+                onChange={(e) => update(index, { link: e.target.value })}
+              />
+            </div>
+
+            <div className="space-y-1.5 sm:col-span-2">
               <Label className="text-xs font-medium">Dates</Label>
               <DateRangeFields
                 startDate={project.startDate}
@@ -90,16 +109,16 @@ export function ProjectsForm({ items, add, update, remove }: ProjectsFormProps) 
                   (one per line)
                 </span>
               </Label>
-              <Textarea
-                rows={4}
-                placeholder="Designed and implemented the core API that reduced response time by 40%..."
+              <BulletPointsEditor
                 value={project.bullets}
-                onChange={(e) => update(index, { bullets: e.target.value })}
+                placeholder="Designed and implemented the core API that reduced response time by 40%..."
+                onChange={(bullets) => update(index, { bullets })}
               />
             </div>
           </div>
         </RepeatableCard>
       ))}
+      </SortableList>
       <Button
         type="button"
         variant="outline"

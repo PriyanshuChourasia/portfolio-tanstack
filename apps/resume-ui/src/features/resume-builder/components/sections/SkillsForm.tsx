@@ -4,6 +4,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { RepeatableCard } from '../RepeatableCard'
+import { SortableList } from '../SortableList'
 import { createEmptySkillCategory } from '../../constants'
 import type { SkillCategory } from '../../types'
 
@@ -12,9 +13,10 @@ interface SkillsFormProps {
   add: (item: SkillCategory) => void
   update: (index: number, patch: Partial<SkillCategory>) => void
   remove: (index: number) => void
+  reorder: (fromIndex: number, toIndex: number) => void
 }
 
-export function SkillsForm({ items, add, update, remove }: SkillsFormProps) {
+export function SkillsForm({ items, add, update, remove, reorder }: SkillsFormProps) {
   return (
     <div className="space-y-4">
       {items.length === 0 && (
@@ -27,8 +29,9 @@ export function SkillsForm({ items, add, update, remove }: SkillsFormProps) {
         </div>
       )}
 
+      <SortableList ids={items.map((skill) => skill.id)} onReorder={reorder}>
       {items.map((skill, index) => (
-        <RepeatableCard key={skill.id} onRemove={() => remove(index)} index={index}>
+        <RepeatableCard key={skill.id} id={skill.id} onRemove={() => remove(index)} index={index}>
           <div className="space-y-3">
             <div className="space-y-1.5">
               <Label className="text-xs font-medium">Category</Label>
@@ -67,6 +70,7 @@ export function SkillsForm({ items, add, update, remove }: SkillsFormProps) {
           </div>
         </RepeatableCard>
       ))}
+      </SortableList>
       <Button
         type="button"
         variant="outline"

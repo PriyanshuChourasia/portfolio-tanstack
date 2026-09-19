@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import { Globe } from 'lucide-react'
 import { DEFAULT_SECTION_ORDER, type SectionId } from '../types'
 import type { ResumeTemplateProps, ResumeTheme } from './types'
 
@@ -233,17 +234,22 @@ export function PremiumTemplate({ data, theme = data.theme }: ResumeTemplateProp
       </PremiumSection>
     ),
 
-    projects: projects.length > 0 && (
+    projects: projects.filter((p) => !p.hidden).length > 0 && (
       <PremiumSection title="Projects" theme={theme}>
         <div className="flex flex-col gap-4">
-          {projects.map((proj) => (
+          {projects.filter((p) => !p.hidden).map((proj) => (
             <div key={proj.id} className="break-inside-avoid">
               <div className="mb-1 flex flex-wrap items-baseline justify-between gap-1.5">
                 <span
-                  className="text-[15px] font-semibold"
+                  className="flex items-center gap-1.5 text-[15px] font-semibold"
                   style={{ color: theme.primary }}
                 >
                   {proj.name}
+                  {proj.link && (
+                    <a href={proj.link} target="_blank" rel="noopener noreferrer" aria-label="Project link">
+                      <Globe className="size-3" style={{ color: ACCENT }} />
+                    </a>
+                  )}
                 </span>
                 <span
                   className="whitespace-nowrap text-[10.5px]"

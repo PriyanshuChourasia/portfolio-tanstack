@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import { Globe } from 'lucide-react'
 import { DEFAULT_SECTION_ORDER, type SectionId } from '../types'
 import type { ResumeTemplateProps } from './types'
 
@@ -83,20 +84,25 @@ export function ModernTemplate({ data, theme = data.theme }: ResumeTemplateProps
       </section>
     ),
 
-    projects: projects.length > 0 && (
+    projects: projects.filter((p) => !p.hidden).length > 0 && (
       <section className="mt-6">
         <h2 className="mb-3 text-base font-bold tracking-wide uppercase">
           Projects
         </h2>
         <div className="space-y-4">
-          {projects.map((p) => (
+          {projects.filter((p) => !p.hidden).map((p) => (
             <div key={p.id} className="break-inside-avoid">
               <div className="flex items-baseline justify-between gap-3">
                 <span
-                  className="font-semibold"
+                  className="flex items-center gap-1.5 font-semibold"
                   style={{ color: theme.primary }}
                 >
                   {p.name}
+                  {p.link && (
+                    <a href={p.link} target="_blank" rel="noopener noreferrer" aria-label="Project link">
+                      <Globe className="size-3" style={{ color: theme.muted }} />
+                    </a>
+                  )}
                 </span>
                 <span
                   className="shrink-0 text-xs"

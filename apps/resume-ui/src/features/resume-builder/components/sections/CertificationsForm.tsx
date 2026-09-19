@@ -1,6 +1,7 @@
 import { Award, Plus, Trash2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { SortableList, SortableItem } from '../SortableList'
 import { createEmptyCertification } from '../../constants'
 import type { CertificationEntry } from '../../types'
 
@@ -9,6 +10,7 @@ interface CertificationsFormProps {
   add: (item: CertificationEntry) => void
   update: (index: number, patch: Partial<CertificationEntry>) => void
   remove: (index: number) => void
+  reorder: (fromIndex: number, toIndex: number) => void
 }
 
 export function CertificationsForm({
@@ -16,6 +18,7 @@ export function CertificationsForm({
   add,
   update,
   remove,
+  reorder,
 }: CertificationsFormProps) {
   return (
     <div className="space-y-3">
@@ -26,10 +29,11 @@ export function CertificationsForm({
         </div>
       )}
 
+      <SortableList ids={items.map((cert) => cert.id)} onReorder={reorder}>
       {items.map((cert, index) => (
+        <SortableItem key={cert.id} id={cert.id}>
         <div
-          key={cert.id}
-          className="group relative rounded-lg border border-input bg-background/50 px-3 py-2.5 transition-all hover:border-border hover:bg-background"
+          className="rounded-lg border border-input bg-background/50 px-3 py-2.5 pl-6 transition-all hover:border-border hover:bg-background"
         >
           <div className="flex items-center gap-2.5">
             <Award className="mt-0.5 size-4 shrink-0 self-start text-muted-foreground/40" />
@@ -60,7 +64,9 @@ export function CertificationsForm({
             </Button>
           </div>
         </div>
+        </SortableItem>
       ))}
+      </SortableList>
       <Button
         type="button"
         variant="outline"

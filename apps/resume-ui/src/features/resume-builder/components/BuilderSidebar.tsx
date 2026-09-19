@@ -33,6 +33,8 @@ import {
   Star,
   Puzzle,
   GripVertical,
+  Eye,
+  EyeOff,
   SeparatorHorizontal,
 } from 'lucide-react'
 import {
@@ -102,6 +104,7 @@ export function BuilderSidebar({ templateId }: BuilderSidebarProps) {
   const updatePersonalInfo = useResumeStore((s) => s.updatePersonalInfo)
   const updateSummary = useResumeStore((s) => s.updateSummary)
   const setSectionOrder = useResumeStore((s) => s.setSectionOrder)
+  const toggleSection = useResumeStore((s) => s.toggleSection)
   const toggleSectionPageBreak = useResumeStore((s) => s.toggleSectionPageBreak)
   const experience = useResumeStore((s) => s.experience)
   const education = useResumeStore((s) => s.education)
@@ -181,7 +184,7 @@ export function BuilderSidebar({ templateId }: BuilderSidebarProps) {
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event
     if (!over || active.id === over.id) return
-    const ids = orderedSections.map((s) => s.id)
+    const ids = data.sectionOrder?.length ? [...data.sectionOrder] : [...DEFAULT_SECTION_ORDER]
     const oldIndex = ids.indexOf(active.id as SectionId)
     const newIndex = ids.indexOf(over.id as SectionId)
     if (oldIndex === -1 || newIndex === -1) return
@@ -254,6 +257,8 @@ export function BuilderSidebar({ templateId }: BuilderSidebarProps) {
                     count={sectionCounts[meta.id]}
                     draggable={isDraggable}
                     pageBreakActive={data.pageBreakBefore.includes(meta.id)}
+                    visible={data.sectionOrder?.length ? data.sectionOrder.includes(meta.id) : true}
+                    onToggleVisibility={() => toggleSection(meta.id)}
                     onTogglePageBreak={() => toggleSectionPageBreak(meta.id)}
                   >
                     {sectionFormMap[meta.id]}
@@ -282,6 +287,8 @@ interface SortableSectionItemProps {
   count: number
   draggable: boolean
   pageBreakActive: boolean
+  visible: boolean
+  onToggleVisibility: () => void
   onTogglePageBreak: () => void
   children: React.ReactNode
 }
@@ -291,6 +298,8 @@ function SortableSectionItem({
   count,
   draggable,
   pageBreakActive,
+  visible,
+  onToggleVisibility,
   onTogglePageBreak,
   children,
 }: SortableSectionItemProps) {
@@ -335,7 +344,7 @@ function SortableSectionItem({
             >
               <Icon className="size-3 sm:size-3.5" />
             </span>
-            <span className="text-sm font-medium">
+            <span className={`text-sm font-medium ${visible ? '' : 'text-muted-foreground/60'}`}>
               {SECTION_LABELS[meta.id]}
             </span>
             {count > 0 && (
@@ -343,6 +352,31 @@ function SortableSectionItem({
                 {count}
               </span>
             )}
+            <span
+              role="button"
+              tabIndex={0}
+              onClick={(e) => {
+                e.stopPropagation()
+                onToggleVisibility()
+              }}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault()
+                  e.stopPropagation()
+                  onToggleVisibility()
+                }
+              }}
+              title={visible ? 'Hide this section from the resume' : 'Show this section in the resume'}
+              aria-label={visible ? 'Hide section' : 'Show section'}
+              aria-pressed={visible}
+              className={`flex size-5 shrink-0 items-center justify-center rounded-md transition-colors sm:size-6 ${
+                visible
+                  ? 'text-muted-foreground/30 hover:bg-muted hover:text-muted-foreground'
+                  : 'bg-destructive/10 text-destructive'
+              }`}
+            >
+              {visible ? <Eye className="size-3 sm:size-3.5" /> : <EyeOff className="size-3 sm:size-3.5" />}
+            </span>
             <span
               role="button"
               tabIndex={0}

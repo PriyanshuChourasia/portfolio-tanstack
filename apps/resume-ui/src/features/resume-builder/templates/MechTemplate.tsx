@@ -163,13 +163,18 @@ export function MechTemplate({ data, theme = data.theme, onElementColorChange, o
       </MechMainSection>
     ),
 
-    projects: projects.length > 0 && (
+    projects: projects.filter((p) => !p.hidden).length > 0 && (
       <MechMainSection id="heading:projects" title="Projects" theme={theme} timeline elementColors={elementColors} onElementColorChange={setColor}>
-        {projects.map((p) => (
+        {projects.filter((p) => !p.hidden).map((p) => (
           <MechTimelineEntry key={p.id} theme={theme}>
             <div className="flex items-baseline justify-between gap-3">
-              <span className="text-[13.5px] font-semibold" style={{ color: theme.primary }}>
+              <span className="flex items-center gap-1.5 text-[13.5px] font-semibold" style={{ color: theme.primary }}>
                 {p.name}
+                {p.link && (
+                  <a href={p.link} target="_blank" rel="noopener noreferrer" aria-label="Project link">
+                    <Link2 className="size-3" style={{ color: theme.accent }} />
+                  </a>
+                )}
               </span>
               {(p.startDate || p.endDate) && (
                 <span

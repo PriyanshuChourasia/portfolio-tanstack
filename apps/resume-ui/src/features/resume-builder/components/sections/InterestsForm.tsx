@@ -1,6 +1,7 @@
 import { Plus, Star, Trash2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { SortableList, SortableItem } from '../SortableList'
 import { createEmptyInterest } from '../../constants'
 import type { InterestEntry } from '../../types'
 
@@ -9,6 +10,7 @@ interface InterestsFormProps {
   add: (item: InterestEntry) => void
   update: (index: number, patch: Partial<InterestEntry>) => void
   remove: (index: number) => void
+  reorder: (fromIndex: number, toIndex: number) => void
 }
 
 export function InterestsForm({
@@ -16,6 +18,7 @@ export function InterestsForm({
   add,
   update,
   remove,
+  reorder,
 }: InterestsFormProps) {
   return (
     <div className="space-y-3">
@@ -26,10 +29,11 @@ export function InterestsForm({
         </div>
       )}
 
+      <SortableList ids={items.map((interest) => interest.id)} onReorder={reorder}>
       {items.map((interest, index) => (
+        <SortableItem key={interest.id} id={interest.id}>
         <div
-          key={interest.id}
-          className="group relative rounded-lg border border-input bg-background/50 px-3 py-2.5 transition-all hover:border-border hover:bg-background"
+          className="rounded-lg border border-input bg-background/50 px-3 py-2.5 pl-6 transition-all hover:border-border hover:bg-background"
         >
           <div className="flex items-center gap-2.5">
             <Star className="mt-0.5 size-4 shrink-0 self-start text-muted-foreground/40" />
@@ -60,7 +64,9 @@ export function InterestsForm({
             </Button>
           </div>
         </div>
+        </SortableItem>
       ))}
+      </SortableList>
       <Button
         type="button"
         variant="outline"

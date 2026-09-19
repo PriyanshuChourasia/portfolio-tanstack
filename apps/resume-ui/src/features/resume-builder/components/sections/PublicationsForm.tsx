@@ -4,6 +4,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { RepeatableCard } from '../RepeatableCard'
+import { SortableList } from '../SortableList'
 import { createEmptyPublication } from '../../constants'
 import type { PublicationEntry } from '../../types'
 
@@ -12,6 +13,7 @@ interface PublicationsFormProps {
   add: (item: PublicationEntry) => void
   update: (index: number, patch: Partial<PublicationEntry>) => void
   remove: (index: number) => void
+  reorder: (fromIndex: number, toIndex: number) => void
 }
 
 export function PublicationsForm({
@@ -19,6 +21,7 @@ export function PublicationsForm({
   add,
   update,
   remove,
+  reorder,
 }: PublicationsFormProps) {
   return (
     <div className="space-y-4">
@@ -29,8 +32,9 @@ export function PublicationsForm({
         </div>
       )}
 
+      <SortableList ids={items.map((pub) => pub.id)} onReorder={reorder}>
       {items.map((pub, index) => (
-        <RepeatableCard key={pub.id} onRemove={() => remove(index)} index={index}>
+        <RepeatableCard key={pub.id} id={pub.id} onRemove={() => remove(index)} index={index}>
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <div className="space-y-1.5">
               <Label className="text-xs font-medium">Title</Label>
@@ -76,6 +80,7 @@ export function PublicationsForm({
           </div>
         </RepeatableCard>
       ))}
+      </SortableList>
       <Button
         type="button"
         variant="outline"

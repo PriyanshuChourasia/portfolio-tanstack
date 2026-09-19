@@ -2,9 +2,10 @@ import { Plus } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Textarea } from '@/components/ui/textarea'
+import { BulletPointsEditor } from '../BulletPointsEditor'
 import { DateRangeFields } from '../DateRangeFields'
 import { RepeatableCard } from '../RepeatableCard'
+import { SortableList } from '../SortableList'
 import { createEmptyExperience } from '../../constants'
 import type { ExperienceEntry } from '../../types'
 
@@ -13,6 +14,7 @@ interface ExperienceFormProps {
   add: (item: ExperienceEntry) => void
   update: (index: number, patch: Partial<ExperienceEntry>) => void
   remove: (index: number) => void
+  reorder: (fromIndex: number, toIndex: number) => void
 }
 
 export function ExperienceForm({
@@ -20,6 +22,7 @@ export function ExperienceForm({
   add,
   update,
   remove,
+  reorder,
 }: ExperienceFormProps) {
   return (
     <div className="space-y-4">
@@ -33,8 +36,9 @@ export function ExperienceForm({
         </div>
       )}
 
+      <SortableList ids={items.map((exp) => exp.id)} onReorder={reorder}>
       {items.map((exp, index) => (
-        <RepeatableCard key={exp.id} onRemove={() => remove(index)} index={index}>
+        <RepeatableCard key={exp.id} id={exp.id} onRemove={() => remove(index)} index={index}>
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <div className="space-y-1.5">
               <Label className="text-xs font-medium">Role / Title</Label>
@@ -78,15 +82,15 @@ export function ExperienceForm({
                 (one per line)
               </span>
             </Label>
-            <Textarea
-              rows={4}
+            <BulletPointsEditor
               value={exp.bullets}
               placeholder="Led a team of 5 engineers to deliver a customer-facing dashboard..."
-              onChange={(e) => update(index, { bullets: e.target.value })}
+              onChange={(bullets) => update(index, { bullets })}
             />
           </div>
         </RepeatableCard>
       ))}
+      </SortableList>
       <Button
         type="button"
         variant="outline"

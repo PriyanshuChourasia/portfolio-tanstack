@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import { Globe } from 'lucide-react'
 import { DEFAULT_SECTION_ORDER, type SectionId } from '../types'
 import type { ResumeTemplateProps, ResumeTheme } from './types'
 
@@ -112,17 +113,22 @@ export function AccentTemplate({ data, theme = data.theme }: ResumeTemplateProps
       </AccentSection>
     ),
 
-    projects: projects.length > 0 && (
+    projects: projects.filter((p) => !p.hidden).length > 0 && (
       <AccentSection title="Projects" theme={theme}>
         <div className="space-y-3">
-          {projects.map((p) => (
+          {projects.filter((p) => !p.hidden).map((p) => (
             <div key={p.id} className="break-inside-avoid">
               <div className="flex items-baseline justify-between gap-3">
                 <span
-                  className="font-semibold"
+                  className="flex items-center gap-1.5 font-semibold"
                   style={{ color: theme.primary }}
                 >
                   {p.name}
+                  {p.link && (
+                    <a href={p.link} target="_blank" rel="noopener noreferrer" aria-label="Project link">
+                      <Globe className="size-3" style={{ color: theme.accent }} />
+                    </a>
+                  )}
                 </span>
                 <span className="shrink-0 text-xs" style={{ color: theme.muted }}>
                   {p.startDate

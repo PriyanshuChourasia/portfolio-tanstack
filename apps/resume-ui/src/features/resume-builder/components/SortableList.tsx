@@ -34,7 +34,7 @@ export function SortableItem({ id, children }: SortableItemProps) {
   }
 
   return (
-    <div ref={setNodeRef} style={style} {...attributes}>
+    <div ref={setNodeRef} style={style} {...attributes} className="group relative">
       <div className={isDragging ? 'scale-[1.02] shadow-lg' : ''}>
         {children}
       </div>

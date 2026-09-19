@@ -90,10 +90,12 @@ export function createEmptyProject(): ProjectEntry {
     id: createId(),
     name: '',
     domain: '',
+    link: '',
     stack: '',
     startDate: '',
     endDate: '',
     bullets: '',
+    hidden: false,
   }
 }
 
@@ -190,6 +192,7 @@ export function createSampleResumeData(): ResumeData {
         id: createId(),
         name: 'Personal Portfolio',
         domain: 'Web Development',
+        link: '',
         stack: 'JavaScript, TypeScript, React, Shadcn/ui, CSS',
         startDate: '',
         endDate: '',
@@ -199,6 +202,7 @@ export function createSampleResumeData(): ResumeData {
         id: createId(),
         name: 'Rabindra Memorial Eye Care',
         domain: 'Clinic Management',
+        link: '',
         stack: 'PHP, Laravel, JavaScript, TypeScript, TanStack React',
         startDate: '',
         endDate: '',
@@ -208,6 +212,7 @@ export function createSampleResumeData(): ResumeData {
         id: createId(),
         name: 'Taxyaar',
         domain: 'Income Tax Filing Platform',
+        link: '',
         stack: 'Java, Spring Boot, PHP, Laravel, TypeScript, TanStack React, Docker',
         startDate: '',
         endDate: '',

@@ -4,6 +4,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { RepeatableCard } from '../RepeatableCard'
+import { SortableList } from '../SortableList'
 import { createEmptyAward } from '../../constants'
 import type { AwardEntry } from '../../types'
 
@@ -12,6 +13,7 @@ interface AwardsFormProps {
   add: (item: AwardEntry) => void
   update: (index: number, patch: Partial<AwardEntry>) => void
   remove: (index: number) => void
+  reorder: (fromIndex: number, toIndex: number) => void
 }
 
 export function AwardsForm({
@@ -19,6 +21,7 @@ export function AwardsForm({
   add,
   update,
   remove,
+  reorder,
 }: AwardsFormProps) {
   return (
     <div className="space-y-4">
@@ -29,8 +32,9 @@ export function AwardsForm({
         </div>
       )}
 
+      <SortableList ids={items.map((award) => award.id)} onReorder={reorder}>
       {items.map((award, index) => (
-        <RepeatableCard key={award.id} onRemove={() => remove(index)} index={index}>
+        <RepeatableCard key={award.id} id={award.id} onRemove={() => remove(index)} index={index}>
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <div className="space-y-1.5">
               <Label className="text-xs font-medium">Award Name</Label>
@@ -68,6 +72,7 @@ export function AwardsForm({
           </div>
         </RepeatableCard>
       ))}
+      </SortableList>
       <Button
         type="button"
         variant="outline"

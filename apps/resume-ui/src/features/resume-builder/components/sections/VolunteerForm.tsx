@@ -2,9 +2,10 @@ import { Heart, Plus } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Textarea } from '@/components/ui/textarea'
+import { BulletPointsEditor } from '../BulletPointsEditor'
 import { DateRangeFields } from '../DateRangeFields'
 import { RepeatableCard } from '../RepeatableCard'
+import { SortableList } from '../SortableList'
 import { createEmptyVolunteer } from '../../constants'
 import type { VolunteerEntry } from '../../types'
 
@@ -13,6 +14,7 @@ interface VolunteerFormProps {
   add: (item: VolunteerEntry) => void
   update: (index: number, patch: Partial<VolunteerEntry>) => void
   remove: (index: number) => void
+  reorder: (fromIndex: number, toIndex: number) => void
 }
 
 export function VolunteerForm({
@@ -20,6 +22,7 @@ export function VolunteerForm({
   add,
   update,
   remove,
+  reorder,
 }: VolunteerFormProps) {
   return (
     <div className="space-y-4">
@@ -30,8 +33,9 @@ export function VolunteerForm({
         </div>
       )}
 
+      <SortableList ids={items.map((vol) => vol.id)} onReorder={reorder}>
       {items.map((vol, index) => (
-        <RepeatableCard key={vol.id} onRemove={() => remove(index)} index={index}>
+        <RepeatableCard key={vol.id} id={vol.id} onRemove={() => remove(index)} index={index}>
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <div className="space-y-1.5">
               <Label className="text-xs font-medium">Role / Title</Label>
@@ -75,15 +79,15 @@ export function VolunteerForm({
                 (one per line)
               </span>
             </Label>
-            <Textarea
-              rows={4}
+            <BulletPointsEditor
               value={vol.bullets}
               placeholder="Organized community outreach events for 200+ attendees..."
-              onChange={(e) => update(index, { bullets: e.target.value })}
+              onChange={(bullets) => update(index, { bullets })}
             />
           </div>
         </RepeatableCard>
       ))}
+      </SortableList>
       <Button
         type="button"
         variant="outline"

@@ -171,6 +171,7 @@ interface ResumeStore {
 
   // Multi-resume
   createResume: (name?: string) => string
+  duplicateResume: (id: string) => string
   switchResume: (id: string) => void
   deleteResume: (id: string) => void
   renameResume: (id: string, name: string) => void
@@ -338,9 +339,11 @@ export const useResumeStore = create<ResumeStore>((set, get) => ({
 
   toggleSection: (sectionId) =>
     set((state) => {
-      const order = state.history.present.sectionOrder.includes(sectionId)
-        ? state.history.present.sectionOrder
-        : [...state.history.present.sectionOrder, sectionId]
+      const current = state.history.present.sectionOrder
+      if (current.includes(sectionId) && current.length <= 1) return state
+      const order = current.includes(sectionId)
+        ? current.filter((id) => id !== sectionId)
+        : [...current, sectionId]
       const newData = { ...state.history.present, sectionOrder: order }
       const newHistory = pushHistory(state.history, newData)
       saveResumeData(state.document.meta.id, newData)
@@ -437,6 +440,27 @@ export const useResumeStore = create<ResumeStore>((set, get) => ({
       return { registry: newRegistry }
     })
     return id
+  },
+
+  duplicateResume: (id) => {
+    const state = get()
+    const source = state.registry.find((r) => r.id === id)
+    if (!source) return ''
+    const data = id === state.activeId ? state.history.present : (loadResumeData(id) ?? createEmptyResumeData())
+    const newId = createId()
+    const meta: ResumeMeta = {
+      id: newId,
+      name: `${source.name} (Copy)`,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    }
+    saveResumeData(newId, data)
+    set((state) => {
+      const newRegistry = [...state.registry, meta]
+      saveRegistry(newRegistry)
+      return { registry: newRegistry }
+    })
+    return newId
   },
 
   switchResume: (id) => {

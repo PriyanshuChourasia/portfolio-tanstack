@@ -2,6 +2,7 @@ import { Globe, Plus, Trash2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Combobox } from '@/components/ui/combobox'
 import { Input } from '@/components/ui/input'
+import { SortableList, SortableItem } from '../SortableList'
 import { createEmptyLanguage } from '../../constants'
 import type { LanguageEntry } from '../../types'
 
@@ -10,6 +11,7 @@ interface LanguagesFormProps {
   add: (item: LanguageEntry) => void
   update: (index: number, patch: Partial<LanguageEntry>) => void
   remove: (index: number) => void
+  reorder: (fromIndex: number, toIndex: number) => void
 }
 
 const LEVEL_ORDER = ['', 'Native', 'Fluent', 'Advanced', 'Intermediate', 'Beginner']
@@ -49,6 +51,7 @@ export function LanguagesForm({
   add,
   update,
   remove,
+  reorder,
 }: LanguagesFormProps) {
   return (
     <div className="space-y-3">
@@ -59,10 +62,11 @@ export function LanguagesForm({
         </div>
       )}
 
+      <SortableList ids={items.map((lang) => lang.id)} onReorder={reorder}>
       {items.map((lang, index) => (
+        <SortableItem key={lang.id} id={lang.id}>
         <div
-          key={lang.id}
-          className="group relative rounded-lg border border-input bg-background/50 px-3 py-2.5 transition-all hover:border-border hover:bg-background"
+          className="rounded-lg border border-input bg-background/50 px-3 py-2.5 pl-6 transition-all hover:border-border hover:bg-background"
         >
           <div className="flex items-center gap-2.5">
             <Globe className="size-4 shrink-0 text-muted-foreground/40" />
@@ -98,7 +102,9 @@ export function LanguagesForm({
             </div>
           )}
         </div>
+        </SortableItem>
       ))}
+      </SortableList>
       <Button
         type="button"
         variant="outline"

@@ -178,17 +178,22 @@ export function VisualTemplate({ data, theme = data.theme }: ResumeTemplateProps
       </VisualSection>
     ),
 
-    projects: projects.length > 0 && (
+    projects: projects.filter((p) => !p.hidden).length > 0 && (
       <VisualSection title="Projects" icon={<Briefcase className="size-3.5" />} theme={theme}>
         <div className="space-y-4">
-          {projects.map((proj) => (
+          {projects.filter((p) => !p.hidden).map((proj) => (
             <div key={proj.id} className="break-inside-avoid">
               <div className="mb-0.5 flex items-baseline justify-between gap-3">
                 <span
-                  className="text-[14px] font-bold"
+                  className="flex items-center gap-1.5 text-[14px] font-bold"
                   style={{ color: theme.primary }}
                 >
                   {proj.name}
+                  {proj.link && (
+                    <a href={proj.link} target="_blank" rel="noopener noreferrer" aria-label="Project link">
+                      <Link2 className="size-3" style={{ color: theme.accent }} />
+                    </a>
+                  )}
                 </span>
                 <span
                   className="inline-flex shrink-0 items-center gap-1 whitespace-nowrap text-xs"

@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { RepeatableCard } from '../RepeatableCard'
+import { SortableList } from '../SortableList'
 import { createEmptyReference } from '../../constants'
 import type { ReferenceEntry } from '../../types'
 
@@ -11,6 +12,7 @@ interface ReferencesFormProps {
   add: (item: ReferenceEntry) => void
   update: (index: number, patch: Partial<ReferenceEntry>) => void
   remove: (index: number) => void
+  reorder: (fromIndex: number, toIndex: number) => void
 }
 
 export function ReferencesForm({
@@ -18,6 +20,7 @@ export function ReferencesForm({
   add,
   update,
   remove,
+  reorder,
 }: ReferencesFormProps) {
   return (
     <div className="space-y-4">
@@ -28,8 +31,9 @@ export function ReferencesForm({
         </div>
       )}
 
+      <SortableList ids={items.map((ref) => ref.id)} onReorder={reorder}>
       {items.map((ref, index) => (
-        <RepeatableCard key={ref.id} onRemove={() => remove(index)} index={index}>
+        <RepeatableCard key={ref.id} id={ref.id} onRemove={() => remove(index)} index={index}>
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <div className="space-y-1.5">
               <Label className="text-xs font-medium">Name</Label>
@@ -74,6 +78,7 @@ export function ReferencesForm({
           </div>
         </RepeatableCard>
       ))}
+      </SortableList>
       <Button
         type="button"
         variant="outline"

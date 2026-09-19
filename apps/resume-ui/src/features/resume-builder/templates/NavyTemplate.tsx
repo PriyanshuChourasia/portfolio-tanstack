@@ -167,17 +167,22 @@ export function NavyTemplate({ data, theme = data.theme }: ResumeTemplateProps) 
       </NavySection>
     ),
 
-    projects: projects.length > 0 && (
+    projects: projects.filter((p) => !p.hidden).length > 0 && (
       <NavySection title="Projects" theme={theme}>
         <div className="space-y-4">
-          {projects.map((p) => (
+          {projects.filter((p) => !p.hidden).map((p) => (
             <div key={p.id} className="break-inside-avoid">
               <div className="flex items-baseline justify-between gap-2">
                 <p
-                  className="font-semibold"
+                  className="flex items-center gap-1.5 font-semibold"
                   style={{ color: theme.accent }}
                 >
                   {p.name}
+                  {p.link && (
+                    <a href={p.link} target="_blank" rel="noopener noreferrer" aria-label="Project link">
+                      <Link2 className="size-3" style={{ color: theme.muted }} />
+                    </a>
+                  )}
                 </p>
                 <span
                   className="shrink-0 text-xs"

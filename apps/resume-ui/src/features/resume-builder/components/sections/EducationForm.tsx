@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { DateRangeFields } from '../DateRangeFields'
 import { RepeatableCard } from '../RepeatableCard'
+import { SortableList } from '../SortableList'
 import { createEmptyEducation } from '../../constants'
 import type { EducationEntry } from '../../types'
 
@@ -13,6 +14,7 @@ interface EducationFormProps {
   add: (item: EducationEntry) => void
   update: (index: number, patch: Partial<EducationEntry>) => void
   remove: (index: number) => void
+  reorder: (fromIndex: number, toIndex: number) => void
 }
 
 const COMMON_DEGREES = [
@@ -39,7 +41,7 @@ const INDIAN_STATES = [
 
 const STATE_OPTIONS = INDIAN_STATES.map((s) => ({ value: s, label: s }))
 
-export function EducationForm({ items, add, update, remove }: EducationFormProps) {
+export function EducationForm({ items, add, update, remove, reorder }: EducationFormProps) {
   return (
     <div className="space-y-4">
       {items.length === 0 && (
@@ -52,8 +54,9 @@ export function EducationForm({ items, add, update, remove }: EducationFormProps
         </div>
       )}
 
+      <SortableList ids={items.map((ed) => ed.id)} onReorder={reorder}>
       {items.map((ed, index) => (
-        <RepeatableCard key={ed.id} onRemove={() => remove(index)} index={index}>
+        <RepeatableCard key={ed.id} id={ed.id} onRemove={() => remove(index)} index={index}>
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <div className="space-y-1.5 sm:col-span-2">
               <Label className="text-xs font-medium">Degree</Label>
@@ -108,6 +111,7 @@ export function EducationForm({ items, add, update, remove }: EducationFormProps
           </div>
         </RepeatableCard>
       ))}
+      </SortableList>
       <Button
         type="button"
         variant="outline"
