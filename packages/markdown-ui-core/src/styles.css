@@ -128,3 +128,14 @@ body {
   @apply bg-background text-foreground antialiased;
   font-family: var(--font-sans);
 }
+
+/* Highlight colors for the `==color:text==` markdown extension. Text color is
+   pinned to a dark gray since these are all light pastel backgrounds, regardless
+   of the surrounding light/dark theme (prose's dark:prose-invert would otherwise
+   turn the text light and unreadable against them). */
+mark.hl-yellow { background-color: #fde68a; color: #1f2937; }
+mark.hl-green { background-color: #bbf7d0; color: #1f2937; }
+mark.hl-blue { background-color: #bfdbfe; color: #1f2937; }
+mark.hl-pink { background-color: #fbcfe8; color: #1f2937; }
+mark.hl-orange { background-color: #fed7aa; color: #1f2937; }
+mark.hl-purple { background-color: #e9d5ff; color: #1f2937; }

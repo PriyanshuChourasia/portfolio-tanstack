@@ -4,11 +4,11 @@ import { useTheme } from 'next-themes'
 import { Button } from './ui/button'
 
 interface AppShellProps {
-  stage: 'home' | 'editor'
+  stage: 'home' | 'pages' | 'editor'
   showEditorToggle?: boolean
   editorOpen?: boolean
   onToggleEditor?: () => void
-  onBackToProjects?: () => void
+  onBack?: () => void
   children: ReactNode
 }
 
@@ -17,7 +17,7 @@ export function AppShell({
   showEditorToggle = false,
   editorOpen = false,
   onToggleEditor,
-  onBackToProjects,
+  onBack,
   children,
 }: AppShellProps) {
   const { theme, setTheme } = useTheme()
@@ -26,13 +26,13 @@ export function AppShell({
     <div className="h-screen flex flex-col bg-background text-foreground">
       <header className="flex items-center justify-between border-b border-border px-4 py-2 shrink-0">
         <div className="flex items-center gap-2">
-          {stage === 'editor' && (
+          {stage !== 'home' && (
             <>
               <Button
                 variant="ghost"
                 size="icon"
-                onClick={onBackToProjects}
-                title="Back to projects"
+                onClick={onBack}
+                title={stage === 'editor' ? 'Back to pages' : 'Back to projects'}
               >
                 <ArrowLeft className="h-4 w-4" />
               </Button>

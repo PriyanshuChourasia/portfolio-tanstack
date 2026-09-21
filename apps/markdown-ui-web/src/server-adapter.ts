@@ -1,4 +1,4 @@
-import type { ProjectMeta, StorageAdapter, UserConfig } from 'markdown-ui-core'
+import type { PageMeta, ProjectMeta, StorageAdapter, UserConfig } from 'markdown-ui-core'
 
 const API_BASE = '/api'
 
@@ -52,6 +52,11 @@ export const serverAdapter: StorageAdapter = {
     return cachedConfigPath ?? 'Local Markdown-AI Storage'
   },
 
+  getLocationNote(): string | null {
+    // Server mode already resolves and shows the real OS path
+    return null
+  },
+
   async readConfig(): Promise<UserConfig | null> {
     const res = await apiFetch('/config')
     if (res.status === 404) return null
@@ -74,22 +79,6 @@ export const serverAdapter: StorageAdapter = {
     return data.projects ?? []
   },
 
-  async readProject(id: string): Promise<string> {
-    const res = await apiFetch(`/projects/${id}`)
-    if (res.status === 404) return ''
-    await checkResponse(res)
-    const data = await res.json()
-    return data.content ?? ''
-  },
-
-  async writeProject(id: string, content: string): Promise<void> {
-    const res = await apiFetch(`/projects/${id}`, {
-      method: 'PUT',
-      body: JSON.stringify({ content }),
-    })
-    await checkResponse(res)
-  },
-
   async createProject(name: string): Promise<ProjectMeta> {
     const res = await apiFetch('/projects', {
       method: 'POST',
@@ -101,6 +90,45 @@ export const serverAdapter: StorageAdapter = {
 
   async deleteProject(id: string): Promise<void> {
     const res = await apiFetch(`/projects/${id}`, {
+      method: 'DELETE',
+    })
+    await checkResponse(res)
+  },
+
+  async listPages(projectId: string): Promise<Array<PageMeta>> {
+    const res = await apiFetch(`/projects/${projectId}/pages`)
+    await checkResponse(res)
+    const data = await res.json()
+    return data.pages ?? []
+  },
+
+  async createPage(projectId: string, name: string): Promise<PageMeta> {
+    const res = await apiFetch(`/projects/${projectId}/pages`, {
+      method: 'POST',
+      body: JSON.stringify({ name }),
+    })
+    await checkResponse(res)
+    return res.json()
+  },
+
+  async readPage(projectId: string, pageId: string): Promise<string> {
+    const res = await apiFetch(`/projects/${projectId}/pages/${pageId}`)
+    if (res.status === 404) return ''
+    await checkResponse(res)
+    const data = await res.json()
+    return data.content ?? ''
+  },
+
+  async writePage(projectId: string, pageId: string, content: string): Promise<void> {
+    const res = await apiFetch(`/projects/${projectId}/pages/${pageId}`, {
+      method: 'PUT',
+      body: JSON.stringify({ content }),
+    })
+    await checkResponse(res)
+  },
+
+  async deletePage(projectId: string, pageId: string): Promise<void> {
+    const res = await apiFetch(`/projects/${projectId}/pages/${pageId}`, {
       method: 'DELETE',
     })
     await checkResponse(res)

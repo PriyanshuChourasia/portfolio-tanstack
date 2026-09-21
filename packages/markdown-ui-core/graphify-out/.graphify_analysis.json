@@ -1,0 +1,221 @@
+{
+  "communities": {
+    "0": [
+      "editor_editorpane",
+      "editor_editorpane_editorpane",
+      "editor_editorpane_editorpaneprops",
+      "lib_context",
+      "lib_context_storagecontext",
+      "lib_context_storageprovider",
+      "lib_context_usestorage",
+      "lib_types",
+      "lib_types_pagemeta",
+      "lib_types_projectmeta",
+      "lib_types_storageadapter",
+      "lib_types_userconfig",
+      "pages_pageshome_pageshome",
+      "projects_projectshome_projectshome",
+      "src_index",
+      "src_markdownui",
+      "src_markdownui_markdownui",
+      "src_markdownui_markdownuiinner",
+      "src_markdownui_markdownuiprops",
+      "src_markdownui_stage"
+    ],
+    "1": [
+      "tsconfig",
+      "tsconfig_compileroptions",
+      "tsconfig_compileroptions_allowimportingtsextensions",
+      "tsconfig_compileroptions_jsx",
+      "tsconfig_compileroptions_lib",
+      "tsconfig_compileroptions_module",
+      "tsconfig_compileroptions_moduleresolution",
+      "tsconfig_compileroptions_noemit",
+      "tsconfig_compileroptions_nofallthroughcasesinswitch",
+      "tsconfig_compileroptions_nouncheckedsideeffectimports",
+      "tsconfig_compileroptions_nounusedlocals",
+      "tsconfig_compileroptions_nounusedparameters",
+      "tsconfig_compileroptions_paths",
+      "tsconfig_compileroptions_skiplibcheck",
+      "tsconfig_compileroptions_strict",
+      "tsconfig_compileroptions_target",
+      "tsconfig_compileroptions_verbatimmodulesyntax",
+      "tsconfig_include",
+      "tsconfig_paths"
+    ],
+    "2": [
+      "package",
+      "package_devdependencies",
+      "package_devdependencies_types_react",
+      "package_devdependencies_types_react_dom",
+      "package_devdependencies_typescript",
+      "package_exports",
+      "package_exports_styles_css",
+      "package_main",
+      "package_name",
+      "package_private",
+      "package_scripts",
+      "package_scripts_build",
+      "package_scripts_format",
+      "package_scripts_lint",
+      "package_type",
+      "package_types"
+    ],
+    "3": [
+      "lib_utils",
+      "lib_utils_cn",
+      "lib_utils_timeago",
+      "pages_pageshome",
+      "pages_pageshome_pageshomeprops",
+      "projects_projectshome",
+      "projects_projectshome_projectshomeprops",
+      "ui_button",
+      "ui_button_button",
+      "ui_button_buttonprops",
+      "ui_button_buttonvariants",
+      "ui_dialog",
+      "ui_dialog_dialog",
+      "ui_dialog_dialogprops"
+    ],
+    "4": [
+      "package_dependencies",
+      "package_dependencies_class_variance_authority",
+      "package_dependencies_clsx",
+      "package_dependencies_lucide_react",
+      "package_dependencies_next_themes",
+      "package_dependencies_radix_ui_react_slot",
+      "package_dependencies_react",
+      "package_dependencies_react_dom",
+      "package_dependencies_react_markdown",
+      "package_dependencies_rehype_highlight",
+      "package_dependencies_remark_gfm",
+      "package_dependencies_tailwind_merge"
+    ],
+    "5": [
+      "components_appshell",
+      "components_appshell_appshell",
+      "components_appshell_appshellprops"
+    ],
+    "6": [
+      "preview_previewpane",
+      "preview_previewpane_previewpane",
+      "preview_previewpane_previewpaneprops"
+    ],
+    "7": [
+      "hooks_usemarkdown",
+      "hooks_usemarkdown_usemarkdown"
+    ]
+  },
+  "cohesion": {
+    "0": 0.2,
+    "1": 0.10526315789473684,
+    "2": 0.125,
+    "3": 0.2857142857142857,
+    "4": 0.16666666666666666,
+    "5": 0.6666666666666666,
+    "6": 0.6666666666666666,
+    "7": 1.0
+  },
+  "gods": [
+    {
+      "id": "tsconfig_compileroptions",
+      "label": "compilerOptions",
+      "degree": 16
+    },
+    {
+      "id": "lib_context_usestorage",
+      "label": "useStorage()",
+      "degree": 8
+    },
+    {
+      "id": "ui_button_button",
+      "label": "Button",
+      "degree": 5
+    },
+    {
+      "id": "ui_dialog_dialog",
+      "label": "Dialog()",
+      "degree": 5
+    },
+    {
+      "id": "package_scripts",
+      "label": "scripts",
+      "degree": 4
+    },
+    {
+      "id": "lib_types_storageadapter",
+      "label": "StorageAdapter",
+      "degree": 4
+    },
+    {
+      "id": "lib_utils_cn",
+      "label": "cn()",
+      "degree": 4
+    },
+    {
+      "id": "pages_pageshome_pageshome",
+      "label": "PagesHome()",
+      "degree": 3
+    },
+    {
+      "id": "projects_projectshome_projectshome",
+      "label": "ProjectsHome()",
+      "degree": 3
+    },
+    {
+      "id": "lib_context_storageprovider",
+      "label": "StorageProvider()",
+      "degree": 3
+    }
+  ],
+  "surprises": [
+    {
+      "source": "MarkdownUIInner()",
+      "target": "useStorage()",
+      "source_files": [
+        "src/MarkdownUI.tsx",
+        "src/lib/context.tsx"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "peripheral node `MarkdownUIInner()` unexpectedly reaches hub `useStorage()`"
+    },
+    {
+      "source": "Dialog()",
+      "target": "cn()",
+      "source_files": [
+        "src/components/ui/dialog.tsx",
+        "src/lib/utils.ts"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "cross-file semantic connection"
+    },
+    {
+      "source": "PagesHome()",
+      "target": "useStorage()",
+      "source_files": [
+        "src/features/pages/PagesHome.tsx",
+        "src/lib/context.tsx"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "cross-file semantic connection"
+    },
+    {
+      "source": "ProjectsHome()",
+      "target": "useStorage()",
+      "source_files": [
+        "src/features/projects/ProjectsHome.tsx",
+        "src/lib/context.tsx"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "cross-file semantic connection"
+    }
+  ],
+  "tokens": {
+    "input": 0,
+    "output": 0
+  }
+}

@@ -1,5 +1,5 @@
 import { createServer, IncomingMessage, ServerResponse } from 'node:http'
-import { existsSync, mkdirSync, readFileSync, unlinkSync, writeFileSync } from 'node:fs'
+import { existsSync, mkdirSync, readFileSync, rmSync, unlinkSync, writeFileSync } from 'node:fs'
 import { dirname, join, resolve } from 'node:path'
 import { getDefaultConfigPath } from './config-path.js'
 
@@ -23,8 +23,24 @@ interface IndexData {
   projects: IndexEntry[]
 }
 
+interface PageIndexEntry {
+  id: string
+  name: string
+  createdAt: string
+  updatedAt: string
+  fileName: string
+}
+
+interface PagesIndexData {
+  pages: Array<PageIndexEntry>
+}
+
 function getProjectsDir(): string {
   return join(dirname(getDefaultConfigPath()), 'projects')
+}
+
+function getProjectDir(projectFileName: string): string {
+  return join(getProjectsDir(), projectFileName)
 }
 
 function readIndex(): IndexData {
@@ -53,6 +69,47 @@ function writeIndex(data: IndexData): void {
   writeFileSync(indexPath, JSON.stringify(data, null, 2), 'utf-8')
 }
 
+function getProjectFileNameById(id: string): string | null {
+  return readIndex().projects.find((p) => p.id === id)?.fileName ?? null
+}
+
+function readPagesIndex(projectFileName: string): PagesIndexData {
+  const indexPath = join(getProjectDir(projectFileName), 'index.json')
+  if (!existsSync(indexPath)) return { pages: [] }
+  try {
+    return JSON.parse(readFileSync(indexPath, 'utf-8')) as PagesIndexData
+  } catch {
+    return { pages: [] }
+  }
+}
+
+function writePagesIndex(projectFileName: string, data: PagesIndexData): void {
+  const dir = getProjectDir(projectFileName)
+  if (!existsSync(dir)) mkdirSync(dir, { recursive: true })
+  writeFileSync(join(dir, 'index.json'), JSON.stringify(data, null, 2), 'utf-8')
+}
+
+// What createProject used to seed every project's single .md file with, before pages existed.
+const LEGACY_SEED_CONTENT = '# Untitled Project\n\nStart writing your markdown here...\n'
+
+/** Projects created before multi-page support have their content directly at `projects/<fileName>.md`.
+ * The first time pages are listed for one of those, fold that content into a single "Home" page
+ * (unless it's just the old placeholder text, in which case there's nothing worth keeping). */
+function migrateLegacyProject(projectFileName: string): PagesIndexData | null {
+  const legacyPath = join(getProjectsDir(), `${projectFileName}.md`)
+  if (!existsSync(legacyPath)) return null
+  const content = readFileSync(legacyPath, 'utf-8')
+  if (content.trim() === '' || content.trim() === LEGACY_SEED_CONTENT.trim()) return null
+  const now = new Date().toISOString()
+  const entry: PageIndexEntry = { id: generateId(), name: 'Home', createdAt: now, updatedAt: now, fileName: 'home' }
+  const data: PagesIndexData = { pages: [entry] }
+  const dir = getProjectDir(projectFileName)
+  if (!existsSync(dir)) mkdirSync(dir, { recursive: true })
+  writeFileSync(join(dir, 'home.md'), content, 'utf-8')
+  writePagesIndex(projectFileName, data)
+  return data
+}
+
 export function startServer(port = 4321): ReturnType<typeof createServer> {
   const DIST_DIR = resolve(process.cwd(), 'dist')
 
@@ -75,18 +132,25 @@ export function startServer(port = 4321): ReturnType<typeof createServer> {
         handleListProjects(req, res)
       } else if (pathname === '/api/projects' && req.method === 'POST') {
         handleCreateProject(req, res)
-      } else if (pathname.startsWith('/api/projects/') && req.method === 'GET') {
-        const id = pathname.slice('/api/projects/'.length)
-        handleReadProject(id, req, res)
-      } else if (pathname.startsWith('/api/projects/') && req.method === 'PUT') {
-        const id = pathname.slice('/api/projects/'.length)
-        handleWriteProject(id, req, res)
-      } else if (pathname.startsWith('/api/projects/') && req.method === 'DELETE') {
-        const id = pathname.slice('/api/projects/'.length)
-        handleDeleteProject(id, req, res)
-      }
-      else {
-        handleNotFound(res)
+      } else {
+        const segments = pathname.split('/').filter(Boolean) // ['api', 'projects', id, 'pages'?, pageId?]
+        const projectId = segments[2] ? decodeURIComponent(segments[2]) : null
+
+        if (segments[0] === 'api' && segments[1] === 'projects' && projectId && segments.length === 3 && req.method === 'DELETE') {
+          handleDeleteProject(projectId, req, res)
+        } else if (segments[0] === 'api' && segments[1] === 'projects' && projectId && segments[3] === 'pages' && segments.length === 4 && req.method === 'GET') {
+          handleListPages(projectId, req, res)
+        } else if (segments[0] === 'api' && segments[1] === 'projects' && projectId && segments[3] === 'pages' && segments.length === 4 && req.method === 'POST') {
+          handleCreatePage(projectId, req, res)
+        } else if (segments[0] === 'api' && segments[1] === 'projects' && projectId && segments[3] === 'pages' && segments[4] && segments.length === 5 && req.method === 'GET') {
+          handleReadPage(projectId, decodeURIComponent(segments[4]), req, res)
+        } else if (segments[0] === 'api' && segments[1] === 'projects' && projectId && segments[3] === 'pages' && segments[4] && segments.length === 5 && req.method === 'PUT') {
+          handleWritePage(projectId, decodeURIComponent(segments[4]), req, res)
+        } else if (segments[0] === 'api' && segments[1] === 'projects' && projectId && segments[3] === 'pages' && segments[4] && segments.length === 5 && req.method === 'DELETE') {
+          handleDeletePage(projectId, decodeURIComponent(segments[4]), req, res)
+        } else {
+          handleNotFound(res)
+        }
       }
       return
     }
@@ -211,30 +275,6 @@ function handleListProjects(_req: IncomingMessage, res: ServerResponse): void {
   res.end(JSON.stringify({ projects }))
 }
 
-function handleReadProject(id: string, _req: IncomingMessage, res: ServerResponse): void {
-  const index = readIndex()
-  const entry = index.projects.find((p) => p.id === id)
-
-  if (!entry) {
-    res.writeHead(404, { 'Content-Type': 'application/json' })
-    res.end(JSON.stringify({ error: 'Not Found' }))
-    return
-  }
-
-  const projectsDir = getProjectsDir()
-  const filePath = join(projectsDir, `${entry.fileName}.md`)
-
-  if (!existsSync(filePath)) {
-    res.writeHead(200, { 'Content-Type': 'application/json' })
-    res.end(JSON.stringify({ content: '' }))
-    return
-  }
-
-  const content = readFileSync(filePath, 'utf-8')
-  res.writeHead(200, { 'Content-Type': 'application/json' })
-  res.end(JSON.stringify({ content }))
-}
-
 function handleCreateProject(req: IncomingMessage, res: ServerResponse): void {
   let body = ''
   req.on('data', (chunk: Buffer) => { body += chunk.toString() })
@@ -257,8 +297,18 @@ function handleCreateProject(req: IncomingMessage, res: ServerResponse): void {
       writeIndex(index)
 
       const projectsDir = getProjectsDir()
-      const mdPath = join(projectsDir, `${fileName}.md`)
-      writeFileSync(mdPath, '# Untitled Project\n\nStart writing your markdown here...\n', 'utf-8')
+
+      let location = ''
+      const configPath = getDefaultConfigPath()
+      if (existsSync(configPath)) {
+        try {
+          location = (JSON.parse(readFileSync(configPath, 'utf-8')) as { locationLabel?: string }).locationLabel ?? ''
+        } catch {
+          location = ''
+        }
+      }
+      const jsonPath = join(projectsDir, `${fileName}.json`)
+      writeFileSync(jsonPath, JSON.stringify({ name, location, createdAt: now }, null, 2), 'utf-8')
 
       res.writeHead(200, { 'Content-Type': 'application/json' })
       res.end(JSON.stringify({ id, name, createdAt: now, updatedAt: now }))
@@ -269,16 +319,111 @@ function handleCreateProject(req: IncomingMessage, res: ServerResponse): void {
   })
 }
 
-function handleWriteProject(id: string, req: IncomingMessage, res: ServerResponse): void {
+function handleListPages(projectId: string, _req: IncomingMessage, res: ServerResponse): void {
+  const fileName = getProjectFileNameById(projectId)
+  if (!fileName) {
+    res.writeHead(404, { 'Content-Type': 'application/json' })
+    res.end(JSON.stringify({ error: 'Not Found' }))
+    return
+  }
+
+  let data = readPagesIndex(fileName)
+  if (data.pages.length === 0) {
+    data = migrateLegacyProject(fileName) ?? data
+  }
+
+  const pages = data.pages
+    .map(({ fileName: _, ...meta }) => meta)
+    .sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())
+
+  res.writeHead(200, { 'Content-Type': 'application/json' })
+  res.end(JSON.stringify({ pages }))
+}
+
+function handleCreatePage(projectId: string, req: IncomingMessage, res: ServerResponse): void {
+  let body = ''
+  req.on('data', (chunk: Buffer) => { body += chunk.toString() })
+  req.on('end', () => {
+    try {
+      const { name } = JSON.parse(body) as { name: string }
+      if (!name || typeof name !== 'string') {
+        res.writeHead(400, { 'Content-Type': 'application/json' })
+        res.end(JSON.stringify({ error: 'Name is required' }))
+        return
+      }
+
+      const fileName = getProjectFileNameById(projectId)
+      if (!fileName) {
+        res.writeHead(404, { 'Content-Type': 'application/json' })
+        res.end(JSON.stringify({ error: 'Not Found' }))
+        return
+      }
+
+      const id = generateId()
+      const pageFileName = sanitizeFileName(name) || `page-${id}`
+      const now = new Date().toISOString()
+      const entry: PageIndexEntry = { id, name, createdAt: now, updatedAt: now, fileName: pageFileName }
+
+      const data = readPagesIndex(fileName)
+      data.pages.push(entry)
+      writePagesIndex(fileName, data)
+
+      const mdPath = join(getProjectDir(fileName), `${pageFileName}.md`)
+      writeFileSync(mdPath, '# Untitled Page\n\nStart writing your markdown here...\n', 'utf-8')
+
+      res.writeHead(200, { 'Content-Type': 'application/json' })
+      res.end(JSON.stringify({ id, name, createdAt: now, updatedAt: now }))
+    } catch {
+      res.writeHead(400, { 'Content-Type': 'application/json' })
+      res.end(JSON.stringify({ error: 'Invalid request' }))
+    }
+  })
+}
+
+function handleReadPage(projectId: string, pageId: string, _req: IncomingMessage, res: ServerResponse): void {
+  const fileName = getProjectFileNameById(projectId)
+  if (!fileName) {
+    res.writeHead(404, { 'Content-Type': 'application/json' })
+    res.end(JSON.stringify({ error: 'Not Found' }))
+    return
+  }
+
+  const data = readPagesIndex(fileName)
+  const entry = data.pages.find((p) => p.id === pageId)
+  if (!entry) {
+    res.writeHead(404, { 'Content-Type': 'application/json' })
+    res.end(JSON.stringify({ error: 'Not Found' }))
+    return
+  }
+
+  const filePath = join(getProjectDir(fileName), `${entry.fileName}.md`)
+  if (!existsSync(filePath)) {
+    res.writeHead(200, { 'Content-Type': 'application/json' })
+    res.end(JSON.stringify({ content: '' }))
+    return
+  }
+
+  const content = readFileSync(filePath, 'utf-8')
+  res.writeHead(200, { 'Content-Type': 'application/json' })
+  res.end(JSON.stringify({ content }))
+}
+
+function handleWritePage(projectId: string, pageId: string, req: IncomingMessage, res: ServerResponse): void {
   let body = ''
   req.on('data', (chunk: Buffer) => { body += chunk.toString() })
   req.on('end', () => {
     try {
       const { content } = JSON.parse(body) as { content: string }
 
-      const index = readIndex()
-      const entry = index.projects.find((p) => p.id === id)
+      const fileName = getProjectFileNameById(projectId)
+      if (!fileName) {
+        res.writeHead(404, { 'Content-Type': 'application/json' })
+        res.end(JSON.stringify({ error: 'Not Found' }))
+        return
+      }
 
+      const data = readPagesIndex(fileName)
+      const entry = data.pages.find((p) => p.id === pageId)
       if (!entry) {
         res.writeHead(404, { 'Content-Type': 'application/json' })
         res.end(JSON.stringify({ error: 'Not Found' }))
@@ -286,10 +431,9 @@ function handleWriteProject(id: string, req: IncomingMessage, res: ServerRespons
       }
 
       entry.updatedAt = new Date().toISOString()
-      writeIndex(index)
+      writePagesIndex(fileName, data)
 
-      const projectsDir = getProjectsDir()
-      const mdPath = join(projectsDir, `${entry.fileName}.md`)
+      const mdPath = join(getProjectDir(fileName), `${entry.fileName}.md`)
       writeFileSync(mdPath, content, 'utf-8')
 
       res.writeHead(200, { 'Content-Type': 'application/json' })
@@ -299,6 +443,35 @@ function handleWriteProject(id: string, req: IncomingMessage, res: ServerRespons
       res.end(JSON.stringify({ error: 'Invalid request' }))
     }
   })
+}
+
+function handleDeletePage(projectId: string, pageId: string, _req: IncomingMessage, res: ServerResponse): void {
+  const fileName = getProjectFileNameById(projectId)
+  if (!fileName) {
+    res.writeHead(404, { 'Content-Type': 'application/json' })
+    res.end(JSON.stringify({ error: 'Not Found' }))
+    return
+  }
+
+  const data = readPagesIndex(fileName)
+  const entry = data.pages.find((p) => p.id === pageId)
+  if (!entry) {
+    res.writeHead(404, { 'Content-Type': 'application/json' })
+    res.end(JSON.stringify({ error: 'Not Found' }))
+    return
+  }
+
+  data.pages = data.pages.filter((p) => p.id !== pageId)
+  writePagesIndex(fileName, data)
+
+  try {
+    unlinkSync(join(getProjectDir(fileName), `${entry.fileName}.md`))
+  } catch {
+    // File might not exist, that's ok
+  }
+
+  res.writeHead(200, { 'Content-Type': 'application/json' })
+  res.end(JSON.stringify({}))
 }
 
 function handleDeleteProject(id: string, _req: IncomingMessage, res: ServerResponse): void {
@@ -320,6 +493,17 @@ function handleDeleteProject(id: string, _req: IncomingMessage, res: ServerRespo
     unlinkSync(mdPath)
   } catch {
     // File might not exist, that's ok
+  }
+  const jsonPath = join(projectsDir, `${entry.fileName}.json`)
+  try {
+    unlinkSync(jsonPath)
+  } catch {
+    // File might not exist, that's ok
+  }
+  try {
+    rmSync(getProjectDir(entry.fileName), { recursive: true, force: true })
+  } catch {
+    // Directory might not exist, that's ok
   }
 
   res.writeHead(200, { 'Content-Type': 'application/json' })

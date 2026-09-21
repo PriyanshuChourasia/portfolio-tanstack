@@ -1,0 +1,92 @@
+{
+  "apps/markdown-ui-web/bin/markdown-ai.js": {
+    "mtime": 1789376524.2349458,
+    "ast_hash": "123eb611da784837b9290cf2a1642235",
+    "semantic_hash": ""
+  },
+  "apps/markdown-ui-web/dist-server/config-path.js": {
+    "mtime": 1789562394.2646954,
+    "ast_hash": "c683ad35ab235af1147384e513ab96ce",
+    "semantic_hash": ""
+  },
+  "apps/markdown-ui-web/dist-server/server.js": {
+    "mtime": 1789562394.271766,
+    "ast_hash": "1c157aeb881346a488ae610888961244",
+    "semantic_hash": ""
+  },
+  "apps/markdown-ui-web/eslint.config.js": {
+    "mtime": 1788689393.5259595,
+    "ast_hash": "af0ffb91c09db6cf58e4bed37e6caef9",
+    "semantic_hash": ""
+  },
+  "apps/markdown-ui-web/package.json": {
+    "mtime": 1789379147.493521,
+    "ast_hash": "f3615c3f00ddf1e964a16b1cde2f4933",
+    "semantic_hash": ""
+  },
+  "apps/markdown-ui-web/prettier.config.js": {
+    "mtime": 1788689393.5263278,
+    "ast_hash": "59950f4d2c89212b0dec6b52ba081d36",
+    "semantic_hash": ""
+  },
+  "apps/markdown-ui-web/scripts/postinstall.js": {
+    "mtime": 1789379140.192481,
+    "ast_hash": "f9128952b8da274fe3c71b804b0152cd",
+    "semantic_hash": ""
+  },
+  "apps/markdown-ui-web/src/main.tsx": {
+    "mtime": 1789376839.462916,
+    "ast_hash": "3e20ef1d8ec720d320c713d1f644352b",
+    "semantic_hash": ""
+  },
+  "apps/markdown-ui-web/src/server-adapter.ts": {
+    "mtime": 1789814503.8652625,
+    "ast_hash": "14b643d6e8a92591645d97f0de3d9e70",
+    "semantic_hash": ""
+  },
+  "apps/markdown-ui-web/src/server/config-path.ts": {
+    "mtime": 1789375151.4918537,
+    "ast_hash": "39e887f9abcc8ba04769cbe6c16c2882",
+    "semantic_hash": ""
+  },
+  "apps/markdown-ui-web/src/server/server.ts": {
+    "mtime": 1789814584.3958118,
+    "ast_hash": "402ba5eefd52fa6d1a427fb884b1d697",
+    "semantic_hash": ""
+  },
+  "apps/markdown-ui-web/src/web-adapter.ts": {
+    "mtime": 1789817716.201536,
+    "ast_hash": "235e5acb2aec0de29d46d94338650f0c",
+    "semantic_hash": ""
+  },
+  "apps/markdown-ui-web/tsconfig.json": {
+    "mtime": 1789375074.9704483,
+    "ast_hash": "bac5f9d8ad5d0d6b3136640b763f7b59",
+    "semantic_hash": ""
+  },
+  "apps/markdown-ui-web/tsconfig.server.json": {
+    "mtime": 1789375216.7718992,
+    "ast_hash": "192b05bc6d59f6f3777177634931fa90",
+    "semantic_hash": ""
+  },
+  "apps/markdown-ui-web/vite.config.ts": {
+    "mtime": 1788689393.5269983,
+    "ast_hash": "e362492928bed90f1253467412505ab4",
+    "semantic_hash": ""
+  },
+  "apps/markdown-ui-web/README.md": {
+    "mtime": 1789379161.3222458,
+    "ast_hash": "fe8f1142f4b90a79a5660c1e4904986f",
+    "semantic_hash": ""
+  },
+  "apps/markdown-ui-web/index.html": {
+    "mtime": 1789378759.7640958,
+    "ast_hash": "e5488e86f996b958811856ca954cd88b",
+    "semantic_hash": ""
+  },
+  "apps/markdown-ui-web/dist-test/test.png": {
+    "mtime": 1789376552.2957559,
+    "ast_hash": "7cddabe5df64daaa6924a5613dd2150a",
+    "semantic_hash": ""
+  }
+}

@@ -3,28 +3,18 @@ import { Plus, FileText, Trash2, FolderOpen } from 'lucide-react'
 import { Button } from '../../components/ui/button'
 import { Dialog } from '../../components/ui/dialog'
 import { useStorage } from '../../lib/context'
+import { timeAgo } from '../../lib/utils'
 import type { ProjectMeta, UserConfig } from '../../lib/types'
 
 interface ProjectsHomeProps {
-  onSelectProject: (id: string) => void
-}
-
-const timeAgo = (iso: string): string => {
-  const seconds = Math.floor((Date.now() - new Date(iso).getTime()) / 1000)
-  if (seconds < 60) return 'just now'
-  const minutes = Math.floor(seconds / 60)
-  if (minutes < 60) return `${minutes}m ago`
-  const hours = Math.floor(minutes / 60)
-  if (hours < 24) return `${hours}h ago`
-  const days = Math.floor(hours / 24)
-  if (days < 30) return `${days}d ago`
-  return `${Math.floor(days / 30)}mo ago`
+  onSelectProject: (id: string, name: string) => void
 }
 
 export function ProjectsHome({ onSelectProject }: ProjectsHomeProps) {
   const adapter = useStorage()
   const [projects, setProjects] = useState<ProjectMeta[]>([])
   const [location, setLocation] = useState<string | null>(null)
+  const [configCreatedAt, setConfigCreatedAt] = useState<string | null>(null)
   const [showDialog, setShowDialog] = useState(false)
   const [newName, setNewName] = useState('')
 
@@ -46,6 +36,7 @@ export function ProjectsHome({ onSelectProject }: ProjectsHomeProps) {
       if (cancelled) return
       setProjects(projects_)
       setLocation(cfg?.locationLabel ?? adapter.getDefaultLocationLabel())
+      setConfigCreatedAt(cfg?.createdAt ?? null)
     })()
     return () => {
       cancelled = true
@@ -53,11 +44,14 @@ export function ProjectsHome({ onSelectProject }: ProjectsHomeProps) {
   }, [adapter])
 
   const handleCreate = async () => {
-    if (!newName.trim()) return
+    if (!newName.trim() || !location) return
+    const cfg: UserConfig = { locationLabel: location, createdAt: configCreatedAt ?? new Date().toISOString() }
+    await adapter.writeConfig(cfg)
+    setConfigCreatedAt(cfg.createdAt)
     const entry = await adapter.createProject(newName.trim())
     setNewName('')
     setShowDialog(false)
-    onSelectProject(entry.id)
+    onSelectProject(entry.id, entry.name)
   }
 
   const handleDelete = async (id: string, e: React.MouseEvent) => {
@@ -65,6 +59,32 @@ export function ProjectsHome({ onSelectProject }: ProjectsHomeProps) {
     await adapter.deleteProject(id)
     setProjects((prev) => prev.filter((p) => p.id !== id))
   }
+
+  const locationPicker = (containerClassName: string) => (
+    <div className={containerClassName}>
+      <div className="flex items-center justify-between w-full">
+        <label className="text-sm text-muted-foreground">Location</label>
+        <span className="text-xs text-muted-foreground truncate max-w-[60%]">
+          {location ?? '...'}
+        </span>
+      </div>
+      <Button
+        type="button"
+        variant="outline"
+        className="w-full justify-start gap-2"
+        onClick={async () => {
+          const label = await adapter.pickLocation()
+          if (label) setLocation(label)
+        }}
+      >
+        <FolderOpen className="h-4 w-4" />
+        Where should the files be kept?
+      </Button>
+      {adapter.getLocationNote() && (
+        <p className="text-xs text-muted-foreground/70">{adapter.getLocationNote()}</p>
+      )}
+    </div>
+  )
 
   const addProjectDialog = () => {
     if (!showDialog) return null
@@ -82,11 +102,12 @@ export function ProjectsHome({ onSelectProject }: ProjectsHomeProps) {
           placeholder="Project name"
           autoFocus
         />
+        {locationPicker('flex flex-col items-start gap-2 w-full mb-4')}
         <div className="flex justify-end gap-2">
           <Button variant="outline" onClick={() => setShowDialog(false)}>
             Cancel
           </Button>
-          <Button onClick={handleCreate} disabled={!newName.trim()}>
+          <Button onClick={handleCreate} disabled={!newName.trim() || !location}>
             Create
           </Button>
         </div>
@@ -101,9 +122,11 @@ export function ProjectsHome({ onSelectProject }: ProjectsHomeProps) {
 
     const handleCreateFirstProject = async () => {
       if (!canCreate) return
-      const cfg: UserConfig = { locationLabel: location, createdAt: new Date().toISOString() }
+      const cfg: UserConfig = { locationLabel: location, createdAt: configCreatedAt ?? new Date().toISOString() }
       await adapter.writeConfig(cfg)
-      onSelectProject((await adapter.createProject(newName.trim())).id)
+      setConfigCreatedAt(cfg.createdAt)
+      const entry = await adapter.createProject(newName.trim())
+      onSelectProject(entry.id, entry.name)
     }
 
     return (
@@ -118,26 +141,7 @@ export function ProjectsHome({ onSelectProject }: ProjectsHomeProps) {
             className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-ring mb-4"
             placeholder="Project name"
           />
-          <div className="flex flex-col items-start gap-2 w-full mb-6">
-            <div className="flex items-center justify-between w-full">
-              <label className="text-sm text-muted-foreground">Location</label>
-              <span className="text-xs text-muted-foreground truncate max-w-[60%]">
-                {location ?? '...'}
-              </span>
-            </div>
-            <Button
-              type="button"
-              variant="outline"
-              className="w-full justify-start gap-2"
-              onClick={async () => {
-                const label = await adapter.pickLocation()
-                if (label) setLocation(label)
-              }}
-            >
-              <FolderOpen className="h-4 w-4" />
-              Where should the files be kept?
-            </Button>
-          </div>
+          {locationPicker('flex flex-col items-start gap-2 w-full mb-6')}
           <Button onClick={handleCreateFirstProject} disabled={!canCreate} className="w-full">
             Create Project
           </Button>
@@ -151,7 +155,7 @@ export function ProjectsHome({ onSelectProject }: ProjectsHomeProps) {
       {projects.map((p) => (
         <button
           key={p.id}
-          onClick={() => onSelectProject(p.id)}
+          onClick={() => onSelectProject(p.id, p.name)}
           className="group flex items-start gap-3 rounded-lg border border-border bg-card p-4 text-left transition-colors hover:bg-accent/50 cursor-pointer"
         >
           <FileText className="h-5 w-5 mt-0.5 shrink-0 text-muted-foreground" />

@@ -3,6 +3,7 @@ export { StorageProvider, useStorage } from './lib/context'
 export type {
   StorageAdapter,
   ProjectMeta,
+  PageMeta,
   UserConfig,
 } from './lib/types'
 export { Button } from './components/ui/button'

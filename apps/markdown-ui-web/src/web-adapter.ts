@@ -1,10 +1,12 @@
-import type { ProjectMeta, StorageAdapter, UserConfig } from 'markdown-ui-core'
+import type { PageMeta, ProjectMeta, StorageAdapter, UserConfig } from 'markdown-ui-core'
 
 const DB_NAME = 'markdown-ui'
 const DB_VERSION = 1
 const STORE_NAME = 'handles'
 const ROOT_KEY = 'root-handle'
-const SEED_CONTENT = `# Untitled Project\n\nStart writing your markdown here...\n`
+const SEED_CONTENT = `# Untitled Page\n\nStart writing your markdown here...\n`
+// What createProject used to seed every project's single .md file with, before pages existed.
+const LEGACY_SEED_CONTENT = `# Untitled Project\n\nStart writing your markdown here...\n`
 
 function openDB(): Promise<IDBDatabase> {
   return new Promise((resolve, reject) => {
@@ -109,9 +111,12 @@ async function readFile(
   }
 }
 
+type ProjectIndexEntry = ProjectMeta & { fileName: string }
+type PageIndexEntry = PageMeta & { fileName: string }
+
 async function readIndex(
   root: FileSystemDirectoryHandle,
-): Promise<{ projects: Array<ProjectMeta & { fileName: string }> }> {
+): Promise<{ projects: Array<ProjectIndexEntry> }> {
   const raw = await readFile(root, 'projects/index.json')
   if (!raw) return { projects: [] }
   try { return JSON.parse(raw) } catch { return { projects: [] } }
@@ -119,10 +124,53 @@ async function readIndex(
 
 async function writeIndex(
   root: FileSystemDirectoryHandle,
-  index: { projects: Array<ProjectMeta & { fileName: string }> },
+  index: { projects: Array<ProjectIndexEntry> },
 ): Promise<void> {
   await getDirHandle(root, 'projects', true)
   await writeFile(root, 'projects/index.json', JSON.stringify(index, null, 2))
+}
+
+async function getProjectFileName(
+  root: FileSystemDirectoryHandle,
+  projectId: string,
+): Promise<string | null> {
+  const index = await readIndex(root)
+  return index.projects.find((p) => p.id === projectId)?.fileName ?? null
+}
+
+async function readPagesIndex(
+  root: FileSystemDirectoryHandle,
+  projectFileName: string,
+): Promise<{ pages: Array<PageIndexEntry> }> {
+  const raw = await readFile(root, `projects/${projectFileName}/index.json`)
+  if (!raw) return { pages: [] }
+  try { return JSON.parse(raw) } catch { return { pages: [] } }
+}
+
+async function writePagesIndex(
+  root: FileSystemDirectoryHandle,
+  projectFileName: string,
+  index: { pages: Array<PageIndexEntry> },
+): Promise<void> {
+  await getDirHandle(root, `projects/${projectFileName}`, true)
+  await writeFile(root, `projects/${projectFileName}/index.json`, JSON.stringify(index, null, 2))
+}
+
+/** Projects created before multi-page support have their content directly at `projects/<fileName>.md`.
+ * The first time pages are listed for one of those, fold that content into a single "Home" page. */
+async function migrateLegacyProject(
+  root: FileSystemDirectoryHandle,
+  projectFileName: string,
+): Promise<{ pages: Array<PageIndexEntry> } | null> {
+  const legacyContent = await readFile(root, `projects/${projectFileName}.md`)
+  if (legacyContent === null) return null
+  if (legacyContent.trim() === '' || legacyContent.trim() === LEGACY_SEED_CONTENT.trim()) return null
+  const now = new Date().toISOString()
+  const entry: PageIndexEntry = { id: generateId(), name: 'Home', createdAt: now, updatedAt: now, fileName: 'home' }
+  const index = { pages: [entry] }
+  await writeFile(root, `projects/${projectFileName}/home.md`, legacyContent)
+  await writePagesIndex(root, projectFileName, index)
+  return index
 }
 
 export const webAdapter: StorageAdapter = {
@@ -136,6 +184,10 @@ export const webAdapter: StorageAdapter = {
 
   getDefaultLocationLabel(): string {
     return 'Documents/Markdown-AI'
+  },
+
+  getLocationNote(): string | null {
+    return "Only the folder name is shown — browsers keep the full computer path private."
   },
 
   async readConfig(): Promise<UserConfig | null> {
@@ -162,34 +214,21 @@ export const webAdapter: StorageAdapter = {
       .sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())
   },
 
-  async readProject(id: string): Promise<string> {
-    const h = await ensureHandle()
-    const index = await readIndex(h)
-    const entry = index.projects.find((p) => p.id === id)
-    if (!entry) return ''
-    return (await readFile(h, `projects/${entry.fileName}.md`)) ?? ''
-  },
-
-  async writeProject(id: string, content: string): Promise<void> {
-    const h = await ensureHandle()
-    const index = await readIndex(h)
-    const entry = index.projects.find((p) => p.id === id)
-    if (!entry) return
-    entry.updatedAt = new Date().toISOString()
-    await writeIndex(h, index)
-    await writeFile(h, `projects/${entry.fileName}.md`, content)
-  },
-
   async createProject(name: string): Promise<ProjectMeta> {
     const h = await ensureHandle()
     const id = generateId()
     const fileName = sanitizeFileName(name) || `project-${id}`
     const now = new Date().toISOString()
-    const meta: ProjectMeta & { fileName: string } = { id, name, createdAt: now, updatedAt: now, fileName }
+    const meta: ProjectIndexEntry = { id, name, createdAt: now, updatedAt: now, fileName }
     const index = await readIndex(h)
     index.projects.push(meta)
     await writeIndex(h, index)
-    await writeFile(h, `projects/${fileName}.md`, SEED_CONTENT)
+
+    const configRaw = await readFile(h, 'config.json')
+    const location = configRaw ? (JSON.parse(configRaw) as UserConfig).locationLabel : h.name
+    const projectInfo = { name, location, createdAt: now }
+    await writeFile(h, `projects/${fileName}.json`, JSON.stringify(projectInfo, null, 2))
+
     return { id, name, createdAt: now, updatedAt: now }
   },
 
@@ -202,6 +241,74 @@ export const webAdapter: StorageAdapter = {
     await writeIndex(h, index)
     try {
       const parent = await getDirHandle(h, 'projects', false)
+      await parent.removeEntry(`${entry.fileName}.md`).catch(() => {})
+      await parent.removeEntry(`${entry.fileName}.json`).catch(() => {})
+      await parent.removeEntry(entry.fileName, { recursive: true }).catch(() => {})
+    } catch { /* already gone */ }
+  },
+
+  async listPages(projectId: string): Promise<Array<PageMeta>> {
+    const h = await ensureHandle()
+    const fileName = await getProjectFileName(h, projectId)
+    if (!fileName) return []
+    let index = await readPagesIndex(h, fileName)
+    if (index.pages.length === 0) {
+      const migrated = await migrateLegacyProject(h, fileName)
+      if (migrated) index = migrated
+    }
+    return [...index.pages]
+      .map(({ fileName: _, ...meta }) => meta)
+      .sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())
+  },
+
+  async createPage(projectId: string, name: string): Promise<PageMeta> {
+    const h = await ensureHandle()
+    const projectFileName = await getProjectFileName(h, projectId)
+    if (!projectFileName) throw new Error('Project not found')
+    const id = generateId()
+    const fileName = sanitizeFileName(name) || `page-${id}`
+    const now = new Date().toISOString()
+    const meta: PageIndexEntry = { id, name, createdAt: now, updatedAt: now, fileName }
+    const index = await readPagesIndex(h, projectFileName)
+    index.pages.push(meta)
+    await writePagesIndex(h, projectFileName, index)
+    await writeFile(h, `projects/${projectFileName}/${fileName}.md`, SEED_CONTENT)
+    return { id, name, createdAt: now, updatedAt: now }
+  },
+
+  async readPage(projectId: string, pageId: string): Promise<string> {
+    const h = await ensureHandle()
+    const projectFileName = await getProjectFileName(h, projectId)
+    if (!projectFileName) return ''
+    const index = await readPagesIndex(h, projectFileName)
+    const entry = index.pages.find((p) => p.id === pageId)
+    if (!entry) return ''
+    return (await readFile(h, `projects/${projectFileName}/${entry.fileName}.md`)) ?? ''
+  },
+
+  async writePage(projectId: string, pageId: string, content: string): Promise<void> {
+    const h = await ensureHandle()
+    const projectFileName = await getProjectFileName(h, projectId)
+    if (!projectFileName) return
+    const index = await readPagesIndex(h, projectFileName)
+    const entry = index.pages.find((p) => p.id === pageId)
+    if (!entry) return
+    entry.updatedAt = new Date().toISOString()
+    await writePagesIndex(h, projectFileName, index)
+    await writeFile(h, `projects/${projectFileName}/${entry.fileName}.md`, content)
+  },
+
+  async deletePage(projectId: string, pageId: string): Promise<void> {
+    const h = await ensureHandle()
+    const projectFileName = await getProjectFileName(h, projectId)
+    if (!projectFileName) return
+    const index = await readPagesIndex(h, projectFileName)
+    const entry = index.pages.find((p) => p.id === pageId)
+    if (!entry) return
+    index.pages = index.pages.filter((p) => p.id !== pageId)
+    await writePagesIndex(h, projectFileName, index)
+    try {
+      const parent = await getDirHandle(h, `projects/${projectFileName}`, false)
       await parent.removeEntry(`${entry.fileName}.md`)
     } catch { /* already gone */ }
   },
