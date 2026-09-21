@@ -127,6 +127,14 @@ export const serverAdapter: StorageAdapter = {
     await checkResponse(res)
   },
 
+  async reorderPages(projectId: string, orderedPageIds: string[]): Promise<void> {
+    const res = await apiFetch(`/projects/${projectId}/pages/reorder`, {
+      method: 'PUT',
+      body: JSON.stringify({ pageIds: orderedPageIds }),
+    })
+    await checkResponse(res)
+  },
+
   async deletePage(projectId: string, pageId: string): Promise<void> {
     const res = await apiFetch(`/projects/${projectId}/pages/${pageId}`, {
       method: 'DELETE',

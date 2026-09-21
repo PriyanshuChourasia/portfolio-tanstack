@@ -1,11 +1,11 @@
-import { useRef, useState, type ChangeEvent, type KeyboardEvent, type SyntheticEvent } from 'react'
-import { Bold, Italic, Highlighter, Image, StickyNote } from 'lucide-react'
+import { useRef, useState, type ChangeEvent, type KeyboardEvent } from 'react'
+import { Bold, Italic, Highlighter, Image } from 'lucide-react'
 import { Button } from '../../components/ui/button'
 import { HIGHLIGHT_COLORS, type HighlightColor } from '../../lib/remark-highlight'
-import { remarkNote } from '../../lib/remark-note'
 
 const NOTE_PREFIX = '%%note:'
 const NOTE_SUFFIX = '%%'
+const NOTES_ENABLED = false
 
 interface EditorPaneProps {
   value: string
@@ -85,15 +85,9 @@ export function EditorPane({ value, onChange }: EditorPaneProps) {
   const [headingLevel, setHeadingLevel] = useState(0)
   const [notePopover, setNotePopover] = useState<{
     visible: boolean
-    x: number
-    y: number
     existingNoteText: string | null
-  }>({ visible: false, x: 0, y: 0, existingNoteText: null })
+  }>({ visible: false, existingNoteText: null })
   const [noteInputText, setNoteInputText] = useState('')
-
-  const syncHeadingLevel = (e: SyntheticEvent<HTMLTextAreaElement>) => {
-    setHeadingLevel(detectHeadingLevel(value, e.currentTarget.selectionStart))
-  }
 
   const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     onChange(e.target.value)
@@ -218,43 +212,7 @@ export function EditorPane({ value, onChange }: EditorPaneProps) {
     })
   }
 
-  const getSelectionCoordinates = (): { x: number; y: number } | null => {
-    const ta = textareaRef.current
-    if (!ta) return null
-    const { selectionStart, selectionEnd } = ta
-    const selected = value.slice(selectionStart, selectionEnd)
-    if (!selected) return null
-    const mirror = document.createElement('div')
-    const { fontSize, fontFamily, lineHeight, paddingTop, paddingLeft } =
-      window.getComputedStyle(ta)
-    Object.assign(mirror.style, {
-      position: 'absolute',
-      visibility: 'hidden',
-      whiteSpace: 'pre-wrap',
-      wordWrap: 'break-word',
-      fontSize,
-      fontFamily,
-      lineHeight,
-      pointerEvents: 'none',
-    })
-    const before = document.createElement('span')
-    before.textContent = value.slice(0, selectionStart)
-    const marker = document.createElement('span')
-    marker.textContent = selected
-    mirror.appendChild(before)
-    mirror.appendChild(marker)
-    document.body.appendChild(mirror)
-    const rect = ta.getBoundingClientRect()
-    const markerRect = marker.getBoundingClientRect()
-    const coords = {
-      x: markerRect.left - rect.left + ta.scrollLeft,
-      y: markerRect.top - rect.top + ta.scrollTop,
-    }
-    document.body.removeChild(mirror)
-    return coords
-  }
-
-  const applyNote = (noteText: string) => {
+    const applyNote = (noteText: string) => {
     const ta = textareaRef.current
     if (!ta) return
     const { selectionStart, selectionEnd } = ta
@@ -270,7 +228,7 @@ export function EditorPane({ value, onChange }: EditorPaneProps) {
           ta.selectionStart = existing.wrapStart
           ta.selectionEnd = existing.wrapStart + selected.length
         })
-        setNotePopover({ visible: false, x: 0, y: 0, existingNoteText: null })
+        setNotePopover({ visible: false, existingNoteText: null })
         return
       }
       const encoded = encodeURIComponent(noteText)
@@ -282,7 +240,7 @@ export function EditorPane({ value, onChange }: EditorPaneProps) {
         ta.selectionStart = existing.wrapStart + before.length
         ta.selectionEnd = existing.wrapStart + before.length + selected.length
       })
-      setNotePopover({ visible: false, x: 0, y: 0, existingNoteText: null })
+      setNotePopover({ visible: false, existingNoteText: null })
       return
     }
 
@@ -296,24 +254,21 @@ export function EditorPane({ value, onChange }: EditorPaneProps) {
       ta.selectionStart = selectionStart + before.length
       ta.selectionEnd = selectionStart + before.length + selected.length
     })
-    setNotePopover({ visible: false, x: 0, y: 0, existingNoteText: null })
+    setNotePopover({ visible: false, existingNoteText: null })
   }
 
   const handleSelectionChange = () => {
+    if (!NOTES_ENABLED) return
     const ta = textareaRef.current
     if (!ta) return
     const selected = value.slice(ta.selectionStart, ta.selectionEnd)
     if (ta.selectionStart === ta.selectionEnd || !selected) {
-      setNotePopover({ visible: false, x: 0, y: 0, existingNoteText: null })
+      setNotePopover({ visible: false, existingNoteText: null })
       return
     }
-    const coords = getSelectionCoordinates()
-    if (!coords) return
     const existing = findNoteWrap(value, ta.selectionStart, ta.selectionEnd)
     setNotePopover({
       visible: true,
-      x: coords.x,
-      y: coords.y - 4,
       existingNoteText: existing ? existing.noteText : null,
     })
     if (existing) {
@@ -366,7 +321,7 @@ export function EditorPane({ value, onChange }: EditorPaneProps) {
   ]
 
   return (
-    <div className="flex-1 flex flex-col overflow-hidden min-h-0">
+    <div className="flex-1 flex flex-col overflow-hidden min-h-0 relative">
       <div className="flex items-center gap-1 border-b border-border px-2 py-1 shrink-0">
         <select
           value={headingLevel}
@@ -434,14 +389,57 @@ export function EditorPane({ value, onChange }: EditorPaneProps) {
         value={value}
         onChange={handleChange}
         onKeyDown={handleKeyDown}
-        onSelect={syncHeadingLevel}
-        onClick={syncHeadingLevel}
-        onKeyUp={syncHeadingLevel}
+        onSelect={handleSelectionChange}
+        onClick={handleSelectionChange}
+        onKeyUp={handleSelectionChange}
+        onMouseUp={handleSelectionChange}
         className="flex-1 resize-none bg-transparent p-4 font-mono text-sm leading-relaxed focus:outline-none placeholder:text-muted-foreground"
         placeholder="Type your Markdown here..."
         spellCheck={false}
         autoComplete="off"
       />
+      {NOTES_ENABLED && notePopover.visible && (
+        <div
+          className="absolute top-2 right-2 z-10 flex flex-col gap-1 rounded-md border border-border bg-card p-2 shadow-lg"
+        >
+          <span className="text-xs text-muted-foreground">
+            {notePopover.existingNoteText !== null ? 'Edit note' : 'Add note'}
+          </span>
+          <input
+            type="text"
+            value={noteInputText}
+            onChange={(e) => setNoteInputText(e.target.value)}
+            placeholder="Enter note text..."
+            className="h-7 rounded border border-input bg-background px-2 text-xs focus:outline-none focus:ring-1 focus:ring-ring w-48"
+            onKeyDown={(e) => { if (e.key === 'Enter') handleNoteConfirm() }}
+            autoFocus
+          />
+          <div className="flex gap-1 justify-end">
+            {notePopover.existingNoteText !== null && (
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                className="h-6 text-xs text-destructive"
+                onMouseDown={(e) => e.preventDefault()}
+                onClick={handleNoteRemove}
+              >
+                Remove
+              </Button>
+            )}
+            <Button
+              type="button"
+              variant="default"
+              size="sm"
+              className="h-6 text-xs"
+              onMouseDown={(e) => e.preventDefault()}
+              onClick={handleNoteConfirm}
+            >
+              Confirm
+            </Button>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

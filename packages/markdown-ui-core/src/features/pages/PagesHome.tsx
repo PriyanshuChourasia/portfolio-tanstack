@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Plus, FileText, Trash2 } from 'lucide-react'
+import { Plus, FileText, Trash2, GripVertical } from 'lucide-react'
 import { Button } from '../../components/ui/button'
 import { Dialog } from '../../components/ui/dialog'
 import { useStorage } from '../../lib/context'
@@ -17,6 +17,7 @@ export function PagesHome({ projectId, projectName, onSelectPage }: PagesHomePro
   const [pages, setPages] = useState<PageMeta[]>([])
   const [showDialog, setShowDialog] = useState(false)
   const [newName, setNewName] = useState('')
+  const [draggedId, setDraggedId] = useState<string | null>(null)
 
   useEffect(() => {
     let cancelled = false
@@ -47,6 +48,39 @@ export function PagesHome({ projectId, projectName, onSelectPage }: PagesHomePro
     e.stopPropagation()
     await adapter.deletePage(projectId, id)
     setPages((prev) => prev.filter((p) => p.id !== id))
+  }
+
+  const handleDragStart = (id: string) => {
+    setDraggedId(id)
+  }
+
+  const handleDragEnd = () => {
+    setDraggedId(null)
+  }
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault()
+    e.dataTransfer.dropEffect = 'move'
+  }
+
+  const handleDrop = async (targetId: string) => {
+    if (!draggedId || draggedId === targetId) return
+    const prev = pages
+    const fromIdx = prev.findIndex((p) => p.id === draggedId)
+    const toIdx = prev.findIndex((p) => p.id === targetId)
+    if (fromIdx === -1 || toIdx === -1) return
+    const newPages = [...prev]
+    const [moved] = newPages.splice(fromIdx, 1)
+    newPages.splice(toIdx, 0, moved)
+    setPages(newPages)
+    const orderedIds = newPages.map((p) => p.id)
+    try {
+      await adapter.reorderPages(projectId, orderedIds)
+    } catch {
+      setPages(prev)
+      console.error('Failed to reorder pages')
+    }
+    setDraggedId(null)
   }
 
   const addPageDialog = () => {
@@ -105,9 +139,14 @@ export function PagesHome({ projectId, projectName, onSelectPage }: PagesHomePro
         <button
           key={p.id}
           onClick={() => onSelectPage(p.id)}
+          draggable
+          onDragStart={() => handleDragStart(p.id)}
+          onDragOver={handleDragOver}
+          onDrop={() => handleDrop(p.id)}
+          onDragEnd={handleDragEnd}
           className="group flex items-start gap-3 rounded-lg border border-border bg-card p-4 text-left transition-colors hover:bg-accent/50 cursor-pointer"
         >
-          <FileText className="h-5 w-5 mt-0.5 shrink-0 text-muted-foreground" />
+          <GripVertical className="h-4 w-4 mt-0.5 shrink-0 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity cursor-grab" />
           <div className="flex-1 min-w-0">
             <p className="font-medium truncate">{p.name}</p>
             <p className="text-xs text-muted-foreground mt-0.5">Updated {timeAgo(p.updatedAt)}</p>

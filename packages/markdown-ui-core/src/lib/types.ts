@@ -10,6 +10,7 @@ export interface PageMeta {
   name: string
   createdAt: string
   updatedAt: string
+  order: number
 }
 
 export interface UserConfig {
@@ -32,4 +33,5 @@ export interface StorageAdapter {
   readPage(projectId: string, pageId: string): Promise<string>
   writePage(projectId: string, pageId: string, content: string): Promise<void>
   deletePage(projectId: string, pageId: string): Promise<void>
+  reorderPages(projectId: string, orderedPageIds: string[]): Promise<void>
 }

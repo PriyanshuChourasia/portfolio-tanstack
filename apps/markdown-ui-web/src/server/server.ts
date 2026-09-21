@@ -29,6 +29,7 @@ interface PageIndexEntry {
   createdAt: string
   updatedAt: string
   fileName: string
+  order: number
 }
 
 interface PagesIndexData {
@@ -77,7 +78,16 @@ function readPagesIndex(projectFileName: string): PagesIndexData {
   const indexPath = join(getProjectDir(projectFileName), 'index.json')
   if (!existsSync(indexPath)) return { pages: [] }
   try {
-    return JSON.parse(readFileSync(indexPath, 'utf-8')) as PagesIndexData
+    const data = JSON.parse(readFileSync(indexPath, 'utf-8')) as PagesIndexData
+    let changed = false
+    for (const p of data.pages) {
+      if (p.order === undefined) {
+        p.order = data.pages.indexOf(p)
+        changed = true
+      }
+    }
+    if (changed) writePagesIndex(projectFileName, data)
+    return data
   } catch {
     return { pages: [] }
   }
@@ -101,7 +111,7 @@ function migrateLegacyProject(projectFileName: string): PagesIndexData | null {
   const content = readFileSync(legacyPath, 'utf-8')
   if (content.trim() === '' || content.trim() === LEGACY_SEED_CONTENT.trim()) return null
   const now = new Date().toISOString()
-  const entry: PageIndexEntry = { id: generateId(), name: 'Home', createdAt: now, updatedAt: now, fileName: 'home' }
+  const entry: PageIndexEntry = { id: generateId(), name: 'Home', createdAt: now, updatedAt: now, fileName: 'home', order: 0 }
   const data: PagesIndexData = { pages: [entry] }
   const dir = getProjectDir(projectFileName)
   if (!existsSync(dir)) mkdirSync(dir, { recursive: true })
@@ -148,6 +158,8 @@ export function startServer(port = 4321): ReturnType<typeof createServer> {
           handleWritePage(projectId, decodeURIComponent(segments[4]), req, res)
         } else if (segments[0] === 'api' && segments[1] === 'projects' && projectId && segments[3] === 'pages' && segments[4] && segments.length === 5 && req.method === 'DELETE') {
           handleDeletePage(projectId, decodeURIComponent(segments[4]), req, res)
+        } else if (segments[0] === 'api' && segments[1] === 'projects' && projectId && segments[3] === 'pages' && segments[4] === 'reorder' && segments.length === 6 && req.method === 'PUT') {
+          handleReorderPages(projectId, req, res)
         } else {
           handleNotFound(res)
         }
@@ -334,7 +346,7 @@ function handleListPages(projectId: string, _req: IncomingMessage, res: ServerRe
 
   const pages = data.pages
     .map(({ fileName: _, ...meta }) => meta)
-    .sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())
+    .sort((a, b) => a.order - b.order)
 
   res.writeHead(200, { 'Content-Type': 'application/json' })
   res.end(JSON.stringify({ pages }))
@@ -362,9 +374,9 @@ function handleCreatePage(projectId: string, req: IncomingMessage, res: ServerRe
       const id = generateId()
       const pageFileName = sanitizeFileName(name) || `page-${id}`
       const now = new Date().toISOString()
-      const entry: PageIndexEntry = { id, name, createdAt: now, updatedAt: now, fileName: pageFileName }
-
       const data = readPagesIndex(fileName)
+      const entry: PageIndexEntry = { id, name, createdAt: now, updatedAt: now, fileName: pageFileName, order: data.pages.length }
+
       data.pages.push(entry)
       writePagesIndex(fileName, data)
 
@@ -372,7 +384,7 @@ function handleCreatePage(projectId: string, req: IncomingMessage, res: ServerRe
       writeFileSync(mdPath, '# Untitled Page\n\nStart writing your markdown here...\n', 'utf-8')
 
       res.writeHead(200, { 'Content-Type': 'application/json' })
-      res.end(JSON.stringify({ id, name, createdAt: now, updatedAt: now }))
+      res.end(JSON.stringify({ id, name, createdAt: now, updatedAt: now, order: data.pages.length - 1 }))
     } catch {
       res.writeHead(400, { 'Content-Type': 'application/json' })
       res.end(JSON.stringify({ error: 'Invalid request' }))
@@ -472,6 +484,39 @@ function handleDeletePage(projectId: string, pageId: string, _req: IncomingMessa
 
   res.writeHead(200, { 'Content-Type': 'application/json' })
   res.end(JSON.stringify({}))
+}
+
+function handleReorderPages(projectId: string, req: IncomingMessage, res: ServerResponse): void {
+  let body = ''
+  req.on('data', (chunk: Buffer) => { body += chunk.toString() })
+  req.on('end', () => {
+    try {
+      const { pageIds } = JSON.parse(body) as { pageIds: string[] }
+      if (!Array.isArray(pageIds)) {
+        res.writeHead(400, { 'Content-Type': 'application/json' })
+        res.end(JSON.stringify({ error: 'pageIds array required' }))
+        return
+      }
+      const fileName = getProjectFileNameById(projectId)
+      if (!fileName) {
+        res.writeHead(404, { 'Content-Type': 'application/json' })
+        res.end(JSON.stringify({ error: 'Not Found' }))
+        return
+      }
+      const data = readPagesIndex(fileName)
+      const idToEntry = new Map(data.pages.map((p) => [p.id, p]))
+      for (let i = 0; i < pageIds.length; i++) {
+        const entry = idToEntry.get(pageIds[i])
+        if (entry) entry.order = i
+      }
+      writePagesIndex(fileName, data)
+      res.writeHead(200, { 'Content-Type': 'application/json' })
+      res.end(JSON.stringify({}))
+    } catch {
+      res.writeHead(400, { 'Content-Type': 'application/json' })
+      res.end(JSON.stringify({ error: 'Invalid request' }))
+    }
+  })
 }
 
 function handleDeleteProject(id: string, _req: IncomingMessage, res: ServerResponse): void {

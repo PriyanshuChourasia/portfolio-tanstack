@@ -144,7 +144,18 @@ async function readPagesIndex(
 ): Promise<{ pages: Array<PageIndexEntry> }> {
   const raw = await readFile(root, `projects/${projectFileName}/index.json`)
   if (!raw) return { pages: [] }
-  try { return JSON.parse(raw) } catch { return { pages: [] } }
+  try {
+    const data = JSON.parse(raw) as { pages: Array<PageIndexEntry> }
+    let changed = false
+    for (const p of data.pages) {
+      if (p.order === undefined) {
+        p.order = data.pages.indexOf(p)
+        changed = true
+      }
+    }
+    if (changed) await writePagesIndex(root, projectFileName, data)
+    return data
+  } catch { return { pages: [] } }
 }
 
 async function writePagesIndex(
@@ -166,7 +177,7 @@ async function migrateLegacyProject(
   if (legacyContent === null) return null
   if (legacyContent.trim() === '' || legacyContent.trim() === LEGACY_SEED_CONTENT.trim()) return null
   const now = new Date().toISOString()
-  const entry: PageIndexEntry = { id: generateId(), name: 'Home', createdAt: now, updatedAt: now, fileName: 'home' }
+  const entry: PageIndexEntry = { id: generateId(), name: 'Home', createdAt: now, updatedAt: now, fileName: 'home', order: 0 }
   const index = { pages: [entry] }
   await writeFile(root, `projects/${projectFileName}/home.md`, legacyContent)
   await writePagesIndex(root, projectFileName, index)
@@ -258,7 +269,7 @@ export const webAdapter: StorageAdapter = {
     }
     return [...index.pages]
       .map(({ fileName: _, ...meta }) => meta)
-      .sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())
+      .sort((a, b) => a.order - b.order)
   },
 
   async createPage(projectId: string, name: string): Promise<PageMeta> {
@@ -268,12 +279,12 @@ export const webAdapter: StorageAdapter = {
     const id = generateId()
     const fileName = sanitizeFileName(name) || `page-${id}`
     const now = new Date().toISOString()
-    const meta: PageIndexEntry = { id, name, createdAt: now, updatedAt: now, fileName }
     const index = await readPagesIndex(h, projectFileName)
+    const meta: PageIndexEntry = { id, name, createdAt: now, updatedAt: now, fileName, order: index.pages.length }
     index.pages.push(meta)
     await writePagesIndex(h, projectFileName, index)
     await writeFile(h, `projects/${projectFileName}/${fileName}.md`, SEED_CONTENT)
-    return { id, name, createdAt: now, updatedAt: now }
+    return { id, name, createdAt: now, updatedAt: now, order: index.pages.length - 1 }
   },
 
   async readPage(projectId: string, pageId: string): Promise<string> {
@@ -296,6 +307,19 @@ export const webAdapter: StorageAdapter = {
     entry.updatedAt = new Date().toISOString()
     await writePagesIndex(h, projectFileName, index)
     await writeFile(h, `projects/${projectFileName}/${entry.fileName}.md`, content)
+  },
+
+  async reorderPages(projectId: string, orderedPageIds: string[]): Promise<void> {
+    const h = await ensureHandle()
+    const projectFileName = await getProjectFileName(h, projectId)
+    if (!projectFileName) return
+    const index = await readPagesIndex(h, projectFileName)
+    const idToEntry = new Map(index.pages.map((p) => [p.id, p]))
+    for (let i = 0; i < orderedPageIds.length; i++) {
+      const entry = idToEntry.get(orderedPageIds[i])
+      if (entry) entry.order = i
+    }
+    await writePagesIndex(h, projectFileName, index)
   },
 
   async deletePage(projectId: string, pageId: string): Promise<void> {
