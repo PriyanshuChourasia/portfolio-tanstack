@@ -1,6 +1,6 @@
 {
   "name": "@pcoder/markdown-ai",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "A local-first Markdown workspace you run on your own machine — install with npm, no account, no cloud, files stay on your device.",
   "keywords": [
     "markdown",
@@ -33,6 +33,7 @@
     "postinstall": "node scripts/postinstall.js"
   },
   "bin": {
+    "markdown": "bin/markdown-ai.js",
     "markdown-ai": "bin/markdown-ai.js"
   },
   "files": [

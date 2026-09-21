@@ -5,7 +5,6 @@ const DB_VERSION = 1
 const STORE_NAME = 'handles'
 const ROOT_KEY = 'root-handle'
 const SEED_CONTENT = `# Untitled Page\n\nStart writing your markdown here...\n`
-// What createProject used to seed every project's single .md file with, before pages existed.
 const LEGACY_SEED_CONTENT = `# Untitled Project\n\nStart writing your markdown here...\n`
 
 function openDB(): Promise<IDBDatabase> {
@@ -167,8 +166,6 @@ async function writePagesIndex(
   await writeFile(root, `projects/${projectFileName}/index.json`, JSON.stringify(index, null, 2))
 }
 
-/** Projects created before multi-page support have their content directly at `projects/<fileName>.md`.
- * The first time pages are listed for one of those, fold that content into a single "Home" page. */
 async function migrateLegacyProject(
   root: FileSystemDirectoryHandle,
   projectFileName: string,
@@ -221,16 +218,27 @@ export const webAdapter: StorageAdapter = {
     const h = await ensureHandle()
     const index = await readIndex(h)
     return [...index.projects]
-      .map(({ fileName: _, ...meta }) => meta)
+      .map(({ fileName: _, ...meta }) => ({ ...meta, path: h.name }))
       .sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())
   },
 
-  async createProject(name: string): Promise<ProjectMeta> {
+  async pickProjectFolder(): Promise<string | null> {
+    try {
+      const handle = await window.showDirectoryPicker({ mode: 'readwrite' })
+      dirHandle = handle
+      await saveHandle(handle)
+      return handle.name
+    } catch {
+      return null
+    }
+  },
+
+  async createProject(name: string, path: string): Promise<ProjectMeta> {
     const h = await ensureHandle()
     const id = generateId()
     const fileName = sanitizeFileName(name) || `project-${id}`
     const now = new Date().toISOString()
-    const meta: ProjectIndexEntry = { id, name, createdAt: now, updatedAt: now, fileName }
+    const meta: ProjectIndexEntry = { id, name, path, createdAt: now, updatedAt: now, fileName }
     const index = await readIndex(h)
     index.projects.push(meta)
     await writeIndex(h, index)
@@ -240,7 +248,7 @@ export const webAdapter: StorageAdapter = {
     const projectInfo = { name, location, createdAt: now }
     await writeFile(h, `projects/${fileName}.json`, JSON.stringify(projectInfo, null, 2))
 
-    return { id, name, createdAt: now, updatedAt: now }
+    return { id, name, path, createdAt: now, updatedAt: now }
   },
 
   async deleteProject(id: string): Promise<void> {

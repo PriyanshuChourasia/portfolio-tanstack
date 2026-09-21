@@ -1,6 +1,7 @@
 export interface ProjectMeta {
   id: string
   name: string
+  path: string
   createdAt: string
   updatedAt: string
 }
@@ -26,7 +27,8 @@ export interface StorageAdapter {
   readConfig(): Promise<UserConfig | null>
   writeConfig(config: UserConfig): Promise<void>
   listProjects(): Promise<ProjectMeta[]>
-  createProject(name: string): Promise<ProjectMeta>
+  pickProjectFolder(): Promise<string | null>
+  createProject(name: string, path: string): Promise<ProjectMeta>
   deleteProject(id: string): Promise<void>
   listPages(projectId: string): Promise<PageMeta[]>
   createPage(projectId: string, name: string): Promise<PageMeta>

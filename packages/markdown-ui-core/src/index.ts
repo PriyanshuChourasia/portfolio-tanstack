@@ -9,3 +9,4 @@ export type {
 export { Button } from './components/ui/button'
 export { Dialog } from './components/ui/dialog'
 export { remarkNote } from './lib/remark-note'
+export { remarkTextColor } from './lib/remark-text-color'

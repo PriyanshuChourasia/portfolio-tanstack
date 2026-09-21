@@ -1,6 +1,7 @@
 import { createServer, IncomingMessage, ServerResponse } from 'node:http'
 import { existsSync, mkdirSync, readFileSync, rmSync, unlinkSync, writeFileSync } from 'node:fs'
-import { dirname, join, resolve } from 'node:path'
+import { execSync } from 'node:child_process'
+import { dirname, join, resolve, basename } from 'node:path'
 import { getDefaultConfigPath } from './config-path.js'
 
 function generateId(): string {
@@ -14,12 +15,13 @@ function sanitizeFileName(name: string): string {
 interface IndexEntry {
   id: string
   name: string
+  path: string
+  fileName: string
   createdAt: string
   updatedAt: string
-  fileName: string
 }
 
-interface IndexData {
+interface RegistryData {
   projects: IndexEntry[]
 }
 
@@ -36,46 +38,81 @@ interface PagesIndexData {
   pages: Array<PageIndexEntry>
 }
 
+const LEGACY_SEED_CONTENT = '# Untitled Project\n\nStart writing your markdown here...\n'
+
+function getConfigDir(): string {
+  return dirname(getDefaultConfigPath())
+}
+
 function getProjectsDir(): string {
-  return join(dirname(getDefaultConfigPath()), 'projects')
+  return join(getConfigDir(), 'projects')
 }
 
-function getProjectDir(projectFileName: string): string {
-  return join(getProjectsDir(), projectFileName)
+function getRegistryPath(): string {
+  return join(getConfigDir(), 'projects.json')
 }
 
-function readIndex(): IndexData {
-  const projectsDir = getProjectsDir()
-  if (!existsSync(projectsDir)) {
-    mkdirSync(projectsDir, { recursive: true })
+function getProjectDir(projectPath: string): string {
+  return projectPath
+}
+
+function readRegistry(): RegistryData {
+  const registryPath = getRegistryPath()
+  if (!existsSync(registryPath)) {
+    migrateFromLegacyIfNeeded()
   }
-  const indexPath = join(projectsDir, 'index.json')
-  if (!existsSync(indexPath)) {
+  if (!existsSync(registryPath)) {
     return { projects: [] }
   }
   try {
-    const content = readFileSync(indexPath, 'utf-8')
-    return JSON.parse(content) as IndexData
+    const content = readFileSync(registryPath, 'utf-8')
+    return JSON.parse(content) as RegistryData
   } catch {
     return { projects: [] }
   }
 }
 
-function writeIndex(data: IndexData): void {
-  const projectsDir = getProjectsDir()
-  if (!existsSync(projectsDir)) {
-    mkdirSync(projectsDir, { recursive: true })
+function writeRegistry(data: RegistryData): void {
+  const configDir = getConfigDir()
+  if (!existsSync(configDir)) {
+    mkdirSync(configDir, { recursive: true })
   }
-  const indexPath = join(projectsDir, 'index.json')
-  writeFileSync(indexPath, JSON.stringify(data, null, 2), 'utf-8')
+  writeFileSync(getRegistryPath(), JSON.stringify(data, null, 2), 'utf-8')
 }
 
-function getProjectFileNameById(id: string): string | null {
-  return readIndex().projects.find((p) => p.id === id)?.fileName ?? null
+function migrateFromLegacyIfNeeded(): void {
+  const newRegistryPath = getRegistryPath()
+  if (existsSync(newRegistryPath)) return
+
+  const legacyDir = getProjectsDir()
+  const legacyIndexPath = join(legacyDir, 'index.json')
+  if (!existsSync(legacyIndexPath)) return
+
+  try {
+    const content = readFileSync(legacyIndexPath, 'utf-8')
+    const oldData = JSON.parse(content) as { projects: Array<{ id: string; name: string; createdAt: string; updatedAt: string; fileName: string }> }
+    if (!oldData.projects || !Array.isArray(oldData.projects)) return
+
+    const newProjects: IndexEntry[] = oldData.projects.map((entry) => {
+      const projectPath = join(getProjectsDir(), entry.fileName)
+      return {
+        ...entry,
+        path: projectPath,
+      }
+    })
+    const newData: RegistryData = { projects: newProjects }
+    writeRegistry(newData)
+  } catch {
+    // Migration failed, start fresh
+  }
 }
 
-function readPagesIndex(projectFileName: string): PagesIndexData {
-  const indexPath = join(getProjectDir(projectFileName), 'index.json')
+function getProjectPathById(id: string): string | null {
+  return readRegistry().projects.find((p) => p.id === id)?.path ?? null
+}
+
+function readPagesIndex(projectPath: string): PagesIndexData {
+  const indexPath = join(getProjectDir(projectPath), 'index.json')
   if (!existsSync(indexPath)) return { pages: [] }
   try {
     const data = JSON.parse(readFileSync(indexPath, 'utf-8')) as PagesIndexData
@@ -86,37 +123,31 @@ function readPagesIndex(projectFileName: string): PagesIndexData {
         changed = true
       }
     }
-    if (changed) writePagesIndex(projectFileName, data)
+    if (changed) writePagesIndex(projectPath, data)
     return data
   } catch {
     return { pages: [] }
   }
 }
 
-function writePagesIndex(projectFileName: string, data: PagesIndexData): void {
-  const dir = getProjectDir(projectFileName)
+function writePagesIndex(projectPath: string, data: PagesIndexData): void {
+  const dir = getProjectDir(projectPath)
   if (!existsSync(dir)) mkdirSync(dir, { recursive: true })
   writeFileSync(join(dir, 'index.json'), JSON.stringify(data, null, 2), 'utf-8')
 }
 
-// What createProject used to seed every project's single .md file with, before pages existed.
-const LEGACY_SEED_CONTENT = '# Untitled Project\n\nStart writing your markdown here...\n'
-
-/** Projects created before multi-page support have their content directly at `projects/<fileName>.md`.
- * The first time pages are listed for one of those, fold that content into a single "Home" page
- * (unless it's just the old placeholder text, in which case there's nothing worth keeping). */
-function migrateLegacyProject(projectFileName: string): PagesIndexData | null {
-  const legacyPath = join(getProjectsDir(), `${projectFileName}.md`)
-  if (!existsSync(legacyPath)) return null
-  const content = readFileSync(legacyPath, 'utf-8')
+function migrateLegacyProject(projectPath: string): PagesIndexData | null {
+  const legacyMdPath = join(getProjectsDir(), `${basename(projectPath)}.md`)
+  if (!existsSync(legacyMdPath)) return null
+  const content = readFileSync(legacyMdPath, 'utf-8')
   if (content.trim() === '' || content.trim() === LEGACY_SEED_CONTENT.trim()) return null
   const now = new Date().toISOString()
   const entry: PageIndexEntry = { id: generateId(), name: 'Home', createdAt: now, updatedAt: now, fileName: 'home', order: 0 }
   const data: PagesIndexData = { pages: [entry] }
-  const dir = getProjectDir(projectFileName)
+  const dir = getProjectDir(projectPath)
   if (!existsSync(dir)) mkdirSync(dir, { recursive: true })
   writeFileSync(join(dir, 'home.md'), content, 'utf-8')
-  writePagesIndex(projectFileName, data)
+  writePagesIndex(projectPath, data)
   return data
 }
 
@@ -127,23 +158,21 @@ export function startServer(port = 4321): ReturnType<typeof createServer> {
     const url = new URL(req.url ?? '/', `http://${req.headers.host ?? 'localhost'}`)
     const pathname = url.pathname
 
-    // API routes
     if (pathname.startsWith('/api/')) {
-      // Config routes
       if (pathname === '/api/config' && req.method === 'GET') {
         handleGetConfig(req, res)
       } else if (pathname === '/api/config-path' && req.method === 'GET') {
         handleGetConfigPath(req, res)
       } else if (pathname === '/api/config' && req.method === 'PUT') {
         handlePutConfig(req, res)
-      }
-      // Project routes
-      else if (pathname === '/api/projects' && req.method === 'GET') {
+      } else if (pathname === '/api/pick-folder' && req.method === 'POST') {
+        handlePickFolder(req, res)
+      } else if (pathname === '/api/projects' && req.method === 'GET') {
         handleListProjects(req, res)
       } else if (pathname === '/api/projects' && req.method === 'POST') {
         handleCreateProject(req, res)
       } else {
-        const segments = pathname.split('/').filter(Boolean) // ['api', 'projects', id, 'pages'?, pageId?]
+        const segments = pathname.split('/').filter(Boolean)
         const projectId = segments[2] ? decodeURIComponent(segments[2]) : null
 
         if (segments[0] === 'api' && segments[1] === 'projects' && projectId && segments.length === 3 && req.method === 'DELETE') {
@@ -167,7 +196,6 @@ export function startServer(port = 4321): ReturnType<typeof createServer> {
       return
     }
 
-    // Static file serving
     const filePath = join(DIST_DIR, pathname === '/' ? 'index.html' : pathname)
     serveStaticFile(req, res, filePath, DIST_DIR)
   })
@@ -187,7 +215,6 @@ function serveStaticFile(_req: IncomingMessage, res: ServerResponse, filePath: s
     res.writeHead(200, { 'Content-Type': contentType })
     res.end(buffer)
   } else {
-    // SPA fallback
     const indexPath = join(DIST_DIR, 'index.html')
     if (existsSync(indexPath)) {
       const content = readFileSync(indexPath, 'utf-8')
@@ -246,16 +273,12 @@ function handlePutConfig(req: IncomingMessage, res: ServerResponse): void {
   req.on('end', () => {
     try {
       const config = JSON.parse(body)
-
       const configPath = getDefaultConfigPath()
       const configDir = dirname(configPath)
-
       if (!existsSync(configDir)) {
         mkdirSync(configDir, { recursive: true })
       }
-
       writeFileSync(configPath, JSON.stringify(config, null, 2), 'utf-8')
-
       res.writeHead(200, { 'Content-Type': 'application/json' })
       res.end(JSON.stringify(config))
     } catch {
@@ -267,9 +290,57 @@ function handlePutConfig(req: IncomingMessage, res: ServerResponse): void {
 
 function handleGetConfigPath(_req: IncomingMessage, res: ServerResponse): void {
   const configPath = getDefaultConfigPath()
-
   res.writeHead(200, { 'Content-Type': 'application/json' })
   res.end(JSON.stringify({ path: configPath }))
+}
+
+function handlePickFolder(req: IncomingMessage, res: ServerResponse): void {
+  let body = ''
+  req.on('data', (chunk: Buffer) => { body += chunk.toString() })
+  req.on('end', () => {
+    try {
+      const path = pickFolderNative()
+      res.writeHead(200, { 'Content-Type': 'application/json' })
+      res.end(JSON.stringify({ path }))
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : 'Unknown error'
+      res.writeHead(200, { 'Content-Type': 'application/json' })
+      res.end(JSON.stringify({ error: msg }))
+    }
+  })
+}
+
+function pickFolderNative(): string | null {
+  const platform = process.platform
+
+  try {
+    let result: string
+
+    if (platform === 'darwin') {
+      result = execSync("osascript -e 'POSIX path of (choose folder)'", { encoding: 'utf-8', timeout: 30000 }).trim()
+    } else if (platform === 'win32') {
+      const psScript = `Add-Type -AssemblyName System.Windows.Forms; $dlg = New-Object System.Windows.Forms.FolderBrowserDialog; $dlg.ShowDialog(); if ($dlg.SelectedPath) { $dlg.SelectedPath }`
+      result = execSync(`powershell -Command "${psScript}"`, { encoding: 'utf-8', timeout: 30000 }).trim()
+    } else {
+      try {
+        result = execSync('zenity --file-selection --directory', { encoding: 'utf-8', timeout: 30000 }).trim()
+      } catch {
+        try {
+          result = execSync('kdialog --getexistingdirectory', { encoding: 'utf-8', timeout: 30000 }).trim()
+        } catch {
+          throw new Error('No folder dialog tool found — install zenity or kdialog')
+        }
+      }
+    }
+
+    if (!result || result.trim() === '') return null
+    return result.trim()
+  } catch (err) {
+    if (err instanceof Error && err.message.includes('No folder dialog tool')) {
+      throw err
+    }
+    return null
+  }
 }
 
 function handleNotFound(res: ServerResponse): void {
@@ -278,8 +349,8 @@ function handleNotFound(res: ServerResponse): void {
 }
 
 function handleListProjects(_req: IncomingMessage, res: ServerResponse): void {
-  const index = readIndex()
-  const projects = index.projects
+  const registry = readRegistry()
+  const projects = registry.projects
     .map(({ fileName: _, ...meta }) => meta)
     .sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())
 
@@ -292,35 +363,40 @@ function handleCreateProject(req: IncomingMessage, res: ServerResponse): void {
   req.on('data', (chunk: Buffer) => { body += chunk.toString() })
   req.on('end', () => {
     try {
-      const { name } = JSON.parse(body) as { name: string }
+      const { name, path: projectPath } = JSON.parse(body) as { name: string; path: string }
       if (!name || typeof name !== 'string') {
         res.writeHead(400, { 'Content-Type': 'application/json' })
         res.end(JSON.stringify({ error: 'Name is required' }))
+        return
+      }
+      if (!projectPath || typeof projectPath !== 'string') {
+        res.writeHead(400, { 'Content-Type': 'application/json' })
+        res.end(JSON.stringify({ error: 'Path is required' }))
+        return
+      }
+      if (!existsSync(projectPath)) {
+        res.writeHead(400, { 'Content-Type': 'application/json' })
+        res.end(JSON.stringify({ error: 'Directory does not exist' }))
+        return
+      }
+      try {
+        const testFile = join(projectPath, `.write-test-${Date.now()}`)
+        writeFileSync(testFile, 'test')
+        unlinkSync(testFile)
+      } catch {
+        res.writeHead(400, { 'Content-Type': 'application/json' })
+        res.end(JSON.stringify({ error: 'Directory is not writable' }))
         return
       }
 
       const id = generateId()
       const fileName = sanitizeFileName(name) || `project-${id}`
       const now = new Date().toISOString()
-      const entry: IndexEntry = { id, name, createdAt: now, updatedAt: now, fileName }
+      const entry: IndexEntry = { id, name, path: projectPath, fileName, createdAt: now, updatedAt: now }
 
-      const index = readIndex()
-      index.projects.push(entry)
-      writeIndex(index)
-
-      const projectsDir = getProjectsDir()
-
-      let location = ''
-      const configPath = getDefaultConfigPath()
-      if (existsSync(configPath)) {
-        try {
-          location = (JSON.parse(readFileSync(configPath, 'utf-8')) as { locationLabel?: string }).locationLabel ?? ''
-        } catch {
-          location = ''
-        }
-      }
-      const jsonPath = join(projectsDir, `${fileName}.json`)
-      writeFileSync(jsonPath, JSON.stringify({ name, location, createdAt: now }, null, 2), 'utf-8')
+      const registry = readRegistry()
+      registry.projects.push(entry)
+      writeRegistry(registry)
 
       res.writeHead(200, { 'Content-Type': 'application/json' })
       res.end(JSON.stringify({ id, name, createdAt: now, updatedAt: now }))
@@ -332,16 +408,16 @@ function handleCreateProject(req: IncomingMessage, res: ServerResponse): void {
 }
 
 function handleListPages(projectId: string, _req: IncomingMessage, res: ServerResponse): void {
-  const fileName = getProjectFileNameById(projectId)
-  if (!fileName) {
+  const projectPath = getProjectPathById(projectId)
+  if (!projectPath) {
     res.writeHead(404, { 'Content-Type': 'application/json' })
     res.end(JSON.stringify({ error: 'Not Found' }))
     return
   }
 
-  let data = readPagesIndex(fileName)
+  let data = readPagesIndex(projectPath)
   if (data.pages.length === 0) {
-    data = migrateLegacyProject(fileName) ?? data
+    data = migrateLegacyProject(projectPath) ?? data
   }
 
   const pages = data.pages
@@ -364,8 +440,8 @@ function handleCreatePage(projectId: string, req: IncomingMessage, res: ServerRe
         return
       }
 
-      const fileName = getProjectFileNameById(projectId)
-      if (!fileName) {
+      const projectPath = getProjectPathById(projectId)
+      if (!projectPath) {
         res.writeHead(404, { 'Content-Type': 'application/json' })
         res.end(JSON.stringify({ error: 'Not Found' }))
         return
@@ -374,13 +450,13 @@ function handleCreatePage(projectId: string, req: IncomingMessage, res: ServerRe
       const id = generateId()
       const pageFileName = sanitizeFileName(name) || `page-${id}`
       const now = new Date().toISOString()
-      const data = readPagesIndex(fileName)
+      const data = readPagesIndex(projectPath)
       const entry: PageIndexEntry = { id, name, createdAt: now, updatedAt: now, fileName: pageFileName, order: data.pages.length }
 
       data.pages.push(entry)
-      writePagesIndex(fileName, data)
+      writePagesIndex(projectPath, data)
 
-      const mdPath = join(getProjectDir(fileName), `${pageFileName}.md`)
+      const mdPath = join(getProjectDir(projectPath), `${pageFileName}.md`)
       writeFileSync(mdPath, '# Untitled Page\n\nStart writing your markdown here...\n', 'utf-8')
 
       res.writeHead(200, { 'Content-Type': 'application/json' })
@@ -393,14 +469,14 @@ function handleCreatePage(projectId: string, req: IncomingMessage, res: ServerRe
 }
 
 function handleReadPage(projectId: string, pageId: string, _req: IncomingMessage, res: ServerResponse): void {
-  const fileName = getProjectFileNameById(projectId)
-  if (!fileName) {
+  const projectPath = getProjectPathById(projectId)
+  if (!projectPath) {
     res.writeHead(404, { 'Content-Type': 'application/json' })
     res.end(JSON.stringify({ error: 'Not Found' }))
     return
   }
 
-  const data = readPagesIndex(fileName)
+  const data = readPagesIndex(projectPath)
   const entry = data.pages.find((p) => p.id === pageId)
   if (!entry) {
     res.writeHead(404, { 'Content-Type': 'application/json' })
@@ -408,7 +484,7 @@ function handleReadPage(projectId: string, pageId: string, _req: IncomingMessage
     return
   }
 
-  const filePath = join(getProjectDir(fileName), `${entry.fileName}.md`)
+  const filePath = join(getProjectDir(projectPath), `${entry.fileName}.md`)
   if (!existsSync(filePath)) {
     res.writeHead(200, { 'Content-Type': 'application/json' })
     res.end(JSON.stringify({ content: '' }))
@@ -427,14 +503,14 @@ function handleWritePage(projectId: string, pageId: string, req: IncomingMessage
     try {
       const { content } = JSON.parse(body) as { content: string }
 
-      const fileName = getProjectFileNameById(projectId)
-      if (!fileName) {
+      const projectPath = getProjectPathById(projectId)
+      if (!projectPath) {
         res.writeHead(404, { 'Content-Type': 'application/json' })
         res.end(JSON.stringify({ error: 'Not Found' }))
         return
       }
 
-      const data = readPagesIndex(fileName)
+      const data = readPagesIndex(projectPath)
       const entry = data.pages.find((p) => p.id === pageId)
       if (!entry) {
         res.writeHead(404, { 'Content-Type': 'application/json' })
@@ -443,9 +519,9 @@ function handleWritePage(projectId: string, pageId: string, req: IncomingMessage
       }
 
       entry.updatedAt = new Date().toISOString()
-      writePagesIndex(fileName, data)
+      writePagesIndex(projectPath, data)
 
-      const mdPath = join(getProjectDir(fileName), `${entry.fileName}.md`)
+      const mdPath = join(getProjectDir(projectPath), `${entry.fileName}.md`)
       writeFileSync(mdPath, content, 'utf-8')
 
       res.writeHead(200, { 'Content-Type': 'application/json' })
@@ -458,14 +534,14 @@ function handleWritePage(projectId: string, pageId: string, req: IncomingMessage
 }
 
 function handleDeletePage(projectId: string, pageId: string, _req: IncomingMessage, res: ServerResponse): void {
-  const fileName = getProjectFileNameById(projectId)
-  if (!fileName) {
+  const projectPath = getProjectPathById(projectId)
+  if (!projectPath) {
     res.writeHead(404, { 'Content-Type': 'application/json' })
     res.end(JSON.stringify({ error: 'Not Found' }))
     return
   }
 
-  const data = readPagesIndex(fileName)
+  const data = readPagesIndex(projectPath)
   const entry = data.pages.find((p) => p.id === pageId)
   if (!entry) {
     res.writeHead(404, { 'Content-Type': 'application/json' })
@@ -474,10 +550,10 @@ function handleDeletePage(projectId: string, pageId: string, _req: IncomingMessa
   }
 
   data.pages = data.pages.filter((p) => p.id !== pageId)
-  writePagesIndex(fileName, data)
+  writePagesIndex(projectPath, data)
 
   try {
-    unlinkSync(join(getProjectDir(fileName), `${entry.fileName}.md`))
+    unlinkSync(join(getProjectDir(projectPath), `${entry.fileName}.md`))
   } catch {
     // File might not exist, that's ok
   }
@@ -497,19 +573,19 @@ function handleReorderPages(projectId: string, req: IncomingMessage, res: Server
         res.end(JSON.stringify({ error: 'pageIds array required' }))
         return
       }
-      const fileName = getProjectFileNameById(projectId)
-      if (!fileName) {
+      const projectPath = getProjectPathById(projectId)
+      if (!projectPath) {
         res.writeHead(404, { 'Content-Type': 'application/json' })
         res.end(JSON.stringify({ error: 'Not Found' }))
         return
       }
-      const data = readPagesIndex(fileName)
+      const data = readPagesIndex(projectPath)
       const idToEntry = new Map(data.pages.map((p) => [p.id, p]))
       for (let i = 0; i < pageIds.length; i++) {
         const entry = idToEntry.get(pageIds[i])
         if (entry) entry.order = i
       }
-      writePagesIndex(fileName, data)
+      writePagesIndex(projectPath, data)
       res.writeHead(200, { 'Content-Type': 'application/json' })
       res.end(JSON.stringify({}))
     } catch {
@@ -520,8 +596,8 @@ function handleReorderPages(projectId: string, req: IncomingMessage, res: Server
 }
 
 function handleDeleteProject(id: string, _req: IncomingMessage, res: ServerResponse): void {
-  const index = readIndex()
-  const entry = index.projects.find((p) => p.id === id)
+  const registry = readRegistry()
+  const entry = registry.projects.find((p) => p.id === id)
 
   if (!entry) {
     res.writeHead(404, { 'Content-Type': 'application/json' })
@@ -529,27 +605,24 @@ function handleDeleteProject(id: string, _req: IncomingMessage, res: ServerRespo
     return
   }
 
-  index.projects = index.projects.filter((p) => p.id !== id)
-  writeIndex(index)
+  registry.projects = registry.projects.filter((p) => p.id !== id)
+  writeRegistry(registry)
 
-  const projectsDir = getProjectsDir()
-  const mdPath = join(projectsDir, `${entry.fileName}.md`)
   try {
-    unlinkSync(mdPath)
-  } catch {
-    // File might not exist, that's ok
-  }
-  const jsonPath = join(projectsDir, `${entry.fileName}.json`)
-  try {
-    unlinkSync(jsonPath)
-  } catch {
-    // File might not exist, that's ok
-  }
-  try {
-    rmSync(getProjectDir(entry.fileName), { recursive: true, force: true })
+    rmSync(getProjectDir(entry.path), { recursive: true, force: true })
   } catch {
     // Directory might not exist, that's ok
   }
+
+  const oldProjectsDir = getProjectsDir()
+  try {
+    const legacyMdPath = join(oldProjectsDir, `${entry.fileName}.md`)
+    unlinkSync(legacyMdPath)
+  } catch { /* might not exist */ }
+  try {
+    const legacyJsonPath = join(oldProjectsDir, `${entry.fileName}.json`)
+    unlinkSync(legacyJsonPath)
+  } catch { /* might not exist */ }
 
   res.writeHead(200, { 'Content-Type': 'application/json' })
   res.end(JSON.stringify({}))

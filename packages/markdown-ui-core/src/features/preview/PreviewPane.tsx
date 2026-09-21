@@ -3,6 +3,7 @@ import remarkGfm from 'remark-gfm'
 import rehypeHighlight from 'rehype-highlight'
 import { remarkHighlight } from '../../lib/remark-highlight'
 import { remarkNote } from '../../lib/remark-note'
+import { remarkTextColor } from '../../lib/remark-text-color'
 
 interface PreviewPaneProps {
   markdown: string
@@ -12,7 +13,7 @@ export function PreviewPane({ markdown }: PreviewPaneProps) {
   return (
     <div className="flex-1 overflow-y-auto min-h-0 p-6 prose prose-sm dark:prose-invert max-w-none">
       <Markdown
-        remarkPlugins={[remarkGfm, remarkHighlight, remarkNote]}
+        remarkPlugins={[remarkGfm, remarkHighlight, remarkNote, remarkTextColor]}
         rehypePlugins={[rehypeHighlight]}
         components={{
           table: ({ children, ...props }) => (

@@ -2,7 +2,6 @@ import type { PageMeta, ProjectMeta, StorageAdapter, UserConfig } from 'markdown
 
 const API_BASE = '/api'
 
-// Cached config path - populated during startup
 let cachedConfigPath: string | null = null
 
 function apiFetch(path: string, options?: RequestInit): Promise<Response> {
@@ -17,7 +16,6 @@ function checkResponse(res: Response): Promise<Response> {
     return res.json().then((data) => {
       throw new Error(data.error ?? `Request failed with status ${res.status}`)
     }).then(() => {
-      // Re-throw with the original status info
       throw new Error(`Request failed with status ${res.status}`)
     })
   }
@@ -30,7 +28,6 @@ export function cacheConfigPath(path: string): void {
 
 export const serverAdapter: StorageAdapter = {
   async pickLocation(): Promise<string> {
-    // Return the fixed storage location used by the local server
     try {
       const res = await apiFetch('/config-path')
       if (!res.ok) throw new Error('Server unavailable')
@@ -47,13 +44,10 @@ export const serverAdapter: StorageAdapter = {
   },
 
   getDefaultLocationLabel(): string {
-    // Return the resolved config path as a human-readable string
-    // Uses cached value from startup fetch, or falls back to a placeholder
     return cachedConfigPath ?? 'Local Markdown-AI Storage'
   },
 
   getLocationNote(): string | null {
-    // Server mode already resolves and shows the real OS path
     return null
   },
 
@@ -79,10 +73,18 @@ export const serverAdapter: StorageAdapter = {
     return data.projects ?? []
   },
 
-  async createProject(name: string): Promise<ProjectMeta> {
+  async pickProjectFolder(): Promise<string | null> {
+    const res = await apiFetch('/pick-folder', { method: 'POST' })
+    await checkResponse(res)
+    const data = await res.json()
+    if (data.error) throw new Error(data.error)
+    return data.path ?? null
+  },
+
+  async createProject(name: string, path: string): Promise<ProjectMeta> {
     const res = await apiFetch('/projects', {
       method: 'POST',
-      body: JSON.stringify({ name }),
+      body: JSON.stringify({ name, path }),
     })
     await checkResponse(res)
     return res.json()

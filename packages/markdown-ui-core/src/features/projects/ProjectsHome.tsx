@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Plus, FileText, Trash2, FolderOpen } from 'lucide-react'
+import { Plus, FileText, Trash2, FolderOpen, FolderPlus } from 'lucide-react'
 import { Button } from '../../components/ui/button'
 import { Dialog } from '../../components/ui/dialog'
 import { useStorage } from '../../lib/context'
@@ -17,6 +17,8 @@ export function ProjectsHome({ onSelectProject }: ProjectsHomeProps) {
   const [configCreatedAt, setConfigCreatedAt] = useState<string | null>(null)
   const [showDialog, setShowDialog] = useState(false)
   const [newName, setNewName] = useState('')
+  const [selectedPath, setSelectedPath] = useState<string | null>(null)
+  const [pickingFolder, setPickingFolder] = useState(false)
 
   useEffect(() => {
     let cancelled = false
@@ -43,13 +45,28 @@ export function ProjectsHome({ onSelectProject }: ProjectsHomeProps) {
     }
   }, [adapter])
 
+  const handlePickFolder = async () => {
+    setPickingFolder(true)
+    try {
+      const path = await adapter.pickProjectFolder()
+      if (path) {
+        setSelectedPath(path)
+      }
+    } catch {
+      // ignore picker errors
+    } finally {
+      setPickingFolder(false)
+    }
+  }
+
   const handleCreate = async () => {
-    if (!newName.trim() || !location) return
-    const cfg: UserConfig = { locationLabel: location, createdAt: configCreatedAt ?? new Date().toISOString() }
+    if (!newName.trim() || !selectedPath) return
+    const cfg: UserConfig = { locationLabel: location ?? '', createdAt: configCreatedAt ?? new Date().toISOString() }
     await adapter.writeConfig(cfg)
     setConfigCreatedAt(cfg.createdAt)
-    const entry = await adapter.createProject(newName.trim())
+    const entry = await adapter.createProject(newName.trim(), selectedPath)
     setNewName('')
+    setSelectedPath(null)
     setShowDialog(false)
     onSelectProject(entry.id, entry.name)
   }
@@ -60,36 +77,11 @@ export function ProjectsHome({ onSelectProject }: ProjectsHomeProps) {
     setProjects((prev) => prev.filter((p) => p.id !== id))
   }
 
-  const locationPicker = (containerClassName: string) => (
-    <div className={containerClassName}>
-      <div className="flex items-center justify-between w-full">
-        <label className="text-sm text-muted-foreground">Location</label>
-        <span className="text-xs text-muted-foreground truncate max-w-[60%]">
-          {location ?? '...'}
-        </span>
-      </div>
-      <Button
-        type="button"
-        variant="outline"
-        className="w-full justify-start gap-2"
-        onClick={async () => {
-          const label = await adapter.pickLocation()
-          if (label) setLocation(label)
-        }}
-      >
-        <FolderOpen className="h-4 w-4" />
-        Where should the files be kept?
-      </Button>
-      {adapter.getLocationNote() && (
-        <p className="text-xs text-muted-foreground/70">{adapter.getLocationNote()}</p>
-      )}
-    </div>
-  )
-
   const addProjectDialog = () => {
     if (!showDialog) return null
+    const canCreate = newName.trim().length > 0 && selectedPath !== null && selectedPath !== ''
     return (
-      <Dialog open={showDialog} onClose={() => setShowDialog(false)}>
+      <Dialog open={showDialog} onClose={() => { setShowDialog(false); setSelectedPath(null) }}>
         <h3 className="text-lg font-semibold mb-4">Add Project</h3>
         <input
           type="text"
@@ -102,12 +94,35 @@ export function ProjectsHome({ onSelectProject }: ProjectsHomeProps) {
           placeholder="Project name"
           autoFocus
         />
-        {locationPicker('flex flex-col items-start gap-2 w-full mb-4')}
+        <div className="flex flex-col items-start gap-2 w-full mb-4">
+          <label className="text-sm text-muted-foreground">Choose Folder</label>
+          <div className="flex w-full gap-2">
+            <input
+              type="text"
+              value={selectedPath ?? ''}
+              readOnly
+              className="flex-1 rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-ring"
+              placeholder="No folder chosen"
+            />
+            <Button
+              type="button"
+              variant="outline"
+              onClick={handlePickFolder}
+              disabled={pickingFolder}
+            >
+              <FolderPlus className="h-4 w-4 mr-1" />
+              {pickingFolder ? 'Picking...' : 'Choose'}
+            </Button>
+          </div>
+          {selectedPath && (
+            <p className="text-xs text-muted-foreground/70 truncate w-full">{selectedPath}</p>
+          )}
+        </div>
         <div className="flex justify-end gap-2">
-          <Button variant="outline" onClick={() => setShowDialog(false)}>
+          <Button variant="outline" onClick={() => { setShowDialog(false); setSelectedPath(null) }}>
             Cancel
           </Button>
-          <Button onClick={handleCreate} disabled={!newName.trim() || !location}>
+          <Button onClick={handleCreate} disabled={!canCreate}>
             Create
           </Button>
         </div>
@@ -117,15 +132,15 @@ export function ProjectsHome({ onSelectProject }: ProjectsHomeProps) {
 
   const emptyStateCard = () => {
     const nameFilled = newName.trim().length > 0
-    const locationPicked = location !== null && location !== ''
-    const canCreate = nameFilled && locationPicked
+    const folderPicked = selectedPath !== null && selectedPath !== ''
+    const canCreate = nameFilled && folderPicked
 
     const handleCreateFirstProject = async () => {
       if (!canCreate) return
-      const cfg: UserConfig = { locationLabel: location, createdAt: configCreatedAt ?? new Date().toISOString() }
+      const cfg: UserConfig = { locationLabel: location ?? '', createdAt: configCreatedAt ?? new Date().toISOString() }
       await adapter.writeConfig(cfg)
       setConfigCreatedAt(cfg.createdAt)
-      const entry = await adapter.createProject(newName.trim())
+      const entry = await adapter.createProject(newName.trim(), selectedPath as string)
       onSelectProject(entry.id, entry.name)
     }
 
@@ -141,7 +156,30 @@ export function ProjectsHome({ onSelectProject }: ProjectsHomeProps) {
             className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-ring mb-4"
             placeholder="Project name"
           />
-          {locationPicker('flex flex-col items-start gap-2 w-full mb-6')}
+          <div className="flex flex-col items-start gap-2 w-full mb-6">
+            <label className="text-sm text-muted-foreground">Choose Folder</label>
+            <div className="flex w-full gap-2">
+              <input
+                type="text"
+                value={selectedPath ?? ''}
+                readOnly
+                className="flex-1 rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-ring"
+                placeholder="No folder chosen"
+              />
+              <Button
+                type="button"
+                variant="outline"
+                onClick={handlePickFolder}
+                disabled={pickingFolder}
+              >
+                <FolderPlus className="h-4 w-4 mr-1" />
+                {pickingFolder ? 'Picking...' : 'Choose'}
+              </Button>
+            </div>
+            {selectedPath && (
+              <p className="text-xs text-muted-foreground/70 truncate w-full">{selectedPath}</p>
+            )}
+          </div>
           <Button onClick={handleCreateFirstProject} disabled={!canCreate} className="w-full">
             Create Project
           </Button>
@@ -161,6 +199,7 @@ export function ProjectsHome({ onSelectProject }: ProjectsHomeProps) {
           <FileText className="h-5 w-5 mt-0.5 shrink-0 text-muted-foreground" />
           <div className="flex-1 min-w-0">
             <p className="font-medium truncate">{p.name}</p>
+            <p className="text-xs text-muted-foreground mt-0.5 truncate">{p.path}</p>
             <p className="text-xs text-muted-foreground mt-0.5">Updated {timeAgo(p.updatedAt)}</p>
           </div>
           <button
@@ -179,7 +218,7 @@ export function ProjectsHome({ onSelectProject }: ProjectsHomeProps) {
     <div className="flex-1 overflow-y-auto p-6">
       {projects.length > 0 && (
         <div className="flex justify-end mb-6">
-          <Button onClick={() => setShowDialog(true)}>
+          <Button onClick={() => { setShowDialog(true); setSelectedPath(null) }}>
             <Plus className="h-4 w-4 mr-1" />
             Add Project
           </Button>

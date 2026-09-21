@@ -1,53 +1,11 @@
-import { useRef, useState, type ChangeEvent, type KeyboardEvent } from 'react'
-import { Bold, Italic, Highlighter, Image } from 'lucide-react'
+import { useRef, useState, type ChangeEvent, type KeyboardEvent, useEffect } from 'react'
+import { Bold, Italic, Highlighter, Image, Baseline } from 'lucide-react'
 import { Button } from '../../components/ui/button'
 import { HIGHLIGHT_COLORS, type HighlightColor } from '../../lib/remark-highlight'
 
 const NOTE_PREFIX = '%%note:'
 const NOTE_SUFFIX = '%%'
 const NOTES_ENABLED = false
-
-interface EditorPaneProps {
-  value: string
-  onChange: (value: string) => void
-}
-
-const MAX_HEADING_LEVEL = 6
-
-// Mirrors the mark.hl-* colors in styles.css, so the swatch shows what you'll actually get.
-const HIGHLIGHT_SWATCHES: Record<HighlightColor, string> = {
-  yellow: '#fde68a',
-  green: '#bbf7d0',
-  blue: '#bfdbfe',
-  pink: '#fbcfe8',
-  orange: '#fed7aa',
-  purple: '#e9d5ff',
-}
-
-const HIGHLIGHT_BEFORE_RE = new RegExp(`==(${HIGHLIGHT_COLORS.join('|')}):$`)
-const HIGHLIGHT_BEFORE_MAX_LEN = Math.max(...HIGHLIGHT_COLORS.map((c) => c.length)) + 3 // "==" + color + ":"
-
-/** If the selection is already wrapped in `==color:...==`, return that wrapper's bounds and color. */
-function findHighlightWrap(
-  value: string,
-  selectionStart: number,
-  selectionEnd: number,
-): { wrapStart: number; wrapEnd: number; color: HighlightColor } | null {
-  const lookback = value.slice(Math.max(0, selectionStart - HIGHLIGHT_BEFORE_MAX_LEN), selectionStart)
-  const beforeMatch = lookback.match(HIGHLIGHT_BEFORE_RE)
-  if (!beforeMatch || value.slice(selectionEnd, selectionEnd + 2) !== '==') return null
-  return {
-    wrapStart: selectionStart - (lookback.length - beforeMatch.index!),
-    wrapEnd: selectionEnd + 2,
-    color: beforeMatch[1] as HighlightColor,
-  }
-}
-
-function getLineBounds(value: string, pos: number): { lineStart: number; lineEnd: number } {
-  const lineStart = value.lastIndexOf('\n', pos - 1) + 1
-  const nextBreak = value.indexOf('\n', pos)
-  return { lineStart, lineEnd: nextBreak === -1 ? value.length : nextBreak }
-}
 
 /** If the selection is already wrapped in `%%note:<encoded>%%...%%`, return wrapper bounds and decoded note text. */
 function findNoteWrap(
@@ -73,21 +31,108 @@ function findNoteWrap(
   }
 }
 
+interface EditorPaneProps {
+  value: string
+  onChange: (value: string) => void
+}
+
+const MAX_HEADING_LEVEL = 6
+
+const HIGHLIGHT_SWATCHES: Record<HighlightColor, string> = {
+  yellow: '#fde68a',
+  green: '#bbf7d0',
+  blue: '#bfdbfe',
+  pink: '#fbcfe8',
+  orange: '#fed7aa',
+  purple: '#e9d5ff',
+}
+
+const HIGHLIGHT_BEFORE_RE = new RegExp(`==(${HIGHLIGHT_COLORS.join('|')}):$`)
+const HIGHLIGHT_BEFORE_MAX_LEN = Math.max(...HIGHLIGHT_COLORS.map((c) => c.length)) + 3
+
+const TEXTCOLOR_PREFIX_LEN = 17
+const TEXTCOLOR_PREFIX_RE = /%%color:#[0-9A-Fa-f]{6}%%$/
+
+/** If the selection is already wrapped in `==color:...==`, return that wrapper's bounds and color. */
+function findHighlightWrap(
+  value: string,
+  selectionStart: number,
+  selectionEnd: number,
+): { wrapStart: number; wrapEnd: number; color: HighlightColor } | null {
+  const lookback = value.slice(Math.max(0, selectionStart - HIGHLIGHT_BEFORE_MAX_LEN), selectionStart)
+  const beforeMatch = lookback.match(HIGHLIGHT_BEFORE_RE)
+  if (!beforeMatch || value.slice(selectionEnd, selectionEnd + 2) !== '==') return null
+  return {
+    wrapStart: selectionStart - (lookback.length - beforeMatch.index!),
+    wrapEnd: selectionEnd + 2,
+    color: beforeMatch[1] as HighlightColor,
+  }
+}
+
+/** If the selection is already wrapped in `%%color:#RRGGBB%%...%%`, return wrapper bounds and hex. */
+function findTextColorWrap(
+  value: string,
+  selectionStart: number,
+  selectionEnd: number,
+): { wrapStart: number; wrapEnd: number; hex: string } | null {
+  const lookback = value.slice(Math.max(0, selectionStart - TEXTCOLOR_PREFIX_LEN), selectionStart)
+  const beforeMatch = lookback.match(TEXTCOLOR_PREFIX_RE)
+  if (!beforeMatch || value.slice(selectionEnd, selectionEnd + 2) !== '%%') return null
+  const hexMatch = beforeMatch[0].match(/%%color:(#[0-9A-Fa-f]{6})%%$/)
+  if (!hexMatch) return null
+  return {
+    wrapStart: selectionStart - (lookback.length - beforeMatch.index!),
+    wrapEnd: selectionEnd + 2,
+    hex: hexMatch[1],
+  }
+}
+
+function getLineBounds(value: string, pos: number): { lineStart: number; lineEnd: number } {
+  const lineStart = value.lastIndexOf('\n', pos - 1) + 1
+  const nextBreak = value.indexOf('\n', pos)
+  return { lineStart, lineEnd: nextBreak === -1 ? value.length : nextBreak }
+}
+
 function detectHeadingLevel(value: string, pos: number): number {
   const { lineStart, lineEnd } = getLineBounds(value, pos)
   const match = value.slice(lineStart, lineEnd).match(/^(#{1,6})\s/)
   return match ? match[1].length : 0
 }
 
+const COMMON_COLORS = ['#000000', '#ffffff', '#ef4444', '#f59e0b', '#22c55e', '#3b82f6', '#8b5cf6', '#ec4899']
+
 export function EditorPane({ value, onChange }: EditorPaneProps) {
   const textareaRef = useRef<HTMLTextAreaElement>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const colorInputRef = useRef<HTMLInputElement>(null)
   const [headingLevel, setHeadingLevel] = useState(0)
   const [notePopover, setNotePopover] = useState<{
     visible: boolean
     existingNoteText: string | null
   }>({ visible: false, existingNoteText: null })
   const [noteInputText, setNoteInputText] = useState('')
+  const [colorPopover, setColorPopover] = useState<{
+    visible: boolean
+    existingHex: string | null
+  }>({ visible: false, existingHex: null })
+  const [colorInputValue, setColorInputValue] = useState('#000000')
+
+  // Tracks the most recently written wrapper's inner range so we can recover
+  // from stale DOM selections when calls arrive faster than the browser's
+  // rAF/render cycle. Cleared once the DOM selection catches up.
+  const lastWrapRef = useRef<{ start: number; end: number } | null>(null)
+
+  // Commit to the document only on native 'change' event (picker release).
+  // React onChange only updates the preview state (colorInputValue).
+  useEffect(() => {
+    const node = colorInputRef.current
+    if (!node) return
+    const handler = () => {
+      applyTextColor(node.value)
+    }
+    node.addEventListener('change', handler)
+    return () => { node.removeEventListener('change', handler) }
+  }, [])
 
   const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     onChange(e.target.value)
@@ -114,8 +159,6 @@ export function EditorPane({ value, onChange }: EditorPaneProps) {
     const { selectionStart, selectionEnd } = ta
     const selected = value.slice(selectionStart, selectionEnd)
 
-    // Toggle off: the markers sit just outside the selection (typical case — you selected
-    // the inner word, not the ** themselves).
     const outerBefore = value.slice(selectionStart - before.length, selectionStart)
     const outerAfter = value.slice(selectionEnd, selectionEnd + after.length)
     if (before && outerBefore === before && outerAfter === after) {
@@ -127,10 +170,10 @@ export function EditorPane({ value, onChange }: EditorPaneProps) {
         ta.selectionStart = selectionStart - before.length
         ta.selectionEnd = selectionEnd - before.length
       })
+      lastWrapRef.current = null
       return
     }
 
-    // Toggle off: the markers are included inside the selection itself.
     if (before && selected.length >= before.length + after.length && selected.startsWith(before) && selected.endsWith(after)) {
       const inner = selected.slice(before.length, selected.length - after.length)
       const newValue = value.slice(0, selectionStart) + inner + value.slice(selectionEnd)
@@ -140,24 +183,31 @@ export function EditorPane({ value, onChange }: EditorPaneProps) {
         ta.selectionStart = selectionStart
         ta.selectionEnd = selectionStart + inner.length
       })
+      lastWrapRef.current = null
       return
     }
 
-    // Otherwise, wrap.
     const hasSelection = selectionStart !== selectionEnd
     const newValue = value.slice(0, selectionStart) + before + selected + after + value.slice(selectionEnd)
     onChange(newValue)
+
+    // Record the wrapper range synchronously so the next call in the same
+    // frame can find it even though the browser's textarea selection hasn't caught up yet.
+    const innerStart = selectionStart + before.length
+    const innerEnd = selectionStart + before.length + selected.length
+    lastWrapRef.current = { start: innerStart, end: innerEnd }
+
     requestAnimationFrame(() => {
       ta.focus()
       if (hasSelection) {
-        // Re-select the wrapped text so a follow-up click (e.g. trying another color) toggles it off,
-        // or a different-color click re-wraps this same real text instead of a placeholder.
-        ta.selectionStart = selectionStart + before.length
-        ta.selectionEnd = selectionStart + before.length + selected.length
+        ta.selectionStart = innerStart
+        ta.selectionEnd = innerEnd
       } else {
-        // Nothing was selected — drop the cursor between the markers instead of inventing
-        // placeholder text, so it can't get wrapped again by the next button click.
-        ta.selectionStart = ta.selectionEnd = selectionStart + before.length
+        ta.selectionStart = ta.selectionEnd = innerStart
+      }
+      // Clear the ref once the DOM selection matches — render has settled.
+      if (ta.selectionStart === innerStart && ta.selectionEnd === innerEnd) {
+        lastWrapRef.current = null
       }
     })
   }
@@ -174,7 +224,6 @@ export function EditorPane({ value, onChange }: EditorPaneProps) {
 
     const selected = value.slice(selectionStart, selectionEnd)
     if (existing.color === color) {
-      // Same color clicked again on already-highlighted text: remove the highlight entirely.
       const newValue = value.slice(0, existing.wrapStart) + selected + value.slice(existing.wrapEnd)
       onChange(newValue)
       requestAnimationFrame(() => {
@@ -182,18 +231,26 @@ export function EditorPane({ value, onChange }: EditorPaneProps) {
         ta.selectionStart = existing.wrapStart
         ta.selectionEnd = existing.wrapStart + selected.length
       })
+      lastWrapRef.current = null
       return
     }
 
-    // Different color: replace the wrapper instead of nesting a new one around the old.
     const before = `==${color}:`
     const after = '=='
     const newValue = value.slice(0, existing.wrapStart) + before + selected + after + value.slice(existing.wrapEnd)
     onChange(newValue)
+
+    const innerStart = existing.wrapStart + before.length
+    const innerEnd = existing.wrapStart + before.length + selected.length
+    lastWrapRef.current = { start: innerStart, end: innerEnd }
+
     requestAnimationFrame(() => {
       ta.focus()
-      ta.selectionStart = existing.wrapStart + before.length
-      ta.selectionEnd = existing.wrapStart + before.length + selected.length
+      ta.selectionStart = innerStart
+      ta.selectionEnd = innerEnd
+      if (ta.selectionStart === innerStart && ta.selectionEnd === innerEnd) {
+        lastWrapRef.current = null
+      }
     })
   }
 
@@ -201,18 +258,19 @@ export function EditorPane({ value, onChange }: EditorPaneProps) {
     const ta = textareaRef.current
     if (!ta) return
     const { lineStart, lineEnd } = getLineBounds(value, ta.selectionStart)
-    const stripped = value.slice(lineStart, lineEnd).replace(/^#{1,6}\s*/, '')
+    const stripped = value.slice(lineStart, lineEnd).replace(/^#{1,6}\s/, '')
     const newLine = level === 0 ? stripped : `${'#'.repeat(level)} ${stripped}`
     const newValue = value.slice(0, lineStart) + newLine + value.slice(lineEnd)
     onChange(newValue)
     setHeadingLevel(level)
+    lastWrapRef.current = null
     requestAnimationFrame(() => {
       ta.focus()
       ta.selectionStart = ta.selectionEnd = lineStart + newLine.length
     })
   }
 
-    const applyNote = (noteText: string) => {
+  const applyNote = (noteText: string) => {
     const ta = textareaRef.current
     if (!ta) return
     const { selectionStart, selectionEnd } = ta
@@ -228,6 +286,7 @@ export function EditorPane({ value, onChange }: EditorPaneProps) {
           ta.selectionStart = existing.wrapStart
           ta.selectionEnd = existing.wrapStart + selected.length
         })
+        lastWrapRef.current = null
         setNotePopover({ visible: false, existingNoteText: null })
         return
       }
@@ -235,10 +294,18 @@ export function EditorPane({ value, onChange }: EditorPaneProps) {
       const before = `%%note:${encoded}%%`
       const newValue = value.slice(0, existing.wrapStart) + before + selected + NOTE_SUFFIX + value.slice(existing.wrapEnd)
       onChange(newValue)
+
+      const innerStart = existing.wrapStart + before.length
+      const innerEnd = existing.wrapStart + before.length + selected.length
+      lastWrapRef.current = { start: innerStart, end: innerEnd }
+
       requestAnimationFrame(() => {
         ta.focus()
-        ta.selectionStart = existing.wrapStart + before.length
-        ta.selectionEnd = existing.wrapStart + before.length + selected.length
+        ta.selectionStart = innerStart
+        ta.selectionEnd = innerEnd
+        if (ta.selectionStart === innerStart && ta.selectionEnd === innerEnd) {
+          lastWrapRef.current = null
+        }
       })
       setNotePopover({ visible: false, existingNoteText: null })
       return
@@ -249,12 +316,85 @@ export function EditorPane({ value, onChange }: EditorPaneProps) {
     const before = `%%note:${encoded}%%`
     const newValue = value.slice(0, selectionStart) + before + selected + NOTE_SUFFIX + value.slice(selectionEnd)
     onChange(newValue)
+
+    const innerStart = selectionStart + before.length
+    const innerEnd = selectionStart + before.length + selected.length
+    lastWrapRef.current = { start: innerStart, end: innerEnd }
+
     requestAnimationFrame(() => {
       ta.focus()
-      ta.selectionStart = selectionStart + before.length
-      ta.selectionEnd = selectionStart + before.length + selected.length
+      ta.selectionStart = innerStart
+      ta.selectionEnd = innerEnd
+      if (ta.selectionStart === innerStart && ta.selectionEnd === innerEnd) {
+        lastWrapRef.current = null
+      }
     })
     setNotePopover({ visible: false, existingNoteText: null })
+  }
+
+  /** Try to find a wrapper, falling back to lastWrapRef if the DOM selection
+   * is stale (didn't catch up from the previous wrapper write). */
+  function findWrapperOrFallback(
+    findFn: (value: string, ss: number, se: number) => { wrapStart: number; wrapEnd: number; color: HighlightColor } | { wrapStart: number; wrapEnd: number; hex: string } | null,
+  ): { wrapStart: number; wrapEnd: number; color: HighlightColor } | { wrapStart: number; wrapEnd: number; hex: string } | null {
+    const ta = textareaRef.current
+    if (!ta) return null
+    const { selectionStart, selectionEnd } = ta
+    const domResult = findFn(value, selectionStart, selectionEnd)
+    if (domResult) return domResult
+
+    // DOM selection is stale — check if lastWrapRef has a recent wrapper
+    // whose inner range overlaps with the current (stale) DOM selection.
+    const ref = lastWrapRef.current
+    if (!ref) return null
+    if (selectionStart < ref.end && selectionEnd > ref.start) {
+      return findFn(value, ref.start, ref.end)
+    }
+    return null
+  }
+
+  const applyTextColor = (hex: string) => {
+    const ta = textareaRef.current
+    if (!ta) return
+    const existing = findWrapperOrFallback(findTextColorWrap)
+    if (!existing) {
+      wrapSelection('%%color:' + hex + '%%', '%%')
+      return
+    }
+
+    const ta2 = textareaRef.current
+    if (!ta2) return
+    const selected = value.slice(ta2.selectionStart, ta2.selectionEnd)
+    if ('hex' in existing && existing.hex === hex) {
+      const newValue = value.slice(0, existing.wrapStart) + selected + value.slice(existing.wrapEnd)
+      onChange(newValue)
+      requestAnimationFrame(() => {
+        ta2.focus()
+        ta2.selectionStart = existing.wrapStart
+        ta2.selectionEnd = existing.wrapStart + selected.length
+      })
+      lastWrapRef.current = null
+      setColorPopover({ visible: false, existingHex: null })
+      return
+    }
+
+    const before = '%%color:' + hex + '%%'
+    const after = '%%'
+    const newValue = value.slice(0, existing.wrapStart) + before + selected + after + value.slice(existing.wrapEnd)
+    onChange(newValue)
+
+    const innerStart = existing.wrapStart + before.length
+    const innerEnd = existing.wrapStart + before.length + selected.length
+    lastWrapRef.current = { start: innerStart, end: innerEnd }
+
+    requestAnimationFrame(() => {
+      ta2.focus()
+      ta2.selectionStart = innerStart
+      ta2.selectionEnd = innerEnd
+      if (ta2.selectionStart === innerStart && ta2.selectionEnd === innerEnd) {
+        lastWrapRef.current = null
+      }
+    })
   }
 
   const handleSelectionChange = () => {
@@ -284,6 +424,19 @@ export function EditorPane({ value, onChange }: EditorPaneProps) {
 
   const handleNoteRemove = () => {
     applyNote('')
+  }
+
+  const handleColorClick = () => {
+    const ta = textareaRef.current
+    if (!ta) return
+    const existing = findTextColorWrap(value, ta.selectionStart, ta.selectionEnd)
+    setColorPopover({ visible: true, existingHex: existing ? existing.hex : null })
+    setColorInputValue(existing ? existing.hex : '#000000')
+  }
+
+  // React onChange on the color input: preview only, no document mutation
+  const handleColorPreviewChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setColorInputValue(e.target.value)
   }
 
   const insertImageDataUrl = (dataUrl: string, alt: string) => {
@@ -362,6 +515,40 @@ export function EditorPane({ value, onChange }: EditorPaneProps) {
               style={{ backgroundColor: HIGHLIGHT_SWATCHES[color] }}
             />
           ))}
+        </div>
+        <div className="flex items-center gap-1 px-1 relative" title="Text color">
+          <Baseline className="h-4 w-4 text-muted-foreground" />
+          <button
+            type="button"
+            onMouseDown={(e) => { e.preventDefault(); handleColorClick() }}
+            className="h-5 w-5 rounded border border-border cursor-pointer hover:scale-110 transition-transform bg-transparent flex items-center justify-center"
+            style={{ color: '#333' }}
+          >
+            <Baseline className="h-3 w-3" />
+          </button>
+          {colorPopover.visible && (
+            <div className="absolute top-full left-0 z-10 flex flex-col gap-1 rounded-md border border-border bg-card p-2 shadow-lg">
+              <input
+                ref={colorInputRef}
+                type="color"
+                value={colorInputValue}
+                onChange={handleColorPreviewChange}
+                className="h-8 w-16 cursor-pointer rounded border border-input bg-background p-1"
+              />
+              <div className="flex flex-wrap gap-1">
+                {COMMON_COLORS.map((c) => (
+                  <button
+                    key={c}
+                    type="button"
+                    title={c}
+                    onMouseDown={(e) => { e.preventDefault(); applyTextColor(c) }}
+                    className="h-5 w-5 rounded border border-border cursor-pointer hover:scale-110 transition-transform"
+                    style={{ backgroundColor: c }}
+                  />
+                ))}
+              </div>
+            </div>
+          )}
         </div>
         {insertButtons.map(({ icon: Icon, title, onClick }) => (
           <Button

@@ -2,7 +2,7 @@
 
 A local-first Markdown workspace you run on your own machine. No account, no cloud — your files stay on your device.
 
-## Install (recommended)
+## Install
 
 ```sh
 npm install -g @pcoder/markdown-ai
@@ -11,10 +11,12 @@ npm install -g @pcoder/markdown-ai
 Run it with:
 
 ```sh
-markdown-ai
+markdown
 ```
 
-This starts a small local server and opens the app in your default browser. A config file and your projects are stored on disk at an OS-appropriate default location:
+This starts a small local server and opens the app in your default browser. The `markdown-ai` command is also available as an alias.
+
+A config file and your projects are stored on disk at an OS-appropriate default location:
 
 | OS | Location |
 |---|---|
@@ -30,10 +32,10 @@ You can see the exact path in use from the app's profile page.
 npm install @pcoder/markdown-ai
 ```
 
-Without `-g`, the `markdown-ai` command isn't added to your shell's PATH — run it through npx instead, from the same folder:
+Without `-g`, the `markdown` command isn't added to your shell's PATH — run it through npx instead:
 
 ```sh
-npx markdown-ai
+npx markdown
 ```
 
 ## Without installing at all
