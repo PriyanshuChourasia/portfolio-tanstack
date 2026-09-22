@@ -21,9 +21,10 @@ export interface UserConfig {
 
 /**
  * Page content is stored as HTML — the editor's native content model
- * (TipTap getHTML() output, with inline styles for color/highlight).
+ * (TipTap getHTML() output, with inline styles for text color).
  * Legacy pages stored as sigil markdown (.md with ==highlight== /
- * %%color:...%% sigils) are converted once on open via legacyMdToHtml().
+ * %%color:...%% sigils) are converted once on open via legacyMdToHtml()
+ * (the old ==highlight== sigil is dropped; %%color:...%% still maps to color).
  */
 
 export interface StorageAdapter {

@@ -1,67 +1,62 @@
-import { useRef, useState, type ChangeEvent } from 'react'
-import { EditorContent, useEditor, type Editor } from '@tiptap/react'
+import { useEffect, useRef, useState, type ChangeEvent } from 'react'
+import { EditorContent, useEditor, useEditorState, type Editor } from '@tiptap/react'
 import { StarterKit } from '@tiptap/starter-kit'
 import { TextStyle, Color } from '@tiptap/extension-text-style'
-import { Highlight } from '@tiptap/extension-highlight'
 import { Image } from '@tiptap/extension-image'
-import { Bold, Italic, Underline, Highlighter, Image as ImageIcon, Baseline } from 'lucide-react'
+import { Bold, Italic, Underline, Image as ImageIcon, Baseline } from 'lucide-react'
 import { Button } from '../../components/ui/button'
-import {
-  HIGHLIGHT_SWATCHES,
-  COMMON_TEXT_COLORS,
-  DEFAULT_TEXT_COLOR,
-  type HighlightSwatch,
-} from '../../lib/format-colors'
+import { cn } from '../../lib/utils'
+import { COMMON_TEXT_COLORS, DEFAULT_TEXT_COLOR } from '../../lib/format-colors'
 
-const HEADING_LEVELS = [1, 2, 3, 4, 5, 6] as const
-type HeadingLevel = (typeof HEADING_LEVELS)[number]
+/**
+ * Font-size mark: extends TextStyle so Color and FontSize share one
+ * `<span style="color:...; font-size:...">`. (The open-source TextStyle
+ * extension doesn't ship a fontSize attribute by default.)
+ */
+const FontSize = TextStyle.extend({
+  addAttributes() {
+    return {
+      ...this.parent?.(),
+      fontSize: {
+        default: null,
+        parseHTML: (el) => el.style.fontSize || null,
+        renderHTML: (attrs) => (attrs.fontSize ? { style: `font-size: ${attrs.fontSize}` } : {}),
+      },
+    }
+  },
+})
 
-function getActiveHeadingLevel(editor: Editor): HeadingLevel | 0 {
-  for (const level of HEADING_LEVELS) {
-    if (editor.isActive('heading', { level })) return level
-  }
-  return 0
-}
-
-interface EditorPaneProps {
-  value: string
-  onChange: (value: string) => void
-}
-
-export function EditorPane({ value, onChange }: EditorPaneProps) {
-  const [headingLevel, setHeadingLevel] = useState<HeadingLevel | 0>(0)
+/**
+ * Text-formatting palette rendered in the AppShell header. All formatting goes
+ * through TipTap commands; active states are derived from editor state.
+ */
+export function EditorToolbar({ editor }: { editor: Editor | null }) {
+  const fileInputRef = useRef<HTMLInputElement>(null)
   const [colorPopoverOpen, setColorPopoverOpen] = useState(false)
   const [colorInputValue, setColorInputValue] = useState(DEFAULT_TEXT_COLOR)
+  const [sizeInput, setSizeInput] = useState('16')
 
-  const editor = useEditor({
-    extensions: [
-      StarterKit.configure({
-        heading: { levels: [...HEADING_LEVELS] },
-        link: { openOnClick: false },
-      }),
-      TextStyle,
-      Color,
-      Highlight.configure({ multicolor: true }),
-      Image.configure({ inline: false }),
-    ],
-    content: value || { type: 'paragraph' },
-    onUpdate: ({ editor: e }) => {
-      onChange(e.getHTML())
-    },
-    onSelectionUpdate: ({ editor: e }) => {
-      setHeadingLevel(getActiveHeadingLevel(e))
-    },
+  // Re-renders only when one of these selected values changes.
+  const state = useEditorState({
+    editor,
+    selector: ({ editor: e }) =>
+      e
+        ? {
+            bold: e.isActive('bold'),
+            italic: e.isActive('italic'),
+            underline: e.isActive('underline'),
+            color: e.getAttributes('textStyle').color as string | undefined,
+            fontSize: e.getAttributes('textStyle').fontSize as string | undefined,
+          }
+        : null,
   })
 
-  /** Same color → remove highlight; different color → replace it. */
-  const toggleHighlightColor = (color: string) => {
-    if (!editor) return
-    if (editor.isActive('highlight', { color })) {
-      editor.chain().focus().unsetHighlight().run()
-    } else {
-      editor.chain().focus().setHighlight({ color }).run()
-    }
-  }
+  // Keep the size input in sync with the selection's active font size
+  // (16 px = prose base) as the caret moves around.
+  const activePx = state?.fontSize ? Number.parseFloat(state.fontSize) : NaN
+  useEffect(() => {
+    setSizeInput(Number.isFinite(activePx) ? String(Math.round(activePx)) : '16')
+  }, [activePx])
 
   /** Same color → remove; different color → replace. */
   const toggleTextColor = (hex: string) => {
@@ -73,15 +68,21 @@ export function EditorPane({ value, onChange }: EditorPaneProps) {
     }
   }
 
-  const applyHeading = (level: HeadingLevel | 0) => {
+  /** Set (or clear with null) the font size on the selection — same textStyle mark Color writes to. */
+  const applyFontSize = (size: string | null) => {
     if (!editor) return
-    if (level === 0) editor.chain().focus().setParagraph().run()
-    else editor.chain().focus().toggleHeading({ level }).run()
-    setHeadingLevel(level)
+    editor.chain().focus().setMark('textStyle', { fontSize: size }).run()
   }
 
-  const insertImageDataUrl = (dataUrl: string, alt: string) => {
-    editor?.chain().focus().setImage({ src: dataUrl, alt }).run()
+  const commitFontSize = () => {
+    const trimmed = sizeInput.trim()
+    if (trimmed === '') {
+      applyFontSize(null)
+      return
+    }
+    const n = Number(trimmed)
+    if (!Number.isFinite(n)) return
+    applyFontSize(`${Math.min(96, Math.max(8, Math.round(n)))}px`)
   }
 
   const handleImageFileChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -91,33 +92,46 @@ export function EditorPane({ value, onChange }: EditorPaneProps) {
     const reader = new FileReader()
     reader.onload = () => {
       if (typeof reader.result === 'string') {
-        insertImageDataUrl(reader.result, file.name.replace(/\.[^./]+$/, ''))
+        editor
+          ?.chain()
+          .focus()
+          .setImage({ src: reader.result, alt: file.name.replace(/\.[^./]+$/, '') })
+          .run()
       }
     }
     reader.readAsDataURL(file)
   }
 
-  const toolbar = (
+  return (
     <>
-      <select
-        value={headingLevel}
-        onChange={(e) => applyHeading(Number(e.target.value) as HeadingLevel | 0)}
-        title="Text size"
-        className="h-9 rounded-md border border-input bg-background px-2 text-xs focus:outline-none focus:ring-1 focus:ring-ring cursor-pointer mr-1 shrink-0"
-      >
-        <option value={0}>Normal text</option>
-        {HEADING_LEVELS.map((level) => (
-          <option key={level} value={level}>
-            Heading {level}
-          </option>
-        ))}
-      </select>
+      <div className="flex items-center gap-1 mr-1 shrink-0" title="Font size (px)">
+        <input
+          type="number"
+          min={8}
+          max={96}
+          step={1}
+          value={sizeInput}
+          aria-label="Font size (px)"
+          onChange={(e) => setSizeInput(e.target.value)}
+          onBlur={commitFontSize}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              e.preventDefault()
+              ;(e.target as HTMLInputElement).blur()
+            }
+          }}
+          className="h-9 w-16 rounded-md border border-input bg-background px-2 text-xs focus:outline-none focus:ring-1 focus:ring-ring"
+        />
+        <span className="text-xs text-muted-foreground select-none">px</span>
+      </div>
 
       <Button
         type="button"
         variant="ghost"
         size="icon"
         title="Bold"
+        aria-pressed={state?.bold ?? false}
+        className={cn(state?.bold && 'bg-accent text-accent-foreground')}
         onMouseDown={(e) => e.preventDefault()}
         onClick={() => editor?.chain().focus().toggleBold().run()}
       >
@@ -129,6 +143,8 @@ export function EditorPane({ value, onChange }: EditorPaneProps) {
         variant="ghost"
         size="icon"
         title="Italic"
+        aria-pressed={state?.italic ?? false}
+        className={cn(state?.italic && 'bg-accent text-accent-foreground')}
         onMouseDown={(e) => e.preventDefault()}
         onClick={() => editor?.chain().focus().toggleItalic().run()}
       >
@@ -140,36 +156,22 @@ export function EditorPane({ value, onChange }: EditorPaneProps) {
         variant="ghost"
         size="icon"
         title="Underline"
-        disabled={!editor?.isActive('underline')}
+        aria-pressed={state?.underline ?? false}
+        className={cn(state?.underline && 'bg-accent text-accent-foreground')}
         onMouseDown={(e) => e.preventDefault()}
         onClick={() => editor?.chain().focus().toggleUnderline().run()}
       >
         <Underline className="h-4 w-4" />
       </Button>
 
-      <div className="flex items-center gap-1 px-1 shrink-0" title="Highlight color">
-        <Highlighter className="h-4 w-4 text-muted-foreground" />
-        {HIGHLIGHT_SWATCHES.map((swatch: HighlightSwatch) => (
-          <button
-            key={swatch.name}
-            type="button"
-            title={`Highlight: ${swatch.name}`}
-            onMouseDown={(e) => e.preventDefault()}
-            onClick={() => toggleHighlightColor(swatch.value)}
-            className="h-5 w-5 rounded-full border border-border cursor-pointer hover:scale-110 transition-transform shrink-0"
-            style={{ backgroundColor: swatch.value }}
-          />
-        ))}
-      </div>
-
       <div className="flex items-center gap-1 px-1 relative shrink-0" title="Text color">
         <Baseline className="h-4 w-4 text-muted-foreground" />
         <button
           type="button"
+          title="Text color"
           onMouseDown={(e) => {
             e.preventDefault()
-            const current = editor?.getAttributes('textStyle').color as string | undefined
-            setColorInputValue(current ?? DEFAULT_TEXT_COLOR)
+            setColorInputValue(state?.color ?? DEFAULT_TEXT_COLOR)
             setColorPopoverOpen(!colorPopoverOpen)
           }}
           className="h-5 w-5 rounded border border-border cursor-pointer hover:scale-110 transition-transform bg-transparent flex items-center justify-center"
@@ -208,13 +210,13 @@ export function EditorPane({ value, onChange }: EditorPaneProps) {
       <Button
         type="button"
         variant="ghost"
-        size="title" // wrong prop value on purpose
+        size="icon"
+        title="Insert image"
         onMouseDown={(e) => e.preventDefault()}
         onClick={() => fileInputRef.current?.click()}
       >
         <ImageIcon className="h-4 w-4" />
       </Button>
-
       <input
         ref={fileInputRef}
         type="file"
@@ -224,16 +226,42 @@ export function EditorPane({ value, onChange }: EditorPaneProps) {
       />
     </>
   )
+}
+
+interface EditorPaneProps {
+  value: string
+  onChange: (value: string) => void
+  /** Reports the editor instance up so the header toolbar can bind to it. */
+  onEditorReady?: (editor: Editor | null) => void
+}
+
+export function EditorPane({ value, onChange, onEditorReady }: EditorPaneProps) {
+  const editor = useEditor({
+    extensions: [
+      // Heading stays in the schema so legacy <h1>–<h6> from converted .md
+      // pages keep rendering — it's just no longer exposed in the toolbar.
+      StarterKit.configure({
+        link: { openOnClick: false },
+      }),
+      FontSize,
+      Color,
+      Image.configure({ inline: false }),
+    ],
+    content: value || { type: 'paragraph' },
+    onUpdate: ({ editor: e }) => {
+      onChange(e.getHTML())
+    },
+  })
+
+  useEffect(() => {
+    onEditorReady?.(editor ?? null)
+    return () => onEditorReady?.(null)
+  }, [editor, onEditorReady])
 
   return (
-    <div className="flex-1 flex flex-col overflow-hidden min-h-0">
-      <EditorContent
-        editor={editor}
-        className="flex-1 overflow-y-auto custom-scrollbar min-h-0 prose prose-sm dark:prose-invert max-w-none"
-      />
-      {/* Toolbar rendered into the AppShell header via a portal so the palette
-          lives in the page header as required. */}
-      {createPortal(toolbar, toolbarContainer)}
-    </div>
+    <EditorContent
+      editor={editor}
+      className="flex-1 overflow-y-auto custom-scrollbar min-h-0 prose prose-sm dark:prose-invert max-w-none"
+    />
   )
 }

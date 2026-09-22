@@ -3,7 +3,9 @@
  *
  * Old versions of this editor stored pages as markdown with custom string
  * sigils written around the selection:
- *   `==yellow:text==` / `==text==`  → colored <mark> (default yellow)
+ *   `==yellow:text==` / `==text==`  → highlighting is no longer supported;
+ *                                      the wrapper is dropped and the inner
+ *                                      text is kept as plain text
  *   `%%color:#RRGGBB%%text%%`       → <span style="color:...">
  *   `%%note:<encoded>%%text%%`      → <abbr title="...">
  *
@@ -18,9 +20,8 @@
  */
 
 import { marked } from 'marked'
-import { HIGHLIGHT_SWATCHES } from './format-colors.js'
 
-const HIGHLIGHT_VALUES: ReadonlySet<string> = new Set(HIGHLIGHT_SWATCHES.map((s) => s.name))
+const HIGHLIGHT_COLOR_NAME = /^[a-z]+$/
 
 /** Minimal HTML escaping for text content between sigils. */
 function escapeHtml(text: string): string {
@@ -75,13 +76,12 @@ function convertInlineSigils(markdown: string): string {
       }
     }
 
-    // Highlight: ==[color:]text==  — color names come from the shared palette
+    // Highlight: ==[color:]text==  — highlighting is removed; drop the
+    // wrapper and keep the inner text as plain content.
     if (peek('==')) {
       const m = /^==(?:([a-z]+):)?([\s\S]*?)==/.exec(markdown.slice(i))
-      if (m && (!m[1] || HIGHLIGHT_VALUES.has(m[1]))) {
-        const colorName = m[1] ?? 'yellow'
-        const swatch = HIGHLIGHT_SWATCHES.find((s) => s.name === colorName) ?? HIGHLIGHT_SWATCHES[0]
-        out += `<mark data-color="${colorName}" style="background-color: ${swatch.value}">${convertInlineSigils(m[2])}</mark>`
+      if (m && (!m[1] || HIGHLIGHT_COLOR_NAME.test(m[1]))) {
+        out += convertInlineSigils(m[2])
         i += m[0].length
         continue
       }

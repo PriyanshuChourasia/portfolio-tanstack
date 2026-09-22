@@ -1,11 +1,12 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
+import type { Editor } from '@tiptap/react'
 import { useStorage, StorageProvider } from './lib/context'
 import { legacyMdToHtml } from './lib/legacy-md-to-html'
 import type { StorageAdapter } from './lib/types'
 import { AppShell } from './components/AppShell'
 import { ProjectsHome } from './features/projects/ProjectsHome'
 import { PagesHome } from './features/pages/PagesHome'
-import { EditorPane } from './features/editor/EditorPane'
+import { EditorPane, EditorToolbar } from './features/editor/EditorPane'
 import { PreviewPane } from './features/preview/PreviewPane'
 
 type Stage = 'home' | 'pages' | 'editor'
@@ -18,6 +19,7 @@ function MarkdownUIInner() {
   const [currentPageId, setCurrentPageId] = useState<string | null>(null)
   const [html, setHtml] = useState('')
   const [showEditor, setShowEditor] = useState(true)
+  const [editor, setEditor] = useState<Editor | null>(null)
   const saveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const currentContentRef = useRef('')
 
@@ -104,6 +106,9 @@ function MarkdownUIInner() {
       editorOpen={showEditor}
       onToggleEditor={() => setShowEditor(!showEditor)}
       onBack={handleBack}
+      headerToolbar={
+        stage === 'editor' && showEditor ? <EditorToolbar editor={editor} /> : undefined
+      }
     >
       {stage === 'home' && <ProjectsHome onSelectProject={handleOpenProject} />}
 
@@ -122,7 +127,7 @@ function MarkdownUIInner() {
               <div className="px-4 py-2 border-b border-border text-xs font-medium uppercase tracking-wider text-muted-foreground shrink-0">
                 Editor
               </div>
-              <EditorPane value={html} onChange={handleContentChange} />
+              <EditorPane value={html} onChange={handleContentChange} onEditorReady={setEditor} />
             </div>
           )}
           <div className="flex-1 flex flex-col min-h-0">

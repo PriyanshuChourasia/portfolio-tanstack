@@ -6,16 +6,16 @@ interface PreviewPaneProps {
   html: string
 }
 
-/** Attributes/styles the highlight + text-color marks rely on. */
+/** Attributes/styles the text-color marks rely on. */
 const PURIFY_CONFIG = {
-  ALLOWED_ATTR: ['style', 'color', 'src', 'alt', 'title', 'href', 'data-color'],
+  ALLOWED_ATTR: ['style', 'color', 'src', 'alt', 'title', 'href'],
   ALLOWED_TAGS: [
     // Block structure
     'p', 'br', 'hr', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
     'blockquote', 'pre', 'code',
     'ul', 'ol', 'li',
     // Inline marks & links/images
-    'strong', 'em', 'u', 's', 'code', 'mark', 'span', 'a', 'img', 'abbr',
+    'strong', 'em', 'u', 's', 'code', 'span', 'a', 'img', 'abbr',
     // Tables (GFM-style, kept for hand-written HTML tables)
     'table', 'thead', 'tbody', 'tr', 'th', 'td', 'colgroup', 'col',
   ],

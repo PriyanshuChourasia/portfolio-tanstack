@@ -1,25 +1,10 @@
 /**
- * Shared color palette for inline formatting (highlight + text color).
+ * Shared color palette for inline text-color formatting.
  *
- * Single source of truth so the editor toolbar swatches, CSS, and stored HTML
- * all use the same values. TipTap's Highlight/Color extensions accept arbitrary
- * CSS color strings, so these are applied verbatim as mark attributes.
+ * Single source of truth so the editor toolbar swatches and stored HTML use
+ * the same values. TipTap's Color extension accepts arbitrary CSS color
+ * strings, so these are applied verbatim as mark attributes.
  */
-
-/** Pastel background colors offered as highlight swatches. */
-export const HIGHLIGHT_SWATCHES = [
-  { name: 'yellow', value: '#fde68a' },
-  { name: 'green', value: '#bbf7d0' },
-  { name: 'blue', value: '#bfdbfe' },
-  { name: 'pink', value: '#fbcfe8' },
-  { name: 'orange', value: '#fed7aa' },
-  { name: 'purple', value: '#e9d5ff' },
-] as const
-
-export type HighlightSwatch = (typeof HIGHLIGHT_SWATCHES)[number]
-
-/** Ink color used on top of the light pastel highlight backgrounds. */
-export const HIGHLIGHT_TEXT_COLOR = '#1f2937'
 
 /** Colors offered as quick picks in the text-color popover. */
 export const COMMON_TEXT_COLORS = [

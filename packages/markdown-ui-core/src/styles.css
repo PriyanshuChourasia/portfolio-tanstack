@@ -129,17 +129,6 @@ body {
   font-family: var(--font-sans);
 }
 
-/* Highlight marks (TipTap Highlight, multicolor). Background is stored inline
-   on the element; text color is pinned to a dark gray since these are all light
-   pastel backgrounds, regardless of the surrounding light/dark theme (prose's
-   dark:prose-invert would otherwise turn the text light and unreadable against
-   them). */
-mark[data-color] {
-  color: #1f2937;
-  border-radius: 0.125rem;
-  padding: 0 0.1em;
-}
-
 /* Inline code blocks inside the editor/preview survive ProseMirror + DOMPurify */
 .tiptap pre {
   background-color: var(--muted);

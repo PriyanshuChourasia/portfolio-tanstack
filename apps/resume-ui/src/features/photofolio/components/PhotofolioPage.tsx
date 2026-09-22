@@ -1,5 +1,6 @@
 import { useCallback, useRef, useState, useEffect } from 'react'
 import { useDropzone } from 'react-dropzone'
+import { Link } from '@tanstack/react-router'
 import { cn } from '@/lib/utils'
 import { ImagePlus, Trash2, ZoomIn, ZoomOut } from 'lucide-react'
 import { usePhotofolioImages, usePhotofolioCanvasSettings, type Photo } from '../usePhotofolioImages'
@@ -8,13 +9,6 @@ const MIN_SIZE = 40
 const HANDLE_SIZE = 8
 const MIN_ZOOM = 1
 const MAX_ZOOM = 3
-const CANVAS_MIN_W = 200
-const CANVAS_MIN_H = 150
-const CANVAS_MAX_W = 1600
-const CANVAS_MAX_H = 1000
-const CANVAS_ZOOM_MIN = 0.25
-const CANVAS_ZOOM_MAX = 2
-const CANVAS_ZOOM_DEFAULT = 1
 
 type ResizeHandle = 't' | 'b' | 'l' | 'r' | 'tl' | 'tr' | 'bl' | 'br'
 
@@ -196,7 +190,7 @@ function PhotoBox({
       data-photo-box
       onClick={(e) => { e.stopPropagation(); onSelect(photo.id) }}
       onPointerDown={(e) => handlePointerDown(e, 'move')}
-      onWheel={isGridMode ? undefined : handleWheel}
+      onWheel={handleWheel}
       className={cn(
         'absolute select-none overflow-hidden border-2 rounded-lg shadow-lg',
         isGridMode ? 'cursor-default' : 'cursor-move',
@@ -273,34 +267,23 @@ interface PhotofolioPageProps {
 
 export function PhotofolioPage({ projectId }: PhotofolioPageProps) {
   const { photos, addPhotos, removePhoto, updatePhoto, clearAll } = usePhotofolioImages(projectId)
-  const { layoutMode, setLayoutMode, columns, setColumns, canvasBgColor, setCanvasBgColor, canvasZoom, setCanvasZoom } = usePhotofolioCanvasSettings(projectId)
+  const { layoutMode, setLayoutMode, columns, setColumns, canvasBgColor } = usePhotofolioCanvasSettings(projectId)
   const [selectedId, setSelectedId] = useState<string | null>(null)
-  const [canvasW, setCanvasW] = useState(CANVAS_MAX_W)
-  const [canvasH, setCanvasH] = useState(CANVAS_MAX_H)
-  const [canvasPanX, setCanvasPanX] = useState(0)
-  const [canvasPanY, setCanvasPanY] = useState(0)
-  const canvasPanXRef = useRef(0)
-  const canvasPanYRef = useRef(0)
+  const [canvasW, setCanvasW] = useState(0)
+  const [canvasH, setCanvasH] = useState(0)
   const canvasContainerRef = useRef<HTMLDivElement>(null)
-  const panStateRef = useRef<{ active: boolean; startX: number; startY: number; origX: number; origY: number } | null>(null)
-  const [isPanning, setIsPanning] = useState(false)
   const freePositionsRef = useRef<Map<string, { x: number; y: number; width: number; height: number }>>(new Map())
   const isGridMode = layoutMode === 'grid'
 
-  // ResizeObserver for responsive canvas
+  // ResizeObserver for full-screen responsive canvas
   useEffect(() => {
     const el = canvasContainerRef.current
     if (!el) return
     const observer = new ResizeObserver((entries) => {
       for (const entry of entries) {
         const { width, height } = entry.contentRect
-        const availableW = Math.min(width - 32, CANVAS_MAX_W)
-        const availableH = Math.min(height - 32, CANVAS_MAX_H)
-        const w = Math.max(CANVAS_MIN_W, availableW)
-        const h = Math.max(CANVAS_MIN_H, availableH)
-        const ratio = Math.min(w / CANVAS_MAX_W, h / CANVAS_MAX_H, 1)
-        setCanvasW(w * ratio)
-        setCanvasH(h * ratio)
+        setCanvasW(width)
+        setCanvasH(height)
       }
     })
     observer.observe(el)
@@ -340,89 +323,6 @@ export function PhotofolioPage({ projectId }: PhotofolioPageProps) {
     }
   }, [])
 
-  // Canvas zoom-to-cursor on wheel
-  const handleCanvasWheel = useCallback((e: React.WheelEvent) => {
-    e.preventDefault()
-    e.stopPropagation()
-    if ((e.target as HTMLElement).closest('[data-photo-box]')) return
-    const canvas = e.currentTarget
-    const rect = canvas.getBoundingClientRect()
-    const cursorX = e.clientX - rect.left
-    const cursorY = e.clientY - rect.top
-    const delta = e.deltaY > 0 ? -0.1 : 0.1
-    const newZoom = Math.max(CANVAS_ZOOM_MIN, Math.min(CANVAS_ZOOM_MAX, canvasZoom + delta))
-    const canvasX = (cursorX - canvasPanX) / canvasZoom
-    const canvasY = (cursorY - canvasPanY) / canvasZoom
-    const newPanX = canvasPanX + canvasX * (canvasZoom - newZoom)
-    const newPanY = canvasPanY + canvasY * (canvasZoom - newZoom)
-    setCanvasZoom(newZoom)
-    setCanvasPanX(Math.round(newPanX))
-    setCanvasPanY(Math.round(newPanY))
-  }, [canvasZoom, canvasPanX, canvasPanY])
-
-// Canvas drag-to-pan on empty background
-  const handleCanvasPointerDown = useCallback((e: React.PointerEvent) => {
-    if (e.target === e.currentTarget) {
-      e.preventDefault()
-      const canvas = e.currentTarget as HTMLElement
-      panStateRef.current = {
-        active: true,
-        startX: e.clientX,
-        startY: e.clientY,
-        origX: canvasPanXRef.current,
-        origY: canvasPanYRef.current,
-      }
-      canvas.setPointerCapture(e.pointerId)
-      setIsPanning(true)
-      canvas.style.cursor = 'grabbing'
-    }
-  }, [])
-
-  // Keep pan refs in sync with state
-  useEffect(() => {
-    canvasPanXRef.current = canvasPanX
-  }, [canvasPanX])
-  useEffect(() => {
-    canvasPanYRef.current = canvasPanY
-  }, [canvasPanY])
-
-  useEffect(() => {
-    const onMove = (e: PointerEvent) => {
-      const state = panStateRef.current
-      if (!state) return
-      const dx = e.clientX - state.startX
-      const dy = e.clientY - state.startY
-      setCanvasPanX(state.origX + dx)
-      setCanvasPanY(state.origY + dy)
-    }
-    const onUp = () => {
-      panStateRef.current = null
-      setIsPanning(false)
-      const canvas = canvasContainerRef.current?.querySelector('[data-canvas]') as HTMLElement
-      if (canvas) canvas.style.cursor = ''
-    }
-    document.addEventListener('pointermove', onMove)
-    document.addEventListener('pointerup', onUp)
-    return () => {
-      document.removeEventListener('pointermove', onMove)
-      document.removeEventListener('pointerup', onUp)
-    }
-  }, [])
-
-  // Double-click to reset view
-  const handleCanvasDoubleClick = useCallback((e: React.MouseEvent) => {
-    if (e.target === e.currentTarget) {
-      setCanvasZoom(CANVAS_ZOOM_DEFAULT)
-      setCanvasPanX(0)
-      setCanvasPanY(0)
-      setSelectedId(null)
-    }
-  }, [])
-
-  const handleCanvasZoomIn = useCallback(() => setCanvasZoom((z) => Math.min(CANVAS_ZOOM_MAX, z + 0.25)), [])
-  const handleCanvasZoomOut = useCallback(() => setCanvasZoom((z) => Math.max(CANVAS_ZOOM_MIN, z - 0.25)), [])
-  const handleCanvasZoomReset = useCallback(() => { setCanvasZoom(CANVAS_ZOOM_DEFAULT); setCanvasPanX(0); setCanvasPanY(0) }, [])
-
   const handleLayoutModeToggle = useCallback(() => {
     setLayoutMode((prev) => {
       if (prev === 'free') {
@@ -442,22 +342,21 @@ export function PhotofolioPage({ projectId }: PhotofolioPageProps) {
     setColumns(Math.max(1, Math.min(8, val)))
   }, [])
 
-  const canvasStyle: React.CSSProperties = {
-    width: canvasW,
-    height: canvasH,
-    backgroundColor: canvasBgColor,
-    transform: `translate(${canvasPanX}px, ${canvasPanY}px) scale(${canvasZoom})`,
-    transformOrigin: '0 0',
-  }
-
   return (
     <div className="flex h-screen flex-col bg-background text-foreground">
       <header className="flex h-12 shrink-0 items-center justify-between border-b border-border/60 bg-card/40 px-4">
         <div className="flex items-center gap-2">
+          <Link to="/photofolio" className="flex items-center gap-1.5 rounded-lg px-2 py-1 text-xs text-muted-foreground hover:bg-muted hover:text-foreground transition-colors">
+            ← Back to Projects
+          </Link>
+          <span className="text-xs text-muted-foreground">|</span>
           <ImagePlus className="size-4 text-primary" />
           <span className="text-sm font-bold">Photofolio</span>
           <span className="text-xs text-muted-foreground">{photos.length} photo{photos.length !== 1 ? 's' : ''}</span>
         </div>
+        <Link to="/photofolio/$projectId/settings" params={{ projectId }} className="flex items-center gap-1.5 rounded-lg border border-border/60 px-2.5 py-1 text-xs text-muted-foreground hover:bg-muted hover:text-foreground transition-colors">
+          Canvas Settings
+        </Link>
       </header>
 
       <div className="flex flex-1 overflow-hidden">
@@ -487,25 +386,6 @@ export function PhotofolioPage({ projectId }: PhotofolioPageProps) {
               )}
             </div>
 
-            <div>
-              <h3 className="mb-2 text-xs font-bold uppercase tracking-widest text-muted-foreground/60">Canvas</h3>
-              <label className="flex items-center gap-2 text-[10px] text-muted-foreground mb-1.5">
-                Background
-                <input type="color" value={canvasBgColor} onChange={(e) => setCanvasBgColor(e.target.value)} className="h-6 w-12 rounded border border-border cursor-pointer" />
-              </label>
-              <div className="space-y-1.5">
-                <button type="button" onClick={handleCanvasZoomOut} className="flex w-full items-center justify-center gap-1.5 rounded-lg border border-border/60 py-1.5 text-[10px] text-muted-foreground hover:bg-muted/60 hover:text-foreground transition-colors">
-                  <ZoomOut className="size-3" /> Zoom Out
-                </button>
-                <button type="button" onClick={handleCanvasZoomIn} className="flex w-full items-center justify-center gap-1.5 rounded-lg border border-border/60 py-1.5 text-[10px] text-muted-foreground hover:bg-muted/60 hover:text-foreground transition-colors">
-                  <ZoomIn className="size-3" /> Zoom In
-                </button>
-                <button type="button" onClick={handleCanvasZoomReset} className="flex w-full items-center justify-center gap-1.5 rounded-lg border border-border/60 py-1.5 text-[10px] text-muted-foreground hover:bg-muted/60 hover:text-foreground transition-colors">
-                  <ZoomIn className="size-3" /> Reset (100%)
-                </button>
-              </div>
-            </div>
-
             {photos.length > 0 && (
               <button type="button" onClick={clearAll} className="w-full rounded-lg border border-destructive/30 py-2 text-[10px] font-medium text-destructive hover:bg-destructive/10">
                 Clear All ({photos.length})
@@ -513,61 +393,38 @@ export function PhotofolioPage({ projectId }: PhotofolioPageProps) {
             )}
           </aside>
 
-        <main className="flex-1 overflow-auto bg-muted/10 flex items-center justify-center p-4">
+        <main className="flex-1 overflow-hidden bg-muted/10">
           <div
             ref={canvasContainerRef}
-            className="flex items-center justify-center w-full h-full"
+            data-canvas
+            onClick={handleCanvasClick}
+            className="relative h-full w-full"
+            style={{ backgroundColor: canvasBgColor }}
           >
             {photos.length === 0 ? (
-              <div className="flex flex-col items-center gap-3 text-muted-foreground/40">
+              <div className="flex h-full flex-col items-center justify-center gap-3 text-muted-foreground/40">
                 <ImagePlus className="size-12" />
                 <p className="text-sm">No photos yet</p>
                 <p className="text-[10px]">Upload images from the sidebar to get started</p>
               </div>
             ) : (
-<div
-      data-canvas
-      onClick={handleCanvasClick}
-      onWheel={handleCanvasWheel}
-      onPointerDown={handleCanvasPointerDown}
-      onDoubleClick={handleCanvasDoubleClick}
-                className="relative rounded-xl shadow-xl overflow-hidden"
-                style={{ cursor: isPanning ? 'grabbing' : 'grab', ...canvasStyle }}
-              >
-                {photos.map((photo) => (
-                  <PhotoBox
-                    key={photo.id}
-                    photo={photo}
-                    canvasW={canvasW}
-                    canvasH={canvasH}
-                    isSelected={selectedId === photo.id}
-                    onSelect={setSelectedId}
-                    onRemove={removePhoto}
-                    onUpdate={updatePhoto}
-                    isGridMode={isGridMode}
-                  />
-                ))}
-              </div>
+              photos.map((photo) => (
+                <PhotoBox
+                  key={photo.id}
+                  photo={photo}
+                  canvasW={canvasW}
+                  canvasH={canvasH}
+                  isSelected={selectedId === photo.id}
+                  onSelect={setSelectedId}
+                  onRemove={removePhoto}
+                  onUpdate={updatePhoto}
+                  isGridMode={isGridMode}
+                />
+              ))
             )}
           </div>
         </main>
       </div>
-
-      {/* Canvas zoom controls - bottom-right */}
-      {photos.length > 0 && (
-        <div className="fixed bottom-4 right-4 flex items-center gap-1 rounded-lg border border-border/60 bg-card/95 shadow-lg p-1 backdrop-blur-sm">
-          <button type="button" onClick={handleCanvasZoomOut} className="flex h-7 w-7 items-center justify-center rounded-md text-muted-foreground hover:bg-muted hover:text-foreground transition-colors" title="Zoom out">
-            <ZoomOut className="size-3.5" />
-          </button>
-          <span className="w-12 text-center text-[10px] font-bold text-foreground">{Math.round(canvasZoom * 100)}%</span>
-          <button type="button" onClick={handleCanvasZoomIn} className="flex h-7 w-7 items-center justify-center rounded-md text-muted-foreground hover:bg-muted hover:text-foreground transition-colors" title="Zoom in">
-            <ZoomIn className="size-3.5" />
-          </button>
-          <button type="button" onClick={handleCanvasZoomReset} className="ml-1 flex h-7 w-7 items-center justify-center rounded-md text-muted-foreground hover:bg-muted hover:text-foreground transition-colors" title="Reset zoom">
-            <ZoomIn className="size-3.5" />
-          </button>
-        </div>
-      )}
     </div>
   )
 }

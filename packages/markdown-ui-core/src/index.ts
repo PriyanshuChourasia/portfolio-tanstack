@@ -9,9 +9,4 @@ export type {
 export { Button } from './components/ui/button'
 export { Dialog } from './components/ui/dialog'
 export { legacyMdToHtml } from './lib/legacy-md-to-html'
-export {
-  HIGHLIGHT_SWATCHES,
-  COMMON_TEXT_COLORS,
-  HIGHLIGHT_TEXT_COLOR,
-  DEFAULT_TEXT_COLOR,
-} from './lib/format-colors'
+export { COMMON_TEXT_COLORS, DEFAULT_TEXT_COLOR } from './lib/format-colors'
