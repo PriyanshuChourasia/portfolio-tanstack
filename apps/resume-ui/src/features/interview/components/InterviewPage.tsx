@@ -10,6 +10,7 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion'
 import { interviewGroups } from '@/data/interview-data'
+import { QuizTest } from './QuizTest'
 
 const ease = [0.25, 0.46, 0.45, 0.94] as const
 
@@ -110,11 +111,15 @@ export function InterviewPage() {
                 </button>
                 <h2 className="mb-2 text-xl font-bold">{activeSubtopic.topic}</h2>
 
-                {activeSubtopic.questions.length > 0 ? (
+                {activeSubtopic.quiz ? (
+                  <QuizTest config={activeSubtopic.quiz} />
+                ) : activeSubtopic.questions.length > 0 ? (
                   <Accordion type="single" collapsible className="w-full">
                     {activeSubtopic.questions.map((q) => (
                       <AccordionItem key={q.id} value={q.id}>
-                        <AccordionTrigger>{q.question}</AccordionTrigger>
+                        <AccordionTrigger className="whitespace-pre-line">
+                          {q.question}
+                        </AccordionTrigger>
                         <AccordionContent className="whitespace-pre-line text-muted-foreground">
                           {q.answer}
                         </AccordionContent>
@@ -135,7 +140,9 @@ export function InterviewPage() {
                   <Accordion type="single" collapsible className="w-full">
                     {activeGroup.questions.map((q) => (
                       <AccordionItem key={q.id} value={q.id}>
-                        <AccordionTrigger>{q.question}</AccordionTrigger>
+                        <AccordionTrigger className="whitespace-pre-line">
+                          {q.question}
+                        </AccordionTrigger>
                         <AccordionContent className="whitespace-pre-line text-muted-foreground">
                           {q.answer}
                         </AccordionContent>
@@ -164,7 +171,7 @@ export function InterviewPage() {
                           <span>{sub.topic}</span>
                           <span className="flex items-center gap-2 text-muted-foreground">
                             <span className="rounded-full bg-muted px-2 py-0.5 text-[10px] font-semibold">
-                              {sub.questions.length}
+                              {sub.quiz ? sub.quiz.questions.length : sub.questions.length}
                             </span>
                             <ChevronRight className="size-4" />
                           </span>
