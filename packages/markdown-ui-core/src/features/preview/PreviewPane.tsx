@@ -1,30 +1,34 @@
-import Markdown from 'react-markdown'
-import remarkGfm from 'remark-gfm'
-import rehypeHighlight from 'rehype-highlight'
-import { remarkHighlight } from '../../lib/remark-highlight'
-import { remarkNote } from '../../lib/remark-note'
-import { remarkTextColor } from '../../lib/remark-text-color'
+import { useMemo } from 'react'
+import DOMPurify from 'dompurify'
 
 interface PreviewPaneProps {
-  markdown: string
+  /** HTML produced by the editor (TipTap getHTML()) — the same content model. */
+  html: string
 }
 
-export function PreviewPane({ markdown }: PreviewPaneProps) {
+/** Attributes/styles the highlight + text-color marks rely on. */
+const PURIFY_CONFIG = {
+  ALLOWED_ATTR: ['style', 'color', 'src', 'alt', 'title', 'href', 'data-color'],
+  ALLOWED_TAGS: [
+    // Block structure
+    'p', 'br', 'hr', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
+    'blockquote', 'pre', 'code',
+    'ul', 'ol', 'li',
+    // Inline marks & links/images
+    'strong', 'em', 'u', 's', 'code', 'mark', 'span', 'a', 'img', 'abbr',
+    // Tables (GFM-style, kept for hand-written HTML tables)
+    'table', 'thead', 'tbody', 'tr', 'th', 'td', 'colgroup', 'col',
+  ],
+}
+
+export function PreviewPane({ html }: PreviewPaneProps) {
+  const clean = useMemo(() => DOMPurify.sanitize(html, PURIFY_CONFIG), [html])
+
   return (
-    <div className="flex-1 overflow-y-auto min-h-0 p-6 prose prose-sm dark:prose-invert max-w-none">
-      <Markdown
-        remarkPlugins={[remarkGfm, remarkHighlight, remarkNote, remarkTextColor]}
-        rehypePlugins={[rehypeHighlight]}
-        components={{
-          table: ({ children, ...props }) => (
-            <div className="overflow-x-auto">
-              <table {...props}>{children}</table>
-            </div>
-          ),
-        }}
-      >
-        {markdown}
-      </Markdown>
-    </div>
+    <div
+      className="flex-1 overflow-y-auto min-h-0 p-6 prose prose-sm dark:prose-invert max-w-none"
+      // Content is sanitized above with an explicit tag/attr allowlist.
+      dangerouslySetInnerHTML={{ __html: clean }}
+    />
   )
 }

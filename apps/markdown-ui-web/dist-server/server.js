@@ -413,8 +413,9 @@ function handleCreatePage(projectId, req, res) {
             const entry = { id, name, createdAt: now, updatedAt: now, fileName: pageFileName, order: data.pages.length };
             data.pages.push(entry);
             writePagesIndex(projectPath, data);
-            const mdPath = join(getProjectDir(projectPath), `${pageFileName}.md`);
-            writeFileSync(mdPath, '# Untitled Page\n\nStart writing your markdown here...\n', 'utf-8');
+            // New pages are stored as HTML — the editor's native content model.
+            const htmlPath = join(getProjectDir(projectPath), `${pageFileName}.html`);
+            writeFileSync(htmlPath, '<h1>Untitled Page</h1>\n<p>Start writing here...</p>', 'utf-8');
             res.writeHead(200, { 'Content-Type': 'application/json' });
             res.end(JSON.stringify({ id, name, createdAt: now, updatedAt: now, order: data.pages.length - 1 }));
         }
@@ -438,7 +439,11 @@ function handleReadPage(projectId, pageId, _req, res) {
         res.end(JSON.stringify({ error: 'Not Found' }));
         return;
     }
-    const filePath = join(getProjectDir(projectPath), `${entry.fileName}.md`);
+    // Prefer the new .html content model; fall back to legacy sigil-markdown
+    // .md files, which the app converts to HTML on open and saves as .html.
+    const htmlPath = join(getProjectDir(projectPath), `${entry.fileName}.html`);
+    const mdPath = join(getProjectDir(projectPath), `${entry.fileName}.md`);
+    const filePath = existsSync(htmlPath) ? htmlPath : mdPath;
     if (!existsSync(filePath)) {
         res.writeHead(200, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify({ content: '' }));
@@ -469,8 +474,10 @@ function handleWritePage(projectId, pageId, req, res) {
             }
             entry.updatedAt = new Date().toISOString();
             writePagesIndex(projectPath, data);
-            const mdPath = join(getProjectDir(projectPath), `${entry.fileName}.md`);
-            writeFileSync(mdPath, content, 'utf-8');
+            // Content is always HTML now (legacy .md is converted on open). Any
+            // stale legacy .md sibling is left in place untouched, but .html wins on read.
+            const htmlPath = join(getProjectDir(projectPath), `${entry.fileName}.html`);
+            writeFileSync(htmlPath, content, 'utf-8');
             res.writeHead(200, { 'Content-Type': 'application/json' });
             res.end(JSON.stringify({}));
         }
@@ -497,10 +504,16 @@ function handleDeletePage(projectId, pageId, _req, res) {
     data.pages = data.pages.filter((p) => p.id !== pageId);
     writePagesIndex(projectPath, data);
     try {
-        unlinkSync(join(getProjectDir(projectPath), `${entry.fileName}.md`));
+        unlinkSync(join(getProjectDir(projectPath), `${entry.fileName}.html`));
     }
     catch {
         // File might not exist, that's ok
+    }
+    try {
+        unlinkSync(join(getProjectDir(projectPath), `${entry.fileName}.md`));
+    }
+    catch {
+        // Legacy file might not exist, that's ok
     }
     res.writeHead(200, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify({}));

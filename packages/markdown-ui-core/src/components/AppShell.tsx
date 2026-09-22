@@ -2,6 +2,7 @@ import type { ReactNode } from 'react'
 import { Moon, Sun, PanelLeftClose, PanelLeft, ArrowLeft } from 'lucide-react'
 import { useTheme } from 'next-themes'
 import { Button } from './ui/button'
+import { cn } from '../lib/utils'
 
 interface AppShellProps {
   stage: 'home' | 'pages' | 'editor'
@@ -9,6 +10,12 @@ interface AppShellProps {
   editorOpen?: boolean
   onToggleEditor?: () => void
   onBack?: () => void
+  /**
+   * Optional toolbar strip rendered inside the header, between the nav buttons
+   * and the theme toggle. Used to lift the editor's formatting palette out of
+   * the editor pane (only meaningful when a document is open).
+   */
+  headerToolbar?: ReactNode
   children: ReactNode
 }
 
@@ -18,13 +25,23 @@ export function AppShell({
   editorOpen = false,
   onToggleEditor,
   onBack,
+  headerToolbar,
   children,
 }: AppShellProps) {
   const { theme, setTheme } = useTheme()
 
   return (
     <div className="h-screen flex flex-col bg-background text-foreground">
-      <header className="flex items-center justify-between border-b border-border px-4 py-2 shrink-0">
+      <header
+        className={cn(
+          'border-b border-border px-4 py-2 shrink-0',
+          // Two rows on narrow viewports when the palette is present so it
+          // can wrap onto its own line instead of squeezing the title row.
+          headerToolbar
+            ? 'flex flex-wrap items-center justify-between gap-x-3 gap-y-1'
+            : 'flex items-center justify-between',
+        )}
+      >
         <div className="flex items-center gap-2">
           {stage !== 'home' && (
             <>
@@ -54,7 +71,14 @@ export function AppShell({
           )}
           <h1 className="text-sm font-semibold tracking-tight">Markdown-AI</h1>
         </div>
-        <div className="flex items-center gap-3">
+        {headerToolbar && (
+          <div
+            className="order-last flex w-full items-center gap-1 overflow-x-auto sm:w-auto sm:order-none sm:flex-1 sm:justify-center sm:overflow-visible min-w-0"
+          >
+            {headerToolbar}
+          </div>
+        )}
+        <div className="flex items-center gap-3 shrink-0">
           <Button
             variant="ghost"
             size="icon"

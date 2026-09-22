@@ -82,7 +82,7 @@ function FloatingNav() {
   ]
 
   const externalLinks = [
-    // { label: 'Photofolio', to: '/photofolio' as const }, // hidden for now
+    { label: 'Photofolio', to: '/photofolio' as const },
     { label: 'Interview', to: '/interview' as const },
   ]
 
@@ -545,11 +545,10 @@ function TemplateShowcase() {
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.04, duration: 0.4, ease }}
                 onClick={() => setActive(i)}
-                className={`group flex snap-start shrink-0 items-center gap-3 rounded-xl border px-3 py-3 text-left transition-all lg:w-full lg:shrink ${
-                  active === i
-                    ? 'border-primary/30 bg-primary/5 shadow-sm'
-                    : 'border-transparent hover:border-border/60 hover:bg-muted/30'
-                }`}
+                className={`group flex snap-start shrink-0 items-center gap-3 rounded-xl border px-3 py-3 text-left transition-all lg:w-full lg:shrink ${active === i
+                  ? 'border-primary/30 bg-primary/5 shadow-sm'
+                  : 'border-transparent hover:border-border/60 hover:bg-muted/30'
+                  }`}
               >
                 <div className={`size-8 rounded-lg bg-gradient-to-br ${t.color} shadow-sm`} />
                 <div className="min-w-0">

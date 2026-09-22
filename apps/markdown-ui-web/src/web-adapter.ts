@@ -4,7 +4,8 @@ const DB_NAME = 'markdown-ui'
 const DB_VERSION = 1
 const STORE_NAME = 'handles'
 const ROOT_KEY = 'root-handle'
-const SEED_CONTENT = `# Untitled Page\n\nStart writing your markdown here...\n`
+/** New pages are stored as HTML — the editor's native content model. */
+const SEED_CONTENT = '<h1>Untitled Page</h1>\n<p>Start writing here...</p>'
 const LEGACY_SEED_CONTENT = `# Untitled Project\n\nStart writing your markdown here...\n`
 
 function openDB(): Promise<IDBDatabase> {
@@ -291,7 +292,7 @@ export const webAdapter: StorageAdapter = {
     const meta: PageIndexEntry = { id, name, createdAt: now, updatedAt: now, fileName, order: index.pages.length }
     index.pages.push(meta)
     await writePagesIndex(h, projectFileName, index)
-    await writeFile(h, `projects/${projectFileName}/${fileName}.md`, SEED_CONTENT)
+    await writeFile(h, `projects/${projectFileName}/${fileName}.html`, SEED_CONTENT)
     return { id, name, createdAt: now, updatedAt: now, order: index.pages.length - 1 }
   },
 
@@ -302,7 +303,13 @@ export const webAdapter: StorageAdapter = {
     const index = await readPagesIndex(h, projectFileName)
     const entry = index.pages.find((p) => p.id === pageId)
     if (!entry) return ''
-    return (await readFile(h, `projects/${projectFileName}/${entry.fileName}.md`)) ?? ''
+    // Prefer the new .html content model; fall back to legacy sigil-markdown
+    // .md files, which the app converts to HTML on open and saves as .html.
+    return (
+      (await readFile(h, `projects/${projectFileName}/${entry.fileName}.html`)) ??
+      (await readFile(h, `projects/${projectFileName}/${entry.fileName}.md`)) ??
+      ''
+    )
   },
 
   async writePage(projectId: string, pageId: string, content: string): Promise<void> {
@@ -314,7 +321,9 @@ export const webAdapter: StorageAdapter = {
     if (!entry) return
     entry.updatedAt = new Date().toISOString()
     await writePagesIndex(h, projectFileName, index)
-    await writeFile(h, `projects/${projectFileName}/${entry.fileName}.md`, content)
+    // Content is always HTML now (legacy .md is converted on open). Any stale
+    // legacy .md sibling is left in place untouched, but .html wins on read.
+    await writeFile(h, `projects/${projectFileName}/${entry.fileName}.html`, content)
   },
 
   async reorderPages(projectId: string, orderedPageIds: string[]): Promise<void> {
@@ -341,6 +350,7 @@ export const webAdapter: StorageAdapter = {
     await writePagesIndex(h, projectFileName, index)
     try {
       const parent = await getDirHandle(h, `projects/${projectFileName}`, false)
+      await parent.removeEntry(`${entry.fileName}.html`).catch(() => {})
       await parent.removeEntry(`${entry.fileName}.md`)
     } catch { /* already gone */ }
   },

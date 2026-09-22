@@ -19,6 +19,13 @@ export interface UserConfig {
   createdAt: string
 }
 
+/**
+ * Page content is stored as HTML — the editor's native content model
+ * (TipTap getHTML() output, with inline styles for color/highlight).
+ * Legacy pages stored as sigil markdown (.md with ==highlight== /
+ * %%color:...%% sigils) are converted once on open via legacyMdToHtml().
+ */
+
 export interface StorageAdapter {
   pickLocation(): Promise<string>
   getDefaultLocationLabel(): string

@@ -129,23 +129,51 @@ body {
   font-family: var(--font-sans);
 }
 
-/* Highlight colors for the `==color:text==` markdown extension. Text color is
-   pinned to a dark gray since these are all light pastel backgrounds, regardless
-   of the surrounding light/dark theme (prose's dark:prose-invert would otherwise
-   turn the text light and unreadable against them). */
-mark.hl-yellow { background-color: #fde68a; color: #1f2937; }
-mark.hl-green { background-color: #bbf7d0; color: #1f2937; }
-mark.hl-blue { background-color: #bfdbfe; color: #1f2937; }
-mark.hl-pink { background-color: #fbcfe8; color: #1f2937; }
-mark.hl-orange { background-color: #fed7aa; color: #1f2937; }
-mark.hl-purple { background-color: #e9d5ff; color: #1f2937; }
-
-/* Note syntax: %%note:<encoded>%%text%% */
-abbr.note {
-  text-decoration: none;
-  border-bottom: 1px dotted currentColor;
-  cursor: help;
+/* Highlight marks (TipTap Highlight, multicolor). Background is stored inline
+   on the element; text color is pinned to a dark gray since these are all light
+   pastel backgrounds, regardless of the surrounding light/dark theme (prose's
+   dark:prose-invert would otherwise turn the text light and unreadable against
+   them). */
+mark[data-color] {
+  color: #1f2937;
+  border-radius: 0.125rem;
+  padding: 0 0.1em;
 }
-abbr.note:hover {
-  background-color: rgba(128, 128, 128, 0.1);
+
+/* Inline code blocks inside the editor/preview survive ProseMirror + DOMPurify */
+.tiptap pre {
+  background-color: var(--muted);
+  border-radius: 0.375rem;
+  padding: 0.75rem 1rem;
+}
+.tiptap pre code {
+  background: none;
+  padding: 0;
+}
+
+/* Images inserted via the toolbar should never overflow the editor/preview */
+.tiptap img,
+.prose img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Editor placeholder + focus styling */
+.tiptap {
+  outline: none;
+  min-height: 100%;
+  padding: 1.5rem;
+}
+
+/* ProseMirror tables */
+.tiptap table,
+.prose table {
+  border-collapse: collapse;
+}
+.tiptap th,
+.tiptap td,
+.prose th,
+.prose td {
+  border: 1px solid var(--border);
+  padding: 0.25rem 0.5rem;
 }

@@ -1,4 +1,5 @@
 export { PhotofolioPage } from './components/PhotofolioPage'
-export { DashboardLayout } from './components/DashboardLayout'
-export { DashboardSidebar } from './components/DashboardSidebar'
-export { ToolPanel } from './components/ToolPanel'
+export { usePhotofolioImages, usePhotofolioCanvasSettings } from './usePhotofolioImages'
+export type { Photo } from './usePhotofolioImages'
+export { usePhotofolioProjects } from './usePhotofolioProjects'
+export type { PhotofolioProject } from './usePhotofolioProjects'

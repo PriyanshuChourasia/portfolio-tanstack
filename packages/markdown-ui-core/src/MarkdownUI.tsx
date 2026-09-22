@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { useStorage, StorageProvider } from './lib/context'
+import { legacyMdToHtml } from './lib/legacy-md-to-html'
 import type { StorageAdapter } from './lib/types'
 import { AppShell } from './components/AppShell'
 import { ProjectsHome } from './features/projects/ProjectsHome'
@@ -15,7 +16,7 @@ function MarkdownUIInner() {
   const [currentProjectId, setCurrentProjectId] = useState<string | null>(null)
   const [currentProjectName, setCurrentProjectName] = useState('')
   const [currentPageId, setCurrentPageId] = useState<string | null>(null)
-  const [markdown, setMarkdown] = useState('')
+  const [html, setHtml] = useState('')
   const [showEditor, setShowEditor] = useState(true)
   const saveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const currentContentRef = useRef('')
@@ -26,21 +27,35 @@ function MarkdownUIInner() {
     setStage('pages')
   }, [])
 
+  const loadPageContent = useCallback(
+    async (projectId: string, pageId: string) => {
+      const raw = await adapter.readPage(projectId, pageId)
+      // One-time migration: legacy pages stored as sigil markdown are
+      // converted to the HTML content model and written back immediately,
+      // so the .md → .html switch happens on first open.
+      const converted = legacyMdToHtml(raw)
+      if (converted !== raw) {
+        await adapter.writePage(projectId, pageId, converted)
+      }
+      setHtml(converted)
+      currentContentRef.current = converted
+    },
+    [adapter],
+  )
+
   const handleOpenPage = useCallback(
     async (pageId: string) => {
       if (!currentProjectId) return
-      const content = await adapter.readPage(currentProjectId, pageId)
       setCurrentPageId(pageId)
-      setMarkdown(content)
-      currentContentRef.current = content
+      await loadPageContent(currentProjectId, pageId)
       setStage('editor')
     },
-    [adapter, currentProjectId],
+    [currentProjectId, loadPageContent],
   )
 
   const handleContentChange = useCallback(
     (value: string) => {
-      setMarkdown(value)
+      setHtml(value)
       currentContentRef.current = value
       if (saveTimerRef.current) clearTimeout(saveTimerRef.current)
       saveTimerRef.current = setTimeout(() => {
@@ -58,7 +73,7 @@ function MarkdownUIInner() {
       adapter.writePage(currentProjectId, currentPageId, currentContentRef.current)
     }
     setCurrentPageId(null)
-    setMarkdown('')
+    setHtml('')
     currentContentRef.current = ''
     setStage('pages')
   }, [adapter, currentProjectId, currentPageId])
@@ -67,7 +82,7 @@ function MarkdownUIInner() {
     setCurrentProjectId(null)
     setCurrentProjectName('')
     setCurrentPageId(null)
-    setMarkdown('')
+    setHtml('')
     currentContentRef.current = ''
     setStage('home')
   }, [])
@@ -76,13 +91,11 @@ function MarkdownUIInner() {
 
   useEffect(() => {
     if (stage !== 'editor' || !currentProjectId || !currentPageId) return
-    if (markdown) return
+    if (html) return
     ;(async () => {
-      const content = await adapter.readPage(currentProjectId, currentPageId)
-      setMarkdown(content)
-      currentContentRef.current = content
+      await loadPageContent(currentProjectId, currentPageId)
     })()
-  }, [stage, currentProjectId, currentPageId, adapter, markdown])
+  }, [stage, currentProjectId, currentPageId, adapter, html, loadPageContent])
 
   return (
     <AppShell
@@ -109,14 +122,14 @@ function MarkdownUIInner() {
               <div className="px-4 py-2 border-b border-border text-xs font-medium uppercase tracking-wider text-muted-foreground shrink-0">
                 Editor
               </div>
-              <EditorPane value={markdown} onChange={handleContentChange} />
+              <EditorPane value={html} onChange={handleContentChange} />
             </div>
           )}
           <div className="flex-1 flex flex-col min-h-0">
             <div className="px-4 py-2 border-b border-border text-xs font-medium uppercase tracking-wider text-muted-foreground shrink-0">
               Preview
             </div>
-            <PreviewPane markdown={markdown} />
+            <PreviewPane html={html} />
           </div>
         </div>
       )}
