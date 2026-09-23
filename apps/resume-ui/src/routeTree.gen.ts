@@ -22,7 +22,6 @@ import { Route as PolandFrontendRouteImport } from './routes/poland/frontend'
 import { Route as PolandBackendRouteImport } from './routes/poland/backend'
 import { Route as PhotofolioProjectIdRouteImport } from './routes/photofolio.$projectId'
 import { Route as GermanyBackendRouteImport } from './routes/germany/backend'
-import { Route as PhotofolioProjectIdSettingsRouteImport } from './routes/photofolio.$projectId_.settings'
 
 const ResumeToPortfolioRoute = ResumeToPortfolioRouteImport.update({
   id: '/resume-to-portfolio',
@@ -89,12 +88,6 @@ const GermanyBackendRoute = GermanyBackendRouteImport.update({
   path: '/germany/backend',
   getParentRoute: () => rootRouteImport,
 } as any)
-const PhotofolioProjectIdSettingsRoute =
-  PhotofolioProjectIdSettingsRouteImport.update({
-    id: '/$projectId_/settings',
-    path: '/$projectId/settings',
-    getParentRoute: () => PhotofolioRoute,
-  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -110,7 +103,6 @@ export interface FileRoutesByFullPath {
   '/poland/backend': typeof PolandBackendRoute
   '/poland/frontend': typeof PolandFrontendRoute
   '/photofolio/': typeof PhotofolioIndexRoute
-  '/photofolio/$projectId/settings': typeof PhotofolioProjectIdSettingsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -125,7 +117,6 @@ export interface FileRoutesByTo {
   '/poland/backend': typeof PolandBackendRoute
   '/poland/frontend': typeof PolandFrontendRoute
   '/photofolio': typeof PhotofolioIndexRoute
-  '/photofolio/$projectId/settings': typeof PhotofolioProjectIdSettingsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -142,7 +133,6 @@ export interface FileRoutesById {
   '/poland/backend': typeof PolandBackendRoute
   '/poland/frontend': typeof PolandFrontendRoute
   '/photofolio/': typeof PhotofolioIndexRoute
-  '/photofolio/$projectId_/settings': typeof PhotofolioProjectIdSettingsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -160,7 +150,6 @@ export interface FileRouteTypes {
     | '/poland/backend'
     | '/poland/frontend'
     | '/photofolio/'
-    | '/photofolio/$projectId/settings'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -175,7 +164,6 @@ export interface FileRouteTypes {
     | '/poland/backend'
     | '/poland/frontend'
     | '/photofolio'
-    | '/photofolio/$projectId/settings'
   id:
     | '__root__'
     | '/'
@@ -191,7 +179,6 @@ export interface FileRouteTypes {
     | '/poland/backend'
     | '/poland/frontend'
     | '/photofolio/'
-    | '/photofolio/$projectId_/settings'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -301,26 +288,17 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GermanyBackendRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/photofolio/$projectId_/settings': {
-      id: '/photofolio/$projectId_/settings'
-      path: '/$projectId/settings'
-      fullPath: '/photofolio/$projectId/settings'
-      preLoaderRoute: typeof PhotofolioProjectIdSettingsRouteImport
-      parentRoute: typeof PhotofolioRoute
-    }
   }
 }
 
 interface PhotofolioRouteChildren {
   PhotofolioProjectIdRoute: typeof PhotofolioProjectIdRoute
   PhotofolioIndexRoute: typeof PhotofolioIndexRoute
-  PhotofolioProjectIdSettingsRoute: typeof PhotofolioProjectIdSettingsRoute
 }
 
 const PhotofolioRouteChildren: PhotofolioRouteChildren = {
   PhotofolioProjectIdRoute: PhotofolioProjectIdRoute,
   PhotofolioIndexRoute: PhotofolioIndexRoute,
-  PhotofolioProjectIdSettingsRoute: PhotofolioProjectIdSettingsRoute,
 }
 
 const PhotofolioRouteWithChildren = PhotofolioRoute._addFileChildren(
