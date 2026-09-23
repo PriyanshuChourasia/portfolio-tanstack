@@ -84,6 +84,7 @@ function FloatingNav() {
   const externalLinks = [
     { label: 'Photofolio', to: '/photofolio' as const },
     { label: 'Interview', to: '/interview' as const },
+    { label: 'Mock Test', to: '/reasoning-mock' as const },
   ]
 
   return (

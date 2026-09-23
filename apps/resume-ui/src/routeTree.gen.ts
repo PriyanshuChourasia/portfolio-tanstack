@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as ResumeToPortfolioRouteImport } from './routes/resume-to-portfolio'
 import { Route as ResumeRouteImport } from './routes/resume'
+import { Route as ReasoningMockRouteImport } from './routes/reasoning-mock'
 import { Route as PortfolioRouteImport } from './routes/portfolio'
 import { Route as PhotofolioRouteImport } from './routes/photofolio'
 import { Route as InterviewRouteImport } from './routes/interview'
@@ -31,6 +32,11 @@ const ResumeToPortfolioRoute = ResumeToPortfolioRouteImport.update({
 const ResumeRoute = ResumeRouteImport.update({
   id: '/resume',
   path: '/resume',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReasoningMockRoute = ReasoningMockRouteImport.update({
+  id: '/reasoning-mock',
+  path: '/reasoning-mock',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PortfolioRoute = PortfolioRouteImport.update({
@@ -96,6 +102,7 @@ export interface FileRoutesByFullPath {
   '/interview': typeof InterviewRoute
   '/photofolio': typeof PhotofolioRouteWithChildren
   '/portfolio': typeof PortfolioRoute
+  '/reasoning-mock': typeof ReasoningMockRoute
   '/resume': typeof ResumeRoute
   '/resume-to-portfolio': typeof ResumeToPortfolioRoute
   '/germany/backend': typeof GermanyBackendRoute
@@ -110,6 +117,7 @@ export interface FileRoutesByTo {
   '/classic': typeof ClassicRoute
   '/interview': typeof InterviewRoute
   '/portfolio': typeof PortfolioRoute
+  '/reasoning-mock': typeof ReasoningMockRoute
   '/resume': typeof ResumeRoute
   '/resume-to-portfolio': typeof ResumeToPortfolioRoute
   '/germany/backend': typeof GermanyBackendRoute
@@ -126,6 +134,7 @@ export interface FileRoutesById {
   '/interview': typeof InterviewRoute
   '/photofolio': typeof PhotofolioRouteWithChildren
   '/portfolio': typeof PortfolioRoute
+  '/reasoning-mock': typeof ReasoningMockRoute
   '/resume': typeof ResumeRoute
   '/resume-to-portfolio': typeof ResumeToPortfolioRoute
   '/germany/backend': typeof GermanyBackendRoute
@@ -143,6 +152,7 @@ export interface FileRouteTypes {
     | '/interview'
     | '/photofolio'
     | '/portfolio'
+    | '/reasoning-mock'
     | '/resume'
     | '/resume-to-portfolio'
     | '/germany/backend'
@@ -157,6 +167,7 @@ export interface FileRouteTypes {
     | '/classic'
     | '/interview'
     | '/portfolio'
+    | '/reasoning-mock'
     | '/resume'
     | '/resume-to-portfolio'
     | '/germany/backend'
@@ -172,6 +183,7 @@ export interface FileRouteTypes {
     | '/interview'
     | '/photofolio'
     | '/portfolio'
+    | '/reasoning-mock'
     | '/resume'
     | '/resume-to-portfolio'
     | '/germany/backend'
@@ -188,6 +200,7 @@ export interface RootRouteChildren {
   InterviewRoute: typeof InterviewRoute
   PhotofolioRoute: typeof PhotofolioRouteWithChildren
   PortfolioRoute: typeof PortfolioRoute
+  ReasoningMockRoute: typeof ReasoningMockRoute
   ResumeRoute: typeof ResumeRoute
   ResumeToPortfolioRoute: typeof ResumeToPortfolioRoute
   GermanyBackendRoute: typeof GermanyBackendRoute
@@ -209,6 +222,13 @@ declare module '@tanstack/react-router' {
       path: '/resume'
       fullPath: '/resume'
       preLoaderRoute: typeof ResumeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reasoning-mock': {
+      id: '/reasoning-mock'
+      path: '/reasoning-mock'
+      fullPath: '/reasoning-mock'
+      preLoaderRoute: typeof ReasoningMockRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/portfolio': {
@@ -313,6 +333,7 @@ const rootRouteChildren: RootRouteChildren = {
   InterviewRoute: InterviewRoute,
   PhotofolioRoute: PhotofolioRouteWithChildren,
   PortfolioRoute: PortfolioRoute,
+  ReasoningMockRoute: ReasoningMockRoute,
   ResumeRoute: ResumeRoute,
   ResumeToPortfolioRoute: ResumeToPortfolioRoute,
   GermanyBackendRoute: GermanyBackendRoute,
