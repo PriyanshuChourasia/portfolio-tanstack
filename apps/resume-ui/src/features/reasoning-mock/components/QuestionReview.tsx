@@ -148,7 +148,7 @@ export function QuestionReview({ result }: { result: TestResult }) {
                     <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
                       Explanation
                     </p>
-                    <p className="mt-1.5 text-sm leading-relaxed">{item.explanation}</p>
+                    <p className="mt-1.5 whitespace-pre-line text-sm leading-relaxed">{item.explanation}</p>
                     <p className="mt-2 text-[10px] text-muted-foreground">{item.sourceNote}</p>
                   </div>
                 )}

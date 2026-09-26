@@ -9,7 +9,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
-import { getExam } from '@/data/reasoning'
+import { SUBJECT_LABELS, getExam } from '@/data/reasoning'
 import { useReasoningMockStore } from '../store'
 import { formatClock, formatDateTime } from '../lib/time'
 
@@ -42,7 +42,7 @@ export function ActiveTestRecovery() {
           <h1 className="text-xl font-bold tracking-tight">Active test found</h1>
         </div>
         <p className="mt-3 text-sm text-muted-foreground">
-          You have an unfinished <strong>{getExam(session.examId).name}</strong> reasoning test
+          You have an unfinished <strong>{getExam(session.examId).name}</strong> {SUBJECT_LABELS[getExam(session.examId).subject].toLowerCase()} test
           ({session.testTitle}). Resume it exactly where you left off.
         </p>
 

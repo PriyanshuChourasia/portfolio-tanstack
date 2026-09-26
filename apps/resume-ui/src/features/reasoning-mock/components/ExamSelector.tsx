@@ -1,7 +1,7 @@
 import { Clock, History, ListChecks, Target, Trophy } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { EXAMS, questionsForExam, topicsForExam } from '@/data/reasoning'
+import { EXAMS, SUBJECT_LABELS, questionsForExam, topicsForExam } from '@/data/reasoning'
 import type { ExamDefinition, TestResult } from '@/data/reasoning'
 import { useReasoningMockStore } from '../store'
 
@@ -23,11 +23,11 @@ export function ExamSelector() {
       <header className="flex flex-wrap items-start justify-between gap-4">
         <div>
           <Badge variant="secondary" className="mb-3 rounded-full px-3 py-1 text-xs">
-            Reasoning only
+            Reasoning & English
           </Badge>
-          <h1 className="text-3xl font-black tracking-tight sm:text-4xl">Reasoning Mock Test</h1>
+          <h1 className="text-3xl font-black tracking-tight sm:text-4xl">Reasoning & English Mock Test</h1>
           <p className="mt-3 max-w-2xl text-sm text-muted-foreground sm:text-base">
-            Practise reasoning for competitive exams with a real exam-style wizard: one question at a
+            Practise reasoning and English for competitive exams with a real exam-style wizard: one question at a
             time, a persistent timer, an answer palette and a detailed evaluation at the end.
           </p>
         </div>
@@ -40,7 +40,7 @@ export function ExamSelector() {
         </Button>
       </header>
 
-      <div className="mt-8 grid gap-4 md:grid-cols-3">
+      <div className="mt-8 grid gap-4 md:grid-cols-2">
         {EXAMS.map((exam) => {
           const bank = questionsForExam(exam.id)
           const topics = topicsForExam(exam.id)
@@ -56,7 +56,9 @@ export function ExamSelector() {
             >
               <div className={`mb-4 h-1.5 w-12 rounded-full bg-gradient-to-r ${exam.accent}`} />
               <h2 className="text-lg font-bold tracking-tight">{exam.name}</h2>
-              <p className="mt-1 text-xs font-medium text-muted-foreground">Reasoning section</p>
+              <p className="mt-1 text-xs font-medium text-muted-foreground">
+                {exam.kind === 'practice' ? 'Topic practice paper' : `${SUBJECT_LABELS[exam.subject]} section`}
+              </p>
 
               <dl className="mt-4 grid grid-cols-2 gap-x-3 gap-y-3 text-xs">
                 <div className="flex items-start gap-2">

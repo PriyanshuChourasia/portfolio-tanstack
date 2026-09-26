@@ -5,7 +5,7 @@ import type {
   FocusArea,
   Question,
   QuestionResult,
-  ReasoningTopic,
+  QuestionTopic,
   RecommendationSet,
   TestResult,
   TestSession,
@@ -50,7 +50,7 @@ function average(values: number[]): number {
 }
 
 export function buildTopicPerformance(results: QuestionResult[]): TopicPerformance[] {
-  const buckets = new Map<ReasoningTopic, QuestionResult[]>()
+  const buckets = new Map<QuestionTopic, QuestionResult[]>()
   for (const result of results) {
     const bucket = buckets.get(result.topic)
     if (bucket) bucket.push(result)
@@ -109,7 +109,7 @@ export function buildTimeAnalysis(
   })
 
   const sorted = [...timed].sort((a, b) => a.timeSpentMs - b.timeSpentMs)
-  const topicBuckets = new Map<ReasoningTopic, number[]>()
+  const topicBuckets = new Map<QuestionTopic, number[]>()
   for (const item of timed) {
     const bucket = topicBuckets.get(item.topic)
     if (bucket) bucket.push(item.timeSpentMs / 1000)

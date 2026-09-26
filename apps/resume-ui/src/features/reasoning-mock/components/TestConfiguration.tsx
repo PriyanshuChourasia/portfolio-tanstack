@@ -4,8 +4,8 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { TEST_PRESETS, getExam, topicsForExam } from '@/data/reasoning'
-import type { DifficultyFilter, ReasoningTopic, TestConfiguration as TestConfig } from '@/data/reasoning'
+import { SUBJECT_LABELS, TEST_PRESETS, getExam, topicsForExam } from '@/data/reasoning'
+import type { DifficultyFilter, QuestionTopic, TestConfiguration as TestConfig } from '@/data/reasoning'
 import { cn } from '@/lib/utils'
 import { useReasoningMockStore } from '../store'
 import { countMatchingQuestions } from '../engine/test-builder'
@@ -47,7 +47,7 @@ export function TestConfiguration() {
 
   const patch = (value: Partial<TestConfig>) => updateConfig(value)
 
-  const toggleTopic = (topic: ReasoningTopic) => {
+  const toggleTopic = (topic: QuestionTopic) => {
     const next = new Set(config.topics)
     if (next.has(topic)) next.delete(topic)
     else next.add(topic)
@@ -67,7 +67,7 @@ export function TestConfiguration() {
 
       <h1 className="text-2xl font-black tracking-tight sm:text-3xl">Configure your test</h1>
       <p className="mt-2 text-sm text-muted-foreground">
-        {exam.name} · Reasoning section · marking {config.marking.positiveMarks} mark(s) per correct answer and{' '}
+        {exam.name} · {SUBJECT_LABELS[exam.subject]} section · marking {config.marking.positiveMarks} mark(s) per correct answer and{' '}
         {config.marking.negativeMarks} deducted per wrong answer.
       </p>
 

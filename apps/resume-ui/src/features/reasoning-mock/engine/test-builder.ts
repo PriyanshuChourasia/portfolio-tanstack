@@ -1,5 +1,5 @@
 import type { Question, TestConfiguration, TestSession } from '@/data/reasoning'
-import { getQuestionById, getTestPreset, getExam, questionsForExam } from '@/data/reasoning'
+import { SUBJECT_LABELS, getQuestionById, getTestPreset, getExam, questionsForExam } from '@/data/reasoning'
 import { createEmptyAnswer } from './scoring'
 
 /**
@@ -48,13 +48,21 @@ export function countMatchingQuestions(config: TestConfiguration): number {
   return matchingQuestions(config).length
 }
 
-/** Applies the difficulty/topic filters and trims the pool to the requested size. */
+/**
+ * Applies the difficulty/topic filters and trims the pool to the requested size.
+ * Sequential papers still sample randomly but keep the picked questions in bank
+ * order, so a level-by-level paper keeps its easy → hard progression.
+ */
 export function selectQuestions(
   config: TestConfiguration,
   random: () => number = Math.random,
 ): Question[] {
   const usable = matchingQuestions(config)
-  return shuffle(usable, random).slice(0, Math.min(config.questionCount, usable.length))
+  const picked = shuffle(usable, random).slice(0, Math.min(config.questionCount, usable.length))
+  if (!getExam(config.examId).sequential) return picked
+
+  const bankOrder = new Map(usable.map((question, index) => [question.id, index]))
+  return picked.sort((a, b) => (bankOrder.get(a.id) ?? 0) - (bankOrder.get(b.id) ?? 0))
 }
 
 export function createSession(config: TestConfiguration, questions: Question[]): TestSession {
@@ -74,7 +82,7 @@ export function createSession(config: TestConfiguration, questions: Question[]):
     id: sessionId,
     testId: config.testId,
     examId: config.examId,
-    testTitle: getTestPreset(config.testId)?.title ?? `${getExam(config.examId).shortName} Reasoning Test`,
+    testTitle: getTestPreset(config.testId)?.title ?? `${getExam(config.examId).shortName} ${SUBJECT_LABELS[getExam(config.examId).subject]} Test`,
     questionIds: questions.map((question) => question.id),
     durationSeconds: config.durationMinutes * 60,
     marking: config.marking,

@@ -10,7 +10,7 @@ import {
   XAxis,
   YAxis,
 } from 'recharts'
-import type { ReasoningTopic, TestResult } from '@/data/reasoning'
+import type { QuestionTopic, TestResult } from '@/data/reasoning'
 import { formatDate } from '../lib/time'
 
 interface AttemptPoint {
@@ -21,8 +21,8 @@ interface AttemptPoint {
   attemptRate: number
 }
 
-function topicTrend(results: TestResult[]): Array<{ topic: ReasoningTopic; first: number; latest: number; delta: number; attempts: number }> {
-  const byTopic = new Map<ReasoningTopic, Array<{ percentage: number; at: number }>>()
+function topicTrend(results: TestResult[]): Array<{ topic: QuestionTopic; first: number; latest: number; delta: number; attempts: number }> {
+  const byTopic = new Map<QuestionTopic, Array<{ percentage: number; at: number }>>()
 
   for (const result of results) {
     for (const topic of result.topicPerformance) {

@@ -6,7 +6,7 @@
  * scoring/evaluation logic could later be moved to a server without UI changes.
  */
 
-export type ExamId = 'SSC_CHSL' | 'SBI_PO' | 'IBPS_PO'
+export type ExamId = 'SSC_CHSL' | 'SBI_PO' | 'IBPS_PO' | 'ANALOGY_PRACTICE' | 'SBI_ENGLISH'
 
 export type Difficulty = 'easy' | 'moderate' | 'difficult'
 
@@ -47,11 +47,35 @@ export const REASONING_TOPICS = [
 
 export type ReasoningTopic = (typeof REASONING_TOPICS)[number]
 
+export const ENGLISH_TOPICS = [
+  'Reading Comprehension',
+  'Cloze Test',
+  'Error Spotting',
+  'Phrase Replacement',
+  'Fillers',
+  'Para Jumbles',
+  'Word Swap',
+  'Vocabulary',
+  'Word Usage',
+] as const
+
+export type EnglishTopic = (typeof ENGLISH_TOPICS)[number]
+
+/** Section an exam paper belongs to — decides which topic list applies. */
+export type Subject = 'reasoning' | 'english'
+
+export type QuestionTopic = ReasoningTopic | EnglishTopic
+
+export const TOPICS_BY_SUBJECT: Record<Subject, readonly QuestionTopic[]> = {
+  reasoning: REASONING_TOPICS,
+  english: ENGLISH_TOPICS,
+}
+
 export interface Question {
   id: string
   /** Exams this question is relevant for — lets one bank serve several exams. */
   examIds: ExamId[]
-  topic: ReasoningTopic
+  topic: QuestionTopic
   subtopic?: string
   difficulty: Difficulty
   questionText: string
@@ -68,7 +92,7 @@ export interface Question {
 /** Shape authors write in the bank files — `createBank` fills in the rest. */
 export interface QuestionInput {
   id: string
-  topic: ReasoningTopic
+  topic: QuestionTopic
   subtopic?: string
   difficulty: Difficulty
   questionText: string
@@ -114,11 +138,17 @@ export interface TestPreset {
   durationMinutes: number
   totalQuestions: number
   difficulty: DifficultyFilter
-  topics: ReasoningTopic[]
+  topics: QuestionTopic[]
 }
 
 export interface ExamDefinition {
   id: ExamId
+  /** `exam` mirrors a real exam's reasoning section; `practice` is a single-topic paper. */
+  kind: 'exam' | 'practice'
+  /** Section of the real exam this paper mirrors. */
+  subject: Subject
+  /** Serve questions in bank order (easy → hard) instead of shuffling them. */
+  sequential?: boolean
   name: string
   shortName: string
   description: string
@@ -140,7 +170,7 @@ export interface TestConfiguration {
   questionCount: number
   durationMinutes: number
   difficulty: DifficultyFilter
-  topics: ReasoningTopic[]
+  topics: QuestionTopic[]
   marking: MarkingScheme
 }
 
@@ -168,7 +198,7 @@ export interface TestSession {
   durationSeconds: number
   marking: MarkingScheme
   difficulty: DifficultyFilter
-  topics: ReasoningTopic[]
+  topics: QuestionTopic[]
   startedAt: string
   /** Start of the current on-screen interval; null while the tab is hidden. */
   activeSince: string | null
@@ -184,7 +214,7 @@ export type QuestionOutcome = 'correct' | 'incorrect' | 'unanswered'
 export interface QuestionResult {
   questionId: string
   index: number
-  topic: ReasoningTopic
+  topic: QuestionTopic
   difficulty: Difficulty
   questionText: string
   options: [string, string, string, string]
@@ -213,7 +243,7 @@ export interface ScoringResult {
 }
 
 export interface TopicPerformance {
-  topic: ReasoningTopic
+  topic: QuestionTopic
   total: number
   attempted: number
   correct: number
@@ -236,7 +266,7 @@ export interface DifficultyPerformance {
 export interface TimeEntry {
   questionId: string
   index: number
-  topic: ReasoningTopic
+  topic: QuestionTopic
   seconds: number
   outcome: QuestionOutcome
 }
@@ -249,11 +279,11 @@ export interface TimeAnalysis {
   slowest: TimeEntry | null
   avgCorrectSeconds: number
   avgIncorrectSeconds: number
-  byTopic: Array<{ topic: ReasoningTopic; avgTimeSeconds: number; questions: number }>
+  byTopic: Array<{ topic: QuestionTopic; avgTimeSeconds: number; questions: number }>
 }
 
 export interface FocusArea {
-  topic: ReasoningTopic
+  topic: QuestionTopic
   accuracy: number
   attempted: number
   correct: number
