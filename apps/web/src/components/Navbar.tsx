@@ -7,7 +7,6 @@ import {
   Home,
   Mail,
   Menu,
-  Newspaper,
   Twitter,
   X,
 } from 'lucide-react'
@@ -38,7 +37,7 @@ type NavItem = {
   label: string
   id: string
   icon: LucideIcon
-  to?: '/projects' | '/blog'
+  to?: '/projects'
 }
 
 const navItems: Array<NavItem> = [
@@ -46,7 +45,6 @@ const navItems: Array<NavItem> = [
   { label: 'About', id: 'about', icon: FileText },
   { label: 'Experience', id: 'experience', icon: Briefcase },
   { label: 'Projects', id: 'projects', icon: FolderKanban, to: '/projects' },
-  { label: 'Blogs', id: 'articles', icon: Newspaper, to: '/blog' },
   { label: 'Contact', id: 'contact', icon: Mail },
 ]
 
@@ -56,8 +54,6 @@ export function Navbar() {
   const { location } = useRouterState()
   const isHome = location.pathname === '/'
   const isProjectsActive = location.pathname.startsWith('/projects')
-  const isBlogsActive =
-    location.pathname.startsWith('/blog')
   const navHref = (id: string) => (isHome ? `#${id}` : `/#${id}`)
 
   useEffect(() => {
@@ -111,8 +107,7 @@ export function Navbar() {
             <div className="hidden md:flex items-center gap-8">
               {navItems.map((item) => {
                 const active =
-                  (item.id === 'projects' && isProjectsActive) ||
-                  (item.id === 'articles' && isBlogsActive)
+                  (item.id === 'projects' && isProjectsActive)                   
                 const linkClass = `text-sm transition-colors relative group ${
                   active
                     ? 'text-primary-accent text-primary-accent'
@@ -218,8 +213,7 @@ export function Navbar() {
               {navItems.map((item) => {
                 const Icon = item.icon
                 const active =
-                  (item.id === 'projects' && isProjectsActive) ||
-                  (item.id === 'articles' && isBlogsActive)
+                  (item.id === 'projects' && isProjectsActive)                   
                 const linkClass = `flex items-center gap-3 px-4 py-3 rounded-xl transition-colors text-sm font-medium ${
                   active
                     ? 'bg-primary-accent/5 bg-card text-primary text-primary-accent'
@@ -272,8 +266,7 @@ export function Navbar() {
       >          {navItems.map((item) => {
           const Icon = item.icon
           const active =
-            (item.id === 'projects' && isProjectsActive) ||
-            (item.id === 'articles' && isBlogsActive)
+            (item.id === 'projects' && isProjectsActive)             
           const linkClass = `relative flex items-center justify-center w-11 h-11 rounded-full border bg-white/80 dark:bg-card/80 shadow-lg transition-all ${
             active
               ? 'border-primary-accent/70 text-primary-accent dark:text-primary-accent'

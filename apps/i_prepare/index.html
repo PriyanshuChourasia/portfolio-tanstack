@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!--
+      Title and meta description are intentionally NOT declared here.
+      They're owned exclusively by TanStack Router's head() (see __root.tsx
+      and individual routes) so each route can override them without
+      producing duplicate <title>/<meta name="description"> tags.
+    -->
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://iprepare.codymitra.com/" />
+    <meta name="theme-color" content="#111827" />
+
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/logo192.png" />
+    <link rel="apple-touch-icon" href="/logo192.png" />
+    <link rel="manifest" href="/manifest.json" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="iPrepare — Exam Mock Test Preparation" />
+    <meta property="og:description" content="Prepare for competitive exams with mock tests, timed practice, and detailed performance analysis." />
+    <meta property="og:url" content="https://iprepare.codymitra.com/" />
+    <meta property="og:site_name" content="iPrepare" />
+    <meta property="og:image" content="https://iprepare.codymitra.com/logo512.png" />
+    <meta property="og:image:width" content="512" />
+    <meta property="og:image:height" content="512" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="iPrepare — Exam Mock Test Preparation" />
+    <meta name="twitter:description" content="Prepare for competitive exams with mock tests, timed practice, and detailed performance analysis." />
+    <meta name="twitter:image" content="https://iprepare.codymitra.com/logo512.png" />
+
+    <!-- Blocking script: apply theme class before first paint to prevent flash -->
+    <script>
+      (function () {
+        try {
+          var t = localStorage.getItem('i-prepare:theme');
+          if (t === 'dark' || t === 'light') {
+            document.documentElement.classList.add(t);
+          } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+          }
+        } catch (e) {}
+      })();
+    </script>
+    <style>
+      html.light body { background: #fafafa; color: #18181b; }
+      html.dark body  { background: #0a0a0a; color: #fafafa; }
+      body { background: #fafafa; color: #18181b; }
+    </style>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

@@ -1,25 +1,24 @@
 import { useEffect, useRef, useState } from 'react'
 import {
-  AnimatePresence,
+  
   motion,
-  useAnimationFrame,
   useMotionValue,
   useReducedMotion,
+  useSpring,
+  useTransform
 } from 'framer-motion'
 import { Link } from '@tanstack/react-router'
 import {
-  ArrowUpRight,
   Briefcase,
-  ChevronDown,
   Folder,
   Github,
   Home,
+  Lightbulb,
   Linkedin,
+  Mail,
   Newspaper,
   Phone,
-  Plug,
-  Shield,
-  Sparkles,
+  Send,
   Twitter,
   User,
 } from 'lucide-react'
@@ -28,7 +27,6 @@ import {
   SiCss,
   SiDocker,
   SiFlutter,
-  SiGin,
   SiGit,
   SiGo,
   SiHtml5,
@@ -48,126 +46,10 @@ import {
 } from 'react-icons/si'
 import { FaJava } from 'react-icons/fa6'
 
-import worksData from '../data/works-data.json'
 import socialLinks from '../data/social-link.json'
+import resumeData from '../data/resume-data.json'
 import { HaveAnIdeaModal } from './HaveAnIdeaModal'
-
-const allWorks = (worksData as { items: Array<any> }).items
-const featuredWorks = [...allWorks].reverse().slice(0, 4)
-
-const skillGroups: Array<{
-  label: string
-  icon: React.ComponentType<any>
-  items: Array<{ label: string; icon: React.ComponentType<any> }>
-}> = [
-    {
-      label: 'Languages',
-      icon: SiJavascript,
-      items: [
-        { label: 'TypeScript', icon: SiTypescript },
-        { label: 'JavaScript', icon: SiJavascript },
-        { label: 'HTML', icon: SiHtml5 },
-        { label: 'CSS', icon: SiCss },
-        { label: 'Java', icon: FaJava },
-        { label: 'Go', icon: SiGo },
-        { label: 'Python', icon: SiPython },
-      ],
-    },
-    {
-      label: 'Frameworks',
-      icon: SiReact,
-      items: [
-        { label: 'React', icon: SiReact },
-        { label: 'Next.js', icon: SiNextdotjs },
-        { label: 'Node.js', icon: SiNodedotjs },
-        { label: 'Spring Boot', icon: SiSpringboot },
-        { label: 'Laravel', icon: SiLaravel },
-        { label: 'Flutter', icon: SiFlutter },
-        { label: 'Tailwind', icon: SiTailwindcss },
-      ],
-    },
-    {
-      label: 'Databases',
-      icon: SiMysql,
-      items: [
-        { label: 'MySQL', icon: SiMysql },
-        { label: 'PostgreSQL', icon: SiPostgresql },
-        { label: 'MongoDB', icon: SiMongodb },
-      ],
-    },
-    {
-      label: 'DevOps',
-      icon: SiDocker,
-      items: [
-        { label: 'Git', icon: SiGit },
-        { label: 'Docker', icon: SiDocker },
-        { label: 'MySQL', icon: SiMysql },
-        { label: 'PostgreSQL', icon: SiPostgresql },
-        { label: 'MongoDB', icon: SiMongodb },
-      ],
-    },
-    {
-      label: 'Backend',
-      icon: SiSpringboot,
-      items: [
-        { label: 'Laravel', icon: SiLaravel },
-        { label: 'Spring Boot', icon: SiSpringboot },
-        { label: 'Java', icon: FaJava },
-        { label: 'Gin', icon: SiGin },
-      ],
-    },
-  ]
-
-const aiTools: Array<{
-  label: string
-  icon: React.ComponentType<any>
-}> = [
-    { label: 'Claude Code', icon: SiAnthropic },
-    { label: 'FreeBuff', icon: Shield },
-    { label: 'MCP', icon: Plug },
-  ]
-
-const heroNavItems: Array<{
-  label: string
-  icon: React.ComponentType<any>
-  href?: string
-  to?: '/projects' | '/blog'
-  active?: boolean
-}> = [
-    { label: 'Home', icon: Home, href: '#home', active: true },
-    { label: 'About', icon: User, href: '#about' },
-    { label: 'Experience', icon: Briefcase, href: '#experience' },
-    { label: 'Projects', icon: Folder, to: '/projects' },
-    { label: 'Blogs', icon: Newspaper, to: '/blog' },
-  ]
-
-type SkillItem = {
-  label: string
-  icon: React.ComponentType<any>
-  tint: string
-}
-
-const groupTints: Record<string, string> = {
-  Languages: 'rgba(225, 29, 36, 0.16)',
-  Frameworks: 'rgba(239, 29, 37, 0.13)',
-  Databases: 'rgba(225, 29, 36, 0.18)',
-  DevOps: 'rgba(255, 255, 255, 0.09)',
-}
-
-const allSkills: Array<SkillItem> = [
-  ...skillGroups.flatMap((group) =>
-    group.items.map((item) => ({
-      ...item,
-      tint:
-        groupTints[group.label] ??
-        'rgba(239, 29, 37, 0.13)',
-    })),
-  ),
-  ...aiTools.map((tool) => ({
-    ...tool,
-    tint: 'rgba(225, 29, 36, 0.18)',
-  })),
-]
+import type {MotionValue} from 'framer-motion';
 
 function seeded(seed: number) {
   const x =
@@ -176,81 +58,6 @@ function seeded(seed: number) {
 
   return x - Math.floor(x)
 }
-
-const GRID_COLS = 6
-const GRID_ROWS = Math.ceil(
-  allSkills.length / GRID_COLS,
-)
-
-const shuffledCells = allSkills
-  .map((_, i) => i)
-  .sort(
-    (a, b) =>
-      seeded(a * 53.7 + 91) -
-      seeded(b * 53.7 + 91),
-  )
-
-const cellOfSkill: Array<number> = []
-
-shuffledCells.forEach(
-  (skillIndex, cellIndex) => {
-    cellOfSkill[skillIndex] = cellIndex
-  },
-)
-
-const chipLayout = allSkills.map((_, i) => {
-  const cell = cellOfSkill[i]
-
-  const col = cell % GRID_COLS
-  const row = Math.floor(cell / GRID_COLS)
-
-  const cellW = 100 / GRID_COLS
-  const cellH = 100 / GRID_ROWS
-
-  const jitterX =
-    (seeded(i * 5.1 + 3) - 0.5) *
-    cellW *
-    0.5
-
-  const jitterY =
-    (seeded(i * 11.3 + 4) - 0.5) *
-    cellH *
-    0.5
-
-  return {
-    x:
-      col * cellW +
-      cellW / 2 +
-      jitterX,
-
-    y:
-      row * cellH +
-      cellH / 2 +
-      jitterY,
-
-    ampX:
-      (seeded(i * 5.1 + 3) - 0.5) * 8,
-
-    ampY:
-      (seeded(i * 11.3 + 4) - 0.5) * 7,
-
-    durX:
-      5 + seeded(i * 17.9 + 5) * 5,
-
-    durY:
-      4 + seeded(i * 19.7 + 6) * 6,
-
-    phaseX:
-      seeded(i * 23.1 + 7) *
-      Math.PI *
-      2,
-
-    phaseY:
-      seeded(i * 29.3 + 8) *
-      Math.PI *
-      2,
-  }
-})
 
 const isNarrow =
   typeof window !== 'undefined'
@@ -359,185 +166,350 @@ const bgDecorLayout = bgDecorItems.map((_, i) => {
     ),
     rotate: (seeded(i * 97.1 + 23) - 0.5) * 22,
     scale: 0.85 + seeded(i * 61.9 + 24) * 0.5,
-    red: i % 2 === 0,
+    accent: i % 2 === 0,
   }
 })
 
-const chipRadii = [
-  {
-    py: 'py-0.5 pl-1.5 pr-2',
-    text: 'text-[8px]',
-    icon: 'h-3.5 w-3.5',
-  },
-  {
-    py: 'py-1 pl-2 pr-2.5',
-    text: 'text-[9px]',
-    icon: 'h-4 w-4',
-  },
-  {
-    py: 'py-1.5 pl-2 pr-3',
-    text: 'text-[10px]',
-    icon: 'h-4.5 w-4.5',
-  },
-]
+/* =========================================================
+    MACOS-STYLE DOCK
+========================================================= */
 
-interface FloatingChipProps {
-  item: SkillItem
-  layout: (typeof chipLayout)[number]
-  index: number
-  paused: boolean
-  active: boolean
-  reduced: boolean | null
-  onHoverChange: (active: boolean) => void
+const DOCK_BASE_SIZE = 46
+const DOCK_MAGNIFY_SIZE = 78
+const DOCK_MAGNIFY_RANGE = 130
+
+type DockIconEntry = {
+  kind: 'item'
+  key: string
+  label: string
+  icon: React.ComponentType<{
+    className?: string
+    strokeWidth?: number
+  }>
+  href?: string
+  to?: '/projects' | '/blog'
+  external?: boolean
+  active?: boolean
+  onClick?: () => void
 }
 
-function FloatingChip({
-  item,
-  layout,
-  index,
-  paused,
-  active,
+type DockEntry =
+  | DockIconEntry
+  | { kind: 'divider'; key: string }
+
+function DockItem({
+  entry,
+  mouseX,
   reduced,
-  onHoverChange,
-}: FloatingChipProps) {
-  const mx = useMotionValue(0)
-  const my = useMotionValue(0)
+}: {
+  entry: DockIconEntry
+  mouseX: MotionValue<number>
+  reduced: boolean | null
+}) {
+  const ref = useRef<HTMLDivElement>(null)
 
-  const t = useRef(0)
+  const Icon = entry.icon
 
-  const Icon = item.icon
-  const tier = index % 3
+  const distance = useTransform(
+    mouseX,
+    (val: number) => {
+      const bounds =
+        ref.current?.getBoundingClientRect()
 
-  useAnimationFrame((_, delta) => {
-    if (paused || reduced) return
+      if (!bounds) {
+        return Number.POSITIVE_INFINITY
+      }
 
-    t.current += delta / 1000
+      return (
+        val - bounds.x - bounds.width / 2
+      )
+    },
+  )
 
-    mx.set(
-      layout.ampX *
-      Math.sin(
-        (t.current * Math.PI * 2) /
-        layout.durX +
-        layout.phaseX,
-      ),
-    )
+  const sizeRaw = useTransform(
+    distance,
+    [
+      -DOCK_MAGNIFY_RANGE,
+      0,
+      DOCK_MAGNIFY_RANGE,
+    ],
+    reduced
+      ? [
+          DOCK_BASE_SIZE,
+          DOCK_BASE_SIZE,
+          DOCK_BASE_SIZE,
+        ]
+      : [
+          DOCK_BASE_SIZE,
+          DOCK_MAGNIFY_SIZE,
+          DOCK_BASE_SIZE,
+        ],
+  )
 
-    my.set(
-      layout.ampY *
-      Math.sin(
-        (t.current * Math.PI * 2) /
-        layout.durY +
-        layout.phaseY,
-      ),
-    )
+  const size = useSpring(sizeRaw, {
+    mass: 0.1,
+    stiffness: 180,
+    damping: 13,
   })
 
   return (
-    <motion.button
-      type="button"
-      title={item.label}
-      aria-label={item.label}
-      onHoverStart={() =>
-        onHoverChange(true)
-      }
-      onHoverEnd={() =>
-        onHoverChange(false)
-      }
-      onTapStart={() =>
-        onHoverChange(true)
-      }
-      onTapCancel={() =>
-        onHoverChange(false)
-      }
-      onBlur={() =>
-        onHoverChange(false)
-      }
-      whileHover={
-        reduced
-          ? undefined
-          : {
-            scale: 1.1,
-            y: -3,
-          }
-      }
-      whileTap={{ scale: 0.92 }}
-      transition={{
-        type: 'spring',
-        stiffness: 320,
-        damping: 18,
-      }}
-      className={`absolute left-0 top-0 flex items-center gap-1.5 rounded-full border backdrop-blur-sm will-change-transform ${chipRadii[tier].py
-        } ${active
-          ? 'z-30 border-primary-accent/70 bg-[#1f0a0a]/95'
-          : 'z-0 border-white/10 bg-[#0D0D0D]/85 hover:border-primary-accent/60 hover:bg-[#161616]'
-        }`}
+    // Only the width takes part in layout; the height stays at the base size
+    // and the magnified icon grows upward out of it, so hovering the dock
+    // never changes its height or shifts the rest of the page.
+    <motion.div
+      ref={ref}
       style={{
-        left: `${layout.x}%`,
-        top: `${layout.y}%`,
-        x: mx,
-        y: my,
+        width: size,
+        height: DOCK_BASE_SIZE,
       }}
+      className="group relative"
     >
-      <span
-        className={`flex items-center justify-center rounded-full ${chipRadii[tier].icon}`}
-        style={{
-          backgroundColor: item.tint,
-        }}
+      <motion.div
+        style={{ height: size }}
+        className="absolute inset-x-0 bottom-0"
       >
-        <Icon className="h-[55%] w-[55%] text-white/95" />
+      {entry.to ? (
+        <Link
+          to={entry.to}
+          title={entry.label}
+          aria-label={entry.label}
+          aria-current={
+            entry.active ? 'page' : undefined
+          }
+          className="block h-full w-full cursor-pointer rounded-[26%] outline-none focus-visible:ring-2 focus-visible:ring-white/40"
+        >
+          <DockIconFace
+            icon={<Icon className="h-[55%] w-[55%] text-white/90" strokeWidth={1.75} />}
+            label={entry.label}
+            active={entry.active}
+          />
+        </Link>
+      ) : entry.href ? (
+        <a
+          href={entry.href}
+          title={entry.label}
+          aria-label={entry.label}
+          aria-current={
+            entry.active ? 'page' : undefined
+          }
+          {...(entry.external
+            ? {
+                target: '_blank',
+                rel: 'noopener noreferrer',
+              }
+            : {})}
+          className="block h-full w-full cursor-pointer rounded-[26%] outline-none focus-visible:ring-2 focus-visible:ring-white/40"
+        >
+          <DockIconFace
+            icon={<Icon className="h-[55%] w-[55%] text-white/90" strokeWidth={1.75} />}
+            label={entry.label}
+            active={entry.active}
+          />
+        </a>
+      ) : (
+        <button
+          type="button"
+          onClick={entry.onClick}
+          title={entry.label}
+          aria-label={entry.label}
+          className="block h-full w-full cursor-pointer rounded-[26%] outline-none focus-visible:ring-2 focus-visible:ring-white/40"
+        >
+          <DockIconFace
+            icon={<Icon className="h-[55%] w-[55%] text-white/90" strokeWidth={1.75} />}
+            label={entry.label}
+            active={entry.active}
+          />
+        </button>
+      )}
+      </motion.div>
+    </motion.div>
+  )
+}
+
+function DockIconFace({
+  icon,
+  label,
+  active,
+}: {
+  icon: React.ReactNode
+  label: string
+  active?: boolean
+}) {
+  return (
+    <>
+      <span className="flex h-full w-full items-center justify-center rounded-[26%] border border-[#BE2ED6]/20 bg-white/[0.06] shadow-[0_4px_16px_rgba(0,0,0,0.35)] backdrop-blur-md transition-colors duration-200 group-hover:border-[#BE2ED6] group-hover:bg-[#BE2ED6] group-focus-within:border-[#BE2ED6] group-focus-within:bg-[#BE2ED6]">
+        {icon}
       </span>
 
+      {/* Tooltip */}
       <span
-        className={`whitespace-nowrap font-semibold ${chipRadii[tier].text
-          } ${active
-            ? 'text-white'
-            : 'text-white/80'
-          }`}
+        className="pointer-events-none absolute -top-9 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md border border-[#BE2ED6]/30 bg-[#1a0b2e]/95 px-2 py-1 font-mono text-[9px] font-semibold uppercase tracking-[0.15em] text-white/85 opacity-0 shadow-lg transition-opacity duration-200 group-hover:opacity-100 group-focus-within:opacity-100"
       >
-        {item.label}
+        {label}
       </span>
-    </motion.button>
+
+      {/* macOS "running app" dot */}
+      {active && (
+        <span className="absolute -bottom-2.5 left-1/2 h-1 w-1 -translate-x-1/2 rounded-full bg-[#BE2ED6] shadow-[0_0_6px_#BE2ED6]" />
+      )}
+    </>
+  )
+}
+
+/* =========================================================
+    MACOS-STYLE EXPERIENCE WIDGET
+========================================================= */
+
+// Earliest start year across all roles, e.g. "2022 - Present" -> 2022
+const careerStartYear = Math.min(
+  ...resumeData.experience.map((e) =>
+    parseInt(e.period, 10),
+  ),
+)
+const yearsOfExperience =
+  new Date().getFullYear() - careerStartYear
+
+const RING_RADIUS = 34
+const RING_CIRCUMFERENCE = 2 * Math.PI * RING_RADIUS
+
+// Glass card with a gradient border that sweeps around it continuously
+function AnimatedBorderCard({
+  children,
+  delay = 0,
+}: {
+  children: React.ReactNode
+  delay?: number
+}) {
+  return (
+    <div className="relative overflow-hidden rounded-[22px] bg-white/10 p-[1.5px] shadow-[0_16px_48px_rgba(0,0,0,0.55)]">
+      <span
+        aria-hidden="true"
+        className="pointer-events-none absolute left-1/2 top-1/2 aspect-square w-[250%] -translate-x-1/2 -translate-y-1/2 animate-[spin_4s_linear_infinite] bg-[conic-gradient(from_0deg,transparent_0%,#BE2ED6_12%,#EF1D25_25%,transparent_40%,transparent_60%,#7C41A8_75%,#BE2ED6_88%,transparent_100%)] motion-reduce:animate-none"
+        style={{ animationDelay: `${delay}s` }}
+      />
+      <div className="relative h-full rounded-[20.5px] bg-[#0c0a10]/95 backdrop-blur-xl">
+        {children}
+      </div>
+    </div>
+  )
+}
+
+function ExperienceWidget({
+  reduced,
+}: {
+  reduced: boolean | null
+}) {
+  return (
+    <div className="flex w-32 flex-col items-center gap-1.5 h-full p-3 sm:w-40 sm:p-4">
+      <span className="self-start font-mono text-[9px] font-semibold uppercase tracking-[0.2em] text-white/60">
+        Experience
+      </span>
+
+      <div className="relative h-20 w-20 sm:h-24 sm:w-24">
+        <svg
+          viewBox="0 0 80 80"
+          className="h-full w-full -rotate-90"
+          aria-hidden="true"
+        >
+          <defs>
+            <linearGradient id="exp-ring" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stopColor="#BE2ED6" />
+              <stop offset="100%" stopColor="#EF1D25" />
+            </linearGradient>
+          </defs>
+          <circle
+            cx="40"
+            cy="40"
+            r={RING_RADIUS}
+            fill="none"
+            stroke="rgba(255,255,255,0.1)"
+            strokeWidth="7"
+          />
+          <motion.circle
+            cx="40"
+            cy="40"
+            r={RING_RADIUS}
+            fill="none"
+            stroke="url(#exp-ring)"
+            strokeWidth="7"
+            strokeLinecap="round"
+            strokeDasharray={RING_CIRCUMFERENCE}
+            initial={{
+              strokeDashoffset: reduced ? 0 : RING_CIRCUMFERENCE,
+            }}
+            animate={{ strokeDashoffset: 0 }}
+            transition={{ duration: 1.6, ease: 'easeOut', delay: 0.3 }}
+          />
+        </svg>
+
+        <div className="absolute inset-0 flex flex-col items-center justify-center">
+          <span className="text-2xl font-bold leading-none text-white sm:text-3xl">
+            {yearsOfExperience}+
+          </span>
+          <span className="mt-0.5 font-mono text-[8px] uppercase tracking-[0.2em] text-white/60">
+            Years
+          </span>
+        </div>
+      </div>
+
+      <span className="font-mono text-[9px] uppercase tracking-[0.15em] text-white/45">
+        Since {careerStartYear}
+      </span>
+    </div>
+  )
+}
+
+function ClockWidget() {
+  const [now, setNow] = useState(() => new Date())
+
+  useEffect(() => {
+    const id = setInterval(() => setNow(new Date()), 1000)
+    return () => clearInterval(id)
+  }, [])
+
+  const timeParts = new Intl.DateTimeFormat('en-US', {
+    hour: 'numeric',
+    minute: '2-digit',
+  }).formatToParts(now)
+  const time = timeParts
+    .filter((p) => p.type !== 'dayPeriod')
+    .map((p) => p.value)
+    .join('')
+    .trim()
+  const meridiem = timeParts.find(
+    (p) => p.type === 'dayPeriod',
+  )?.value
+
+  return (
+    <div className="flex w-32 flex-col h-full p-3 sm:w-40 sm:p-4">
+      <span className="font-mono text-[9px] font-semibold uppercase tracking-[0.2em] text-[#EF1D25]">
+        {now.toLocaleDateString('en-US', { weekday: 'long' })}
+      </span>
+
+      <div className="flex flex-1 items-center">
+        <span className="text-3xl font-bold leading-none tabular-nums text-white sm:text-4xl">
+          {time}
+        </span>
+        <span className="ml-1 self-end pb-2 font-mono text-[9px] uppercase tracking-[0.15em] text-white/60 sm:pb-3">
+          {meridiem}
+        </span>
+      </div>
+
+      <span className="font-mono text-[9px] uppercase tracking-[0.15em] text-white/45">
+        {now.toLocaleDateString('en-US', {
+          day: 'numeric',
+          month: 'short',
+          year: 'numeric',
+        })}
+      </span>
+    </div>
   )
 }
 
 export function HeroSection() {
-  const [featuredIndex, setFeaturedIndex] =
-    useState(0)
-
-  useEffect(() => {
-    const id = setInterval(() => {
-      setFeaturedIndex(
-        (i) =>
-          (i + 1) %
-          featuredWorks.length,
-      )
-    }, 3200)
-
-    return () => clearInterval(id)
-  }, [])
-
-  const featuredWork =
-    featuredWorks[featuredIndex]
-
-  const github = socialLinks.find(
-    (l) => l.name === 'Github',
+  const mouseX = useMotionValue(
+    Number.POSITIVE_INFINITY,
   )
-
-  const twitter = socialLinks.find(
-    (l) => l.name === 'Twitter',
-  )
-
-  const linkedin = socialLinks.find(
-    (l) => l.name === 'LinkedIn',
-  )
-
-  const contactPhone = {
-    label: '+91 6203163193',
-    href: 'tel:+916203163193',
-  }
-
-  const [activeSkill, setActiveSkill] =
-    useState<number | null>(null)
 
   const reducedMotion =
     useReducedMotion()
@@ -545,17 +517,132 @@ export function HeroSection() {
   const [ideaModalOpen, setIdeaModalOpen] =
     useState(false)
 
-  const navItemClasses = (
-    active: boolean,
-  ) =>
-    active
-      ? 'flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-1.5 text-[11px] font-medium text-white'
-      : 'flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[11px] font-medium text-white/70 transition-all duration-200 hover:bg-white/10 hover:text-white'
+  const github = socialLinks.find(
+    (l) => l.name === 'Github',
+  )
+
+  const linkedin = socialLinks.find(
+    (l) => l.name === 'LinkedIn',
+  )
+
+  const twitter = socialLinks.find(
+    (l) => l.name === 'Twitter',
+  )
+
+  const gmail = socialLinks.find(
+    (l) => l.name === 'Gmail',
+  )
+
+  const contactPhone = {
+    label: '+91 6203163193',
+    href: 'tel:+916203163193',
+  }
+
+  const dockEntries = ([
+    {
+      kind: 'item',
+      key: 'home',
+      label: 'Home',
+      icon: Home,
+      href: '#home',
+      active: true,
+    },
+    {
+      kind: 'item',
+      key: 'about',
+      label: 'About',
+      icon: User,
+      href: '#about',
+    },
+    {
+      kind: 'item',
+      key: 'experience',
+      label: 'Experience',
+      icon: Briefcase,
+      href: '#experience',
+    },
+    {
+      kind: 'item',
+      key: 'projects',
+      label: 'Projects',
+      icon: Folder,
+      to: '/projects',
+    },
+    {
+      kind: 'item',
+      key: 'blogs',
+      label: 'Blogs',
+      icon: Newspaper,
+      to: '/blog',
+    },
+    { kind: 'divider', key: 'd1' },
+    {
+      kind: 'item',
+      key: 'github',
+      label: 'GitHub',
+      icon: Github,
+      href: github?.url,
+      external: true,
+    },
+    {
+      kind: 'item',
+      key: 'linkedin',
+      label: 'LinkedIn',
+      icon: Linkedin,
+      href: linkedin?.url,
+      external: true,
+    },
+    {
+      kind: 'item',
+      key: 'twitter',
+      label: 'Twitter',
+      icon: Twitter,
+      href: twitter?.url,
+      external: true,
+    },
+    {
+      kind: 'item',
+      key: 'mail',
+      label: 'Email',
+      icon: Mail,
+      href: gmail
+        ? `mailto:${gmail.url}`
+        : undefined,
+    },
+    {
+      kind: 'item',
+      key: 'phone',
+      label: contactPhone.label,
+      icon: Phone,
+      href: contactPhone.href,
+    },
+    { kind: 'divider', key: 'd2' },
+    {
+      kind: 'item',
+      key: 'idea',
+      label: 'Have an idea?',
+      icon: Lightbulb,
+      onClick: () => setIdeaModalOpen(true),
+    },
+    {
+      kind: 'item',
+      key: 'contact',
+      label: 'Contact',
+      icon: Send,
+      href: '#contact',
+    },
+  ] as Array<DockEntry>).filter(
+    (entry) =>
+      entry.kind === 'divider' ||
+      Boolean(entry.href) ||
+      Boolean(entry.to) ||
+      Boolean(entry.onClick),
+  )
 
   return (
     <section
       id="home"
-      className="relative min-h-screen w-full overflow-hidden bg-gray-300 lg:h-screen"
+      className="relative flex min-h-screen w-full flex-col overflow-hidden bg-[#070707] lg:h-screen"
     >
       {/* =====================================================
           BACKGROUND
@@ -565,13 +652,33 @@ export function HeroSection() {
         aria-hidden="true"
       >
         <div
-          className="absolute inset-0 opacity-40"
+          className="absolute inset-0 opacity-70"
           style={{
             backgroundImage:
-              'linear-gradient(rgba(225, 29, 36, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(225, 29, 36, 0.05) 1px, transparent 1px)',
+              'linear-gradient(rgba(225, 29, 36, 0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(225, 29, 36, 0.06) 1px, transparent 1px)',
             backgroundSize: '48px 48px',
           }}
         />
+
+
+        {/* Twinkling stars */}
+        {stars.map((star, i) => (
+          <span
+            key={i}
+            className={`pointer-events-none absolute rounded-full bg-white ${star.twinkle
+              ? 'animate-pulse motion-reduce:animate-none'
+              : ''
+              }`}
+            style={{
+              left: `${star.x}%`,
+              top: `${star.y}%`,
+              width: star.s,
+              height: star.s,
+              opacity: star.o,
+              animationDuration: `${2 + (i % 5) * 0.6}s`,
+            }}
+          />
+        ))}
 
         {/* Tech / role icon-words watermark — outline only, no fills */}
         {bgDecorItems.map((item, i) => {
@@ -589,23 +696,23 @@ export function HeroSection() {
             >
               {item.type === 'icon' ? (
                 <span
-                  className={`flex h-11 w-11 items-center justify-center rounded-full border-2 bg-transparent ${layout.red
-                    ? 'border-red-700/50'
-                    : 'border-black/45'
+                  className={`flex h-11 w-11 items-center justify-center rounded-full border-2 bg-transparent ${layout.accent
+                    ? 'border-[#EF1D25]/25'
+                    : 'border-[#5D328E]/40'
                     }`}
                 >
                   <item.Icon
-                    className={`h-5 w-5 ${layout.red
-                      ? 'text-red-700/55'
-                      : 'text-black/50'
+                    className={`h-5 w-5 ${layout.accent
+                      ? 'text-[#EF1D25]/30'
+                      : 'text-[#5D328E]/55'
                       }`}
                   />
                 </span>
               ) : (
                 <span
-                  className={`whitespace-nowrap rounded-full border-2 bg-transparent px-3.5 py-1.5 font-mono text-[11px] font-semibold uppercase tracking-[0.2em] ${layout.red
-                    ? 'border-red-700/50 text-red-700/55'
-                    : 'border-black/45 text-black/50'
+                  className={`whitespace-nowrap rounded-full border-2 bg-transparent px-3.5 py-1.5 font-mono text-[11px] font-semibold uppercase tracking-[0.2em] ${layout.accent
+                    ? 'border-[#EF1D25]/25 text-[#EF1D25]/30'
+                    : 'border-[#5D328E]/40 text-[#5D328E]/55'
                     }`}
                 >
                   {item.label}
@@ -617,707 +724,113 @@ export function HeroSection() {
       </div>
 
       {/* =====================================================
-          BENTO WRAPPER
+          TOP-LEFT WIDGETS — EXPERIENCE + CLOCK
       ===================================================== */}
-      <div className="relative flex items-center justify-center px-4 py-10 sm:px-6 md:py-0 lg:h-screen">
-        <div
-          className="
-            relative
-            grid
-            w-full
-            max-w-6xl
-            auto-rows-fr
-            grid-cols-1
-            gap-4
-            md:h-[76vh]
-            md:grid-cols-2
-            md:grid-rows-2
-          "
-        >
-          {/* =================================================
-              Q1 — PROFILE / IDENTITY
-          ================================================= */}
-          <div
-            className={`
-              group
-              relative
-              order-1
-              overflow-visible
-              rounded-2xl
-              border
-              border-primary/25
-              bg-[#0A0A0A]
-              after:content-['']
-              after:absolute
-              after:-left-[2px]
-              after:-top-[2px]
-              after:w-0
-              after:h-0
-              after:rounded-tl-2xl
-              after:rounded-bl-full
-              after:rounded-br-full
-              after:border-t-[1.5px]
-              after:border-t-[#EF1D25]
-              after:border-l-[1.5px]
-              after:border-l-[#EF1D25]
-              after:border-r-0
-              after:border-b-0
-              after:border
-              after:transition-[width,height]
-              after:duration-300
-              after:ease-out
-              has-[[data-contact-trigger]:hover]:after:w-[40%]
-              has-[[data-contact-trigger]:hover]:after:h-[40%]
-            `}
-          >
-            {/* =================================================
-                PROFILE IMAGE
-            ================================================= */}
-            <div className="absolute inset-0 overflow-hidden rounded-2xl">
-              <img
-                src="/myimage.webp"
-                alt="Priyanshu Chourasia"
-                className="absolute inset-0 h-full w-full object-cover object-center"
-              />
-            </div>
+      <div className="absolute left-4 top-4 z-20 flex items-stretch gap-3 sm:left-6 sm:top-6">
+        <AnimatedBorderCard>
+          <ExperienceWidget reduced={reducedMotion} />
+        </AnimatedBorderCard>
+        <AnimatedBorderCard delay={-2}>
+          <ClockWidget />
+        </AnimatedBorderCard>
+      </div>
 
-            {/* =================================================
-                CONTACT TAG
-            ================================================= */}
-            <div
-              className="
-                group/contactdd
-                absolute
-                left-0
-                top-[27%]
-                z-50
-                hidden
-                -translate-x-full
-                pr-3
-                md:block
-              "
-            >
-              <a
-                href="#contact"
-                title="Contact"
-                data-contact-trigger
-                className="group/contact relative block w-max"
-              >
-                <div
-                  className="
-                    relative
-                    flex
-                    items-center
-                    gap-2
-                    border
-                    border-[#3A1515]
-                    bg-[#090909]
-                    px-3
-                    py-2
-                    font-mono
-                    text-[9px]
-                    font-semibold
-                    uppercase
-                    tracking-[0.25em]
-                    text-[#888888]
-                    transition-all
-                    duration-300
-                    group-hover/contact:border-[#EF1D25]
-                    group-hover/contact:text-[#EF1D25]
-                  "
-                >
-                  {/* Tag marker */}
-                  <span
-                    className="
-                      h-1.5
-                      w-1.5
-                      shrink-0
-                      border
-                      border-[#EF1D25]/70
-                      transition-colors
-                      duration-300
-                      group-hover/contact:bg-[#EF1D25]
-                    "
-                  />
-
-                  <span>CONTACT</span>
-
-                  {/* Connector */}
-                  <span
-                    className="
-                      absolute
-                      -right-3
-                      top-1/2
-                      h-px
-                      w-3
-                      -translate-y-1/2
-                      bg-[#3A1515]
-                      transition-colors
-                      duration-300
-                      group-hover/contact:bg-[#EF1D25]
-                    "
-                  />
-
-                  {/* Connector endpoint */}
-                  <span
-                    className="
-                      absolute
-                      -right-3.75
-                      top-1/2
-                      h-1
-                      w-1
-                      -translate-y-1/2
-                      rotate-45
-                      bg-[#EF1D25]/70
-                    "
-                  />
-                </div>
-              </a>
-
-              {/* Contact dropdown — opens above the tag on hover */}
-              <div
-                className="
-                  pointer-events-none
-                  absolute
-                  bottom-full
-                  left-0
-                  z-50
-                  w-48
-                  pb-2
-                  -translate-y-1
-                  opacity-0
-                  transition-[opacity,transform]
-                  duration-300
-                  delay-500
-                  ease-out
-                  group-hover/contactdd:pointer-events-auto
-                  group-hover/contactdd:translate-y-0
-                  group-hover/contactdd:opacity-100
-                  group-hover/contactdd:delay-0
-                "
-              >
-                <div className="flex flex-col gap-1 border border-[#3A1515] bg-[#090909] p-2">
-                  {github && (
-                    <a
-                      href={github.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-2 whitespace-nowrap px-2 py-1.5 font-mono text-[9px] font-semibold uppercase tracking-[0.15em] text-[#888888] transition-colors duration-200 hover:bg-[#151515] hover:text-[#FFD700]"
-                    >
-                      <Github size={12} strokeWidth={1.75} />
-                      GitHub
-                    </a>
-                  )}
-
-                  {linkedin && (
-                    <a
-                      href={linkedin.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-2 whitespace-nowrap px-2 py-1.5 font-mono text-[9px] font-semibold uppercase tracking-[0.15em] text-[#888888] transition-colors duration-200 hover:bg-[#151515] hover:text-[#FFD700]"
-                    >
-                      <Linkedin size={12} strokeWidth={1.75} />
-                      LinkedIn
-                    </a>
-                  )}
-
-                  {twitter && (
-                    <a
-                      href={twitter.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-2 whitespace-nowrap px-2 py-1.5 font-mono text-[9px] font-semibold uppercase tracking-[0.15em] text-[#888888] transition-colors duration-200 hover:bg-[#151515] hover:text-[#FFD700]"
-                    >
-                      <Twitter size={12} strokeWidth={1.75} />
-                      Twitter
-                    </a>
-                  )}
-
-                  <div className="my-0.5 h-px bg-[#3A1515]" />
-
-                  <a
-                    href={contactPhone.href}
-                    className="flex items-center gap-2 whitespace-nowrap px-2 py-1.5 font-mono text-[9px] font-semibold tracking-[0.1em] text-[#888888] transition-colors duration-200 hover:bg-[#151515] hover:text-[#FFD700]"
-                  >
-                    <Phone size={12} strokeWidth={1.75} />
-                    {contactPhone.label}
-                  </a>
-                </div>
-              </div>
-            </div>
-
-            {/* =================================================
-                HAVE AN IDEA? TAG
-            ================================================= */}
-            <div
-              className="
-                absolute
-                left-0
-                top-[62%]
-                z-50
-                hidden
-                -translate-x-full
-                pr-3
-                md:block
-              "
-            >
-              <button
-                type="button"
-                onClick={() => setIdeaModalOpen(true)}
-                title="Have an idea?"
-                className="group/idea relative block w-max"
-              >
-                <div
-                  className="
-                    relative
-                    flex
-                    items-center
-                    gap-2
-                    border
-                    border-[#3A1515]
-                    bg-[#090909]
-                    px-3
-                    py-2
-                    font-mono
-                    text-[9px]
-                    font-semibold
-                    uppercase
-                    tracking-[0.2em]
-                    text-[#888888]
-                    transition-all
-                    duration-300
-                    group-hover/idea:border-[#EF1D25]
-                    group-hover/idea:text-[#EF1D25]
-                  "
-                >
-                  {/* Tag marker */}
-                  <span
-                    className="
-                      h-1.5
-                      w-1.5
-                      shrink-0
-                      border
-                      border-[#EF1D25]/70
-                      transition-colors
-                      duration-300
-                      group-hover/idea:bg-[#EF1D25]
-                    "
-                  />
-
-                  <span>HAVE AN IDEA?</span>
-
-                  {/* Connector */}
-                  <span
-                    className="
-                      absolute
-                      -right-3
-                      top-1/2
-                      h-px
-                      w-3
-                      -translate-y-1/2
-                      bg-[#3A1515]
-                      transition-colors
-                      duration-300
-                      group-hover/idea:bg-[#EF1D25]
-                    "
-                  />
-
-                  {/* Connector endpoint */}
-                  <span
-                    className="
-                      absolute
-                      -right-3.75
-                      top-1/2
-                      h-1
-                      w-1
-                      -translate-y-1/2
-                      rotate-45
-                      bg-[#EF1D25]/70
-                    "
-                  />
-                </div>
-              </button>
-            </div>
-
-            {/* =================================================
-                BOTTOM IDENTITY + NAV
-            ================================================= */}
-            <div className="absolute inset-x-0 bottom-0 z-20 flex flex-col gap-3.5 bg-linear-to-t from-black via-black/50 to-transparent px-4 pb-3.5 pt-20 sm:px-5 sm:pb-4">
-              <div className="flex items-end justify-between gap-3">
-                <div>
-                  <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-red-400">
-                    01 / Profile
-                  </span>
-
-                  <h1 className="mt-1.5 text-xl font-bold leading-tight tracking-tight text-white sm:text-2xl md:text-[28px]">
-                    PRIYANSHU CHOURASIA
-                  </h1>
-                </div>
-
-                <div className="pb-0.5 text-right">
-                  <p className="font-mono text-[9px] uppercase tracking-[0.25em] text-red-400">
-                    Software Engineer
-                  </p>
-
-                  <p className="mt-1 flex items-center justify-end gap-1.5 text-[10px] text-white/60">
-                    <span className="h-1.5 w-1.5 rounded-full bg-red-500" />
-                    India
-                  </p>
-                </div>
-              </div>
-
-              <p className="max-w-md text-[11px] leading-relaxed text-white/75 sm:text-xs">
-                Building scalable software and thoughtful digital products.
-              </p>
-
-              <nav
-                aria-label="Primary"
-                className="flex flex-wrap items-center justify-center gap-1 rounded-full border border-white/10 bg-black/55 px-1.5 py-1 backdrop-blur-sm"
-              >
-                {heroNavItems.map(
-                  (item) => {
-                    const Icon = item.icon
-                    const active =
-                      item.active
-
-                    return (
-                      <span
-                        key={item.label}
-                        className={navItemClasses(
-                          Boolean(active),
-                        )}
-                      >
-                        {active && (
-                          <span className="h-1 w-1 rounded-full bg-primary-accent" />
-                        )}
-
-                        {item.to ? (
-                          <Link
-                            to={item.to}
-                            aria-current={
-                              active
-                                ? 'page'
-                                : undefined
-                            }
-                            className="flex items-center gap-1.5"
-                          >
-                            <Icon className="h-3.5 w-3.5" />
-
-                            {item.label}
-                          </Link>
-                        ) : (
-                          <a
-                            href={item.href}
-                            aria-current={
-                              active
-                                ? 'page'
-                                : undefined
-                            }
-                            className="flex items-center gap-1.5"
-                          >
-                            <Icon className="h-3.5 w-3.5" />
-
-                            {item.label}
-                          </a>
-                        )}
-                      </span>
-                    )
-                  },
-                )}
-              </nav>
-            </div>
-          </div>
-
-          {/* =================================================
-              Q2 — PROJECTS + SOCIALS
-          ================================================= */}
-          <div className="relative order-2 rounded-2xl border border-[#1c1c1c] bg-[#080808] p-2.5">
-            <div className="flex items-center justify-between px-1 pb-2 pt-1">
-              <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-white/50">
-                02 / Projects
-              </span>
-
-              <span className="flex items-center gap-1.5">
-                <span className="h-1 w-1 rounded-full bg-red-500" />
-
-                <span className="font-mono text-[9px] uppercase tracking-widest text-red-400/80">
-                  Live
-                </span>
-              </span>
-            </div>
-
-            <div className="grid h-[calc(100%-2.1rem)] grid-cols-2 grid-rows-2 gap-2">
-              {/* LinkedIn */}
-              <a
-                href="https://www.linkedin.com/in/priyanshu-chourasia-17833120a/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group relative overflow-hidden rounded-xl border border-white/10 transition-all duration-300 ease-out hover:-translate-y-0.5 hover:border-[#3b0a0a]"
-              >
-                <img
-                  src="/linkedin.png"
-                  alt="LinkedIn"
-                  className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03]"
-                />
-
-                <span className="absolute inset-x-0 bottom-0 flex items-center justify-center gap-1.5 border-t border-white/10 bg-black/85 py-1 text-center text-[10px] font-medium text-white/85">
-                  <span className="h-1 w-1 rounded-full bg-red-500" />
-                  LinkedIn
-                </span>
-              </a>
-
-              {/* Featured Project */}
-              <div className="group relative overflow-hidden rounded-xl border border-white/10 transition-all duration-300 ease-out hover:-translate-y-0.5 hover:border-[#3b0a0a]">
-                <AnimatePresence mode="wait">
-                  <motion.img
-                    key={featuredWork?.title}
-                    src={featuredWork?.image}
-                    alt={featuredWork?.title}
-                    initial={{
-                      opacity: 0,
-                      scale: 1.05,
-                    }}
-                    animate={{
-                      opacity: 1,
-                      scale: 1,
-                    }}
-                    exit={{
-                      opacity: 0,
-                      scale: 0.95,
-                    }}
-                    transition={{
-                      duration: 0.5,
-                    }}
-                    className="absolute inset-0 h-full w-full object-cover"
-                  />
-                </AnimatePresence>
-
-                <div className="absolute inset-0 bg-linear-to-t from-[#050505]/90 via-[#050505]/30 to-transparent" />
-
-                <div className="absolute inset-x-0 bottom-0 p-2">
-                  <AnimatePresence mode="wait">
-                    <motion.p
-                      key={featuredWork?.title}
-                      initial={{
-                        opacity: 0,
-                        y: 4,
-                      }}
-                      animate={{
-                        opacity: 1,
-                        y: 0,
-                      }}
-                      exit={{
-                        opacity: 0,
-                        y: -4,
-                      }}
-                      transition={{
-                        duration: 0.3,
-                      }}
-                      className="truncate text-[10px] font-semibold text-white"
-                    >
-                      {featuredWork?.title}
-                    </motion.p>
-                  </AnimatePresence>
-
-                  <div className="mt-1 flex gap-0.5">
-                    {featuredWorks.map(
-                      (_, i) => (
-                        <span
-                          key={i}
-                          className={`h-0.5 rounded-full transition-all duration-300 ${i === featuredIndex
-                            ? 'w-2 bg-primary-accent'
-                            : 'w-0.5 bg-white/25'
-                            }`}
-                        />
-                      ),
-                    )}
-                  </div>
-                </div>
-              </div>
-
-              {/* GitHub */}
-              {github && (
-                <a
-                  href={github.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group relative overflow-hidden rounded-xl border border-white/10 transition-all duration-300 ease-out hover:-translate-y-0.5 hover:border-[#3b0a0a]"
-                >
-                  <img
-                    src="/githubprofile.png"
-                    alt="GitHub"
-                    className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03]"
-                  />
-
-                  <span className="absolute inset-x-0 bottom-0 flex items-center justify-center gap-1.5 border-t border-white/10 bg-black/85 py-1 text-center text-[10px] font-medium text-white/85">
-                    <span className="h-1 w-1 rounded-full bg-red-500" />
-                    GitHub
-                  </span>
-                </a>
-              )}
-
-              {/* Twitter */}
-              {twitter && (
-                <a
-                  href={twitter.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group relative overflow-hidden rounded-xl border border-white/10 transition-all duration-300 ease-out hover:-translate-y-0.5 hover:border-[#3b0a0a]"
-                >
-                  <img
-                    src="/twitterImage.png"
-                    alt="Twitter"
-                    className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03]"
-                  />
-
-                  <span className="absolute inset-x-0 bottom-0 flex items-center justify-center gap-1.5 border-t border-white/10 bg-black/85 py-1 text-center text-[10px] font-medium text-white/85">
-                    <span className="h-1 w-1 rounded-full bg-red-500" />
-                    Twitter
-                  </span>
-                </a>
-              )}
-            </div>
-          </div>
-
-          {/* =================================================
-              Q3 — SKILLS
-          ================================================= */}
-          <div
-            className="relative order-3 flex flex-col overflow-hidden rounded-2xl border border-[#1c1c1c] shadow-[inset_0_4px_12px_rgba(0,0,0,0.6),inset_0_-2px_6px_rgba(255,255,255,0.05)]"
+      {/* =====================================================
+          CENTER IDENTITY
+      ===================================================== */}
+      <div className="relative z-10 flex flex-1 flex-col items-center justify-center gap-5 px-4 pb-16 pt-24 text-center">
+        <h1 aria-label="Priyanshu Chourasia" className="relative mb-[0.35em] mt-[0.2em] flex items-center justify-center gap-[0.35em] text-3xl font-bold leading-tight tracking-tight text-white sm:text-5xl md:text-6xl">
+          {/* Purple reflection split along the slant — light on the left,
+              dark on the right — fading out to the black edges */}
+          <span
+            aria-hidden="true"
+            className="pointer-events-none absolute left-1/2 top-1/2 -z-10 h-[600px] w-[min(1050px,130vw)] -translate-x-1/2 -translate-y-1/2 opacity-80"
             style={{
-              background:
-                'radial-gradient(ellipse 120% 90% at 30% 0%, #2a0a0a 0%, #0D0D0D 55%, #050505 100%)',
+              backgroundImage:
+                'linear-gradient(110deg, #7F4EA8 0%, #BE2ED6 49.8%, #5D328E 50.2%, #42156F 100%)',
+              maskImage:
+                'radial-gradient(ellipse at center, black 0%, rgba(0,0,0,0.6) 45%, transparent 75%)',
+              WebkitMaskImage:
+                'radial-gradient(ellipse at center, black 0%, rgba(0,0,0,0.6) 45%, transparent 75%)',
             }}
-          >
-            <div className="relative z-20 flex items-center justify-between gap-2 px-4 pb-2 pt-3.5">
-              <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-white/50">
-                03 / Skills
-              </span>
+          />
 
-              <span className="flex items-center gap-1.5">
-                <Sparkles className="h-3 w-3 text-primary-accent" />
+          <span className="-translate-y-[0.2em]">PRIYANSHU</span>
 
-                <span className="text-[10px] font-bold uppercase tracking-widest text-white/70">
-                  Buy Service
-                </span>
-              </span>
-            </div>
+          {/* Big slanted divider between first and last name */}
+          <span
+            aria-hidden="true"
+            className="pointer-events-none absolute left-1/2 top-1/2 -z-10 h-[min(70vh,560px)] w-[3px] -translate-x-1/2 -translate-y-1/2 rotate-[20deg] rounded-full bg-[linear-gradient(to_bottom,transparent,#BE2ED6_20%,#7C41A8_50%,#42156F_80%,transparent)] shadow-[0_0_18px_#BE2ED6]"
+          />
 
-            <div className="relative z-0 min-h-0 flex-1 overflow-hidden">
-              {stars.map((star, i) => (
-                <span
-                  key={i}
-                  className={`pointer-events-none absolute rounded-full bg-white ${star.twinkle
-                    ? 'animate-pulse motion-reduce:animate-none'
-                    : ''
-                    }`}
-                  style={{
-                    left: `${star.x}%`,
-                    top: `${star.y}%`,
-                    width: star.s,
-                    height: star.s,
-                    opacity: star.o,
-                    animationDuration: `${2 + (i % 5) * 0.6}s`,
-                  }}
-                />
-              ))}
+          <span className="translate-y-[0.35em] text-[#EF1D25]">
+            CHOURASIA
+          </span>
+        </h1>
 
-              <div className="pointer-events-none absolute inset-0">
-                <div className="absolute -left-6 -top-8 h-28 w-28 rounded-full bg-primary-accent/12 blur-2xl" />
+        <p className="font-mono text-[11px] uppercase tracking-[0.3em] text-red-400">
+          Software Engineer — India
+        </p>
 
-                <div className="absolute -bottom-10 -right-8 h-32 w-32 rounded-full bg-[#5a0b0b]/30 blur-3xl" />
-              </div>
+        <p className="max-w-md text-sm leading-relaxed text-white/65 sm:text-base">
+          Building scalable software and thoughtful digital products.
+        </p>
 
-              {allSkills.map(
-                (skill, i) => (
-                  <FloatingChip
-                    key={`${skill.label}-${i}`}
-                    item={skill}
-                    layout={chipLayout[i]}
-                    index={i}
-                    paused={
-                      activeSkill === i
-                    }
-                    active={
-                      activeSkill === i
-                    }
-                    reduced={reducedMotion}
-                    onHoverChange={(a) =>
-                      setActiveSkill(
-                        a ? i : null,
-                      )
-                    }
-                  />
-                ),
-              )}
-            </div>
-          </div>
-
-          {/* =================================================
-              Q4 — FEATURED PROJECT
-          ================================================= */}
+        <div className="mt-2 flex flex-wrap items-center justify-center gap-3">
           <Link
             to="/projects"
-            title="View My Projects"
-            className="group relative order-4 block overflow-hidden rounded-2xl border border-[#1c1c1c] bg-[#0D0D0D] transition-all duration-300 ease-out hover:-translate-y-1 hover:border-primary-accent/40"
+            className="inline-flex items-center gap-2 rounded-full border border-[#EF1D25]/60 bg-[#EF1D25]/10 px-5 py-2.5 font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-[#EF1D25] transition-colors duration-200 hover:bg-[#EF1D25]/20"
           >
-            <img
-              src={featuredWork?.image}
-              alt="My Projects"
-              className="absolute inset-0 h-full w-full object-cover opacity-60 transition-transform duration-500 ease-out group-hover:scale-[1.02]"
-            />
+            View Projects
 
-            <div className="absolute inset-0 bg-linear-to-t from-black/85 via-black/40 to-black/10" />
-
-            <div className="absolute inset-x-0 bottom-0 p-4 sm:p-5">
-              <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-red-400">
-                04 / Featured
-              </p>
-
-              <h3 className="mt-1 truncate text-lg font-bold text-white sm:text-xl">
-                {featuredWork?.title}
-              </h3>
-
-              <span className="mt-2 inline-flex items-center gap-1.5 text-[11px] font-medium text-white/60 transition-colors duration-300 group-hover:text-white">
-                View all projects
-
-                <ArrowUpRight className="h-3.5 w-3.5 text-red-400 transition-transform duration-300 ease-out group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-              </span>
-            </div>
+            <Folder className="h-3.5 w-3.5" />
           </Link>
+
+          <button
+            type="button"
+            onClick={() => setIdeaModalOpen(true)}
+            className="inline-flex items-center gap-2 rounded-full border border-white/15 px-5 py-2.5 font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-white/80 transition-colors duration-200 hover:border-white/40 hover:text-white"
+          >
+            Have an idea?
+
+            <Lightbulb className="h-3.5 w-3.5" />
+          </button>
         </div>
       </div>
 
       {/* =====================================================
-          HIRE ME
+          MACOS-STYLE DOCK MENU BAR
       ===================================================== */}
-      <div className="pointer-events-none absolute inset-x-0 bottom-5 z-30 hidden flex-col items-center gap-2 md:flex">
-        <span className="font-mono text-[11px] font-semibold uppercase tracking-[0.3em] text-red-600">
-          Hire Me
-        </span>
-
-        <a
-          href="#services"
-          title="View my services"
-          className="pointer-events-auto"
+      <div className="relative z-30 flex justify-center px-4 pb-4 sm:pb-5">
+        <motion.div
+          onMouseMove={(e) => mouseX.set(e.clientX)}
+          onMouseLeave={() =>
+            mouseX.set(Number.POSITIVE_INFINITY)
+          }
+          className="flex max-w-full flex-wrap items-end justify-center gap-2 rounded-2xl border border-[#BE2ED6]/30 px-2.5 pb-3.5 pt-2.5 shadow-[0_16px_48px_rgba(0,0,0,0.55),0_0_32px_rgba(190,46,214,0.25)] backdrop-blur-xl sm:flex-nowrap"
+          style={{
+            // Same slant split as the hero glow — light on the left, dark on the right
+            backgroundImage:
+              'linear-gradient(110deg, rgba(127,78,168,0.35) 0%, rgba(190,46,214,0.35) 49.8%, rgba(93,50,142,0.4) 50.2%, rgba(66,21,111,0.5) 100%)',
+          }}
         >
-          <motion.div
-            animate={
-              reducedMotion
-                ? undefined
-                : {
-                  y: [0, 6, 0],
-                }
-            }
-            transition={{
-              duration: 1.6,
-              repeat: Infinity,
-              ease: 'easeInOut',
-            }}
-          >
-            <ChevronDown className="h-5 w-5 text-red-500" />
-          </motion.div>
-        </a>
+          {dockEntries.map((entry) =>
+            entry.kind === 'divider' ? (
+              <span
+                key={entry.key}
+                className="mx-1 h-9 w-px self-center rotate-[20deg] bg-[#BE2ED6]/40"
+                aria-hidden="true"
+              />
+            ) : (
+              <DockItem
+                key={entry.key}
+                entry={entry}
+                mouseX={mouseX}
+                reduced={reducedMotion}
+              />
+            ),
+          )}
+        </motion.div>
       </div>
 
       <HaveAnIdeaModal

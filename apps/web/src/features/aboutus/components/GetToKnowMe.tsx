@@ -49,7 +49,7 @@ const projects = [
 
 export default function GetToKnowMe() {
   return (
-    <section className="grid min-h-screen w-full grid-cols-1 lg:grid-cols-[40%_60%]">
+    <section id="about" className="grid min-h-screen w-full grid-cols-1 lg:grid-cols-[40%_60%]">
       {/* =========================================================
           LEFT — EDUCATION
       ========================================================= */}
@@ -339,12 +339,11 @@ export default function GetToKnowMe() {
                 MY INFORMATION
             ================================================= */}
             <motion.div
-              id="about"
               initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
-              className="scroll-mt-24 border-b border-red-950/70 p-6 md:border-b-0 md:border-r md:p-8 lg:p-10"
+              className="border-b border-red-950/70 p-6 md:border-b-0 md:border-r md:p-8 lg:p-10"
             >
               {/* Section heading */}
               <div className="mb-8">

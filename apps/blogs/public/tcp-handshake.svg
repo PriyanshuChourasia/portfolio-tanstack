@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 700" role="img" aria-labelledby="tcpTitle">
+  <title id="tcpTitle">TCP three-way handshake between client and server</title>
+
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0B0B0B" />
+      <stop offset="100%" stop-color="#050505" />
+    </linearGradient>
+    <linearGradient id="redGlow" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#EF1D25" stop-opacity="0.9" />
+      <stop offset="100%" stop-color="#EF1D25" stop-opacity="0.35" />
+    </linearGradient>
+    <linearGradient id="redGlowRev" x1="1" y1="0" x2="0" y2="0">
+      <stop offset="0%" stop-color="#EF1D25" stop-opacity="0.9" />
+      <stop offset="100%" stop-color="#EF1D25" stop-opacity="0.35" />
+    </linearGradient>
+    <marker id="arrowRight" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0,0 L10,5 L0,10 Z" fill="#EF1D25" />
+    </marker>
+    <marker id="arrowLeft" markerWidth="10" markerHeight="10" refX="2" refY="5" orient="auto">
+      <path d="M10,0 L0,5 L10,10 Z" fill="#EF1D25" />
+    </marker>
+    <pattern id="grid" width="56" height="56" patternUnits="userSpaceOnUse">
+      <path d="M 56 0 L 0 0 0 56" fill="none" stroke="#EF1D25" stroke-opacity="0.08" stroke-width="1" />
+    </pattern>
+  </defs>
+
+  <rect width="1600" height="700" fill="url(#bg)" />
+  <rect width="1600" height="700" fill="url(#grid)" />
+
+  <line x1="0" y1="0" x2="0" y2="700" stroke="#242424" stroke-width="2" />
+  <line x1="1598" y1="0" x2="1598" y2="700" stroke="#242424" stroke-width="2" />
+  <line x1="0" y1="1" x2="1600" y2="1" stroke="#242424" stroke-width="2" />
+  <line x1="0" y1="699" x2="1600" y2="699" stroke="#242424" stroke-width="2" />
+  <line x1="0" y1="0" x2="0" y2="48" stroke="#6B1A1A" stroke-width="4" />
+  <line x1="1600" y1="0" x2="1552" y2="0" stroke="#6B1A1A" stroke-width="4" />
+
+  <text x="1536" y="70" text-anchor="end" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="20" letter-spacing="6" fill="#EF1D25" font-weight="700">TCP</text>
+  <text x="1536" y="94" text-anchor="end" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="14" letter-spacing="3" fill="#555555">THREE-WAY HANDSHAKE</text>
+
+  <!-- Client / Server lifelines -->
+  <line x1="270" y1="140" x2="270" y2="620" stroke="#2A2A2A" stroke-width="2" stroke-dasharray="4 6" />
+  <line x1="1330" y1="140" x2="1330" y2="620" stroke="#2A2A2A" stroke-width="2" stroke-dasharray="4 6" />
+
+  <!-- Client box -->
+  <rect x="150" y="88" width="240" height="72" rx="10" fill="#0C0C0C" stroke="#EF1D25" stroke-width="1.5" />
+  <text x="270" y="118" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="20" fill="#F5F5F5" font-weight="700">CLIENT</text>
+  <text x="270" y="142" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12" fill="#777777" letter-spacing="2">SEQ = X</text>
+
+  <!-- Server box -->
+  <rect x="1210" y="88" width="240" height="72" rx="10" fill="#0C0C0C" stroke="#EF1D25" stroke-width="1.5" />
+  <text x="1330" y="118" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="20" fill="#F5F5F5" font-weight="700">SERVER</text>
+  <text x="1330" y="142" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12" fill="#777777" letter-spacing="2">SEQ = Y</text>
+
+  <!-- SYN -->
+  <line x1="270" y1="230" x2="1330" y2="230" stroke="url(#redGlow)" stroke-width="3" marker-end="url(#arrowRight)" />
+  <rect x="640" y="196" width="260" height="30" rx="6" fill="#0B0B0B" stroke="#3A1414" />
+  <text x="770" y="217" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="15" fill="#EF1D25" font-weight="700" letter-spacing="1">SYN  seq=X</text>
+
+  <!-- SYN-ACK -->
+  <line x1="1330" y1="340" x2="270" y2="340" stroke="url(#redGlowRev)" stroke-width="3" marker-end="url(#arrowLeft)" />
+  <rect x="600" y="306" width="340" height="30" rx="6" fill="#0B0B0B" stroke="#3A1414" />
+  <text x="770" y="327" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="15" fill="#EF1D25" font-weight="700" letter-spacing="1">SYN-ACK  seq=Y, ack=X+1</text>
+
+  <!-- ACK -->
+  <line x1="270" y1="450" x2="1330" y2="450" stroke="url(#redGlow)" stroke-width="3" marker-end="url(#arrowRight)" />
+  <rect x="640" y="416" width="260" height="30" rx="6" fill="#0B0B0B" stroke="#3A1414" />
+  <text x="770" y="437" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="15" fill="#EF1D25" font-weight="700" letter-spacing="1">ACK  ack=Y+1</text>
+
+  <!-- ESTABLISHED -->
+  <line x1="270" y1="540" x2="270" y2="620" stroke="#2A2A2A" stroke-width="2" />
+  <line x1="1330" y1="540" x2="1330" y2="620" stroke="#2A2A2A" stroke-width="2" />
+  <rect x="620" y="522" width="300" height="40" rx="20" fill="#0C0C0C" stroke="#2E6B3A" stroke-width="1.5" />
+  <circle cx="646" cy="542" r="5" fill="#3ECF6E" />
+  <text x="770" y="548" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="15" fill="#3ECF6E" font-weight="700" letter-spacing="2">ESTABLISHED</text>
+
+  <text x="64" y="660" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="13" fill="#555555" letter-spacing="1">SYN &#8594; SYN-ACK &#8594; ACK</text>
+  <text x="1536" y="660" text-anchor="end" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="13" fill="#555555" letter-spacing="1">RFC 793</text>
+</svg>
