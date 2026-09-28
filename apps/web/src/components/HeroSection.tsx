@@ -16,7 +16,6 @@ import {
   Lightbulb,
   Linkedin,
   Mail,
-  Newspaper,
   Phone,
   Send,
   Twitter,
@@ -187,7 +186,7 @@ type DockIconEntry = {
     strokeWidth?: number
   }>
   href?: string
-  to?: '/projects' | '/blog'
+  to?: '/projects'
   external?: boolean
   active?: boolean
   onClick?: () => void
@@ -567,13 +566,6 @@ export function HeroSection() {
       label: 'Projects',
       icon: Folder,
       to: '/projects',
-    },
-    {
-      kind: 'item',
-      key: 'blogs',
-      label: 'Blogs',
-      icon: Newspaper,
-      to: '/blog',
     },
     { kind: 'divider', key: 'd1' },
     {

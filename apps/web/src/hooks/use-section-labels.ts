@@ -6,7 +6,6 @@ const DEFAULT_LABELS: Record<string, string> = {
   ABOUT: 'ABOUT',
   RESUME: 'RESUME',
   WORKS: 'WORKS',
-  BLOG: 'BLOG',
   CONTACT: 'CONTACT',
 }
 

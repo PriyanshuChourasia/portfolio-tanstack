@@ -3,7 +3,6 @@ import {
   AtSign,
   Briefcase,
   FileText,
-  MessageSquare,
   Search,
   User,
   X,
@@ -19,8 +18,8 @@ interface SidebarDrawerProps {
   onTabChange?: (tab: string) => void
 }
 
-const NAV_KEYS = ['ABOUT', 'RESUME', 'WORKS', 'BLOG', 'CONTACT'] as const
-const NAV_ICONS = [User, FileText, Briefcase, MessageSquare, AtSign]
+const NAV_KEYS = ['ABOUT', 'RESUME', 'WORKS', 'CONTACT'] as const
+const NAV_ICONS = [User, FileText, Briefcase, AtSign]
 
 export function SidebarDrawer({
   isOpen,

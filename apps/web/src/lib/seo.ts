@@ -13,7 +13,7 @@ export const SOCIAL_LINKS = {
 export const DEFAULT_TITLE =
   'Priyanshu Chourasia | Full Stack Developer Portfolio'
 export const DEFAULT_DESCRIPTION =
-  'Portfolio of Priyanshu Chourasia, a Full Stack Developer building modern, performant web applications. Explore projects, blog posts, and experience.'
+  'Portfolio of Priyanshu Chourasia, a Full Stack Developer building modern, performant web applications. Explore projects and experience.'
 export const DEFAULT_IMAGE = `${SITE_URL}/hero-person.png`
 
 export function absoluteUrl(path: string) {

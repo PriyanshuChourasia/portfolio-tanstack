@@ -4,7 +4,6 @@ import {
   Briefcase,
   FileText,
   Menu,
-  MessageSquare,
   User,
 } from 'lucide-react'
 import { EditableLabel } from './editable-label'
@@ -17,8 +16,8 @@ interface SidebarNavProps {
   onMenuToggle: () => void
 }
 
-const NAV_KEYS = ['ABOUT', 'RESUME', 'WORKS', 'BLOG', 'CONTACT'] as const
-const NAV_ICONS = [User, FileText, Briefcase, MessageSquare, AtSign]
+const NAV_KEYS = ['ABOUT', 'RESUME', 'WORKS', 'CONTACT'] as const
+const NAV_ICONS = [User, FileText, Briefcase, AtSign]
 
 export function SidebarNav({
   activeTab,
