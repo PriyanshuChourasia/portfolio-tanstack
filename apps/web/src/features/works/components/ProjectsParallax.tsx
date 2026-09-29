@@ -44,6 +44,102 @@ function workShots(work: Work): Array<Shot> {
   return [{ src: work.image, alt: work.title, kind: 'desktop' }]
 }
 
+/* =========================================================
+    PANEL THEMES — default dark violet; OPD ERP gets its own
+    clinic teal (#028390, #26A69B, #81CCC4, #DFF2F0)
+========================================================= */
+
+type PanelTheme = {
+  section: string
+  glowA: string
+  glowB: string
+  number: string
+  title: string
+  client: string
+  tag: string
+  description: string
+  stackChip: string
+  cta: string
+  card: string
+  navButton: string
+  dotActive: string
+  dotIdle: string
+  caption: string
+  // Width of the screenshot wheel stage
+  stage: string
+}
+
+const darkTheme: PanelTheme = {
+  section: 'border-white/5 bg-[#070707]',
+  glowA:
+    'bg-[radial-gradient(closest-side,rgba(190,46,214,0.28),rgba(127,78,168,0.14)_55%,transparent)]',
+  glowB: 'bg-[radial-gradient(closest-side,rgba(93,50,142,0.3),transparent)]',
+  number: 'text-white/60',
+  title: 'text-white',
+  client: 'text-[#BE2ED6]',
+  tag: 'border-[#BE2ED6]/50 bg-[#BE2ED6]/10 text-[#BE2ED6]',
+  description: 'text-white/70',
+  stackChip: 'border-white/15 text-white/70',
+  cta: 'border-[#EF1D25]/60 bg-[#EF1D25]/10 text-[#EF1D25] hover:bg-[#EF1D25]/20',
+  card: 'border-white/10 bg-[#0c0a10] shadow-[0_24px_64px_rgba(0,0,0,0.6)]',
+  navButton:
+    'border-white/15 text-white/80 hover:border-[#BE2ED6] hover:bg-[#BE2ED6] hover:text-white',
+  dotActive: 'bg-[#EF1D25]',
+  dotIdle: 'bg-white/25 hover:bg-white/50',
+  caption: 'text-white/50',
+  stage: 'w-[80%] max-w-xl',
+}
+
+const opdTheme: PanelTheme = {
+  section: 'border-[#81CCC4]/40 bg-[#DFF2F0]',
+  glowA:
+    'bg-[radial-gradient(closest-side,rgba(38,166,155,0.28),rgba(129,204,196,0.18)_55%,transparent)]',
+  glowB: 'bg-[radial-gradient(closest-side,rgba(2,131,144,0.18),transparent)]',
+  number: 'text-[#028390]/70',
+  title: 'text-[#028390]',
+  client: 'text-[#26A69B]',
+  tag: 'border-[#26A69B]/50 bg-[#26A69B]/10 text-[#028390]',
+  description: 'text-[#0B4A50]',
+  stackChip: 'border-[#81CCC4] bg-white/60 text-[#028390]',
+  cta: 'border-[#028390] bg-[#028390] text-white hover:border-[#26A69B] hover:bg-[#26A69B]',
+  card: 'border-[#81CCC4] bg-white shadow-[0_24px_64px_rgba(2,131,144,0.18)]',
+  navButton:
+    'border-[#81CCC4] text-[#028390] hover:border-[#028390] hover:bg-[#028390] hover:text-white',
+  dotActive: 'bg-[#028390]',
+  dotIdle: 'bg-[#81CCC4] hover:bg-[#26A69B]',
+  caption: 'text-[#028390]/70',
+  stage: 'w-full max-w-3xl',
+}
+
+// Resume Builder — indigo + mint on navy/black (#5E5FFF, #01B397, #0E142A, #0A0A0A)
+const resumeTheme: PanelTheme = {
+  section:
+    'border-[#5E5FFF]/15 bg-[linear-gradient(160deg,#0E142A_0%,#0A0A0A_65%)]',
+  glowA:
+    'bg-[radial-gradient(closest-side,rgba(94,95,255,0.3),rgba(94,95,255,0.12)_55%,transparent)]',
+  glowB: 'bg-[radial-gradient(closest-side,rgba(1,179,151,0.22),transparent)]',
+  number: 'text-[#5E5FFF]/80',
+  title: 'text-white',
+  client: 'text-[#01B397]',
+  tag: 'border-[#5E5FFF]/50 bg-[#5E5FFF]/10 text-[#8F90FF]',
+  description: 'text-white/70',
+  stackChip: 'border-[#5E5FFF]/25 bg-[#0E142A]/60 text-white/75',
+  cta: 'border-[#01B397] bg-[#01B397] text-[#0A0A0A] hover:border-[#5E5FFF] hover:bg-[#5E5FFF] hover:text-white',
+  card: 'border-[#5E5FFF]/25 bg-[#0E142A] shadow-[0_24px_64px_rgba(94,95,255,0.18)]',
+  navButton:
+    'border-[#5E5FFF]/30 text-white/80 hover:border-[#5E5FFF] hover:bg-[#5E5FFF] hover:text-white',
+  dotActive: 'bg-[#01B397]',
+  dotIdle: 'bg-[#5E5FFF]/35 hover:bg-[#5E5FFF]/70',
+  caption: 'text-[#01B397]/70',
+  stage: 'w-full max-w-3xl',
+}
+
+function panelTheme(work: Work): PanelTheme {
+  if (work.title.startsWith('OPD ERP')) return opdTheme
+  if (work.title === 'Resume Builder') return resumeTheme
+  return darkTheme
+}
+
 const toRad = (deg: number) => (deg * Math.PI) / 180
 
 /* =========================================================
@@ -58,36 +154,32 @@ function WheelCard({
   index,
   position,
   onSelect,
+  theme,
 }: {
   shot: Shot
   index: number
   position: MotionValue<number>
   onSelect: (index: number) => void
+  theme: PanelTheme
 }) {
   // Signed distance from the front of the wheel (0 = facing you)
   const offset = useTransform(position, (p) => index - p)
 
   const x = useTransform(
     offset,
-    (o) => `${Math.sin(toRad(o * WHEEL_STEP)) * 62}%`,
+    (o) => `${Math.sin(toRad(o * WHEEL_STEP)) * 58}%`,
   )
   const z = useTransform(
     offset,
     (o) => (Math.cos(toRad(o * WHEEL_STEP)) - 1) * 420,
   )
   const rotateY = useTransform(offset, (o) => -o * WHEEL_STEP)
-  const scale = useTransform(
-    offset,
-    (o) => 1 - Math.min(Math.abs(o), 1) * 0.18,
-  )
+  const scale = useTransform(offset, (o) => 1 - Math.min(Math.abs(o), 1) * 0.18)
   const opacity = useTransform(offset, (o) => {
     const d = Math.abs(o)
-    return d <= 1 ? 1 - d * 0.55 : Math.max(0, 0.45 - (d - 1) * 0.45)
+    return d <= 1 ? 1 - d * 0.2 : Math.max(0, 0.8 - (d - 1) * 0.8)
   })
-  const zIndex = useTransform(
-    offset,
-    (o) => 100 - Math.round(Math.abs(o) * 10),
-  )
+  const zIndex = useTransform(offset, (o) => 100 - Math.round(Math.abs(o) * 10))
 
   const isMobile = shot.kind === 'mobile'
 
@@ -95,7 +187,7 @@ function WheelCard({
     <motion.figure
       onClick={() => onSelect(index)}
       style={{ x, z, rotateY, scale, opacity, zIndex }}
-      className={`absolute inset-0 m-auto cursor-pointer overflow-hidden rounded-2xl border border-white/10 bg-[#0c0a10] shadow-[0_24px_64px_rgba(0,0,0,0.6)] ${
+      className={`absolute inset-0 m-auto cursor-pointer overflow-hidden rounded-2xl border ${theme.card} ${
         isMobile ? 'aspect-[9/19] h-full' : 'aspect-[16/10] h-fit w-full'
       }`}
     >
@@ -116,12 +208,14 @@ function ShotWheel({
   position,
   active,
   onSelect,
+  theme,
 }: {
   shots: Array<Shot>
   title: string
   position: MotionValue<number>
   active: number
   onSelect: (index: number) => void
+  theme: PanelTheme
 }) {
   const count = shots.length
 
@@ -132,26 +226,33 @@ function ShotWheel({
       aria-label={`${title} screenshots`}
       className="flex w-full flex-col items-center gap-6"
     >
-      <div className="relative aspect-[4/3] w-full max-w-2xl select-none [perspective:1400px] [transform-style:preserve-3d]">
-        {shots.map((shot, i) => (
-          <WheelCard
-            key={shot.src}
-            shot={shot}
-            index={i}
-            position={position}
-            onSelect={onSelect}
-          />
-        ))}
+      {/* Stage is shifted right into the page gutter; the short left-edge fade
+          stops side cards from spilling over the project text */}
+      <div className="flex w-full justify-center [mask-image:linear-gradient(to_right,transparent,black_6%)] lg:w-[calc(100%+4rem)] lg:self-start lg:pl-12">
+        <div
+          className={`relative aspect-[4/3] select-none [perspective:1400px] [transform-style:preserve-3d] ${theme.stage}`}
+        >
+          {shots.map((shot, i) => (
+            <WheelCard
+              key={shot.src}
+              shot={shot}
+              index={i}
+              position={position}
+              onSelect={onSelect}
+              theme={theme}
+            />
+          ))}
+        </div>
       </div>
 
       {count > 1 && (
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-4 lg:translate-x-14">
           <button
             type="button"
             onClick={() => onSelect(Math.max(0, active - 1))}
             disabled={active === 0}
             aria-label="Previous screenshot"
-            className="flex h-9 w-9 items-center justify-center rounded-full border border-white/15 text-white/80 transition-colors hover:border-[#BE2ED6] hover:bg-[#BE2ED6] hover:text-white disabled:pointer-events-none disabled:opacity-30"
+            className={`flex h-9 w-9 items-center justify-center rounded-full border transition-colors disabled:pointer-events-none disabled:opacity-30 ${theme.navButton}`}
           >
             <ChevronLeft className="h-4 w-4" />
           </button>
@@ -166,8 +267,8 @@ function ShotWheel({
                 aria-current={i === active}
                 className={`h-2 rounded-full transition-all duration-300 ${
                   i === active
-                    ? 'w-6 bg-[#EF1D25]'
-                    : 'w-2 bg-white/25 hover:bg-white/50'
+                    ? `w-6 ${theme.dotActive}`
+                    : `w-2 ${theme.dotIdle}`
                 }`}
               />
             ))}
@@ -178,7 +279,7 @@ function ShotWheel({
             onClick={() => onSelect(Math.min(count - 1, active + 1))}
             disabled={active === count - 1}
             aria-label="Next screenshot"
-            className="flex h-9 w-9 items-center justify-center rounded-full border border-white/15 text-white/80 transition-colors hover:border-[#BE2ED6] hover:bg-[#BE2ED6] hover:text-white disabled:pointer-events-none disabled:opacity-30"
+            className={`flex h-9 w-9 items-center justify-center rounded-full border transition-colors disabled:pointer-events-none disabled:opacity-30 ${theme.navButton}`}
           >
             <ChevronRight className="h-4 w-4" />
           </button>
@@ -187,7 +288,7 @@ function ShotWheel({
 
       <p
         aria-live="polite"
-        className="font-mono text-[10px] uppercase tracking-[0.2em] text-white/50"
+        className={`font-mono text-[10px] uppercase tracking-[0.2em] lg:translate-x-14 ${theme.caption}`}
       >
         {shots[active].alt}
       </p>
@@ -244,6 +345,7 @@ function ProjectPanel({ work, index }: { work: Work; index: number }) {
     })
   }
 
+  const theme = panelTheme(work)
   const number = String(index + 1).padStart(2, '0')
   const stack = workStack(work)
   const hasLink = Boolean(work.link) && work.link !== '#'
@@ -260,7 +362,7 @@ function ProjectPanel({ work, index }: { work: Work; index: number }) {
     <section
       ref={sectionRef}
       aria-label={work.title}
-      className="relative w-full border-t border-white/5 bg-[#070707]"
+      className={`relative w-full border-t ${theme.section}`}
       // One screen of scroll per screenshot, so each gets its turn at the front
       style={{ height: `${count * 100}vh` }}
     >
@@ -271,26 +373,36 @@ function ProjectPanel({ work, index }: { work: Work; index: number }) {
           style={{ y: glowY }}
           className="pointer-events-none absolute inset-0"
         >
-          <div className="absolute right-[-10%] top-1/2 h-[80vh] w-[70vw] -translate-y-1/2 rounded-full bg-[radial-gradient(closest-side,rgba(190,46,214,0.28),rgba(127,78,168,0.14)_55%,transparent)] blur-2xl" />
-          <div className="absolute bottom-[-20%] left-[-15%] h-[60vh] w-[50vw] rounded-full bg-[radial-gradient(closest-side,rgba(93,50,142,0.3),transparent)] blur-2xl" />
+          <div
+            className={`absolute right-[-10%] top-1/2 h-[80vh] w-[70vw] -translate-y-1/2 rounded-full blur-2xl ${theme.glowA}`}
+          />
+          <div
+            className={`absolute bottom-[-20%] left-[-15%] h-[60vh] w-[50vw] rounded-full blur-2xl ${theme.glowB}`}
+          />
         </motion.div>
 
-        <div className="relative mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-10 px-6 sm:px-10 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-16 lg:px-16">
+        <div className="relative mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-10 px-6 sm:px-10 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-24 lg:px-16">
           {/* About the project — left */}
           <motion.div
             {...reveal}
             transition={{ duration: 0.7, ease: 'easeOut' }}
             className="flex flex-col items-start gap-5"
           >
-            <span className="font-mono text-[11px] font-semibold uppercase tracking-[0.25em] text-white/60">
+            <span
+              className={`font-mono text-[11px] font-semibold uppercase tracking-[0.25em] ${theme.number}`}
+            >
               {number} / {String(works.length).padStart(2, '0')}
             </span>
 
-            <h3 className="text-3xl font-bold leading-[1.1] tracking-tight text-white sm:text-4xl lg:text-5xl">
+            <h3
+              className={`text-3xl font-bold leading-[1.1] tracking-tight sm:text-4xl lg:text-5xl ${theme.title}`}
+            >
               {work.title}
             </h3>
 
-            <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-[#BE2ED6]">
+            <p
+              className={`font-mono text-[11px] uppercase tracking-[0.2em] ${theme.client}`}
+            >
               {work.client}
             </p>
 
@@ -299,7 +411,7 @@ function ProjectPanel({ work, index }: { work: Work; index: number }) {
                 {workTags(work).map((tag) => (
                   <li
                     key={tag}
-                    className="rounded-full border border-[#BE2ED6]/50 bg-[#BE2ED6]/10 px-3 py-1 font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-[#BE2ED6]"
+                    className={`rounded-full border px-3 py-1 font-mono text-[10px] font-semibold uppercase tracking-[0.2em] ${theme.tag}`}
                   >
                     {tag}
                   </li>
@@ -307,7 +419,9 @@ function ProjectPanel({ work, index }: { work: Work; index: number }) {
               </ul>
             )}
 
-            <p className="line-clamp-6 text-sm leading-relaxed text-white/70 sm:text-base">
+            <p
+              className={`line-clamp-6 text-sm leading-relaxed sm:text-base ${theme.description}`}
+            >
               {workDetails(work)?.tagline ?? work.description}
             </p>
 
@@ -316,7 +430,7 @@ function ProjectPanel({ work, index }: { work: Work; index: number }) {
                 {stack.map((tech) => (
                   <li
                     key={tech}
-                    className="rounded-full border border-white/15 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.15em] text-white/70"
+                    className={`rounded-full border px-3 py-1 font-mono text-[10px] uppercase tracking-[0.15em] ${theme.stackChip}`}
                   >
                     {tech}
                   </li>
@@ -329,7 +443,7 @@ function ProjectPanel({ work, index }: { work: Work; index: number }) {
                 href={work.link}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mt-2 inline-flex w-fit items-center gap-2 rounded-full border border-[#EF1D25]/60 bg-[#EF1D25]/10 px-5 py-2.5 font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-[#EF1D25] transition-colors duration-200 hover:bg-[#EF1D25]/20"
+                className={`mt-2 inline-flex w-fit items-center gap-2 rounded-full border px-5 py-2.5 font-mono text-[10px] font-semibold uppercase tracking-[0.2em] transition-colors duration-200 ${theme.cta}`}
               >
                 Visit live
                 <ArrowUpRight className="h-3.5 w-3.5" />
@@ -348,6 +462,7 @@ function ProjectPanel({ work, index }: { work: Work; index: number }) {
               position={position}
               active={active}
               onSelect={scrollToShot}
+              theme={theme}
             />
           </motion.div>
         </div>

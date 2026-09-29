@@ -147,6 +147,40 @@
   --blue-950: #3C0100;
 }
 
+/* OPD ERP project page — teal clinic theme (#028390, #26A69B, #81CCC4, #DFF2F0).
+   Overrides the design tokens for the page subtree, plus the hardcoded slate
+   utilities in project-detail-page.tsx, which would otherwise win over the tokens. */
+.theme-opd {
+  --background: #dff2f0;
+  --foreground: #0b4a50;
+  --primary: #028390;
+  --primary-accent: #26a69b;
+  --card: #ffffff;
+  --border: #81ccc4;
+  --muted-foreground: #3f7f80;
+  background: linear-gradient(180deg, #dff2f0 0%, #f4fbfa 45%, #dff2f0 100%);
+  color: var(--foreground);
+}
+.theme-opd :is(.text-slate-900, .text-slate-700, .text-slate-600) {
+  color: var(--foreground);
+}
+.theme-opd
+  :is(
+    .text-slate-500,
+    .text-slate-400,
+    .text-slate-300,
+    .dark\:text-slate-500,
+    .dark\:text-slate-600
+  ) {
+  color: var(--muted-foreground);
+}
+.theme-opd .border-slate-200 {
+  border-color: #81ccc4;
+}
+.theme-opd .bg-slate-50 {
+  background-color: #dff2f0;
+}
+
 @theme inline {
   --font-sans: 'Space Grotesk', sans-serif;
   --font-mono: 'Fira Code', monospace;

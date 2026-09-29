@@ -28,6 +28,7 @@ import type { Variants } from 'framer-motion'
 import type { LucideIcon } from 'lucide-react'
 import worksData from '@/data/works-data.json'
 import { Navbar } from '@/components/Navbar'
+import { cn } from '@/lib/utils'
 
 type ProjectDetails = {
   tagline?: string
@@ -154,6 +155,8 @@ export function ProjectDetailPage({ projectId }: { projectId: number }) {
     )
   }
 
+  const isOpd = project.title.startsWith('OPD ERP')
+
   const details: ProjectDetails | undefined =
     'details' in project ? project.details : undefined
 
@@ -167,7 +170,12 @@ export function ProjectDetailPage({ projectId }: { projectId: number }) {
       : undefined
 
   return (
-    <div className="min-h-screen bg-white dark:bg-background">
+    <div
+      className={cn(
+        'min-h-screen',
+        isOpd ? 'theme-opd' : 'bg-white dark:bg-background',
+      )}
+    >
       <Navbar />
 
       <motion.main
@@ -183,14 +191,27 @@ export function ProjectDetailPage({ projectId }: { projectId: number }) {
           <div className="absolute -top-40 -right-24 h-96 w-96 rounded-full bg-primary-accent/10 blur-3xl" />
           <div className="absolute -bottom-48 -left-24 h-96 w-96 rounded-full bg-primary/10 blur-3xl" />
           <div className="hidden sm:block absolute inset-6 lg:inset-10 pointer-events-none">
-            <div className="absolute left-1/3 top-0 bottom-0 w-px bg-white/5" />
-            <div className="absolute left-2/3 top-0 bottom-0 w-px bg-white/5" />
+            <div
+              className={cn(
+                'absolute left-1/3 top-0 bottom-0 w-px',
+                isOpd ? 'bg-primary/10' : 'bg-white/5',
+              )}
+            />
+            <div
+              className={cn(
+                'absolute left-2/3 top-0 bottom-0 w-px',
+                isOpd ? 'bg-primary/10' : 'bg-white/5',
+              )}
+            />
           </div>
 
           {/* Oversized watermark number */}
           <span
             aria-hidden
-            className="hidden lg:block absolute -right-6 top-10 select-none text-[11rem] font-black text-white/[0.05] leading-none pointer-events-none"
+            className={cn(
+              'hidden lg:block absolute -right-6 top-10 select-none text-[11rem] font-black leading-none pointer-events-none',
+              isOpd ? 'text-primary/[0.08]' : 'text-white/[0.05]',
+            )}
           >
             {String(projectId).padStart(2, '0')}
           </span>
@@ -208,7 +229,12 @@ export function ProjectDetailPage({ projectId }: { projectId: number }) {
                   {project.category}
                 </span>
 
-                <h1 className="mt-6 text-4xl sm:text-5xl lg:text-6xl font-black uppercase tracking-tight leading-[0.95] text-white">
+                <h1
+                  className={cn(
+                    'mt-6 text-4xl sm:text-5xl lg:text-6xl font-black uppercase tracking-tight leading-[0.95]',
+                    isOpd ? 'text-primary' : 'text-white',
+                  )}
+                >
                   {project.title}
                 </h1>
 
@@ -221,7 +247,12 @@ export function ProjectDetailPage({ projectId }: { projectId: number }) {
                   </div>
                 )}
 
-                <p className="mt-6 max-w-xl text-base leading-8 text-slate-300">
+                <p
+                  className={cn(
+                    'mt-6 max-w-xl text-base leading-8',
+                    isOpd ? 'text-foreground' : 'text-slate-300',
+                  )}
+                >
                   {details?.tagline ?? project.description}
                 </p>
 
@@ -248,7 +279,11 @@ export function ProjectDetailPage({ projectId }: { projectId: number }) {
                 transition={{ duration: 0.7, delay: 0.2 }}
                 className="relative"
               >
-                <div className="absolute -inset-4 rounded-3xl bg-linear-to-br from-primary-accent/25 via-transparent to-fuchsia-500/15 blur-2xl opacity-70" />
+                <div className={cn(
+                    'absolute -inset-4 rounded-3xl bg-linear-to-br from-primary-accent/25 via-transparent blur-2xl opacity-70',
+                    isOpd ? 'to-primary/20' : 'to-fuchsia-500/15',
+                  )}
+                />
 
                 <div className="relative overflow-hidden rounded-2xl border border-border bg-card/80 shadow-2xl shadow-card backdrop-blur-xl">
                   {/* Browser chrome */}
