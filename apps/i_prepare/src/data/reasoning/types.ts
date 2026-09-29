@@ -12,9 +12,6 @@ export type ExamId =
   | 'IBPS_PO'
   | 'ANALOGY_PRACTICE'
   | 'SBI_ENGLISH'
-  | 'JAVA_CORE'
-  | 'JAVA_ADV'
-  | 'GO_LANG'
 
 export type Difficulty = 'easy' | 'moderate' | 'difficult'
 
@@ -70,71 +67,14 @@ export const ENGLISH_TOPICS = [
 export type EnglishTopic = (typeof ENGLISH_TOPICS)[number]
 
 /** Section an exam paper belongs to — decides which topic list applies. */
-export type Subject = 'reasoning' | 'english' | 'java' | 'go'
+export type Subject = 'reasoning' | 'english'
 
-/**
- * Interview-question banks are labelled with the version a behaviour applies to,
- * so the UI can render a badge next to questions like virtual threads or
- * sequenced collections.
- */
-export const JAVA_VERSION_LABELS = ['Java 8+', 'Java 17', 'Java 21', 'Java 25', 'Java 26'] as const
-export type JavaVersionLabel = (typeof JAVA_VERSION_LABELS)[number]
-
-export type QuestionTopic = ReasoningTopic | EnglishTopic | InterviewTopic
-
-/**
- * Topics for the interview banks. These stay deliberately broader than the exam
- * topic lists — each is a study module in the Java + Go curriculum.
- */
-export const JAVA_CORE_TOPICS = [
-  'JVM & Class Loading',
-  'Language Basics',
-  'OOP',
-  'equals & hashCode',
-  'Generics',
-  'Exceptions',
-  'Strings',
-  'Java 21 Features',
-  'Java 25/26 Features',
-] as const
-
-export const JAVA_ADV_TOPICS = [
-  'Collections',
-  'Streams & Lambdas',
-  'Multithreading',
-  'Concurrency Utilities',
-  'Virtual Threads',
-  'JVM Internals & GC',
-  'I/O & NIO',
-  'Design Patterns',
-  'Java 21 Features',
-  'Java 25/26 Features',
-] as const
-
-export const GO_TOPICS = [
-  'Fundamentals',
-  'Types & Structs',
-  'Functions & Errors',
-  'Slices & Maps',
-  'Interfaces',
-  'Goroutines',
-  'Channels',
-  'Context & Sync',
-  'Memory & GC',
-  'Testing & Tooling',
-] as const
+export type QuestionTopic = ReasoningTopic | EnglishTopic
 
 export const TOPICS_BY_SUBJECT: Record<Subject, readonly QuestionTopic[]> = {
   reasoning: REASONING_TOPICS,
   english: ENGLISH_TOPICS,
-  java: [...JAVA_CORE_TOPICS, ...JAVA_ADV_TOPICS] as QuestionTopic[],
-  go: GO_TOPICS,
 }
-
-export type JavaCoreTopic = (typeof JAVA_CORE_TOPICS)[number]
-export type JavaAdvTopic = (typeof JAVA_ADV_TOPICS)[number]
-export type GoTopic = (typeof GO_TOPICS)[number]
-export type InterviewTopic = JavaCoreTopic | JavaAdvTopic | GoTopic
 
 export interface Question {
   id: string
@@ -152,8 +92,6 @@ export interface Question {
   sourceYear?: number
   /** Human readable provenance shown in the review screens. */
   sourceNote: string
-  /** Optional version badge for interview questions, e.g. "Java 21" or "Go 1.21+". */
-  versionTag?: string
 }
 
 /** Shape authors write in the bank files — `createBank` fills in the rest. */
@@ -170,9 +108,7 @@ export interface QuestionInput {
   pattern: string
   sourceYear?: number
   sourceType?: SourceType
-  /** Optional version badge rendered next to interview questions. */
-  versionTag?: string
-  /** Overrides the generated source note — used by interview banks. */
+  /** Overrides the generated source note. */
   sourceNote?: string
 }
 
@@ -194,7 +130,6 @@ export function createBank(examId: ExamId, rows: QuestionInput[]): Question[] {
       ((row.sourceType ?? 'pyq_pattern') === 'actual_pyq'
         ? `Actual PYQ — ${row.pattern}`
         : `PYQ-pattern question (not an actual paper question) — modelled on ${row.pattern}`),
-    versionTag: row.versionTag,
   }))
 }
 
@@ -218,8 +153,6 @@ export interface ExamDefinition {
   id: ExamId
   /** `exam` mirrors a real exam's section; `practice` is a single-topic paper. */
   kind: 'exam' | 'practice'
-  /** Presentation grouping — competitive exam sections vs tech interview banks. */
-  category?: 'competitive' | 'interview'
   /** Section of the real exam this paper mirrors. */
   subject: Subject
   /** Serve questions in bank order (easy → hard) instead of shuffling them. */

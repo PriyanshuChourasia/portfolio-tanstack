@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { AlertTriangle, Send } from 'lucide-react'
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -47,42 +48,40 @@ export function SubmitConfirmation({
           </DialogDescription>
         </DialogHeader>
 
-        <ul className="space-y-2 text-sm">
-          <li className="flex items-center justify-between rounded-lg bg-muted/40 px-3 py-2">
-            <span className="text-muted-foreground">Answered</span>
-            <span className="font-semibold">{answered}</span>
-          </li>
-          <li className="flex items-center justify-between rounded-lg bg-muted/40 px-3 py-2">
-            <span className="text-muted-foreground">Unanswered</span>
-            <span className="font-semibold">{unanswered}</span>
-          </li>
-          <li className="flex items-center justify-between rounded-lg bg-muted/40 px-3 py-2">
-            <span className="text-muted-foreground">Marked for review</span>
-            <span className="font-semibold">{marked}</span>
-          </li>
-          <li className="flex items-center justify-between rounded-lg bg-muted/40 px-3 py-2">
-            <span className="text-muted-foreground">Time remaining</span>
-            <span className="font-mono font-semibold">{formatClock(timeRemainingSeconds)}</span>
-          </li>
-        </ul>
+        <div className="space-y-2">
+          {[
+            { label: 'Answered', value: answered },
+            { label: 'Unanswered', value: unanswered },
+            { label: 'Marked for review', value: marked },
+            { label: 'Time remaining', value: formatClock(timeRemainingSeconds) },
+          ].map((item) => (
+            <div key={item.label} className="flex items-center justify-between rounded-lg bg-muted/40 px-3 py-2">
+              <span className="text-muted-foreground">{item.label}</span>
+              <span className="font-semibold">{item.value}</span>
+            </div>
+          ))}
+        </div>
 
         {needsAcknowledgement && (
-          <div className="rounded-xl border border-amber-500/40 bg-amber-500/10 p-3">
-            <p className="flex items-start gap-2 text-xs font-medium text-amber-800 dark:text-amber-200">
-              <AlertTriangle className="mt-0.5 size-4 shrink-0" />
-              You have {unanswered} unanswered question{unanswered === 1 ? '' : 's'}. Are you sure you want to
-              submit?
-            </p>
-            <label className="mt-3 flex items-center gap-2 text-xs font-medium">
-              <input
-                type="checkbox"
-                checked={acknowledged}
-                onChange={(event) => setAcknowledged(event.target.checked)}
-                className="size-4 rounded border-border accent-primary"
-              />
-              Yes, submit with {unanswered} unanswered question{unanswered === 1 ? '' : 's'}.
-            </label>
-          </div>
+          <Alert variant="destructive">
+            <AlertTriangle className="mt-0.5 size-4 shrink-0" />
+            <AlertTitle>Unanswered questions</AlertTitle>
+            <AlertDescription>
+              You have {unanswered} unanswered question{unanswered === 1 ? '' : 's'}. Are you sure you want to submit?
+            </AlertDescription>
+          </Alert>
+        )}
+
+        {needsAcknowledgement && (
+          <label className="mt-3 flex items-center gap-2 text-xs font-medium">
+            <input
+              type="checkbox"
+              checked={acknowledged}
+              onChange={(event) => setAcknowledged(event.target.checked)}
+              className="size-4 rounded border-border accent-primary"
+            />
+            Yes, submit with {unanswered} unanswered question{unanswered === 1 ? '' : 's'}.
+          </label>
         )}
 
         <DialogFooter className="gap-2 sm:justify-between">

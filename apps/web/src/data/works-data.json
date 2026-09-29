@@ -9,33 +9,6 @@
   ],
   "items": [
     {
-      "title": "User Tracking Web Portal",
-      "category": "Frontend",
-      "client": "Primesys Technologies LLP",
-      "image": "/images/primesystrack.png",
-      "icon": "ImageIcon",
-      "description": "A web application for tracking user activities (location point), having real-time updates and interactive maps. Portal contains reporting features, with personalized dashboards and analytics. Users can perform some actions related to uploading and managing its data.",
-      "link": "#"
-    },
-    {
-      "title": "User Tracking Mobile Application",
-      "category": "Mobile Dev",
-      "client": "Primesys Technologies LLP",
-      "image": "/images/work2.png",
-      "icon": "ImageIcon",
-      "description": "Cross-platform application made in Flutter for tracking user activities with secure authentication, real-time updates, and interactive maps. Users can upload and manage their location data.",
-      "link": "#"
-    },
-    {
-      "title": "Primesys User Backend System",
-      "category": "Backend",
-      "client": "Primesys Technologies LLP",
-      "image": "/images/springboot.png",
-      "icon": "Music",
-      "description": "Spring boot Application, Updating Features and managing and updating code for primesys. Changing APIs endpoints and improving performance. Learnt a big deal of location and geographic directions while tracking users location activities.",
-      "link": "#"
-    },
-    {
       "title": "OPD ERP — Clinic Management System",
       "category": "Full Stack",
       "client": "Independent Product",

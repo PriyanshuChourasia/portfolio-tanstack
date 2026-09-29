@@ -44,7 +44,7 @@ const navItems: Array<NavItem> = [
   { label: 'Home', id: 'home', icon: Home },
   { label: 'About', id: 'about', icon: FileText },
   { label: 'Experience', id: 'experience', icon: Briefcase },
-  { label: 'Projects', id: 'projects', icon: FolderKanban, to: '/projects' },
+  { label: 'Projects', id: 'projects', icon: FolderKanban },
   { label: 'Contact', id: 'contact', icon: Mail },
 ]
 

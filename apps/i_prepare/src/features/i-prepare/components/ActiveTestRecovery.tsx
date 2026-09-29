@@ -1,14 +1,8 @@
 import { useState } from 'react'
 import { History, PlayCircle, RotateCcw, TriangleAlert } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { SUBJECT_LABELS, getExam } from '@/data/reasoning'
 import { useIPrepareStore } from '../store'
 import { formatClock, formatDateTime } from '../lib/time'
@@ -36,48 +30,51 @@ export function ActiveTestRecovery() {
 
   return (
     <div className="mx-auto w-full max-w-2xl px-4 py-14">
-      <div className="rounded-2xl border border-amber-500/40 bg-card p-6 shadow-sm">
-        <div className="flex items-center gap-2">
-          <TriangleAlert className="size-5 text-amber-500" />
-          <h1 className="text-xl font-bold tracking-tight">Active test found</h1>
-        </div>
-        <p className="mt-3 text-sm text-muted-foreground">
-          You have an unfinished <strong>{getExam(session.examId).name}</strong> {SUBJECT_LABELS[getExam(session.examId).subject].toLowerCase()} test
-          ({session.testTitle}). Resume it exactly where you left off.
-        </p>
+      <Card className="border-amber-500/40 bg-card shadow-sm">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2 text-xl font-bold tracking-tight">
+            <TriangleAlert className="size-5 text-amber-500" />
+            Active test found
+          </CardTitle>
+          <CardDescription>
+            You have an unfinished <strong>{getExam(session.examId).name}</strong>{' '}
+            {SUBJECT_LABELS[getExam(session.examId).subject].toLowerCase()} test ({session.testTitle}). Resume it exactly where you left off.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-5">
+          <dl className="grid gap-3 sm:grid-cols-3">
+            <div className="rounded-xl bg-muted/40 px-3 py-2.5">
+              <dt className="text-[11px] text-muted-foreground">Progress</dt>
+              <dd className="text-sm font-semibold">
+                {answered} / {session.questionIds.length} answered
+              </dd>
+            </div>
+            <div className="rounded-xl bg-muted/40 px-3 py-2.5">
+              <dt className="text-[11px] text-muted-foreground">Time remaining</dt>
+              <dd className="font-mono text-sm font-semibold">{formatClock(remaining)}</dd>
+            </div>
+            <div className="rounded-xl bg-muted/40 px-3 py-2.5">
+              <dt className="text-[11px] text-muted-foreground">Started</dt>
+              <dd className="text-sm font-semibold">{formatDateTime(session.startedAt)}</dd>
+            </div>
+          </dl>
 
-        <dl className="mt-5 grid gap-3 sm:grid-cols-3">
-          <div className="rounded-xl bg-muted/40 px-3 py-2.5">
-            <dt className="text-[11px] text-muted-foreground">Progress</dt>
-            <dd className="text-sm font-semibold">
-              {answered} / {session.questionIds.length} answered
-            </dd>
+          <div className="flex flex-wrap gap-2">
+            <Button size="lg" onClick={resumeSession}>
+              <PlayCircle className="size-4" />
+              Resume Test
+            </Button>
+            <Button size="lg" variant="outline" onClick={() => setConfirmDiscard(true)}>
+              <RotateCcw className="size-4" />
+              Start New Test
+            </Button>
           </div>
-          <div className="rounded-xl bg-muted/40 px-3 py-2.5">
-            <dt className="text-[11px] text-muted-foreground">Time remaining</dt>
-            <dd className="font-mono text-sm font-semibold">{formatClock(remaining)}</dd>
-          </div>
-          <div className="rounded-xl bg-muted/40 px-3 py-2.5">
-            <dt className="text-[11px] text-muted-foreground">Started</dt>
-            <dd className="text-sm font-semibold">{formatDateTime(session.startedAt)}</dd>
-          </div>
-        </dl>
-
-        <div className="mt-6 flex flex-wrap gap-2">
-          <Button size="lg" onClick={resumeSession}>
-            <PlayCircle className="size-4" />
-            Resume Test
-          </Button>
-          <Button size="lg" variant="outline" onClick={() => setConfirmDiscard(true)}>
-            <RotateCcw className="size-4" />
-            Start New Test
-          </Button>
-        </div>
-        <p className="mt-4 flex items-center gap-1.5 text-[11px] text-muted-foreground">
-          <History className="size-3.5" />
-          Starting a new test discards this session and its answers permanently.
-        </p>
-      </div>
+          <p className="flex items-center gap-1.5 text-[11px] text-muted-foreground">
+            <History className="size-3.5" />
+            Starting a new test discards this session and its answers permanently.
+          </p>
+        </CardContent>
+      </Card>
 
       <Dialog open={confirmDiscard} onOpenChange={setConfirmDiscard}>
         <DialogContent className="sm:max-w-md">

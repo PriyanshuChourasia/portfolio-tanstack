@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { ListChecks, Send } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 import { OPTION_KEYS, getExam } from '@/data/reasoning'
 import { questionsForSession } from '../engine/test-builder'
 import { useIPrepareStore } from '../store'
@@ -196,23 +197,23 @@ export function TestWizard() {
               Keyboard: ← / → to move, 1–4 or A–D to answer, M to mark for review, C to clear.
             </p>
 
-            <div className="mt-4 lg:hidden">
-              <Button variant="outline" size="sm" onClick={() => setPaletteOpen((open) => !open)}>
-                <ListChecks className="size-4" />
-                {paletteOpen ? 'Hide question palette' : 'Show question palette'}
-              </Button>
-              {paletteOpen && (
-                <div className="mt-3">
-                  <QuestionPalette
-                    session={session}
-                    onJump={(target) => {
-                      goToQuestion(target)
-                      setPaletteOpen(false)
-                    }}
-                  />
-                </div>
-              )}
-            </div>
+                        <Sheet open={paletteOpen} onOpenChange={setPaletteOpen}>
+              <SheetTrigger asChild>
+                <Button variant="outline" size="sm" className="lg:hidden">
+                  <ListChecks className="size-4" />
+                  Question palette
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="bottom" className="h-auto max-h-[80vh] sm:max-h-[60vh]">
+                <QuestionPalette
+                  session={session}
+                  onJump={(target) => {
+                    goToQuestion(target)
+                    setPaletteOpen(false)
+                  }}
+                />
+              </SheetContent>
+            </Sheet>
           </div>
 
           <aside className="hidden lg:block">

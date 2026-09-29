@@ -1,15 +1,12 @@
-import { useLayoutEffect, useRef, useState } from 'react'
+import { useRef } from 'react'
 import {
   motion,
-  useMotionValue,
   useReducedMotion,
   useScroll,
   useSpring,
   useTransform,
 } from 'framer-motion'
-import { Link } from '@tanstack/react-router'
 import { ArrowUpRight } from 'lucide-react'
-import type { MotionValue } from 'framer-motion'
 
 import worksData from '@/data/works-data.json'
 
@@ -17,99 +14,166 @@ type Work = (typeof worksData.items)[number]
 
 const works = worksData.items
 
-/* =========================================================
-    PROJECT CARD
-========================================================= */
+type WorkDetails = {
+  tagline?: string
+  stack?: Array<{ group: string; items: Array<string> }>
+}
 
-function ProjectCard({
-  work,
-  index,
-  progress,
-}: {
-  work: Work
-  index: number
-  progress: MotionValue<number>
-}) {
-  // Image drifts against the scroll direction inside its frame
-  const imageX = useTransform(progress, [0, 1], ['-8%', '8%'])
+function workDetails(work: Work): WorkDetails | undefined {
+  return 'details' in work ? work.details : undefined
+}
 
-  return (
-    <Link
-      to="/projects/$id"
-      params={{ id: String(index + 1) }}
-      className="group relative flex h-[62vh] w-[82vw] shrink-0 flex-col overflow-hidden rounded-3xl border border-white/10 bg-[#0c0a10] shadow-[0_24px_64px_rgba(0,0,0,0.6)] transition-colors duration-300 hover:border-[#BE2ED6]/60 sm:w-[60vw] lg:w-[38vw]"
-    >
-      {/* Image with inner parallax */}
-      <div className="relative flex-1 overflow-hidden">
-        <motion.img
-          src={work.image}
-          alt={work.title}
-          loading="lazy"
-          style={{ x: imageX }}
-          className="absolute inset-0 h-full w-full scale-[1.2] object-cover transition-transform duration-700 group-hover:scale-[1.26]"
-        />
-        <div className="absolute inset-0 bg-linear-to-t from-[#0c0a10] via-[#0c0a10]/30 to-transparent" />
-
-        <span className="absolute left-5 top-5 font-mono text-[11px] font-semibold uppercase tracking-[0.25em] text-white/70">
-          {String(index + 1).padStart(2, '0')}
-        </span>
-
-        <span className="absolute right-5 top-5 rounded-full border border-[#EF1D25]/50 bg-[#EF1D25]/10 px-3 py-1 font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-[#EF1D25] backdrop-blur-sm">
-          {work.category}
-        </span>
-      </div>
-
-      {/* Details */}
-      <div className="relative flex items-end justify-between gap-4 p-5 sm:p-6">
-        <div className="min-w-0">
-          <h3 className="text-lg font-bold leading-snug text-white sm:text-xl">
-            {work.title}
-          </h3>
-          <p className="mt-1 truncate font-mono text-[10px] uppercase tracking-[0.2em] text-white/45">
-            {work.client}
-          </p>
-        </div>
-
-        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/15 text-white/80 transition-colors duration-300 group-hover:border-[#BE2ED6] group-hover:bg-[#BE2ED6] group-hover:text-white">
-          <ArrowUpRight className="h-4 w-4" />
-        </span>
-      </div>
-    </Link>
-  )
+function workStack(work: Work): Array<string> {
+  const stack = workDetails(work)?.stack ?? []
+  return stack.flatMap((group) => group.items).slice(0, 8)
 }
 
 /* =========================================================
-    INTRO PANEL
+    PROJECT PANEL — one full-viewport parallax scene per project
 ========================================================= */
 
-function IntroPanel() {
+function ProjectPanel({ work, index }: { work: Work; index: number }) {
+  const reducedMotion = useReducedMotion()
+  const panelRef = useRef<HTMLElement>(null)
+
+  // 0 when the panel enters from below, 1 when it leaves off the top
+  const { scrollYProgress } = useScroll({
+    target: panelRef,
+    offset: ['start end', 'end start'],
+  })
+
+  const progress = useSpring(scrollYProgress, {
+    stiffness: 120,
+    damping: 30,
+    mass: 0.3,
+  })
+
+  const still = (value: string) => (reducedMotion ? [value, value] : null)
+
+  // Three layers at different speeds: image (slow), ghost number (fast), copy (medium)
+  const imageY = useTransform(progress, [0, 1], still('0%') ?? ['-12%', '12%'])
+  const ghostY = useTransform(progress, [0, 1], still('0%') ?? ['40%', '-40%'])
+  const contentY = useTransform(progress, [0, 1], still('0px') ?? ['80px', '-80px'])
+  const contentOpacity = useTransform(
+    progress,
+    [0, 0.3, 0.7, 1],
+    reducedMotion ? [1, 1, 1, 1] : [0, 1, 1, 0],
+  )
+
+  const number = String(index + 1).padStart(2, '0')
+  const stack = workStack(work)
+  const hasLink = Boolean(work.link) && work.link !== '#'
+  const alignRight = index % 2 === 1
+
   return (
-    <div className="flex w-[82vw] shrink-0 flex-col justify-center sm:w-[60vw] lg:w-[34vw]">
-      <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-[#EF1D25]">
-        Selected Work
-      </span>
-
-      <h2 className="mt-4 text-4xl font-bold leading-[1.05] tracking-tight text-white sm:text-5xl lg:text-6xl">
-        Projects I&apos;ve{' '}
-        <span className="bg-linear-to-r from-[#BE2ED6] to-[#7F4EA8] bg-clip-text text-transparent">
-          worked on
-        </span>{' '}
-        &amp; made
-      </h2>
-
-      <p className="mt-5 max-w-sm text-sm leading-relaxed text-white/60 sm:text-base">
-        From client portals to full ERP suites — scroll to explore{' '}
-        {works.length} builds.
-      </p>
-
-      <Link
-        to="/projects"
-        className="mt-8 inline-flex w-fit items-center gap-2 rounded-full border border-[#EF1D25]/60 bg-[#EF1D25]/10 px-5 py-2.5 font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-[#EF1D25] transition-colors duration-200 hover:bg-[#EF1D25]/20"
+    <section
+      ref={panelRef}
+      aria-label={work.title}
+      className="relative flex h-screen w-full items-center overflow-hidden bg-[#070707]"
+    >
+      {/* Background image — slow layer */}
+      <motion.div
+        aria-hidden="true"
+        style={{ y: imageY }}
+        className="absolute inset-[-15%_0]"
       >
-        All Projects
-        <ArrowUpRight className="h-3.5 w-3.5" />
-      </Link>
-    </div>
+        <img
+          src={work.image}
+          alt=""
+          loading="lazy"
+          className="h-full w-full object-cover opacity-45"
+        />
+      </motion.div>
+
+      {/* Readability scrims */}
+      <div
+        aria-hidden="true"
+        className={`absolute inset-0 ${
+          alignRight
+            ? 'bg-linear-to-l from-[#070707] via-[#070707]/80 to-[#070707]/20'
+            : 'bg-linear-to-r from-[#070707] via-[#070707]/80 to-[#070707]/20'
+        }`}
+      />
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 bg-linear-to-t from-[#070707] via-transparent to-[#070707]/70"
+      />
+
+      {/* Ghost index number — fast layer */}
+      <motion.span
+        aria-hidden="true"
+        style={{ y: ghostY }}
+        className={`pointer-events-none absolute top-1/2 -translate-y-1/2 select-none text-[40vw] font-black leading-none tracking-tighter text-white/[0.04] sm:text-[28vw] ${
+          alignRight ? 'left-[-2vw]' : 'right-[-2vw]'
+        }`}
+      >
+        {number}
+      </motion.span>
+
+      {/* Copy — medium layer */}
+      <motion.div
+        style={{ y: contentY, opacity: contentOpacity }}
+        className={`relative z-10 mx-auto flex w-full max-w-7xl px-6 sm:px-10 lg:px-16 ${
+          alignRight ? 'justify-end text-right' : 'justify-start'
+        }`}
+      >
+        <div
+          className={`flex max-w-xl flex-col gap-5 ${
+            alignRight ? 'items-end' : 'items-start'
+          }`}
+        >
+          <div className="flex items-center gap-3">
+            <span className="font-mono text-[11px] font-semibold uppercase tracking-[0.25em] text-white/60">
+              {number} / {String(works.length).padStart(2, '0')}
+            </span>
+            <span className="rounded-full border border-[#EF1D25]/50 bg-[#EF1D25]/10 px-3 py-1 font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-[#EF1D25]">
+              {work.category}
+            </span>
+          </div>
+
+          <h3 className="text-3xl font-bold leading-[1.05] tracking-tight text-white sm:text-5xl lg:text-6xl">
+            {work.title}
+          </h3>
+
+          <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-[#BE2ED6]">
+            {work.client}
+          </p>
+
+          <p className="text-sm leading-relaxed text-white/70 sm:text-base">
+            {workDetails(work)?.tagline ?? work.description}
+          </p>
+
+          {stack.length > 0 && (
+            <ul
+              className={`flex flex-wrap gap-2 ${
+                alignRight ? 'justify-end' : 'justify-start'
+              }`}
+            >
+              {stack.map((tech) => (
+                <li
+                  key={tech}
+                  className="rounded-full border border-white/15 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.15em] text-white/70"
+                >
+                  {tech}
+                </li>
+              ))}
+            </ul>
+          )}
+
+          {hasLink && (
+            <a
+              href={work.link}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-2 inline-flex w-fit items-center gap-2 rounded-full border border-[#EF1D25]/60 bg-[#EF1D25]/10 px-5 py-2.5 font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-[#EF1D25] transition-colors duration-200 hover:bg-[#EF1D25]/20"
+            >
+              Visit live
+              <ArrowUpRight className="h-3.5 w-3.5" />
+            </a>
+          )}
+        </div>
+      </motion.div>
+    </section>
   )
 }
 
@@ -118,134 +182,26 @@ function IntroPanel() {
 ========================================================= */
 
 export function ProjectsParallax() {
-  const reducedMotion = useReducedMotion()
-  // Held at 0 when motion is reduced, so the card images don't drift
-  const stillProgress = useMotionValue(0)
-
-  const sectionRef = useRef<HTMLElement>(null)
-  const trackRef = useRef<HTMLDivElement>(null)
-
-  // Horizontal distance the track needs to travel, and the section height
-  // that gives exactly that much vertical scroll while pinned.
-  const [distance, setDistance] = useState(0)
-  const [viewportH, setViewportH] = useState(0)
-
-  useLayoutEffect(() => {
-    const track = trackRef.current
-    if (!track) return
-
-    const measure = () => {
-      setDistance(
-        Math.max(0, track.scrollWidth - window.innerWidth),
-      )
-      setViewportH(window.innerHeight)
-    }
-
-    measure()
-    const ro = new ResizeObserver(measure)
-    ro.observe(track)
-    window.addEventListener('resize', measure)
-    return () => {
-      ro.disconnect()
-      window.removeEventListener('resize', measure)
-    }
-  }, [])
-
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ['start start', 'end end'],
-  })
-
-  const smooth = useSpring(scrollYProgress, {
-    stiffness: 120,
-    damping: 30,
-    mass: 0.3,
-  })
-
-  const trackX = useTransform(smooth, [0, 1], [0, -distance])
-  const ghostX = useTransform(smooth, [0, 1], ['0%', '-25%'])
-  const barScale = useTransform(smooth, [0, 1], [0, 1])
-
-  /* Reduced motion — plain scrollable row, no pinning */
-  if (reducedMotion) {
-    return (
-      <section
-        id="work"
-        className="relative w-full overflow-hidden bg-[#070707] py-24"
-      >
-        <div className="flex gap-6 overflow-x-auto px-6 pb-4 custom-scrollbar sm:px-10">
-          <IntroPanel />
-          {works.map((work, i) => (
-            <ProjectCard
-              key={work.title}
-              work={work}
-              index={i}
-              progress={stillProgress}
-            />
-          ))}
-        </div>
-      </section>
-    )
-  }
-
   return (
-    <section
-      id="work"
-      ref={sectionRef}
-      className="relative w-full bg-[#070707]"
-      style={{
-        height: viewportH ? distance + viewportH : '400vh',
-      }}
-    >
-      <div className="sticky top-0 flex h-screen w-full items-center overflow-hidden">
-        {/* Background — split purple glow like the hero */}
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute left-1/2 top-1/2 h-[600px] w-[min(1050px,130vw)] -translate-x-1/2 -translate-y-1/2 opacity-40"
-          style={{
-            backgroundImage:
-              'linear-gradient(110deg, #7F4EA8 0%, #BE2ED6 49.8%, #5D328E 50.2%, #42156F 100%)',
-            maskImage:
-              'radial-gradient(ellipse at center, black 0%, rgba(0,0,0,0.6) 45%, transparent 75%)',
-            WebkitMaskImage:
-              'radial-gradient(ellipse at center, black 0%, rgba(0,0,0,0.6) 45%, transparent 75%)',
-          }}
-        />
+    <section id="projects" className="relative w-full bg-[#070707]">
+      {/* Intro */}
+      <div className="relative mx-auto flex max-w-7xl flex-col px-6 pb-8 pt-24 sm:px-10 lg:px-16">
+        <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-[#EF1D25]">
+          Selected Work
+        </span>
 
-        {/* Slow ghost word — the back parallax layer */}
-        <motion.span
-          aria-hidden="true"
-          style={{ x: ghostX }}
-          className="pointer-events-none absolute left-0 top-1/2 -translate-y-1/2 select-none whitespace-nowrap text-[22vw] font-black uppercase leading-none tracking-tight text-white/[0.03]"
-        >
-          Projects · Projects
-        </motion.span>
-
-        {/* Card track — the front layer */}
-        <motion.div
-          ref={trackRef}
-          style={{ x: trackX }}
-          className="relative z-10 flex items-center gap-6 px-6 sm:gap-8 sm:px-10 lg:px-16"
-        >
-          <IntroPanel />
-          {works.map((work, i) => (
-            <ProjectCard
-              key={work.title}
-              work={work}
-              index={i}
-              progress={smooth}
-            />
-          ))}
-        </motion.div>
-
-        {/* Progress bar */}
-        <div className="absolute bottom-8 left-6 right-6 z-10 h-px bg-white/10 sm:left-10 sm:right-10 lg:left-16 lg:right-16">
-          <motion.div
-            style={{ scaleX: barScale }}
-            className="h-full origin-left bg-linear-to-r from-[#BE2ED6] to-[#EF1D25]"
-          />
-        </div>
+        <h2 className="mt-4 max-w-3xl text-4xl font-bold leading-[1.05] tracking-tight text-white sm:text-5xl lg:text-6xl">
+          Projects I&apos;ve{' '}
+          <span className="bg-linear-to-r from-[#BE2ED6] to-[#7F4EA8] bg-clip-text text-transparent">
+            worked on
+          </span>{' '}
+          &amp; made
+        </h2>
       </div>
+
+      {works.map((work, i) => (
+        <ProjectPanel key={work.title} work={work} index={i} />
+      ))}
     </section>
   )
 }

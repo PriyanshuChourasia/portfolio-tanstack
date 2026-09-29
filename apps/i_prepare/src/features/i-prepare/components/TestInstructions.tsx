@@ -1,6 +1,8 @@
 import { ArrowLeft, CheckCircle2, ListChecks, Play, ShieldCheck } from 'lucide-react'
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { getExam } from '@/data/reasoning'
 import { useIPrepareStore } from '../store'
 import { STORAGE_LABELS } from '../lib/storage'
@@ -62,36 +64,40 @@ export function TestInstructions() {
           { label: 'Unanswered', value: '0 marks' },
           { label: 'Difficulty', value: config.difficulty },
         ].map((row) => (
-          <div key={row.label} className="flex items-center justify-between gap-4 rounded-xl border border-border/60 bg-card px-4 py-3">
-            <span className="text-xs text-muted-foreground">{row.label}</span>
-            <span className="text-sm font-semibold capitalize">{row.value}</span>
+          <div key={row.label} className="rounded-xl border border-border/60 bg-card px-4 py-3">
+            <p className="text-xs text-muted-foreground">{row.label}</p>
+            <p className="text-sm font-semibold capitalize">{row.value}</p>
           </div>
         ))}
       </div>
 
-      <section className="mt-6 rounded-2xl border border-border/60 bg-card p-5 sm:p-6">
-        <div className="flex items-center gap-2">
-          <ListChecks className="size-4 text-primary" />
-          <h2 className="text-sm font-bold uppercase tracking-wide">Rules</h2>
-        </div>
-        <ul className="mt-4 space-y-2.5">
-          {RULES.map((rule) => (
-            <li key={rule} className="flex items-start gap-2 text-sm text-muted-foreground">
-              <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-primary/70" />
-              <span>{rule}</span>
-            </li>
-          ))}
-        </ul>
+      <Card className="mt-6">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2 text-sm font-bold uppercase tracking-wide">
+            <ListChecks className="size-4 text-primary" /> Rules
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <ul className="space-y-2.5">
+            {RULES.map((rule) => (
+              <li key={rule} className="flex items-start gap-2 text-sm text-muted-foreground">
+                <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-primary/70" />
+                <span>{rule}</span>
+              </li>
+            ))}
+          </ul>
 
-        <div className="mt-5 flex items-start gap-2 rounded-xl bg-muted/40 p-3 text-xs text-muted-foreground">
-          <ShieldCheck className="mt-0.5 size-4 shrink-0" />
-          <p>
-            {STORAGE_LABELS[storageKind ?? 'memory']}. The timer is calculated from the recorded start
-            time, so it keeps running correctly even if you reload the page. When the clock reaches
-            zero the test is submitted automatically.
-          </p>
-        </div>
-      </section>
+          <Alert className="mt-5 bg-muted/40">
+            <ShieldCheck className="mt-0.5 size-4 shrink-0" />
+            <AlertTitle>Storage Note</AlertTitle>
+            <AlertDescription>
+              {STORAGE_LABELS[storageKind ?? 'memory']}. The timer is calculated from the recorded start
+              time, so it keeps running correctly even if you reload the page. When the clock reaches
+              zero the test is submitted automatically.
+            </AlertDescription>
+          </Alert>
+        </CardContent>
+      </Card>
 
       <div className="mt-6 flex flex-wrap items-center justify-between gap-4">
         <div className="flex items-center gap-2 text-xs text-muted-foreground">

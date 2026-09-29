@@ -1,10 +1,10 @@
 import { lazy, Suspense } from 'react'
 import { ArrowLeft, ClipboardList, ExternalLink, Loader2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { Card } from '@/components/ui/card'
 import { useIPrepareStore } from '../store'
 import { formatDateTime, formatDurationWords } from '../lib/time'
 
-// Recharts is only needed on this screen, so it stays out of the main bundle.
 const ProgressChart = lazy(() =>
   import('./ProgressChart').then((module) => ({ default: module.ProgressChart })),
 )
@@ -31,7 +31,7 @@ export function TestHistory() {
       </p>
 
       {results.length === 0 ? (
-        <div className="mt-10 rounded-2xl border border-dashed border-border/60 p-10 text-center">
+        <div className="mt-10 rounded-2xl border border-dashed border-border/60 bg-card p-10 text-center">
           <ClipboardList className="mx-auto size-8 text-muted-foreground" />
           <p className="mt-3 text-sm font-medium">No completed tests yet.</p>
           <p className="mt-1 text-xs text-muted-foreground">
@@ -43,12 +43,9 @@ export function TestHistory() {
         </div>
       ) : (
         <div className="mt-8 space-y-4">
-          <ul className="grid gap-3">
+          <div className="grid gap-3">
             {results.map((result) => (
-              <li
-                key={result.id}
-                className="flex flex-wrap items-center gap-4 rounded-2xl border border-border/60 bg-card p-4 shadow-sm"
-              >
+              <Card key={result.id} className="flex flex-wrap items-center gap-4 border border-border/60 bg-card p-4 shadow-sm">
                 <div className="min-w-0 flex-1">
                   <p className="truncate text-sm font-bold">
                     {result.examName} · {result.testTitle}
@@ -78,9 +75,9 @@ export function TestHistory() {
                     <ExternalLink className="size-3.5" />
                   </Button>
                 </div>
-              </li>
+              </Card>
             ))}
-          </ul>
+          </div>
 
           <Suspense
             fallback={

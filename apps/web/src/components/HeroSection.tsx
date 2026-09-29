@@ -466,7 +466,10 @@ function ClockWidget() {
     return () => clearInterval(id)
   }, [])
 
+  const timeZone = 'Asia/Kolkata'
+
   const timeParts = new Intl.DateTimeFormat('en-US', {
+    timeZone,
     hour: 'numeric',
     minute: '2-digit',
   }).formatToParts(now)
@@ -481,9 +484,14 @@ function ClockWidget() {
 
   return (
     <div className="flex w-32 flex-col h-full p-3 sm:w-40 sm:p-4">
-      <span className="font-mono text-[9px] font-semibold uppercase tracking-[0.2em] text-[#EF1D25]">
-        {now.toLocaleDateString('en-US', { weekday: 'long' })}
-      </span>
+      <div className="flex items-center justify-between gap-2">
+        <span className="font-mono text-[9px] font-semibold uppercase tracking-[0.2em] text-[#EF1D25]">
+          {now.toLocaleDateString('en-US', { timeZone, weekday: 'long' })}
+        </span>
+        <span className="font-mono text-[11px] font-extrabold uppercase tracking-[0.1em] text-white sm:text-xs">
+          India
+        </span>
+      </div>
 
       <div className="flex flex-1 items-center">
         <span className="text-3xl font-bold leading-none tabular-nums text-white sm:text-4xl">
@@ -496,6 +504,7 @@ function ClockWidget() {
 
       <span className="font-mono text-[9px] uppercase tracking-[0.15em] text-white/45">
         {now.toLocaleDateString('en-US', {
+          timeZone,
           day: 'numeric',
           month: 'short',
           year: 'numeric',
@@ -565,7 +574,7 @@ export function HeroSection() {
       key: 'projects',
       label: 'Projects',
       icon: Folder,
-      to: '/projects',
+      href: '#projects',
     },
     { kind: 'divider', key: 'd1' },
     {
@@ -747,7 +756,12 @@ export function HeroSection() {
             }}
           />
 
-          <span className="-translate-y-[0.2em]">PRIYANSHU</span>
+          <span className="flex -translate-y-[0.2em] flex-col items-center">
+            PRIYANSHU
+            <span aria-hidden="true" className="mt-[0.15em] text-[0.4em] tracking-[0.2em]">
+              SOFTWARE
+            </span>
+          </span>
 
           {/* Big slanted divider between first and last name */}
           <span
@@ -755,39 +769,19 @@ export function HeroSection() {
             className="pointer-events-none absolute left-1/2 top-1/2 -z-10 h-[min(70vh,560px)] w-[3px] -translate-x-1/2 -translate-y-1/2 rotate-[20deg] rounded-full bg-[linear-gradient(to_bottom,transparent,#BE2ED6_20%,#7C41A8_50%,#42156F_80%,transparent)] shadow-[0_0_18px_#BE2ED6]"
           />
 
-          <span className="translate-y-[0.35em] text-[#EF1D25]">
+          <span className="flex translate-y-[0.35em] flex-col items-center text-[#EF1D25]">
             CHOURASIA
+            <span aria-hidden="true" className="mt-[0.15em] text-[0.4em] tracking-[0.2em]">
+              ENGINEER
+            </span>
           </span>
         </h1>
 
-        <p className="font-mono text-[11px] uppercase tracking-[0.3em] text-red-400">
-          Software Engineer — India
-        </p>
+        <p className="sr-only">Software Engineer</p>
 
         <p className="max-w-md text-sm leading-relaxed text-white/65 sm:text-base">
           Building scalable software and thoughtful digital products.
         </p>
-
-        <div className="mt-2 flex flex-wrap items-center justify-center gap-3">
-          <Link
-            to="/projects"
-            className="inline-flex items-center gap-2 rounded-full border border-[#EF1D25]/60 bg-[#EF1D25]/10 px-5 py-2.5 font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-[#EF1D25] transition-colors duration-200 hover:bg-[#EF1D25]/20"
-          >
-            View Projects
-
-            <Folder className="h-3.5 w-3.5" />
-          </Link>
-
-          <button
-            type="button"
-            onClick={() => setIdeaModalOpen(true)}
-            className="inline-flex items-center gap-2 rounded-full border border-white/15 px-5 py-2.5 font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-white/80 transition-colors duration-200 hover:border-white/40 hover:text-white"
-          >
-            Have an idea?
-
-            <Lightbulb className="h-3.5 w-3.5" />
-          </button>
-        </div>
       </div>
 
       {/* =====================================================

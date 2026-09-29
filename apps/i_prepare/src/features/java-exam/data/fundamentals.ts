@@ -1,0 +1,318 @@
+import type { JavaQuestionInput } from '../types'
+
+/**
+ * Fundamentals domain: primitives, operators, control flow, strings, arrays,
+ * access modifiers, static/final semantics and class-initialisation order.
+ */
+export const fundamentalsQuestions: JavaQuestionInput[] = [
+  {
+    id: 'fn-001',
+    domain: 'Fundamentals',
+    level: 1,
+    kind: 'mcq',
+    prompt: 'Which statement about JDK, JRE and JVM is correct?',
+    options: [
+      'JVM contains the JRE; the JRE contains the JDK',
+      'JDK contains the JRE; the JRE contains the JVM',
+      'JRE contains the JDK; the JDK contains the JVM',
+      'They are three names for the same thing',
+    ],
+    answerKey: 1,
+    explanation:
+      'JDK = JRE + development tools (javac, javadoc, jdb). JRE = JVM + core libraries needed to run applications. JVM is the abstract machine that executes bytecode.',
+    followUps: [
+      'Do you need the full JDK on a production server?',
+      'Where does JIT compilation happen — JDK, JRE or JVM?',
+    ],
+    trap: 'Interviewers probe whether you know production servers usually need only the JRE — unless you compile at runtime or use build tools.',
+  },
+  {
+    id: 'fn-002',
+    domain: 'Fundamentals',
+    level: 1,
+    kind: 'mcq',
+    prompt: 'What is the output?',
+    code: 'byte b = 10;\nb = (byte)(b + 1);\nSystem.out.println(b);',
+    options: ['11', 'Compilation error', '10', 'Runtime exception'],
+    answerKey: 0,
+    explanation:
+      'Binary numeric promotion widens b and 1 to int, so b + 1 is an int and needs the explicit (byte) cast. With the cast the result is 11.',
+    followUps: ['What happens without the cast?', 'Why does b += 1 compile without a cast?'],
+    trap: 'b += 1 hides an implicit narrowing cast; b = b + 1 does not compile without one.',
+  },
+  {
+    id: 'fn-003',
+    domain: 'Fundamentals',
+    level: 2,
+    kind: 'output_prediction',
+    prompt: 'What does this print?',
+    code: 'System.out.println(0.1 + 0.2 == 0.3);',
+    options: ['true', 'false'],
+    answerKey: 1,
+    explanation:
+      '0.1 and 0.2 are not exactly representable in binary floating point; the sum is 0.30000000000000004, so the comparison is false. Use BigDecimal or compare with a tolerance.',
+    followUps: ['How would you compare monetary values safely?'],
+  },
+  {
+    id: 'fn-004',
+    domain: 'Fundamentals',
+    level: 2,
+    kind: 'output_prediction',
+    prompt: 'What is the output?',
+    code: 'Integer a = 127, b = 127;\nInteger c = 128, d = 128;\nSystem.out.println((a == b) + " " + (c == d));',
+    options: ['true true', 'true false', 'false false', 'false true'],
+    answerKey: 1,
+    explanation:
+      'Autoboxing uses Integer.valueOf(), which caches -128..127. 127 == 127 is reference-equal true, but 128 allocates new objects, so == is false. Always use .equals() for wrappers.',
+    followUps: ['Is the cache upper bound guaranteed by the spec?', 'Where else does the Integer cache bite?'],
+    trap: 'In collections like Map<Integer,...>, == on boxed keys fails silently for values above 127.',
+  },
+  {
+    id: 'fn-005',
+    domain: 'Fundamentals',
+    level: 2,
+    kind: 'mcq',
+    prompt: 'Which access modifier allows subclass access in a different package but not general package access in the other package?',
+    options: ['public', 'protected', 'package-private (default)', 'private'],
+    answerKey: 1,
+    explanation:
+      'protected = package access plus subclass access in other packages. Package-private is same-package only; private is same-class only.',
+    followUps: ['Can a subclass read a protected field of a different subclass instance?'],
+    trap: 'protected also grants package access — a common misconception is that it is "subclass only".',
+  },
+  {
+    id: 'fn-006',
+    domain: 'Fundamentals',
+    level: 2,
+    kind: 'output_prediction',
+    prompt: 'What is the result?',
+    code: 'String a = "hello";\nString b = "hello";\nString c = new String("hello");\nSystem.out.println((a == b) + " " + (a == c) + " " + a.equals(c));',
+    options: ['true false true', 'true true true', 'false false true', 'true false false'],
+    answerKey: 0,
+    explanation:
+      'Literals are interned into the string pool, so a and b reference one object. new String("hello") allocates a fresh heap object, so == is false but equals is true.',
+    followUps: ['What does intern() do and when is it useful?', 'Where does the string pool live since Java 7?'],
+  },
+  {
+    id: 'fn-007',
+    domain: 'Fundamentals',
+    level: 3,
+    kind: 'mcq',
+    prompt: 'Why is String immutable in Java?',
+    options: [
+      'To make reflection safer',
+      'Security, thread safety, caching of hashCode and the string pool',
+      'Historical accident — mutability would be fine',
+      'Because String is final',
+    ],
+    answerKey: 1,
+    explanation:
+      'Immutability enables: safe sharing as map keys (cached hashCode), class-loading security (paths/URLs cannot change after checks), thread safety and the pool itself.',
+    followUps: ['Why must String be final for the pool to be safe?'],
+  },
+  {
+    id: 'fn-008',
+    domain: 'Fundamentals',
+    level: 2,
+    kind: 'output_prediction',
+    prompt: 'What is the output?',
+    code: 'String s = null;\nSystem.out.println(s + "x");',
+    options: ['nullx', 'NullPointerException', 'x', 'Compilation error'],
+    answerKey: 0,
+    explanation:
+      'String concatenation converts null to the literal "null" via String.valueOf, so the output is nullx. The NPE only appears on instance method calls like s.length().',
+    trap: 'A classic trick question — concatenation is not a dereference.',
+  },
+  {
+    id: 'fn-009',
+    domain: 'Fundamentals',
+    level: 3,
+    kind: 'mcq',
+    prompt: 'What is the initialisation order for a new instance?',
+    options: [
+      'Static init blocks → field initializers → constructor body',
+      'Field initializers → instance init blocks → constructor body, after static init on first use',
+      'Constructor body → field initializers → instance init blocks',
+      'Everything runs inside the constructor in source order',
+    ],
+    answerKey: 1,
+    explanation:
+      'Static initialisers run once at class initialisation. Per instance: field initializers and instance init blocks run in source order, then the constructor body — after the super() chain.',
+    followUps: ['What happens if a field initializer calls an overridden method?'],
+    trap: 'Calling overridable methods from constructors/initialisers leaks a half-constructed object.',
+  },
+  {
+    id: 'fn-010',
+    domain: 'Fundamentals',
+    level: 2,
+    kind: 'true_false',
+    prompt: 'Java is always pass-by-value — including for object references.',
+    options: ['True', 'False'],
+    answerKey: 0,
+    explanation:
+      'The value passed is a copy of the reference, so the callee can mutate the object but reassigning the parameter never affects the caller\u2019s variable.',
+    followUps: ['Show code where a swap method fails to swap.'],
+    trap: 'The #1 misunderstood Java fundamental — "objects are passed by reference" is wrong.',
+  },
+  {
+    id: 'fn-011',
+    domain: 'Fundamentals',
+    level: 3,
+    kind: 'mcq',
+    prompt: 'Which statement about static methods is true?',
+    options: [
+      'They can be overridden polymorphically',
+      'They are hidden, not overridden — binding is static',
+      'They participate in dynamic dispatch',
+      'They cannot be overloaded',
+    ],
+    answerKey: 1,
+    explanation:
+      'static methods resolve at compile time on the reference type. Parent p = new Child(); p.staticM() calls Parent.staticM() — method hiding, not overriding.',
+    followUps: ['Why is calling statics via instances bad practice?'],
+  },
+  {
+    id: 'fn-012',
+    domain: 'Fundamentals',
+    level: 3,
+    kind: 'mcq',
+    prompt: 'What does the transient keyword do?',
+    options: [
+      'Marks a field as thread-local',
+      'Excludes a field from default serialisation',
+      'Makes a field volatile',
+      'Prevents subclassing of the field type',
+    ],
+    answerKey: 1,
+    explanation:
+      'transient fields are skipped by the default serialisation mechanism and come back as defaults (null/0) on deserialisation.',
+    followUps: ['How do you restore transient state after deserialisation? (readObject/writeObject)'],
+  },
+  {
+    id: 'fn-013',
+    domain: 'Fundamentals',
+    level: 2,
+    kind: 'mcq',
+    prompt: 'What is the default value of an int instance field that is never assigned?',
+    options: ['Compilation error', 'null', '0', 'Undefined'],
+    answerKey: 2,
+    explanation:
+      'Instance and static fields get default values (0 for numeric primitives, false, null). Only local variables must be definitely assigned before use.',
+    followUps: ['Why are local variables different?'],
+  },
+  {
+    id: 'fn-014',
+    domain: 'Fundamentals',
+    level: 3,
+    kind: 'output_prediction',
+    prompt: 'What is the output?',
+    code: 'int x = 5;\nint y = x++ + ++x;\nSystem.out.println(x + " " + y);',
+    options: ['7 12', '6 11', '7 11', '6 12'],
+    answerKey: 0,
+    explanation:
+      'x++ yields 5 (x becomes 6), ++x makes x 7 and yields 7. Sum 5 + 7 = 12, final x = 7.',
+    trap: 'Post-increment yields then increments; pre-increment increments then yields.',
+  },
+  {
+    id: 'fn-015',
+    domain: 'Fundamentals',
+    level: 3,
+    kind: 'mcq',
+    prompt: 'What happens when an integer expression overflows?',
+    options: [
+      'ArithmeticException is thrown',
+      'It wraps around (two\u2019s complement)',
+      'It saturates at Integer.MAX_VALUE',
+      'The compiler rejects it',
+    ],
+    answerKey: 1,
+    explanation:
+      'int arithmetic wraps silently in two\u2019s complement. Use Math.addExact/multiplyExact for fail-fast checks or long/BigInteger where needed.',
+    followUps: ['How do you detect overflow without exceptions?'],
+    trap: 'Overflow is silent — production bugs come from unchecked wrap-around, not exceptions.',
+  },
+  {
+    id: 'fn-016',
+    domain: 'Fundamentals',
+    level: 4,
+    kind: 'mcq',
+    prompt: 'Which case does switch (on String) match first?',
+    code: 'switch ("A") {\n  case "A": System.out.println("A");\n  case "B": System.out.println("B");\n  default: System.out.println("D");\n}',
+    options: ['Prints A only', 'A B D (fall-through)', 'A D', 'Compilation error'],
+    answerKey: 1,
+    explanation:
+      'Without break, execution falls through: A, B, then default D. Enhanced switch (Java 14+) does not fall through.',
+    followUps: ['Rewrite this as an arrow switch.'],
+  },
+  {
+    id: 'fn-017',
+    domain: 'Fundamentals',
+    level: 4,
+    kind: 'short_answer',
+    prompt: 'Explain the difference between fail-fast and fail-safe iteration in Java, with one example of each.',
+    modelAnswer:
+      'Fail-fast iterators (ArrayList, HashMap) detect structural modification outside the iterator via a modCount check on next() and throw ConcurrentModificationException — best-effort, not guaranteed. Fail-safe (actually weakly consistent) iterators (CopyOnWriteArrayList, ConcurrentHashMap keySet) iterate over a snapshot or live weakly-consistent view and never throw CME, at the cost of not reflecting concurrent changes (CoW) or no guarantees about them (CHM).',
+    rubric: [
+      'modCount / CME mechanism for fail-fast',
+      'Snapshot or weakly consistent semantics for fail-safe',
+      'One correct class named for each',
+      'Notes the best-effort (not guaranteed) nature of fail-fast',
+    ],
+    explanation:
+      'Interviewers want the mechanism (modCount), the exception, and the trade-off (snapshot staleness vs. exception risk).',
+    trap: '"Fail-safe" is a marketing term — the official docs say weakly consistent; no iterator guarantees detecting all concurrent modifications.',
+  },
+  {
+    id: 'fn-018',
+    domain: 'Fundamentals',
+    level: 4,
+    kind: 'debugging',
+    prompt:
+      'This method occasionally throws ArrayIndexOutOfBoundsException under load. Diagnose the likely cause and the fix.',
+    code: 'private int cursor = 0;\nprivate final int[] buffer = new int[64];\n\nvoid record(int value) {\n  buffer[cursor++] = value;\n  if (cursor == buffer.length) cursor = 0;\n}',
+    modelAnswer:
+      'cursor is shared mutable state with a check-then-act race: two threads can both read cursor == 63, both increment to 64/65, and index out of bounds before the wrap. Fix by making the cursor atomic with the write: synchronise record() (and any reader), or use AtomicInteger with a CAS loop that bounds the index, or better — replace with ArrayBlockingQueue which encapsulates a correct circular buffer.',
+    rubric: [
+      'Identifies the check-then-act race on cursor',
+      'Explains why it appears only under load',
+      'Proposes synchronisation or an atomic/encapsulated alternative',
+    ],
+    explanation:
+      'Shared mutable index + non-atomic increment is a textbook race condition; the bounds check and increment must be one atomic step.',
+    followUps: ['Why is volatile not enough here?'],
+  },
+  {
+    id: 'fn-019',
+    domain: 'Fundamentals',
+    level: 4,
+    kind: 'mcq',
+    prompt: 'What is a record, and what does the compiler derive from its components?',
+    options: [
+      'A mutable data carrier with generated getters/setters',
+      'An immutable transparent data carrier deriving accessors, equals, hashCode and toString',
+      'An annotation processor for DTOs',
+      'A serialisable singleton',
+    ],
+    answerKey: 1,
+    explanation:
+      'A record declares its state (components) once and derives final accessors, equals, hashCode, toString; the class and fields are final. It is for transparent data carriers, not JavaBeans.',
+    followUps: ['When should you NOT use a record?', 'Can records have static members?'],
+  },
+  {
+    id: 'fn-020',
+    domain: 'Fundamentals',
+    level: 5,
+    kind: 'short_answer',
+    prompt: 'What are the practical implications of Java modules (JPMS) for a large backend codebase? When would you adopt them?',
+    modelAnswer:
+      'JPMS gives strong encapsulation (only exported packages are accessible, even reflectively without opens), reliable configuration (missing modules fail at startup, not ClassNotFoundError deep in a run) and a layering tool to prevent illegal dependencies. Adoption costs: split-package restrictions, migrating reflective frameworks (Spring, Hibernate need opens), and build complexity. Adopt for: JDK strong encapsulation compliance, library authors (jlink, avoiding Classpath hell), large monoliths where package-info discipline has failed. Skip for: typical Spring Boot services where the module-path friction outweighs the benefit — most production teams stay on the classpath.',
+    rubric: [
+      'Strong encapsulation vs classpath visibility',
+      'Reliable configuration benefit',
+      'opens/reflective framework friction',
+      'A judgement call on when NOT to adopt',
+    ],
+    explanation:
+      'Senior answer = trade-offs, not features. Knowing when not to use a technology is the staff-level signal.',
+  },
+]

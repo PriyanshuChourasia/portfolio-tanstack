@@ -1,5 +1,6 @@
 import type { TestSession } from '@/data/reasoning'
 import { cn } from '@/lib/utils'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
 type PaletteState = 'not-visited' | 'answered' | 'marked' | 'answered-marked' | 'visited'
 
@@ -57,59 +58,64 @@ export function QuestionPalette({
   )
 
   return (
-    <section className="rounded-2xl border border-border/60 bg-card p-4">
-      <h2 className="text-xs font-bold uppercase tracking-wide text-muted-foreground">Question Palette</h2>
+    <Card className="border border-border/60 bg-card shadow-sm">
+      <CardHeader>
+        <CardTitle className="text-xs font-bold uppercase tracking-wide text-muted-foreground">
+          Question Palette
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        <div className="grid grid-cols-5 gap-2 sm:grid-cols-8 lg:grid-cols-5 xl:grid-cols-6">
+          {session.questionIds.map((questionId, index) => {
+            const state = paletteState(session, questionId)
+            const isCurrent = index === session.currentQuestionIndex
+            return (
+              <button
+                key={questionId}
+                type="button"
+                onClick={() => onJump(index)}
+                aria-label={`Question ${index + 1}: ${STATE_LABELS[state]}`}
+                aria-current={isCurrent ? 'true' : undefined}
+                className={cn(
+                  'flex h-9 items-center justify-center rounded-lg border text-xs transition-all hover:opacity-80',
+                  STATE_CLASSES[state],
+                  isCurrent && 'ring-2 ring-primary ring-offset-2 ring-offset-background',
+                )}
+              >
+                {index + 1}
+              </button>
+            )
+          })}
+        </div>
 
-      <div className="mt-3 grid grid-cols-5 gap-2 sm:grid-cols-8 lg:grid-cols-5 xl:grid-cols-6">
-        {session.questionIds.map((questionId, index) => {
-          const state = paletteState(session, questionId)
-          const isCurrent = index === session.currentQuestionIndex
-          return (
-            <button
-              key={questionId}
-              type="button"
-              onClick={() => onJump(index)}
-              aria-label={`Question ${index + 1}: ${STATE_LABELS[state]}`}
-              aria-current={isCurrent ? 'true' : undefined}
-              className={cn(
-                'flex h-9 items-center justify-center rounded-lg border text-xs transition-all hover:opacity-80',
-                STATE_CLASSES[state],
-                isCurrent && 'ring-2 ring-primary ring-offset-2 ring-offset-background',
-              )}
-            >
-              {index + 1}
-            </button>
-          )
-        })}
-      </div>
-
-      <dl className="mt-4 grid grid-cols-2 gap-2 text-[11px]">
-        <div className="rounded-lg bg-muted/40 px-2.5 py-1.5">
-          <dt className="text-muted-foreground">Answered</dt>
-          <dd className="font-semibold">{counts.answered}</dd>
-        </div>
-        <div className="rounded-lg bg-muted/40 px-2.5 py-1.5">
-          <dt className="text-muted-foreground">Not answered</dt>
-          <dd className="font-semibold">{counts.unanswered}</dd>
-        </div>
-        <div className="rounded-lg bg-muted/40 px-2.5 py-1.5">
-          <dt className="text-muted-foreground">Marked</dt>
-          <dd className="font-semibold">{counts.marked}</dd>
-        </div>
-        <div className="rounded-lg bg-muted/40 px-2.5 py-1.5">
-          <dt className="text-muted-foreground">Not visited</dt>
-          <dd className="font-semibold">{counts.notVisited}</dd>
-        </div>
-      </dl>
-
-      <div className="mt-4 space-y-1.5">
-        {LEGEND.map((item) => (
-          <div key={item.state} className="flex items-center gap-2 text-[11px] text-muted-foreground">
-            <span className={cn('size-3 shrink-0 rounded border', STATE_CLASSES[item.state])} />
-            {item.label}
+        <dl className="grid grid-cols-2 gap-2 text-[11px]">
+          <div className="rounded-lg bg-muted/40 px-2.5 py-1.5">
+            <dt className="text-muted-foreground">Answered</dt>
+            <dd className="font-semibold">{counts.answered}</dd>
           </div>
-        ))}
-      </div>
-    </section>
+          <div className="rounded-lg bg-muted/40 px-2.5 py-1.5">
+            <dt className="text-muted-foreground">Not answered</dt>
+            <dd className="font-semibold">{counts.unanswered}</dd>
+          </div>
+          <div className="rounded-lg bg-muted/40 px-2.5 py-1.5">
+            <dt className="text-muted-foreground">Marked</dt>
+            <dd className="font-semibold">{counts.marked}</dd>
+          </div>
+          <div className="rounded-lg bg-muted/40 px-2.5 py-1.5">
+            <dt className="text-muted-foreground">Not visited</dt>
+            <dd className="font-semibold">{counts.notVisited}</dd>
+          </div>
+        </dl>
+
+        <div className="space-y-1.5">
+          {LEGEND.map((item) => (
+            <div key={item.state} className="flex items-center gap-2 text-[11px] text-muted-foreground">
+              <span className={cn('size-3 shrink-0 rounded border', STATE_CLASSES[item.state])} />
+              {item.label}
+            </div>
+          ))}
+        </div>
+      </CardContent>
+    </Card>
   )
 }

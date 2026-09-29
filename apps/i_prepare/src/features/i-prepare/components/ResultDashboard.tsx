@@ -1,5 +1,8 @@
 import { ArrowLeft, History, RotateCcw } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
+import { Separator } from '@/components/ui/separator'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { useIPrepareStore } from '../store'
 import { DifficultyAnalysis } from './DifficultyAnalysis'
 import { PerformanceInsights } from './PerformanceInsights'
@@ -29,8 +32,8 @@ export function ResultDashboard() {
   }
 
   return (
-    <div className="mx-auto w-full max-w-5xl px-4 py-8 sm:py-12">
-      <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
+    <div className="mx-auto w-full max-w-5xl px-4 py-8 sm:py-12 space-y-6">
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <Button variant="outline" size="sm" onClick={goToExams}>
           <ArrowLeft className="size-4" />
           Exam selection
@@ -47,20 +50,43 @@ export function ResultDashboard() {
         </div>
       </div>
 
-      <ScoreCard result={result} />
+      <Card>
+        <CardContent className="pt-6">
+          <ScoreCard result={result} />
+        </CardContent>
+      </Card>
 
-      <div className="mt-4">
-        <PerformanceInsights result={result} />
-      </div>
+      <Separator />
 
-      <div className="mt-4 grid gap-4">
-        <TopicAnalysis topics={result.topicPerformance} />
-        <div className="grid gap-4 lg:grid-cols-2">
-          <DifficultyAnalysis rows={result.difficultyPerformance} />
-          <TimeAnalysis analysis={result.timeAnalysis} />
-        </div>
-        <QuestionReview result={result} />
-      </div>
+      <Card>
+        <CardHeader>
+          <CardTitle>Performance</CardTitle>
+          <CardDescription>Detailed breakdown of your test results</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          <PerformanceInsights result={result} />
+          <Tabs defaultValue="topics">
+            <TabsList>
+              <TabsTrigger value="topics">Topics</TabsTrigger>
+              <TabsTrigger value="difficulty">Difficulty</TabsTrigger>
+              <TabsTrigger value="time">Time</TabsTrigger>
+              <TabsTrigger value="review">Review</TabsTrigger>
+            </TabsList>
+            <TabsContent value="topics">
+              <TopicAnalysis topics={result.topicPerformance} />
+            </TabsContent>
+            <TabsContent value="difficulty">
+              <DifficultyAnalysis rows={result.difficultyPerformance} />
+            </TabsContent>
+            <TabsContent value="time">
+              <TimeAnalysis analysis={result.timeAnalysis} />
+            </TabsContent>
+            <TabsContent value="review">
+              <QuestionReview result={result} />
+            </TabsContent>
+          </Tabs>
+        </CardContent>
+      </Card>
     </div>
   )
 }

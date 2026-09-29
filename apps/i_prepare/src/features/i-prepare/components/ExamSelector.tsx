@@ -1,6 +1,7 @@
 import { Clock, History, ListChecks, Target, Trophy } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { EXAMS, SUBJECT_LABELS, questionsForExam, topicsForExam } from '@/data/reasoning'
 import type { ExamDefinition, TestResult } from '@/data/reasoning'
 import { useIPrepareStore } from '../store'
@@ -48,76 +49,79 @@ export function ExamSelector() {
           const attempts = results.filter((result) => result.examId === exam.id).length
 
           return (
-            <button
-              key={exam.id}
-              type="button"
-              onClick={() => selectExam(exam.id)}
-              className="group flex h-full flex-col rounded-2xl border border-border/60 bg-card p-5 text-left shadow-sm transition-all hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-md"
-            >
-              <div className={`mb-4 h-1.5 w-12 rounded-full bg-gradient-to-r ${exam.accent}`} />
-              <h2 className="text-lg font-bold tracking-tight">{exam.name}</h2>
-              <p className="mt-1 text-xs font-medium text-muted-foreground">
-                {exam.kind === 'practice' ? 'Topic practice paper' : `${SUBJECT_LABELS[exam.subject]} section`}
-              </p>
-
-              <dl className="mt-4 grid grid-cols-2 gap-x-3 gap-y-3 text-xs">
-                <div className="flex items-start gap-2">
-                  <Target className="mt-0.5 size-3.5 shrink-0 text-muted-foreground" />
-                  <div>
-                    <dt className="text-muted-foreground">Difficulty</dt>
-                    <dd className="font-semibold">{exam.difficultyLabel}</dd>
+            <Card key={exam.id} className="group flex h-full flex-col overflow-hidden border border-border/60 bg-card shadow-sm transition-all hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-md">
+              <div className={`h-1.5 w-12 rounded-full bg-gradient-to-r ${exam.accent}`} />
+              <CardHeader>
+                <CardTitle className="text-lg font-bold tracking-tight">{exam.name}</CardTitle>
+                <CardDescription>
+                  {exam.kind === 'practice' ? 'Topic practice paper' : `${SUBJECT_LABELS[exam.subject]} section`}
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="flex-1 space-y-4">
+                <dl className="grid grid-cols-2 gap-x-3 gap-y-3 text-xs">
+                  <div className="flex items-start gap-2">
+                    <Target className="mt-0.5 size-3.5 shrink-0 text-muted-foreground" />
+                    <div>
+                      <dt className="text-muted-foreground">Difficulty</dt>
+                      <dd className="font-semibold">{exam.difficultyLabel}</dd>
+                    </div>
                   </div>
-                </div>
-                <div className="flex items-start gap-2">
-                  <ListChecks className="mt-0.5 size-3.5 shrink-0 text-muted-foreground" />
-                  <div>
-                    <dt className="text-muted-foreground">Questions</dt>
-                    <dd className="font-semibold">{bank.length} in bank</dd>
+                  <div className="flex items-start gap-2">
+                    <ListChecks className="mt-0.5 size-3.5 shrink-0 text-muted-foreground" />
+                    <div>
+                      <dt className="text-muted-foreground">Questions</dt>
+                      <dd className="font-semibold">{bank.length} in bank</dd>
+                    </div>
                   </div>
-                </div>
-                <div className="flex items-start gap-2">
-                  <Clock className="mt-0.5 size-3.5 shrink-0 text-muted-foreground" />
-                  <div>
-                    <dt className="text-muted-foreground">Duration</dt>
-                    <dd className="font-semibold">{exam.defaultDurationMinutes} min</dd>
+                  <div className="flex items-start gap-2">
+                    <Clock className="mt-0.5 size-3.5 shrink-0 text-muted-foreground" />
+                    <div>
+                      <dt className="text-muted-foreground">Duration</dt>
+                      <dd className="font-semibold">{exam.defaultDurationMinutes} min</dd>
+                    </div>
                   </div>
-                </div>
-                <div className="flex items-start gap-2">
-                  <Trophy className="mt-0.5 size-3.5 shrink-0 text-muted-foreground" />
-                  <div>
-                    <dt className="text-muted-foreground">Best score</dt>
-                    <dd className="font-semibold">
-                      {best ? `${best.overall.score}/${best.overall.maxScore} · ${best.overall.percentage}%` : '—'}
-                    </dd>
+                  <div className="flex items-start gap-2">
+                    <Trophy className="mt-0.5 size-3.5 shrink-0 text-muted-foreground" />
+                    <div>
+                      <dt className="text-muted-foreground">Best score</dt>
+                      <dd className="font-semibold">
+                        {best ? `${best.overall.score}/${best.overall.maxScore} · ${best.overall.percentage}%` : '—'}
+                      </dd>
+                    </div>
                   </div>
+                </dl>
+
+                <p className="text-xs leading-relaxed text-muted-foreground">{exam.description}</p>
+
+                <div className="flex flex-wrap gap-1">
+                  {topics.slice(0, 4).map((topic) => (
+                    <span key={topic} className="rounded-full bg-muted px-2 py-0.5 text-[10px] font-medium text-muted-foreground">
+                      {topic}
+                    </span>
+                  ))}
+                  {topics.length > 4 && (
+                    <span className="rounded-full bg-muted px-2 py-0.5 text-[10px] font-medium text-muted-foreground">
+                      +{topics.length - 4} more
+                    </span>
+                  )}
                 </div>
-              </dl>
 
-              <p className="mt-4 text-xs leading-relaxed text-muted-foreground">{exam.description}</p>
-
-              <div className="mt-4 flex flex-wrap gap-1">
-                {topics.slice(0, 4).map((topic) => (
-                  <span key={topic} className="rounded-full bg-muted px-2 py-0.5 text-[10px] font-medium text-muted-foreground">
-                    {topic}
-                  </span>
-                ))}
-                {topics.length > 4 && (
-                  <span className="rounded-full bg-muted px-2 py-0.5 text-[10px] font-medium text-muted-foreground">
-                    +{topics.length - 4} more
-                  </span>
-                )}
-              </div>
-
-              <p className="mt-4 text-[11px] font-medium text-muted-foreground">{exam.patternNote}</p>
-              <p className="mt-1 text-[11px] text-muted-foreground">
-                {attempts > 0 ? `${attempts} previous attempt(s)` : 'No attempts yet'}
-              </p>
-
-              <span className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-primary">
-                Configure test
-                <span aria-hidden className="transition-transform group-hover:translate-x-0.5">→</span>
-              </span>
-            </button>
+                <p className="text-[11px] font-medium text-muted-foreground">{exam.patternNote}</p>
+                <p className="text-[11px] text-muted-foreground">
+                  {attempts > 0 ? `${attempts} previous attempt(s)` : 'No attempts yet'}
+                </p>
+              </CardContent>
+              <CardFooter className="border-t px-6 py-4">
+                <button
+                  type="button"
+                  onClick={() => selectExam(exam.id)}
+                  className="inline-flex items-center gap-1 text-sm font-semibold text-primary transition-transform hover:translate-x-0.5"
+                >
+                  Configure test
+                  <span aria-hidden>→</span>
+                </button>
+              </CardFooter>
+            </Card>
           )
         })}
       </div>
