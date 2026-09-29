@@ -9,9 +9,15 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as JavaExamRouteImport } from './routes/java-exam'
 import { Route as IPrepareRouteImport } from './routes/i-prepare'
 import { Route as IndexRouteImport } from './routes/index'
 
+const JavaExamRoute = JavaExamRouteImport.update({
+  id: '/java-exam',
+  path: '/java-exam',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IPrepareRoute = IPrepareRouteImport.update({
   id: '/i-prepare',
   path: '/i-prepare',
@@ -26,31 +32,42 @@ const IndexRoute = IndexRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/i-prepare': typeof IPrepareRoute
+  '/java-exam': typeof JavaExamRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/i-prepare': typeof IPrepareRoute
+  '/java-exam': typeof JavaExamRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/i-prepare': typeof IPrepareRoute
+  '/java-exam': typeof JavaExamRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/i-prepare'
+  fullPaths: '/' | '/i-prepare' | '/java-exam'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/i-prepare'
-  id: '__root__' | '/' | '/i-prepare'
+  to: '/' | '/i-prepare' | '/java-exam'
+  id: '__root__' | '/' | '/i-prepare' | '/java-exam'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   IPrepareRoute: typeof IPrepareRoute
+  JavaExamRoute: typeof JavaExamRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/java-exam': {
+      id: '/java-exam'
+      path: '/java-exam'
+      fullPath: '/java-exam'
+      preLoaderRoute: typeof JavaExamRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/i-prepare': {
       id: '/i-prepare'
       path: '/i-prepare'
@@ -71,6 +88,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   IPrepareRoute: IPrepareRoute,
+  JavaExamRoute: JavaExamRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

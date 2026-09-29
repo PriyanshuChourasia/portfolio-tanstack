@@ -2,7 +2,8 @@ import { useMemo, useState } from 'react'
 import { CheckCircle2, ChevronDown, MinusCircle, XCircle } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import type { TestResult } from '@/data/reasoning'
+import { OPTION_KEYS, type TestResult } from '@/data/reasoning'
+import { FigureView } from '@/components/FigureView'
 import { cn } from '@/lib/utils'
 import { DIFFICULTY_LABELS, formatSeconds } from '../engine/evaluation'
 import { OptionSelector } from './OptionSelector'
@@ -125,15 +126,45 @@ export function QuestionReview({ result }: { result: TestResult }) {
                     {item.questionText}
                   </p>
 
-                  <div className="mt-3">
-                    <OptionSelector
-                      options={item.options}
-                      selected={item.selectedOption}
-                      reveal
-                      correctOption={item.correctOption}
-                      disabled
-                    />
-                  </div>
+                  {item.figure && (
+                    <div className="mt-3 rounded-xl border border-border/60 bg-muted/30 p-3">
+                      <FigureView figure={item.figure} size={100} />
+                    </div>
+                  )}
+
+                  {item.figureOptions ? (
+                    <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-4">
+                      {item.figureOptions.map((spec, index) => {
+                        const key = OPTION_KEYS[index]
+                        return (
+                          <div
+                            key={key}
+                            className={cn(
+                              'flex flex-col items-center gap-1.5 rounded-lg border p-2',
+                              key === item.correctOption
+                                ? 'border-emerald-500/60 bg-emerald-500/10'
+                                : key === item.selectedOption
+                                  ? 'border-destructive/60 bg-destructive/10'
+                                  : 'border-border/60 opacity-70',
+                            )}
+                          >
+                            <span className="text-[10px] font-bold text-muted-foreground">{key}</span>
+                            <FigureView figure={spec} size={64} />
+                          </div>
+                        )
+                      })}
+                    </div>
+                  ) : (
+                    <div className="mt-3">
+                      <OptionSelector
+                        options={item.options}
+                        selected={item.selectedOption}
+                        reveal
+                        correctOption={item.correctOption}
+                        disabled
+                      />
+                    </div>
+                  )}
 
                   <div className="mt-3 flex flex-wrap items-center justify-between gap-3 text-[11px] text-muted-foreground">
                     <span>
@@ -153,6 +184,18 @@ export function QuestionReview({ result }: { result: TestResult }) {
                         Explanation
                       </p>
                       <p className="mt-1.5 whitespace-pre-line text-sm leading-relaxed">{item.explanation}</p>
+                      {item.steps && item.steps.length > 0 && (
+                        <div className="mt-3">
+                          <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+                            Step-by-step reasoning
+                          </p>
+                          <ol className="mt-1.5 list-decimal space-y-1 pl-5 text-sm leading-relaxed">
+                            {item.steps.map((step) => (
+                              <li key={step}>{step}</li>
+                            ))}
+                          </ol>
+                        </div>
+                      )}
                       <p className="mt-2 text-[10px] text-muted-foreground">{item.sourceNote}</p>
                     </div>
                   )}

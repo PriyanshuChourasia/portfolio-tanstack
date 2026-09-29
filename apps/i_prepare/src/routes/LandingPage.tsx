@@ -18,6 +18,8 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
 import { EXAMS, questionsForExam, topicsForExam } from '@/data/reasoning'
 import type { TestResult } from '@/data/reasoning'
+import { JAVA_EXAMS } from '@/features/java-exam/types'
+import { JAVA_QUESTIONS } from '@/features/java-exam/data/questions'
 import { useIPrepareStore } from '@/features/i-prepare/store'
 import { formatDateTime } from '@/features/i-prepare/lib/time'
 import { useTheme } from '@/lib/theme'
@@ -99,7 +101,7 @@ export function LandingPage() {
         <section className="mt-10 animate-fade-up text-center">
           <Badge variant="secondary" className="mb-4 gap-1.5 rounded-full px-3 py-1">
             <BookOpenCheck className="size-3.5 text-primary" />
-            {EXAMS.length} mock tests · {stats.totalQuestions} questions
+            {EXAMS.length} mock tests · {stats.totalQuestions} questions · verbal + non-verbal
           </Badge>
           <h1 className="mx-auto max-w-2xl text-4xl font-black tracking-tight sm:text-5xl">
             Practice like the{' '}
@@ -262,6 +264,48 @@ export function LandingPage() {
                 </Card>
               )
             })}
+          </div>
+        </section>
+
+        {/* ── java exams ─────────────────────────────────────────────── */}
+        <section className="mt-12">
+          <div className="flex items-end justify-between gap-4">
+            <div>
+              <h2 className="text-xl font-black tracking-tight sm:text-2xl">Java Interview Exams</h2>
+              <p className="mt-1 text-sm text-muted-foreground">
+                Timed backend exams with auto-grading, self-graded subjective answers, mastery tracking and
+                revision exams — {JAVA_QUESTIONS.length} questions across fundamentals to system design.
+              </p>
+            </div>
+          </div>
+          <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+            {JAVA_EXAMS.map((exam) => (
+              <a
+                key={exam.id}
+                href="/java-exam"
+                className={cn(
+                  'group block rounded-xl border border-border/60 bg-gradient-to-br p-5 shadow-sm transition-all hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-md',
+                  exam.accent,
+                )}
+              >
+                <div className="flex items-center justify-between gap-2">
+                  <h3 className="font-bold tracking-tight">{exam.name}</h3>
+                  <Badge variant="outline" className="shrink-0 rounded-full bg-card/60 text-[10px]">
+                    L{Math.min(...exam.levels)}–L{Math.max(...exam.levels)}
+                  </Badge>
+                </div>
+                <p className="mt-2 line-clamp-2 text-xs leading-relaxed text-muted-foreground">
+                  {exam.description}
+                </p>
+                <div className="mt-3 flex items-center justify-between text-[11px] text-muted-foreground">
+                  <span>{exam.questionCount} questions</span>
+                  <span className="inline-flex items-center gap-1 font-semibold text-primary">
+                    Open
+                    <ArrowRight className="size-3 transition-transform group-hover:translate-x-0.5" />
+                  </span>
+                </div>
+              </a>
+            ))}
           </div>
         </section>
 

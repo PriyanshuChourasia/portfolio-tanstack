@@ -1,7 +1,7 @@
 import { Outlet, createRootRoute, Link, useRouterState } from '@tanstack/react-router'
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Menu, X, Brain, Home, ClipboardList, Moon, Sun } from 'lucide-react'
+import { Menu, X, Brain, Home, ClipboardList, Coffee, Moon, Sun } from 'lucide-react'
 import { TooltipProvider } from '@/components/ui/tooltip'
 import { Button } from '@/components/ui/button'
 import { useTheme } from '@/lib/theme'
@@ -29,6 +29,7 @@ export const Route = createRootRoute({
 const NAV_ITEMS = [
   { to: '/', label: 'Home', icon: Home },
   { to: '/i-prepare', label: 'Mock Tests', icon: ClipboardList },
+  { to: '/java-exam', label: 'Java Exams', icon: Coffee },
 ] as const
 
 function RootComponent() {

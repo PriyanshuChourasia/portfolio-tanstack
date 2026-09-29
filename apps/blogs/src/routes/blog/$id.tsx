@@ -1,4 +1,4 @@
-import { createFileRoute, useParams } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router'
 import { JsonLd } from '@/components/JsonLd'
 import { BlogPostDetailPage } from '@/features/blog/components/blog-detail-page'
 import { getBlogPosts } from '@/data/blog-posts'
@@ -24,7 +24,7 @@ export const Route = createFileRoute('/blog/$id')({
 })
 
 function RouteComponent() {
-  const { id } = useParams()
+  const { id } = Route.useParams()
   const post = getBlogPosts().find((item) => item.id === parseInt(id))
 
   const schema = post && {

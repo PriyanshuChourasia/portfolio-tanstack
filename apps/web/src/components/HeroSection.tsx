@@ -557,6 +557,13 @@ export function HeroSection() {
     },
     {
       kind: 'item',
+      key: 'projects',
+      label: 'Projects',
+      icon: Folder,
+      href: '#projects',
+    },
+    {
+      kind: 'item',
       key: 'about',
       label: 'About',
       icon: User,
@@ -568,13 +575,6 @@ export function HeroSection() {
       label: 'Experience',
       icon: Briefcase,
       href: '#experience',
-    },
-    {
-      kind: 'item',
-      key: 'projects',
-      label: 'Projects',
-      icon: Folder,
-      href: '#projects',
     },
     { kind: 'divider', key: 'd1' },
     {

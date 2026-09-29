@@ -1,5 +1,4 @@
 import type {
-  JavaExamResult,
   DomainScore,
   JavaAnswer,
   JavaDomain,
@@ -58,7 +57,6 @@ export function maxMarksFor(question: JavaQuestion): number {
 
 function indicesMatch(correct: number[], selected: number[]): JavaOutcome {
   const correctSet = new Set(correct)
-  const selectedSet = new Set(selected)
   const hits = selected.filter((index) => correctSet.has(index)).length
   const misses = selected.length - hits
   const missed = correct.length - hits
@@ -423,6 +421,7 @@ export function buildJavaExamResult(
   questions: JavaQuestion[],
 ): JavaExamResult {
   const submittedAt = session.submittedAt ?? new Date().toISOString()
+  const questionResults = gradeJavaQuestions(questions, session.answers)
   const evaluation = evaluateJavaExam({ ...session, submittedAt }, questions)
   return {
     id: `java-result-${session.id}`,
@@ -444,7 +443,7 @@ export function buildJavaExamResult(
     weakDomains: evaluation.weakDomains,
     summary: evaluation.summary,
     recommendations: evaluation.recommendations,
-    questionResults: evaluation.questionResults,
+    questionResults,
   }
 }
 

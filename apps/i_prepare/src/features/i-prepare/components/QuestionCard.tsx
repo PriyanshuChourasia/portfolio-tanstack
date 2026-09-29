@@ -1,7 +1,9 @@
-import type { OptionKey, Question, UserAnswer } from '@/data/reasoning'
+import { OPTION_KEYS, type OptionKey, type Question, type UserAnswer } from '@/data/reasoning'
 import { DIFFICULTY_LABELS } from '../engine/evaluation'
+import { cn } from '@/lib/utils'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
+import { FigureView } from '@/components/FigureView'
 import { OptionSelector } from './OptionSelector'
 
 const DIFFICULTY_STYLES: Record<Question['difficulty'], string> = {
@@ -56,13 +58,44 @@ export function QuestionCard({
           {question.questionText}
         </p>
 
-        <div className="mt-6">
-          <OptionSelector
-            options={question.options}
-            selected={answer?.selectedOption ?? null}
-            onSelect={onSelect}
-          />
-        </div>
+        {question.figure && (
+          <div className="mt-4 flex flex-wrap items-end gap-4 rounded-xl border border-border/60 bg-muted/30 p-4">
+            <FigureView figure={question.figure} size={120} />
+          </div>
+        )}
+
+        {question.figureOptions ? (
+          <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
+            {question.figureOptions.map((spec, index) => {
+              const key = OPTION_KEYS[index]
+              const isSelected = answer?.selectedOption === key
+              return (
+                <button
+                  key={key}
+                  type="button"
+                  onClick={() => onSelect(key)}
+                  className={cn(
+                    'flex flex-col items-center gap-2 rounded-xl border p-3 transition-all',
+                    isSelected
+                      ? 'border-primary bg-primary/10 shadow-sm'
+                      : 'border-border/60 hover:border-primary/50 hover:bg-primary/5',
+                  )}
+                >
+                  <span className="text-[10px] font-bold text-muted-foreground">{key}</span>
+                  <FigureView figure={spec} size={72} />
+                </button>
+              )
+            })}
+          </div>
+        ) : (
+          <div className="mt-6">
+            <OptionSelector
+              options={question.options}
+              selected={answer?.selectedOption ?? null}
+              onSelect={onSelect}
+            />
+          </div>
+        )}
 
         {question.subtopic && (
           <p className="mt-4 text-[11px] text-muted-foreground">Subtopic: {question.subtopic}</p>

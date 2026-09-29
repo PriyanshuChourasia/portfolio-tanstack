@@ -2,6 +2,7 @@ import type {
   JavaAnswer,
   JavaDomain,
   JavaExamSession,
+  JavaLevel,
   JavaQuestion,
   QuestionKind,
 } from '../types'

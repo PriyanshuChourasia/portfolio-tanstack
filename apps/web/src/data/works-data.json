@@ -11,13 +11,36 @@
     {
       "title": "OPD ERP — Clinic Management System",
       "category": "Full Stack",
-      "client": "Independent Product",
+      "client": "Product",
+      "tags": ["OPD", "Appointment Booking"],
       "image": "/opderp.png",
       "icon": "ImageIcon",
       "description": "Doctor ERP is a full-stack clinic and hospital management system that digitizes the complete patient journey — from walk-in registration and appointment booking to live token queues, doctor consultation, smart prescriptions, POS billing, and pharmacy dispensing — in a single unified application. Built with NestJS, PostgreSQL, and Prisma on the backend and React 19, TanStack Router, and Tailwind on the frontend, it features role-native interfaces for admin, doctor, receptionist, pharmacist, and nurse users, backed by a granular role-based access control system with JWT refresh-token rotation.",
       "link": "https://opd.codymitra.com",
+      "gallery": [
+        {
+          "src": "/opd/Screenshot 2026-09-29 at 07.37.47.png",
+          "alt": "OPD ERP appointments dashboard",
+          "kind": "desktop"
+        },
+        {
+          "src": "/opd/Screenshot 2026-09-29 at 08.00.40.png",
+          "alt": "OPD ERP patient invoice",
+          "kind": "desktop"
+        },
+        {
+          "src": "/opd/Screenshot 2026-09-29 at 07.36.49.png",
+          "alt": "OPD ERP landing page on mobile",
+          "kind": "mobile"
+        },
+        {
+          "src": "/opd/Screenshot 2026-09-29 at 07.37.03.png",
+          "alt": "OPD ERP clinic workspace setup on mobile",
+          "kind": "mobile"
+        }
+      ],
       "details": {
-        "tagline": "Full-stack clinic & hospital management system covering registration → appointments → queue → consultation → prescriptions → billing/POS → pharmacy dispensing, built for admin, doctor, receptionist, pharmacist & nurse roles.",
+        "tagline": "Clinic & hospital management system covering registration → appointments → queue → consultation → prescriptions → billing/POS → pharmacy dispensing, built for admin, doctor, receptionist, pharmacist & nurse roles.",
         "journey": [
           "Walk-in / Scheduled",
           "Registration",
@@ -139,16 +162,63 @@
     {
       "title": "CodyERP — Restaurant Management System",
       "category": "Full Stack",
-      "client": "Independent Product",
+      "client": "Product",
+      "tags": ["Restaurant", "POS Billing"],
       "image": "/restaurant.png",
       "icon": "ImageIcon",
       "description": "An all-in-one restaurant management platform in active development — POS billing, inventory tracking, staff management, and financial reporting in one place. Ships with developer/demo credentials for quickly inspecting the underlying data while building out new modules.",
-      "link": "https://restaurant.codymitra.com/"
+      "link": "https://restaurant.codymitra.com/",
+      "gallery": [
+        {
+          "src": "/restaurant/Screenshot 2026-09-29 at 07.58.33.png",
+          "alt": "CodyERP's 12 integrated restaurant modules",
+          "kind": "desktop"
+        },
+        {
+          "src": "/restaurant/Screenshot 2026-09-29 at 07.58.44.png",
+          "alt": "CodyERP landing page and sign in",
+          "kind": "desktop"
+        }
+      ],
+      "details": {
+        "tagline": "All-in-one restaurant management platform — POS terminal, order management, KOT board, inventory, menu, staff, GST-compliant billing, ledger & accounting, purchases, reservations and live dashboards across 12 integrated modules."
+      }
     },
     {
-      "title": "OPD ERP",
+      "title": "Resume Builder",
+      "category": "Frontend",
+      "client": "Product",
+      "tags": ["ATS Friendly", "PDF Export"],
+      "image": "/resume/Screenshot 2026-09-29 at 08.05.12.png",
+      "icon": "ImageIcon",
+      "description": "A free, open-source, browser-based resume builder with live preview, ATS-friendly templates, PDF export and zero sign-up. Everything runs in the browser — no accounts, no servers, no tracking.",
+      "link": "https://resumeio.codymitra.com",
+      "gallery": [
+        {
+          "src": "/resume/Screenshot 2026-09-29 at 08.05.12.png",
+          "alt": "Resume Builder landing page",
+          "kind": "desktop"
+        },
+        {
+          "src": "/resume/Screenshot 2026-09-29 at 08.05.28.png",
+          "alt": "Resume Builder editor with live preview",
+          "kind": "desktop"
+        }
+      ],
+      "details": {
+        "tagline": "Free, open-source resume builder — live preview, ATS-friendly templates, one-click PDF export, PDF import, multiple resumes with auto-save and undo/redo, drag-and-drop sections and theme customization, all running in the browser with zero sign-up.",
+        "stack": [
+          { "group": "Frontend", "items": ["React 19", "TanStack Router", "Tailwind CSS v4", "shadcn/ui"] },
+          { "group": "State & UX", "items": ["Zustand", "Framer Motion", "dnd-kit"] },
+          { "group": "PDF", "items": ["jsPDF", "html2canvas", "pdf.js"] }
+        ]
+      }
+    },
+    {
+      "title": "Account ERP",
       "category": "Full Stack",
-      "client": "Independent Product",
+      "client": "Product",
+      "tags": ["Accounting", "Invoicing"],
       "image": "/opderpdashboard.png",
       "icon": "ImageIcon",
       "description": "The accounting and finance module of the OPD ERP suite — ledgers, invoicing, and expense tracking that plug into the same clinic management system. In active development.",

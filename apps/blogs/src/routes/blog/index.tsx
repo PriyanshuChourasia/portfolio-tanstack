@@ -1,5 +1,4 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { Link } from '@tanstack/react-router'
 import { Navbar } from '@/components/Navbar'
 import Articles from '@/features/articles/components/articles'
 import { SITE_URL, buildMeta } from '@/lib/seo'

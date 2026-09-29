@@ -15,6 +15,7 @@ import { useEffect, useState } from 'react'
 import { FaLinkedin } from 'react-icons/fa'
 import { FaGithub } from 'react-icons/fa6'
 import type { LucideIcon } from 'lucide-react'
+import { SITE_URL } from '@/lib/seo'
 
 const socialLinks = [
   {
@@ -38,14 +39,14 @@ type NavItem = {
   label: string
   id: string
   icon: LucideIcon
-  to?: '/projects' | '/blog'
+  to?: '/blog'
 }
 
 const navItems: Array<NavItem> = [
   { label: 'Home', id: 'home', icon: Home },
   { label: 'About', id: 'about', icon: FileText },
   { label: 'Experience', id: 'experience', icon: Briefcase },
-  { label: 'Projects', id: 'projects', icon: FolderKanban, to: '/projects' },
+  { label: 'Projects', id: 'projects', icon: FolderKanban },
   { label: 'Blogs', id: 'articles', icon: Newspaper, to: '/blog' },
   { label: 'Contact', id: 'contact', icon: Mail },
 ]
@@ -54,11 +55,10 @@ export function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
   const { location } = useRouterState()
-  const isHome = location.pathname === '/'
-  const isProjectsActive = location.pathname.startsWith('/projects')
   const isBlogsActive =
     location.pathname.startsWith('/blog')
-  const navHref = (id: string) => (isHome ? `#${id}` : `/#${id}`)
+  // Portfolio sections live on the main site, not in this blogs app
+  const navHref = (id: string) => `${SITE_URL}/#${id}`
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50)
@@ -91,7 +91,7 @@ export function Navbar() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
           <div className="flex items-center justify-between">
             {/* Logo */}
-            <Link to="/">
+            <a href={SITE_URL}>
               <motion.div
                 whileHover={{ scale: 1.05 }}
                 className="flex items-center gap-2.5"
@@ -105,14 +105,12 @@ export function Navbar() {
                   CodyMitra
                 </span>
               </motion.div>
-            </Link>
+            </a>
 
             {/* Desktop nav links */}
             <div className="hidden md:flex items-center gap-8">
               {navItems.map((item) => {
-                const active =
-                  (item.id === 'projects' && isProjectsActive) ||
-                  (item.id === 'articles' && isBlogsActive)
+                const active = item.id === 'articles' && isBlogsActive
                 const linkClass = `text-sm transition-colors relative group ${
                   active
                     ? 'text-primary-accent text-primary-accent'
@@ -217,9 +215,7 @@ export function Navbar() {
             <div className="max-w-7xl mx-auto px-4 py-4 flex flex-col gap-1">
               {navItems.map((item) => {
                 const Icon = item.icon
-                const active =
-                  (item.id === 'projects' && isProjectsActive) ||
-                  (item.id === 'articles' && isBlogsActive)
+                const active = item.id === 'articles' && isBlogsActive
                 const linkClass = `flex items-center gap-3 px-4 py-3 rounded-xl transition-colors text-sm font-medium ${
                   active
                     ? 'bg-primary-accent/5 bg-card text-primary text-primary-accent'
@@ -271,9 +267,7 @@ export function Navbar() {
         className="fixed right-6 top-1/2 -translate-y-1/2 z-40 hidden lg:flex flex-col gap-4 pointer-events-auto"
       >          {navItems.map((item) => {
           const Icon = item.icon
-          const active =
-            (item.id === 'projects' && isProjectsActive) ||
-            (item.id === 'articles' && isBlogsActive)
+          const active = item.id === 'articles' && isBlogsActive
           const linkClass = `relative flex items-center justify-center w-11 h-11 rounded-full border bg-white/80 dark:bg-card/80 shadow-lg transition-all ${
             active
               ? 'border-primary-accent/70 text-primary-accent dark:text-primary-accent'

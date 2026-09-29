@@ -1,8 +1,9 @@
-import { TOPICS_BY_SUBJECT } from './types'
+import { TOPICS_BY_SUBJECT, createBank } from './types'
 import type {
   ExamDefinition,
   ExamId,
   Question,
+  QuestionInput,
   QuestionTopic,
   Subject,
   TestPreset,
@@ -12,6 +13,8 @@ import { sbiPoQuestions } from './sbi-po'
 import { ibpsPoQuestions } from './ibps-po'
 import { analogyPracticeQuestions } from './analogy-practice'
 import { sbiEnglishQuestions } from './sbi-english'
+import { nonVerbalQuestions } from './nonverbal'
+import { verbalExtraQuestions } from './verbal-extra'
 
 /**
  * Exam metadata + ready-made paper presets.
@@ -31,6 +34,51 @@ import { sbiEnglishQuestions } from './sbi-english'
  * 100 questions climb through 10 levels and are served in order.
  */
 export const EXAMS: ExamDefinition[] = [
+  {
+    id: 'NONVERBAL_MASTER',
+    kind: 'exam',
+    subject: 'nonverbal',
+    name: 'Non-Verbal Reasoning Master',
+    shortName: 'Non-Verbal',
+    description:
+      'Figure-based reasoning — series, analogy, classification, matrices, mirror & water images, paper folding/cutting, embedded figures, counting and cubes & dice. Figures render as crisp SVG.',
+    patternNote: '18 figure questions · 25 minutes · 1 mark each · −0.25 for a wrong answer',
+    difficultyLabel: 'Easy to Difficult',
+    marking: { positiveMarks: 1, negativeMarks: 0.25 },
+    defaultDurationMinutes: 25,
+    defaultQuestionCount: 18,
+    accent: 'from-cyan-500/20 to-sky-500/5',
+  },
+  {
+    id: 'VERBAL_FULL',
+    kind: 'exam',
+    subject: 'reasoning',
+    name: 'Verbal Reasoning — Full Section',
+    shortName: 'Verbal Full',
+    description:
+      'The complete verbal paper: analogy, series, coding-decoding, blood relations, directions, ranking, puzzles, syllogism plus alphabet test, arithmetical reasoning, Venn diagrams, statement–assumption/argument, cause & effect and course of action.',
+    patternNote: '50+ questions · 45 minutes · 1 mark each · −0.25 for a wrong answer',
+    difficultyLabel: 'Easy to Difficult',
+    marking: { positiveMarks: 1, negativeMarks: 0.25 },
+    defaultDurationMinutes: 45,
+    defaultQuestionCount: 50,
+    accent: 'from-lime-500/20 to-green-500/5',
+  },
+  {
+    id: 'REASONING_MASTER',
+    kind: 'exam',
+    subject: 'reasoning',
+    name: 'Verbal + Non-Verbal Master Exam',
+    shortName: 'Master Exam',
+    description:
+      'The final 120-minute certification combining every verbal and non-verbal topic — includes the full figure battery. Finish with a complete performance report, weak-area detection and a revision plan.',
+    patternNote: '68+ questions · 120 minutes · 1 mark each · −0.25 for a wrong answer',
+    difficultyLabel: 'All levels',
+    marking: { positiveMarks: 1, negativeMarks: 0.25 },
+    defaultDurationMinutes: 120,
+    defaultQuestionCount: 68,
+    accent: 'from-fuchsia-500/20 to-pink-500/5',
+  },
   {
     id: 'SSC_CHSL',
     kind: 'exam',
@@ -112,6 +160,7 @@ export const EXAMS: ExamDefinition[] = [
 export const SUBJECT_LABELS: Record<Subject, string> = {
   reasoning: 'Reasoning',
   english: 'English',
+  nonverbal: 'Non-Verbal',
 }
 
 const QUESTION_BANK: Record<ExamId, Question[]> = {
@@ -120,6 +169,18 @@ const QUESTION_BANK: Record<ExamId, Question[]> = {
   IBPS_PO: ibpsPoQuestions,
   ANALOGY_PRACTICE: analogyPracticeQuestions,
   SBI_ENGLISH: sbiEnglishQuestions,
+  NONVERBAL_MASTER: createBank('NONVERBAL_MASTER', nonVerbalQuestions),
+  VERBAL_FULL: createBank('VERBAL_FULL', [
+    ...(verbalExtraQuestions as QuestionInput[]),
+    ...sscChslQuestions,
+    ...ibpsPoQuestions,
+  ] as QuestionInput[]),
+  REASONING_MASTER: createBank('REASONING_MASTER', [
+    ...(verbalExtraQuestions as QuestionInput[]),
+    ...sscChslQuestions,
+    ...ibpsPoQuestions,
+    ...(nonVerbalQuestions as QuestionInput[]),
+  ] as QuestionInput[]),
 }
 
 export const ALL_REASONING_QUESTIONS: Question[] = EXAMS.flatMap((exam) => QUESTION_BANK[exam.id])
@@ -184,5 +245,5 @@ export function getQuestionById(questionId: string): Question | undefined {
   return ALL_REASONING_QUESTIONS.find((question) => question.id === questionId)
 }
 
-export { sscChslQuestions, sbiPoQuestions, ibpsPoQuestions, analogyPracticeQuestions, sbiEnglishQuestions }
+export { sscChslQuestions, sbiPoQuestions, ibpsPoQuestions, analogyPracticeQuestions, sbiEnglishQuestions, nonVerbalQuestions, verbalExtraQuestions }
 export * from './types'

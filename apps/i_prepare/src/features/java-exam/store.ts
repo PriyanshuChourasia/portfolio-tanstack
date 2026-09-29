@@ -1,7 +1,6 @@
 import { create } from 'zustand'
 import type {
   DomainMastery,
-  JavaAnswer,
   JavaDomain,
   JavaExamResult,
   JavaExamSession,
@@ -46,7 +45,6 @@ interface JavaKvState {
 }
 
 const KV_KEY = 'state'
-const RESTORABLE_SCREENS: JavaScreen[] = ['catalogue', 'history', 'mastery', 'result', 'reveal']
 
 interface JavaExamState {
   hydrated: boolean
@@ -67,6 +65,8 @@ interface JavaExamState {
   goToHistory: () => void
   goToMastery: () => void
   startExam: (examId: string) => void
+  /** Arms the created session and enters the test screen (timer starts here). */
+  beginTest: () => Promise<void>
   goToInstructions: () => void
   goToQuestion: (index: number) => void
   nextQuestion: () => void
@@ -108,9 +108,9 @@ function flushTiming(session: JavaExamSession, nowIso: string): JavaExamSession 
   const currentId = session.questionIds[session.currentQuestionIndex]
   const current = currentId ? session.answers[currentId] : undefined
   const answers =
-    current && delta > 0
-      ? { ...session.answers, [current.id]: { ...current, timeSpentMs: current.timeSpentMs + delta } }
-      : session.answers
+      current && delta > 0
+        ? { ...session.answers, [current.questionId]: { ...current, timeSpentMs: current.timeSpentMs + delta } }
+        : session.answers
   return { ...session, answers, activeSince: nowIso }
 }
 
@@ -260,6 +260,32 @@ export const useJavaExamStore = create<JavaExamState>((set, get) => {
       // A session whose clock ran out while the tab was closed is submitted now.
       if (active && isSessionExpired(active)) {
         await submitSession('timeout')
+        return
+      }
+
+      // Refresh mid-reveal: rebuild the provisional result so grading can finish.
+      if (!active && kv?.screen === 'reveal') {
+        const lastSubmitted = sessionRecords
+          .filter((item) => item.status === 'submitted')
+          .sort((a, b) => Date.parse(b.submittedAt ?? '') - Date.parse(a.submittedAt ?? ''))[0]
+        const hasUngraded =
+          lastSubmitted &&
+          Object.values(lastSubmitted.answers).some(
+            (answer) => answer.text.trim() !== '' && answer.selfGrade === null,
+          )
+        if (lastSubmitted && hasUngraded) {
+          set({
+            pendingResult: buildJavaExamResult(lastSubmitted, questionsForSession(lastSubmitted)),
+            session: lastSubmitted,
+            screen: 'reveal',
+          })
+          return
+        }
+      }
+
+      // Guard against stale screens that need a live session.
+      if (!active && ['test', 'instructions'].includes(kv?.screen ?? '')) {
+        set({ screen: 'catalogue' })
       }
     },
 
@@ -296,6 +322,14 @@ export const useJavaExamStore = create<JavaExamState>((set, get) => {
       )
       set({ session, screen: 'instructions' })
       void persistKv({ screen: 'instructions' })
+    },
+
+    beginTest: async () => {
+      const session = get().session
+      if (!session || session.status !== 'active') return
+      set({ session, screen: 'test' })
+      await persistSession(session)
+      await persistKv({ screen: 'test', activeSessionId: session.id })
     },
 
     goToInstructions: () => {
