@@ -1,0 +1,90 @@
+{
+  "products": ["OPD ERP", "CodyERP", "Resume Builder", "Account ERP"],
+  "layers": [
+    {
+      "id": "frontend",
+      "name": "Frontend",
+      "caption": "What users touch",
+      "tools": [
+        { "name": "React 19", "products": ["OPD ERP", "Resume Builder"] },
+        { "name": "TypeScript", "products": ["OPD ERP", "Resume Builder"] },
+        { "name": "Vite", "products": ["OPD ERP"] },
+        {
+          "name": "TanStack Router",
+          "products": ["OPD ERP", "Resume Builder"]
+        },
+        { "name": "TanStack Query", "products": ["OPD ERP"] },
+        { "name": "Redux Toolkit", "products": ["OPD ERP"] },
+        { "name": "Zustand", "products": ["Resume Builder"] },
+        {
+          "name": "Tailwind CSS v4",
+          "products": ["OPD ERP", "Resume Builder"]
+        },
+        {
+          "name": "shadcn/ui",
+          "products": ["OPD ERP", "Resume Builder"]
+        },
+        { "name": "Framer Motion", "products": ["Resume Builder"] },
+        { "name": "dnd-kit", "products": ["Resume Builder"] }
+      ]
+    },
+    {
+      "id": "mobile",
+      "name": "Mobile",
+      "caption": "Apps in your pocket",
+      "tools": [
+        { "name": "React Native", "products": [] },
+        { "name": "Flutter / Dart", "products": [] },
+        { "name": "iOS & Android deployment", "products": [] }
+      ]
+    },
+    {
+      "id": "backend",
+      "name": "Backend",
+      "caption": "Business logic and APIs",
+      "tools": [
+        { "name": "NestJS 11", "products": ["OPD ERP"] },
+        { "name": "Spring Boot", "products": [] },
+        { "name": "Laravel", "products": [] },
+        { "name": "JWT auth", "products": ["OPD ERP"] },
+        {
+          "name": "jsPDF / html2canvas / pdf.js",
+          "products": ["Resume Builder"]
+        }
+      ]
+    },
+    {
+      "id": "data",
+      "name": "Data",
+      "caption": "Where it's stored",
+      "tools": [
+        { "name": "PostgreSQL", "products": ["OPD ERP"] },
+        { "name": "Prisma 5", "products": ["OPD ERP"] },
+        { "name": "MySQL", "products": [] },
+        { "name": "MongoDB", "products": [] }
+      ]
+    },
+    {
+      "id": "ai",
+      "name": "AI",
+      "caption": "The Gen AI layer",
+      "tools": [
+        { "name": "AI tools & API integration", "products": [] },
+        { "name": "Chatbot development", "products": [] },
+        { "name": "Real-time data processing", "products": [] }
+      ]
+    },
+    {
+      "id": "infra",
+      "name": "Infra & DevOps",
+      "caption": "How it ships",
+      "tools": [
+        { "name": "Turborepo monorepos", "products": ["OPD ERP"] },
+        { "name": "CI/CD pipelines", "products": [] },
+        { "name": "Hosting & infrastructure", "products": [] },
+        { "name": "Frontend deployment & optimization", "products": [] },
+        { "name": "End-to-end testing", "products": [] }
+      ]
+    }
+  ]
+}

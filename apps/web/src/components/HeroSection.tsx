@@ -9,13 +9,15 @@ import {
 } from 'framer-motion'
 import { Link } from '@tanstack/react-router'
 import {
-  Briefcase,
+  Building2,
   Folder,
   Github,
   Home,
+  Layers,
   Lightbulb,
   Linkedin,
   Mail,
+  Milestone,
   Phone,
   Send,
   Twitter,
@@ -571,10 +573,24 @@ export function HeroSection() {
     },
     {
       kind: 'item',
+      key: 'journey',
+      label: 'Journey',
+      icon: Milestone,
+      href: '#journey',
+    },
+    {
+      kind: 'item',
       key: 'experience',
       label: 'Experience',
-      icon: Briefcase,
-      href: '#experience',
+      icon: Building2,
+      href: '#workplaces',
+    },
+    {
+      kind: 'item',
+      key: 'stack',
+      label: 'Stack',
+      icon: Layers,
+      href: '#stack',
     },
     { kind: 'divider', key: 'd1' },
     {

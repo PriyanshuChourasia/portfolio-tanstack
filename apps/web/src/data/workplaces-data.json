@@ -1,0 +1,28 @@
+{
+  "items": [
+    {
+      "name": "Primesys Technologies",
+      "role": "Software Developer",
+      "period": "2023 - Present",
+      "location": "TODO",
+      "logo": "",
+      "summary": "TODO: one line on what you build there",
+      "built": [
+        "OPD ERP — Clinic Management System",
+        "CodyERP — Restaurant Management System",
+        "Account ERP"
+      ],
+      "stack": ["React", "TypeScript", "NestJS", "Spring Boot"]
+    },
+    {
+      "name": "Freelance",
+      "role": "Fullstack Developer",
+      "period": "2022 - Present",
+      "location": "Remote",
+      "logo": "",
+      "summary": "TODO: one line on the kind of client work",
+      "built": ["Resume Builder"],
+      "stack": ["React", "Laravel", "Tailwind CSS"]
+    }
+  ]
+}

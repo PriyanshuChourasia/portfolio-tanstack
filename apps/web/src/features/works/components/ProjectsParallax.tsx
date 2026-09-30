@@ -46,7 +46,7 @@ function workShots(work: Work): Array<Shot> {
 
 /* =========================================================
     PANEL THEMES — default dark violet; OPD ERP gets its own
-    clinic teal (#028390, #26A69B, #81CCC4, #DFF2F0)
+    deep clinic teal (#03383D, #26A69B, #81CCC4, #DFF2F0)
 ========================================================= */
 
 type PanelTheme = {
@@ -91,23 +91,26 @@ const darkTheme: PanelTheme = {
 }
 
 const opdTheme: PanelTheme = {
-  section: 'border-[#81CCC4]/40 bg-[#DFF2F0]',
+  section:
+    'border-[#26A69B]/20 bg-[linear-gradient(160deg,#03383D_0%,#021F22_65%)]',
   glowA:
-    'bg-[radial-gradient(closest-side,rgba(38,166,155,0.28),rgba(129,204,196,0.18)_55%,transparent)]',
-  glowB: 'bg-[radial-gradient(closest-side,rgba(2,131,144,0.18),transparent)]',
-  number: 'text-[#028390]/70',
-  title: 'text-[#028390]',
-  client: 'text-[#26A69B]',
-  tag: 'border-[#26A69B]/50 bg-[#26A69B]/10 text-[#028390]',
-  description: 'text-[#0B4A50]',
-  stackChip: 'border-[#81CCC4] bg-white/60 text-[#028390]',
-  cta: 'border-[#028390] bg-[#028390] text-white hover:border-[#26A69B] hover:bg-[#26A69B]',
-  card: 'border-[#81CCC4] bg-white shadow-[0_24px_64px_rgba(2,131,144,0.18)]',
+    'bg-[radial-gradient(closest-side,rgba(38,166,155,0.3),rgba(2,131,144,0.14)_55%,transparent)]',
+  glowB: 'bg-[radial-gradient(closest-side,rgba(129,204,196,0.16),transparent)]',
+  number: 'text-[#81CCC4]/80',
+  title: 'text-[#DFF2F0]',
+  // #26A69B on the #03383D panel is only ~4.3:1 — too low for 11px text.
+  // #4DC3B8 stays mid-teal but reaches ~6:1.
+  client: 'text-[#4DC3B8]',
+  tag: 'border-[#26A69B]/50 bg-[#26A69B]/10 text-[#81CCC4]',
+  description: 'text-[#DFF2F0]/75',
+  stackChip: 'border-[#81CCC4]/30 bg-[#021F22]/60 text-[#DFF2F0]/80',
+  cta: 'border-[#26A69B] bg-[#26A69B] text-[#021F22] hover:border-[#81CCC4] hover:bg-[#81CCC4]',
+  card: 'border-[#26A69B]/40 bg-[#03383D] shadow-[0_24px_64px_rgba(0,0,0,0.5)]',
   navButton:
-    'border-[#81CCC4] text-[#028390] hover:border-[#028390] hover:bg-[#028390] hover:text-white',
-  dotActive: 'bg-[#028390]',
-  dotIdle: 'bg-[#81CCC4] hover:bg-[#26A69B]',
-  caption: 'text-[#028390]/70',
+    'border-[#81CCC4]/40 text-[#81CCC4] hover:border-[#26A69B] hover:bg-[#26A69B] hover:text-[#021F22]',
+  dotActive: 'bg-[#26A69B]',
+  dotIdle: 'bg-[#81CCC4]/35 hover:bg-[#81CCC4]/70',
+  caption: 'text-[#81CCC4]/80',
   stage: 'w-full max-w-3xl',
 }
 

@@ -1,12 +1,14 @@
 import { Link, useRouterState } from '@tanstack/react-router'
 import { AnimatePresence, motion, useScroll, useTransform } from 'framer-motion'
 import {
-  Briefcase,
+  Building2,
   FileText,
   FolderKanban,
   Home,
+  Layers,
   Mail,
   Menu,
+  Milestone,
   Twitter,
   X,
 } from 'lucide-react'
@@ -43,7 +45,9 @@ type NavItem = {
 const navItems: Array<NavItem> = [
   { label: 'Home', id: 'home', icon: Home },
   { label: 'About', id: 'about', icon: FileText },
-  { label: 'Experience', id: 'experience', icon: Briefcase },
+  { label: 'Journey', id: 'journey', icon: Milestone },
+  { label: 'Experience', id: 'workplaces', icon: Building2 },
+  { label: 'Stack', id: 'stack', icon: Layers },
   { label: 'Projects', id: 'projects', icon: FolderKanban },
   { label: 'Contact', id: 'contact', icon: Mail },
 ]
