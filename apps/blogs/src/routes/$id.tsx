@@ -10,13 +10,13 @@ import {
   buildMeta,
 } from '@/lib/seo'
 
-export const Route = createFileRoute('/blog/$id')({
+export const Route = createFileRoute('/$id')({
   head: ({ params }) => buildMeta({
       title: params.id
         ? `${getBlogPosts().find((item) => item.id === parseInt(params.id))?.title ?? 'Blog post not found'} | Priyanshu Chourasia`
         : 'Blog post not found | Priyanshu Chourasia',
       description: getBlogPosts().find((item) => item.id === parseInt(params.id))?.desc ?? 'Read the latest blog post from Priyanshu Chourasia.',
-      url: `${SITE_URL}/blog/${params.id}`,
+      url: `${SITE_URL}/${params.id}`,
       image: getBlogPosts().find((item) => item.id === parseInt(params.id))?.image ? absoluteUrl(getBlogPosts().find((item) => item.id === parseInt(params.id))!.image!) : DEFAULT_IMAGE,
       type: 'article',
     }),
@@ -33,7 +33,7 @@ function RouteComponent() {
     headline: post.title,
     description: post.desc,
     image: absoluteUrl(post.image),
-    url: `${SITE_URL}/blog/${id}`,
+    url: `${SITE_URL}/${id}`,
     datePublished: post.date,
     author: { '@type': 'Person', name: post.author || AUTHOR_NAME },
   }

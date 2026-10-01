@@ -111,7 +111,7 @@ export default function Articles() {
             </div>
 
             <Link
-              to="/blog/$id"
+              to="/$id"
               params={{ id: String(featured.id) }}
               className="absolute inset-0 z-10"
               aria-label={`Read ${featured.title}`}
@@ -165,7 +165,7 @@ export default function Articles() {
                 </div>
 
                 <Link
-                  to="/blog/$id"
+                  to="/$id"
                   params={{ id: String(post.id) }}
                   className="absolute inset-0 z-10"
                   aria-label={`Read ${post.title}`}

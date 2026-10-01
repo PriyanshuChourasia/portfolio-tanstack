@@ -3,12 +3,12 @@ import { Navbar } from '@/components/Navbar'
 import Articles from '@/features/articles/components/articles'
 import { SITE_URL, buildMeta } from '@/lib/seo'
 
-export const Route = createFileRoute('/blog/')({
+export const Route = createFileRoute('/')({
   head: () =>
     buildMeta({
       title: 'Blog | Priyanshu Chourasia',
       description: 'Read the latest blog posts from Priyanshu Chourasia.',
-      url: `${SITE_URL}/blog`,
+      url: `${SITE_URL}/`,
     }),
   component: RouteComponent,
 })

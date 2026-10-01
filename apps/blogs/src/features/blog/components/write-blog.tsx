@@ -529,7 +529,7 @@ export function BlogWritePage() {
                 {savedPostId ? (
                   <div className="rounded-2xl border border-emerald-400/20 bg-emerald-50 dark:bg-emerald-400/10 p-4 text-sm leading-6 text-emerald-700 dark:text-emerald-100">
                     Post saved. Open{' '}
-                    <span className="font-semibold">/blog/{savedPostId}</span>{' '}
+                    <span className="font-semibold">/{savedPostId}</span>{' '}
                     or go back to the blog section to see it.
                   </div>
                 ) : null}

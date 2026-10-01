@@ -18,7 +18,7 @@ export function BlogPostDetailPage({ postId }: { postId: number }) {
   const [hasImageError, setHasImageError] = useState(false)
   const post = getBlogPosts().find((item) => item.id === postId)
   const headings = extractHeadings(post?.content ?? '')
-  const shouldShowHeroImage = Boolean(post?.image?.trim()) && !hasImageError
+  const shouldShowHeroImage = Boolean(post.image.trim()) && !hasImageError
 
   if (!post) {
     return (
@@ -206,7 +206,7 @@ export function BlogPostDetailPage({ postId }: { postId: number }) {
               {/* Prev / Next navigation */}
               <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <a
-                  href="/blog"
+                  href="/"
                   className="group flex items-start gap-4 rounded-xl border border-[#242424] bg-[#0C0C0C] p-5 transition-all duration-200 hover:border-[#6B1A1A]"
                 >
                   <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#111111] text-[#EF1D25] transition-colors group-hover:bg-[#6B1A1A]">

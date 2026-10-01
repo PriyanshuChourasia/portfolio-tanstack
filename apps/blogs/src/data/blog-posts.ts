@@ -73,15 +73,15 @@ function readStoredPosts(): Array<BlogPost> {
 
     return parsed.filter((post): post is BlogPost => {
       return (
-        typeof post?.id === 'number' &&
-        typeof post?.date === 'string' &&
-        typeof post?.author === 'string' &&
-        typeof post?.title === 'string' &&
-        typeof post?.category === 'string' &&
-        typeof post?.image === 'string' &&
-        typeof post?.desc === 'string' &&
-        typeof post?.intro === 'string' &&
-        typeof post?.content === 'string'
+        typeof post.id === 'number' &&
+        typeof post.date === 'string' &&
+        typeof post.author === 'string' &&
+        typeof post.title === 'string' &&
+        typeof post.category === 'string' &&
+        typeof post.image === 'string' &&
+        typeof post.desc === 'string' &&
+        typeof post.intro === 'string' &&
+        typeof post.content === 'string'
       )
     })
   } catch {

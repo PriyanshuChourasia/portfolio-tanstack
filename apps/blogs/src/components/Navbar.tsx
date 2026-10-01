@@ -39,7 +39,7 @@ type NavItem = {
   label: string
   id: string
   icon: LucideIcon
-  to?: '/blog'
+  to?: '/'
 }
 
 const navItems: Array<NavItem> = [
@@ -47,7 +47,7 @@ const navItems: Array<NavItem> = [
   { label: 'About', id: 'about', icon: FileText },
   { label: 'Experience', id: 'experience', icon: Briefcase },
   { label: 'Projects', id: 'projects', icon: FolderKanban },
-  { label: 'Blogs', id: 'articles', icon: Newspaper, to: '/blog' },
+  { label: 'Blogs', id: 'articles', icon: Newspaper, to: '/' },
   { label: 'Contact', id: 'contact', icon: Mail },
 ]
 
@@ -56,7 +56,7 @@ export function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false)
   const { location } = useRouterState()
   const isBlogsActive =
-    location.pathname.startsWith('/blog')
+    location.pathname.startsWith('/') && !location.pathname.startsWith('/write')
   // Portfolio sections live on the main site, not in this blogs app
   const navHref = (id: string) => `${SITE_URL}/#${id}`
 
