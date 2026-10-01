@@ -14,7 +14,7 @@ export const DEFAULT_TITLE =
   'Priyanshu Chourasia | Full Stack Developer Portfolio'
 export const DEFAULT_DESCRIPTION =
   'Portfolio of Priyanshu Chourasia, a Full Stack Developer building modern, performant web applications. Explore projects, blog posts, and experience.'
-export const DEFAULT_IMAGE = `${SITE_URL}/hero-person.png`
+export const DEFAULT_IMAGE = `${SITE_URL}/myprofile.jpeg`
 
 export function absoluteUrl(path: string) {
   return path.startsWith('http') ? path : `${SITE_URL}${path}`

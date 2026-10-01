@@ -1,23 +1,26 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { Navbar } from '@/components/Navbar'
-import Articles from '@/features/articles/components/articles'
-import { SITE_URL, buildMeta } from '@/lib/seo'
+import { HeroSection } from '@/components/HeroSection'
+import { BlogChainSection } from '@/components/BlogChainSection'
+import { AboutSection } from '@/components/AboutSection'
+import { ContactSection } from '@/components/ContactSection'
+import { Footer } from '@/components/Footer'
 
 export const Route = createFileRoute('/')({
-  head: () =>
-    buildMeta({
-      title: 'Blog | Priyanshu Chourasia',
-      description: 'Read the latest blog posts from Priyanshu Chourasia.',
-      url: `${SITE_URL}/`,
-    }),
   component: RouteComponent,
 })
 
 function RouteComponent() {
   return (
-    <>
+    <div className="min-h-screen bg-white text-neutral-900">
       <Navbar />
-      <Articles />
-    </>
+      <main>
+        <HeroSection />
+        <BlogChainSection />
+        <AboutSection />
+        <ContactSection />
+      </main>
+      <Footer />
+    </div>
   )
 }

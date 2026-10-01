@@ -1,47 +1,12 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { JsonLd } from '@/components/JsonLd'
-import { BlogPostDetailPage } from '@/features/blog/components/blog-detail-page'
-import { getBlogPosts } from '@/data/blog-posts'
-import {
-  AUTHOR_NAME,
-  DEFAULT_IMAGE,
-  SITE_URL,
-  absoluteUrl,
-  buildMeta,
-} from '@/lib/seo'
-
 export const Route = createFileRoute('/$id')({
-  head: ({ params }) => buildMeta({
-      title: params.id
-        ? `${getBlogPosts().find((item) => item.id === parseInt(params.id))?.title ?? 'Blog post not found'} | Priyanshu Chourasia`
-        : 'Blog post not found | Priyanshu Chourasia',
-      description: getBlogPosts().find((item) => item.id === parseInt(params.id))?.desc ?? 'Read the latest blog post from Priyanshu Chourasia.',
-      url: `${SITE_URL}/${params.id}`,
-      image: getBlogPosts().find((item) => item.id === parseInt(params.id))?.image ? absoluteUrl(getBlogPosts().find((item) => item.id === parseInt(params.id))!.image!) : DEFAULT_IMAGE,
-      type: 'article',
-    }),
   component: RouteComponent,
 })
 
 function RouteComponent() {
-  const { id } = Route.useParams()
-  const post = getBlogPosts().find((item) => item.id === parseInt(id))
-
-  const schema = post && {
-    '@context': 'https://schema.org',
-    '@type': 'BlogPosting',
-    headline: post.title,
-    description: post.desc,
-    image: absoluteUrl(post.image),
-    url: `${SITE_URL}/${id}`,
-    datePublished: post.date,
-    author: { '@type': 'Person', name: post.author || AUTHOR_NAME },
-  }
-
   return (
-    <>
-      {schema && <JsonLd data={schema} />}
-      <BlogPostDetailPage postId={parseInt(id)} />
-    </>
+    <div className="min-h-screen bg-white">
+      <p className="p-6 text-sm text-neutral-400">Blog post</p>
+    </div>
   )
 }
