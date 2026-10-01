@@ -1,5 +1,7 @@
 # https://www.robotstxt.org/robotstxt.html
 User-agent: *
 Disallow: /resume/template
+Disallow: /builder
+Disallow: /portfolio/
 
 Sitemap: https://codymitra.com/sitemap.xml

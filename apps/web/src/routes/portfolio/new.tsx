@@ -4,6 +4,7 @@ import { BuilderLayout, BuilderProvider } from '@/features/portfolio-builder'
 import { createNewPortfolio } from '@/features/portfolio-builder/data/defaults'
 
 export const Route = createFileRoute('/portfolio/new')({
+  head: () => ({ meta: [{ name: 'robots', content: 'noindex, nofollow' }] }),
   component: RouteComponent,
 })
 

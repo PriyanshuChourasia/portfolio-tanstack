@@ -4,7 +4,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite --port 3000",
-    "build": "vite build && tsc",
+    "build": "node scripts/generate-sitemap.mjs && vite build && tsc",
+    "sitemap": "node scripts/generate-sitemap.mjs",
     "serve": "vite preview",
     "test": "vitest run",
     "lint": "eslint",

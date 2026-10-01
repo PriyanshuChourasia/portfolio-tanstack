@@ -2,6 +2,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { BuilderLayout, BuilderProvider } from '@/features/portfolio-builder'
 
 export const Route = createFileRoute('/portfolio/$id')({
+  head: () => ({ meta: [{ name: 'robots', content: 'noindex, nofollow' }] }),
   component: RouteComponent,
 })
 
