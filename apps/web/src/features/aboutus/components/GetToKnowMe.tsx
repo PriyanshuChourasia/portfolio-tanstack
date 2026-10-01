@@ -21,12 +21,12 @@ export default function GetToKnowMe() {
   return (
     <section
       id="about"
-      className="grid min-h-screen w-full grid-cols-1 overflow-x-clip lg:grid-cols-[40%_60%]"
+      className="grid min-h-0 w-full grid-cols-1 overflow-x-clip lg:min-h-screen lg:grid-cols-[40%_60%]"
     >
       {/* =========================================================
           LEFT — PROFILE IMAGE
       ========================================================= */}
-      <div className="flex min-h-screen items-center justify-center bg-white px-6 py-12 md:px-8 lg:px-10 xl:px-12">
+      <div className="flex min-h-0 items-center justify-center bg-white px-5 py-10 sm:px-6 md:px-8 lg:min-h-screen lg:px-10 xl:px-12">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -40,7 +40,7 @@ export default function GetToKnowMe() {
           <img
             src="/priyanshuimage.png"
             alt="Priyanshu Chourasia"
-            className="relative mx-auto h-[70vh] max-h-[640px] w-auto object-contain px-6 pt-8"
+            className="relative mx-auto h-[42svh] max-h-[640px] w-auto object-contain px-6 pt-8 sm:h-[50svh] lg:h-[70vh]"
           />
         </motion.div>
       </div>
@@ -48,15 +48,15 @@ export default function GetToKnowMe() {
       {/* =========================================================
           RIGHT — GET TO KNOW ME
       ========================================================= */}
-      <div className="min-h-screen bg-white text-gray-900">
+      <div className="min-h-0 bg-white text-gray-900 lg:min-h-screen">
         {/* =====================================================
             CONTENT WRAPPER
         ===================================================== */}
-        <div className="flex min-h-screen flex-col justify-center">
+        <div className="flex min-h-0 flex-col justify-center lg:min-h-screen">
           {/* ===================================================
               TOP HEADER
           =================================================== */}
-          <header className="px-6 py-10 md:px-10 md:py-12 lg:px-12">
+          <header className="px-5 py-10 sm:px-6 md:px-10 md:py-12 lg:px-12">
             {/* Small label */}
             <motion.div
               initial={{ opacity: 0, y: -15 }}
@@ -158,7 +158,7 @@ export default function GetToKnowMe() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="scroll-mt-24 border-t border-gray-200 px-6 py-10 md:px-10 md:py-12 lg:px-12"
+            className="scroll-mt-24 border-t border-gray-200 px-5 py-10 sm:px-6 md:px-10 md:py-12 lg:px-12"
           >
             {/* Small label */}
             <span className="font-mono text-[11px] uppercase tracking-[0.25em] text-gray-500">
@@ -166,7 +166,7 @@ export default function GetToKnowMe() {
             </span>
 
             {/* Paragraph */}
-            <div className="mt-8 max-w-2xl space-y-5 text-lg leading-relaxed text-gray-700 md:text-xl">
+            <div className="mt-8 max-w-2xl space-y-5 text-base leading-relaxed text-gray-700 md:text-lg lg:text-xl">
               <p>
                 I've spent{' '}
                 <span className="font-semibold text-gray-900">3+ years</span>{' '}

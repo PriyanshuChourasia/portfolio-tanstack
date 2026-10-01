@@ -1,1 +1,1 @@
-export { default as Contact } from './components/contact'
+export { default as LetsConnectSection } from './components/LetsConnectSection'

@@ -33,7 +33,7 @@
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
 
-  --background: #fff692;
+  --background: #070707;
   --foreground: #FFF5EB;
   --primary: #3C0100;
   --primary-accent: #F2A25C;
@@ -637,21 +637,6 @@
     font-weight: 300;
     position: relative;
     transition: background 0.3s ease, color 0.3s ease;
-  }
-
-  body::before {
-    content: '';
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background:
-      radial-gradient(circle at 20% 50%, rgba(112, 54, 17, 0.04), transparent 50%),
-      radial-gradient(circle at 80% 50%, rgba(242, 162, 92, 0.04), transparent 50%);
-    pointer-events: none;
-    z-index: -1;
-    transition: background 0.3s ease;
   }
 
   ::selection {

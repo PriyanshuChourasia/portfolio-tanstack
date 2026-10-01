@@ -9,6 +9,8 @@ import {
 } from 'framer-motion'
 import { Link } from '@tanstack/react-router'
 import {
+  ArrowUpRight,
+  Brain,
   Building2,
   Folder,
   Github,
@@ -19,6 +21,7 @@ import {
   Mail,
   Milestone,
   Phone,
+  Rocket,
   Send,
   Twitter,
   User,
@@ -33,6 +36,7 @@ import {
   SiHtml5,
   SiJavascript,
   SiLaravel,
+  SiLinux,
   SiMongodb,
   SiMysql,
   SiNextdotjs,
@@ -44,6 +48,7 @@ import {
   SiSpringboot,
   SiTailwindcss,
   SiTypescript,
+  SiUbuntu,
 } from 'react-icons/si'
 import { FaJava } from 'react-icons/fa6'
 
@@ -187,6 +192,8 @@ type DockIconEntry = {
     className?: string
     strokeWidth?: number
   }>
+  // Brand-style tint for the tile and icon, like a macOS app icon
+  color: string
   href?: string
   to?: '/projects'
   external?: boolean
@@ -280,8 +287,9 @@ function DockItem({
           className="block h-full w-full cursor-pointer rounded-[26%] outline-none focus-visible:ring-2 focus-visible:ring-white/40"
         >
           <DockIconFace
-            icon={<Icon className="h-[55%] w-[55%] text-white/90" strokeWidth={1.75} />}
+            icon={<Icon className={DOCK_ICON_CLASS} strokeWidth={1.75} />}
             label={entry.label}
+            color={entry.color}
             active={entry.active}
           />
         </Link>
@@ -302,8 +310,9 @@ function DockItem({
           className="block h-full w-full cursor-pointer rounded-[26%] outline-none focus-visible:ring-2 focus-visible:ring-white/40"
         >
           <DockIconFace
-            icon={<Icon className="h-[55%] w-[55%] text-white/90" strokeWidth={1.75} />}
+            icon={<Icon className={DOCK_ICON_CLASS} strokeWidth={1.75} />}
             label={entry.label}
+            color={entry.color}
             active={entry.active}
           />
         </a>
@@ -316,8 +325,9 @@ function DockItem({
           className="block h-full w-full cursor-pointer rounded-[26%] outline-none focus-visible:ring-2 focus-visible:ring-white/40"
         >
           <DockIconFace
-            icon={<Icon className="h-[55%] w-[55%] text-white/90" strokeWidth={1.75} />}
+            icon={<Icon className={DOCK_ICON_CLASS} strokeWidth={1.75} />}
             label={entry.label}
+            color={entry.color}
             active={entry.active}
           />
         </button>
@@ -327,18 +337,27 @@ function DockItem({
   )
 }
 
+// Icon takes the tile's colour, and turns white when the tile fills on hover
+const DOCK_ICON_CLASS =
+  'h-[55%] w-[55%] text-[var(--dock-color)] transition-colors duration-200 group-hover:text-white group-focus-within:text-white'
+
 function DockIconFace({
   icon,
   label,
+  color,
   active,
 }: {
   icon: React.ReactNode
   label: string
+  color: string
   active?: boolean
 }) {
   return (
     <>
-      <span className="flex h-full w-full items-center justify-center rounded-[26%] border border-[#BE2ED6]/20 bg-white/[0.06] shadow-[0_4px_16px_rgba(0,0,0,0.35)] backdrop-blur-md transition-colors duration-200 group-hover:border-[#BE2ED6] group-hover:bg-[#BE2ED6] group-focus-within:border-[#BE2ED6] group-focus-within:bg-[#BE2ED6]">
+      <span
+        style={{ '--dock-color': color } as React.CSSProperties}
+        className="flex h-full w-full items-center justify-center rounded-[26%] border border-[color-mix(in_oklab,var(--dock-color)_35%,transparent)] bg-[color-mix(in_oklab,var(--dock-color)_16%,transparent)] shadow-[0_4px_16px_rgba(0,0,0,0.35)] backdrop-blur-md transition-colors duration-200 group-hover:border-[var(--dock-color)] group-hover:bg-[var(--dock-color)] group-focus-within:border-[var(--dock-color)] group-focus-within:bg-[var(--dock-color)]"
+      >
         {icon}
       </span>
 
@@ -516,6 +535,154 @@ function ClockWidget() {
   )
 }
 
+/* =========================================================
+    SERVER WIDGET — DevOps rack + what I'm learning now
+========================================================= */
+
+// Each rack unit: two status LEDs that blink on their own rhythm
+const RACK_UNITS = [
+  { y: 4, leds: ['#34D399', '#BE2ED6'], delay: 0 },
+  { y: 26, leds: ['#34D399', '#22D3EE'], delay: 0.4 },
+  { y: 48, leds: ['#FACC15', '#34D399'], delay: 0.8 },
+]
+
+// The ops tools shown on the DevOps card
+const DEVOPS_TOOLS = [
+  { name: 'Ubuntu', Icon: SiUbuntu, color: '#E95420' },
+  { name: 'Linux', Icon: SiLinux, color: '#FCC624' },
+  { name: 'Docker', Icon: SiDocker, color: '#2496ED' },
+]
+
+function ServerWidget({ reduced }: { reduced: boolean | null }) {
+  return (
+    <div className="flex h-full w-60 flex-col gap-3 p-5">
+      <div className="flex items-center justify-between">
+        <span className="font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-white/60">
+          DevOps
+        </span>
+        <span className="font-mono text-[9px] uppercase tracking-[0.15em] text-[#34D399]">
+          Online
+        </span>
+      </div>
+
+      {/* Server rack */}
+      <svg
+        viewBox="0 0 120 70"
+        className="h-24 w-full"
+        role="img"
+        aria-label="Server rack with blinking status lights"
+      >
+        {RACK_UNITS.map((unit) => (
+          <g key={unit.y}>
+            <rect
+              x="2"
+              y={unit.y}
+              width="116"
+              height="18"
+              rx="4"
+              fill="rgba(255,255,255,0.04)"
+              stroke="rgba(190,46,214,0.45)"
+              strokeWidth="1.5"
+            />
+            {/* Drive bays */}
+            {[0, 1, 2, 3].map((bay) => (
+              <rect
+                key={bay}
+                x={10 + bay * 14}
+                y={unit.y + 6}
+                width="10"
+                height="6"
+                rx="1.5"
+                fill="rgba(255,255,255,0.12)"
+              />
+            ))}
+            {unit.leds.map((color, i) => (
+              <motion.circle
+                key={color + i}
+                cx={98 + i * 10}
+                cy={unit.y + 9}
+                r="2.6"
+                fill={color}
+                style={{ filter: `drop-shadow(0 0 3px ${color})` }}
+                animate={reduced ? undefined : { opacity: [1, 0.25, 1] }}
+                transition={{
+                  duration: 1.1 + i * 0.5,
+                  delay: unit.delay + i * 0.3,
+                  repeat: Infinity,
+                  ease: 'easeInOut',
+                }}
+              />
+            ))}
+          </g>
+        ))}
+      </svg>
+
+      {/* Tools */}
+      <ul className="flex flex-wrap gap-1.5">
+        {DEVOPS_TOOLS.map(({ name, Icon, color }) => (
+          <li
+            key={name}
+            className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.05] px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.1em] text-white/80"
+          >
+            <Icon className="h-3 w-3" style={{ color }} aria-hidden="true" />
+            {name}
+          </li>
+        ))}
+      </ul>
+
+      {/* Service */}
+      <div className="flex items-start gap-2 rounded-xl border border-[#BE2ED6]/30 bg-[#BE2ED6]/10 px-3 py-2">
+        <Rocket className="mt-0.5 h-4 w-4 shrink-0 text-[#BE2ED6]" strokeWidth={1.75} />
+        <div className="flex flex-col">
+          <span className="text-xs font-semibold text-white">
+            Deployment as a service
+          </span>
+          <span className="text-[11px] leading-snug text-white/55">
+            Servers set up, apps shipped and kept running.
+          </span>
+        </div>
+      </div>
+
+      <div className="mt-auto flex flex-col gap-1 border-t border-white/10 pt-3">
+        <span className="font-mono text-[9px] uppercase tracking-[0.15em] text-white/45">
+          Currently learning
+        </span>
+        <span className="flex items-center gap-1.5 text-sm font-semibold text-white">
+          <Brain className="h-4 w-4 shrink-0 text-[#BE2ED6]" strokeWidth={1.75} />
+          Machine Learning
+        </span>
+      </div>
+    </div>
+  )
+}
+
+/* =========================================================
+    WORK WITH ME — pill with a spinning gradient border
+========================================================= */
+
+function WorkWithMeButton() {
+  return (
+    <a
+      href="#contact"
+      className="group relative mt-2 inline-flex overflow-hidden rounded-full p-[1.5px] shadow-[0_0_32px_rgba(190,46,214,0.25)] outline-none focus-visible:ring-2 focus-visible:ring-white/40"
+    >
+      <span
+        aria-hidden="true"
+        className="pointer-events-none absolute left-1/2 top-1/2 aspect-square w-[250%] -translate-x-1/2 -translate-y-1/2 animate-[spin_3s_linear_infinite] bg-[conic-gradient(from_0deg,transparent_0%,#BE2ED6_12%,#EF1D25_25%,transparent_40%,transparent_60%,#7C41A8_75%,#BE2ED6_88%,transparent_100%)] motion-reduce:animate-none"
+      />
+      <span className="relative inline-flex items-center gap-2.5 rounded-full bg-white px-6 py-3 font-mono text-xs font-semibold uppercase tracking-[0.2em] text-[#EF1D25] transition-colors duration-200 group-hover:bg-[#FFF1F2]">
+        {/* Available for work */}
+        <span className="relative flex h-2 w-2">
+          <span className="absolute inset-0 animate-ping rounded-full bg-[#34D399] opacity-60 motion-reduce:animate-none" />
+          <span className="relative h-2 w-2 rounded-full bg-[#34D399]" />
+        </span>
+        Work with me
+        <ArrowUpRight className="h-4 w-4 transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+      </span>
+    </a>
+  )
+}
+
 export function HeroSection() {
   const mouseX = useMotionValue(
     Number.POSITIVE_INFINITY,
@@ -552,6 +719,7 @@ export function HeroSection() {
     {
       kind: 'item',
       key: 'home',
+      color: '#60A5FA',
       label: 'Home',
       icon: Home,
       href: '#home',
@@ -560,6 +728,7 @@ export function HeroSection() {
     {
       kind: 'item',
       key: 'projects',
+      color: '#F59E0B',
       label: 'Projects',
       icon: Folder,
       href: '#projects',
@@ -567,6 +736,7 @@ export function HeroSection() {
     {
       kind: 'item',
       key: 'about',
+      color: '#34D399',
       label: 'About',
       icon: User,
       href: '#about',
@@ -574,6 +744,7 @@ export function HeroSection() {
     {
       kind: 'item',
       key: 'journey',
+      color: '#C19ADD',
       label: 'Journey',
       icon: Milestone,
       href: '#journey',
@@ -581,6 +752,7 @@ export function HeroSection() {
     {
       kind: 'item',
       key: 'experience',
+      color: '#F472B6',
       label: 'Experience',
       icon: Building2,
       href: '#workplaces',
@@ -588,6 +760,7 @@ export function HeroSection() {
     {
       kind: 'item',
       key: 'stack',
+      color: '#22D3EE',
       label: 'Stack',
       icon: Layers,
       href: '#stack',
@@ -596,6 +769,7 @@ export function HeroSection() {
     {
       kind: 'item',
       key: 'github',
+      color: '#E5E7EB',
       label: 'GitHub',
       icon: Github,
       href: github?.url,
@@ -604,6 +778,7 @@ export function HeroSection() {
     {
       kind: 'item',
       key: 'linkedin',
+      color: '#3B8FE8',
       label: 'LinkedIn',
       icon: Linkedin,
       href: linkedin?.url,
@@ -612,6 +787,7 @@ export function HeroSection() {
     {
       kind: 'item',
       key: 'twitter',
+      color: '#1DA1F2',
       label: 'Twitter',
       icon: Twitter,
       href: twitter?.url,
@@ -620,6 +796,7 @@ export function HeroSection() {
     {
       kind: 'item',
       key: 'mail',
+      color: '#EA4335',
       label: 'Email',
       icon: Mail,
       href: gmail
@@ -629,6 +806,7 @@ export function HeroSection() {
     {
       kind: 'item',
       key: 'phone',
+      color: '#34C759',
       label: contactPhone.label,
       icon: Phone,
       href: contactPhone.href,
@@ -637,6 +815,7 @@ export function HeroSection() {
     {
       kind: 'item',
       key: 'idea',
+      color: '#FACC15',
       label: 'Have an idea?',
       icon: Lightbulb,
       onClick: () => setIdeaModalOpen(true),
@@ -644,6 +823,7 @@ export function HeroSection() {
     {
       kind: 'item',
       key: 'contact',
+      color: '#BE2ED6',
       label: 'Contact',
       icon: Send,
       href: '#contact',
@@ -753,9 +933,19 @@ export function HeroSection() {
       </div>
 
       {/* =====================================================
+          LEFT-SIDE WIDGET — DEVOPS SERVER + LEARNING
+          Only on wide screens, where it clears the centred name
+      ===================================================== */}
+      <div className="absolute left-6 top-1/2 z-20 hidden -translate-y-1/2 xl:flex">
+        <AnimatedBorderCard delay={-1}>
+          <ServerWidget reduced={reducedMotion} />
+        </AnimatedBorderCard>
+      </div>
+
+      {/* =====================================================
           CENTER IDENTITY
       ===================================================== */}
-      <div className="relative z-10 flex flex-1 flex-col items-center justify-center gap-5 px-4 pb-16 pt-24 text-center">
+      <div className="relative z-10 flex flex-1 flex-col items-center justify-center gap-5 px-4 pb-10 pt-24 text-center">
         <h1 aria-label="Priyanshu Chourasia" className="relative mb-[0.35em] mt-[0.2em] flex items-center justify-center gap-[0.35em] text-3xl font-bold leading-tight tracking-tight text-white sm:text-5xl md:text-6xl">
           {/* Purple reflection split along the slant — light on the left,
               dark on the right — fading out to the black edges */}
@@ -798,12 +988,14 @@ export function HeroSection() {
         <p className="max-w-md text-sm leading-relaxed text-white/65 sm:text-base">
           Building scalable software and thoughtful digital products.
         </p>
+
+        <WorkWithMeButton />
       </div>
 
       {/* =====================================================
           MACOS-STYLE DOCK MENU BAR
       ===================================================== */}
-      <div className="relative z-30 flex justify-center px-4 pb-4 sm:pb-5">
+      <div className="relative z-30 flex justify-center px-4 pb-8 sm:pb-10 lg:pb-12">
         <motion.div
           onMouseMove={(e) => mouseX.set(e.clientX)}
           onMouseLeave={() =>

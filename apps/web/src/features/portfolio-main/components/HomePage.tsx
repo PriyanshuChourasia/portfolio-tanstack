@@ -1,11 +1,10 @@
 import GetToKnowMe from '@/features/aboutus/components/GetToKnowMe'
-import AboutSection from '@/features/aboutus/components/aboutus'
 import JourneySection from '@/features/aboutus/components/JourneySection'
-import WhereIBuiltSection from '@/features/aboutus/components/WhereIBuiltSection'
 import StackSection from '@/features/aboutus/components/StackSection'
-import ContactSection from '@/features/contact/components/contact'
+import WhereIBuiltSection from '@/features/aboutus/components/WhereIBuiltSection'
 import { HeroSection } from '@/components/HeroSection'
 import { ProjectsParallax } from '@/features/works/components/ProjectsParallax'
+import LetsConnectSection from '@/features/contact/components/LetsConnectSection'
 
 export default function Home() {
   return (
@@ -16,8 +15,7 @@ export default function Home() {
       <JourneySection />
       <WhereIBuiltSection />
       <StackSection />
-      <AboutSection />
-      <ContactSection />
+      <LetsConnectSection />
     </main>
   )
 }

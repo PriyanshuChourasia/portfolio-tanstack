@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { Fragment, useCallback, useEffect, useRef, useState } from 'react'
 import {
   AnimatePresence,
   animate,
@@ -12,9 +12,15 @@ import {
   Briefcase,
   ChevronLeft,
   ChevronRight,
+  Cog,
+  Cpu,
   GraduationCap,
   Pause,
+  PenLine,
+  PencilLine,
   Play,
+  School,
+  Wrench,
 } from 'lucide-react'
 import type { AnimationPlaybackControls } from 'framer-motion'
 
@@ -23,8 +29,40 @@ import GearToCodeAnimation from '@/features/aboutus/components/GearToCodeAnimati
 
 type JourneyKind = 'work' | 'education'
 
+// The extra fields are optional — only some milestones carry them
 type JourneyItem = (typeof resumeData.experience)[number] & {
   kind: JourneyKind
+  quote?: string
+  image?: string
+  emphasis?: string
+  icon?: 'school' | 'cog'
+}
+
+const getQuote = (item: JourneyItem) => item.quote
+const getImage = (item: JourneyItem) => item.image
+const getEmphasis = (item: JourneyItem) => item.emphasis
+const getIcon = (item: JourneyItem) => item.icon
+
+// Emphasise the phrase in code rather than storing markup in the JSON. The phrase
+// is data, so it's matched by index rather than pasted into a RegExp.
+const splitEmphasis = (quote: string, emphasis?: string) => {
+  if (!emphasis) return quote
+
+  const at = quote.toLowerCase().indexOf(emphasis.toLowerCase())
+  if (at === -1) return quote
+
+  const end = at + emphasis.length
+
+  return [
+    quote.slice(0, at),
+    <span
+      key={at}
+      className="text-[#E9D9F5] font-semibold not-italic"
+    >
+      {quote.slice(at, end)}
+    </span>,
+    quote.slice(end),
+  ]
 }
 
 // "2023 - Present" → 2023; an open-ended period counts as the latest end year
@@ -34,12 +72,14 @@ const endYear = (period: string) => {
   return match ? parseInt(match[1], 10) : Number.MAX_SAFE_INTEGER
 }
 
-// Oldest first, so the story runs forward in time
+// Oldest first, so the story runs forward in time.
+// The JSON import widens `icon` to `string`, so it is narrowed back to the union here.
 const journey: Array<JourneyItem> = [
   ...resumeData.experience.map((item) => ({ ...item, kind: 'work' as const })),
   ...resumeData.education.map((item) => ({
     ...item,
     kind: 'education' as const,
+    icon: item.icon as JourneyItem['icon'],
   })),
 ].sort(
   (a, b) =>
@@ -57,30 +97,167 @@ const slides: Array<Slide> = [
 
 const INTRO_PATH = ['Mechanical', 'Software Developer', 'Computer Science']
 
+const MOTTO = ['Still building', 'still learning', 'still shipping']
+
 const badges = {
   work: {
     label: 'Work',
     icon: Briefcase,
-    className: 'bg-[#C19ADD]/20 text-[#441573]',
+    className: 'border border-[#C19ADD]/30 bg-[#C19ADD]/15 text-[#E9D9F5]',
   },
   education: {
     label: 'Education',
     icon: GraduationCap,
-    className: 'bg-gray-100 text-gray-600',
+    className: 'border border-white/15 bg-white/10 text-white/70',
   },
 } as const
 
 const SLIDE_MS = 5000
 const INTRO_MS = 8000
+const QUOTE_MS = 7000
 
-// The opening card gets a little longer on screen
-const slideDuration = (slide: Slide) =>
-  slide.type === 'intro' ? INTRO_MS : SLIDE_MS
+// The opening card and any slide carrying a quote stay on screen longer
+const slideDuration = (slide: Slide) => {
+  if (slide.type === 'intro') return INTRO_MS
+  if (getQuote(slide.item)) return QUOTE_MS
+
+  return SLIDE_MS
+}
 
 const CONTROL_BUTTON =
-  'flex h-10 w-10 items-center justify-center rounded-full border border-gray-200 text-gray-700 transition-colors hover:border-[#8353AD] hover:bg-[#8353AD] hover:text-white focus-visible:ring-2 focus-visible:ring-[#C19ADD] focus-visible:outline-none'
+  'flex h-10 w-10 items-center justify-center rounded-full border border-white/20 text-white/80 transition-colors hover:border-[#C19ADD] hover:bg-[#C19ADD] hover:text-[#0B1026] focus-visible:ring-2 focus-visible:ring-[#C19ADD] focus-visible:outline-none'
 
 const pad = (value: number) => String(value).padStart(2, '0')
+
+/* =========================================================
+    MILESTONE ILLUSTRATIONS
+========================================================= */
+
+// The small row of symbols under the main icon
+const SUB_ICON_ROW = 'flex items-center gap-1.5 text-[#E9D9F5]'
+
+const illustrations = {
+  school: {
+    Main: School,
+    // "shifting from pencil to pen"
+    sub: <PencilLine size={18} />,
+    subAfter: <PenLine size={18} />,
+  },
+  cog: {
+    Main: Cog,
+    // a nod to "towards engineering"
+    sub: <Wrench size={18} />,
+    subAfter: <Cpu size={18} />,
+  },
+} as const satisfies Record<string, unknown>
+
+/* =========================================================
+    MOTTO — highlight loops while the story plays
+========================================================= */
+
+const MOTTO_STEP_MS = 1600
+const MOTTO_IDLE_COLOR = '#1f2937' // gray-800
+const MOTTO_ACTIVE_COLOR = '#8353AD'
+const MOTTO_DOT_IDLE = '#C19ADD'
+
+function Motto({ playing }: { playing: boolean }) {
+  const reducedMotion = Boolean(useReducedMotion())
+  const ref = useRef<HTMLParagraphElement>(null)
+
+  const inView = useInView(ref, { amount: 0.6 })
+
+  const [active, setActive] = useState(0)
+
+  // Loop runs only while the story plays and the motto is on screen.
+  // Pausing freezes `active` where it is, and resuming carries on from there.
+  useEffect(() => {
+    if (reducedMotion || !playing || !inView) return
+
+    const id = setInterval(() => {
+      setActive((prev) => (prev + 1) % MOTTO.length)
+    }, MOTTO_STEP_MS)
+
+    return () => clearInterval(id)
+  }, [inView, playing, reducedMotion])
+
+  return (
+    <p
+      ref={ref}
+      aria-label={MOTTO.join(', ')}
+      className="mt-16 flex flex-wrap items-center justify-center gap-x-4 gap-y-2"
+    >
+      {MOTTO.map((phrase, i) => {
+        const isActive = !reducedMotion && active === i
+        // A dot sits between phrases i and i + 1, so it lights for either
+        const dotActive =
+          !reducedMotion && (active === i || active === i + 1)
+
+        return (
+          <Fragment key={phrase}>
+            {/* Entrance on the wrapper, so it never fights the loop's lift */}
+            <motion.span
+              aria-hidden="true"
+              initial={reducedMotion ? false : { opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.5 }}
+              transition={{
+                duration: 0.5,
+                ease: 'easeOut',
+                delay: reducedMotion ? 0 : i * 0.12,
+              }}
+              className="inline-block"
+            >
+              <motion.span
+                aria-hidden="true"
+                animate={{
+                  y: isActive ? -3 : 0,
+                  opacity: reducedMotion ? 1 : isActive ? 1 : 0.45,
+                  color: isActive ? MOTTO_ACTIVE_COLOR : MOTTO_IDLE_COLOR,
+                }}
+                transition={
+                  reducedMotion
+                    ? { duration: 0 }
+                    : {
+                        y: { type: 'spring', stiffness: 400, damping: 20 },
+                        opacity: { duration: 0.3 },
+                        color: { duration: 0.3 },
+                      }
+                }
+                className="relative inline-block font-mono text-sm font-bold tracking-[0.2em] text-gray-800 uppercase md:text-base"
+              >
+                {phrase}
+
+                {/* Underline draws in from the left while active */}
+                <motion.span
+                  aria-hidden="true"
+                  initial={false}
+                  animate={{ scaleX: isActive ? 1 : 0 }}
+                  transition={{ duration: 0.4, ease: 'easeOut' }}
+                  className="absolute left-0 -bottom-1 h-0.5 w-full origin-left bg-[#8353AD]"
+                />
+              </motion.span>
+            </motion.span>
+
+            {/* Separator grows and turns violet beside the active phrase */}
+            {i < MOTTO.length - 1 && (
+              <motion.span
+                aria-hidden="true"
+                animate={{ scale: dotActive ? 1.6 : 1 }}
+                transition={{ duration: 0.3, ease: 'easeOut' }}
+                style={{
+                  backgroundColor: dotActive
+                    ? MOTTO_ACTIVE_COLOR
+                    : MOTTO_DOT_IDLE,
+                }}
+                className="h-1.5 w-1.5 shrink-0 rounded-full"
+              />
+            )}
+          </Fragment>
+        )
+      })}
+    </p>
+  )
+}
 
 /* =========================================================
     SECTION
@@ -214,6 +391,17 @@ export default function JourneySection() {
     },
   }
 
+  // The visual settles in from slightly small, alongside the other items
+  const visualVariants = {
+    enter: reducedMotion ? { opacity: 0 } : { opacity: 0, y: 12, scale: 0.95 },
+    center: {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      transition: { duration: 0.4, ease: 'easeOut' as const },
+    },
+  }
+
   /* -------------------------------------------------------
       Interaction handlers
   ------------------------------------------------------- */
@@ -249,6 +437,16 @@ export default function JourneySection() {
   const badge = isIntro ? null : badges[current.item.kind]
   const BadgeIcon = badge?.icon
 
+  // All of these come from the data — nothing is Diploma- or 10th Grade-specific
+  const quote = isIntro ? undefined : getQuote(current.item)
+  const emphasis = isIntro ? undefined : getEmphasis(current.item)
+  const image = isIntro ? undefined : getImage(current.item)
+  const icon = isIntro ? undefined : getIcon(current.item)
+
+  // image (photo) > icon (illustration) > nothing
+  const Illustration = icon ? illustrations[icon] : undefined
+  const hasVisual = Boolean(image || Illustration)
+
   const segmentLabel = (slide: Slide, position: number) =>
     slide.type === 'intro'
       ? `Go to ${pad(position)}: My Story`
@@ -275,8 +473,9 @@ export default function JourneySection() {
           </span>
 
           <h2 className="mt-3 text-4xl font-black tracking-[-0.04em] text-gray-900 md:text-5xl lg:text-6xl">
-            Journey so far
-            <span className="text-gray-400">.</span>
+            Journey so{' '}
+            <span className="pr-1 text-[#8353AD] italic">far</span>
+            <span className="text-[#8353AD]">.</span>
           </h2>
 
           <p className="mt-4 max-w-xl text-gray-600">
@@ -295,13 +494,27 @@ export default function JourneySection() {
             aria-label="Journey so far"
             tabIndex={0}
             onKeyDown={onKeyDown}
-            className="relative min-h-[500px] overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-[0_24px_64px_rgba(0,0,0,0.08)] focus-visible:ring-2 focus-visible:ring-[#C19ADD] focus-visible:outline-none md:min-h-[580px]"
+            className="relative min-h-[500px] overflow-hidden rounded-3xl border border-white/10 bg-[linear-gradient(145deg,#0B1026_0%,#0A0F1F_45%,#07070D_100%)] shadow-[0_24px_64px_rgba(11,16,38,0.45)] focus-visible:ring-2 focus-visible:ring-[#C19ADD] focus-visible:outline-none md:min-h-[580px]"
           >
-            {/* Soft glow behind the content */}
+            {/* --------------------------------------------
+                BACKDROP — permanent, behind the progress bar,
+                slide and controls
+            -------------------------------------------- */}
             <div
               aria-hidden="true"
-              className="pointer-events-none absolute -top-16 -right-12 h-72 w-72 rounded-full bg-[#C19ADD]/25 blur-3xl"
-            />
+              className="pointer-events-none absolute inset-0"
+            >
+              {/* Light purple glows */}
+              <div className="absolute -top-16 -right-16 h-80 w-80 rounded-full bg-[#C19ADD]/25 blur-3xl" />
+
+              <div className="absolute -bottom-12 -left-12 h-72 w-72 rounded-full bg-[#8353AD]/20 blur-3xl" />
+
+              {/* Faint dark-blue wash through the centre */}
+              <div className="absolute top-1/2 left-1/2 h-64 w-[60%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#1E2A5A]/40 blur-3xl" />
+
+              {/* Subtle dotted texture */}
+              <div className="absolute inset-0 bg-[radial-gradient(#ffffff0d_1px,transparent_1px)] bg-[size:18px_18px] opacity-60" />
+            </div>
 
             {/* --------------------------------------------
                 PROGRESS SEGMENTS
@@ -313,10 +526,10 @@ export default function JourneySection() {
                   type="button"
                   onClick={() => goTo(i)}
                   aria-label={segmentLabel(slide, i + 1)}
-                  className="h-1 flex-1 cursor-pointer overflow-hidden rounded-full bg-gray-200 transition-colors hover:bg-gray-300 focus-visible:ring-2 focus-visible:ring-[#C19ADD] focus-visible:outline-none"
+                  className="h-1 flex-1 cursor-pointer overflow-hidden rounded-full bg-white/15 transition-colors hover:bg-white/25 focus-visible:ring-2 focus-visible:ring-[#C19ADD] focus-visible:outline-none"
                 >
                   <motion.span
-                    className="block h-full w-full origin-left bg-[#8353AD]"
+                    className="block h-full w-full origin-left bg-[#C19ADD]"
                     style={{
                       scaleX: i < index ? 1 : i === index ? progress : 0,
                     }}
@@ -364,7 +577,7 @@ export default function JourneySection() {
                         {/* Top */}
                         <motion.span
                           variants={itemVariants}
-                          className="font-mono text-xs tracking-[0.4em] text-[#8353AD] uppercase md:text-sm"
+                          className="font-mono text-xs tracking-[0.4em] text-[#C19ADD] uppercase md:text-sm"
                         >
                           My Story
                         </motion.span>
@@ -372,17 +585,20 @@ export default function JourneySection() {
                         {/* Middle */}
                         <div className="flex flex-col items-center">
                           <motion.div variants={itemVariants}>
-                            <GearToCodeAnimation className="mb-3 h-24 w-36 md:h-32 md:w-44" />
+                            <GearToCodeAnimation
+                              tone="dark"
+                              className="mb-3 h-24 w-36 md:h-32 md:w-44"
+                            />
                           </motion.div>
 
                           <motion.span
                             variants={itemVariants}
-                            className="text-base text-gray-500 md:text-lg"
+                            className="text-base text-white/60 md:text-lg"
                           >
                             The journey from
                           </motion.span>
 
-                          <p className="mt-3 flex max-w-4xl flex-wrap items-center justify-center gap-x-2 gap-y-1 text-2xl font-black tracking-[-0.03em] text-gray-900 md:text-5xl">
+                          <p className="mt-3 flex max-w-4xl flex-wrap items-center justify-center gap-x-2 gap-y-1 text-2xl font-black tracking-[-0.03em] text-white md:text-5xl">
                             {INTRO_PATH.map((stage, stageIndex) => (
                               <span
                                 key={stage}
@@ -411,7 +627,7 @@ export default function JourneySection() {
                         {/* Bottom */}
                         <motion.span
                           variants={itemVariants}
-                          className="font-mono text-[11px] tracking-[0.3em] text-gray-400 italic uppercase"
+                          className="font-mono text-[11px] tracking-[0.3em] text-white/50 italic uppercase"
                         >
                           Based on a true story
                         </motion.span>
@@ -426,7 +642,7 @@ export default function JourneySection() {
                           variants={itemVariants}
                           className="relative flex flex-wrap items-center justify-between gap-3"
                         >
-                          <span className="font-mono text-sm text-[#8353AD]">
+                          <span className="font-mono text-sm text-[#C19ADD]">
                             {current.item.period}
                           </span>
 
@@ -440,29 +656,96 @@ export default function JourneySection() {
                           )}
                         </motion.div>
 
-                        {/* Title */}
-                        <motion.h3
-                          variants={itemVariants}
-                          className="relative mt-8 text-3xl font-black tracking-[-0.03em] text-gray-900 md:text-6xl"
+                        {/* Text — single column, or the left half when a
+                            visual is present */}
+                        <div
+                          className={
+                            hasVisual
+                              ? 'relative md:grid md:grid-cols-[1fr_auto] md:items-center md:gap-10'
+                              : 'contents'
+                          }
                         >
-                          {current.item.title}
-                        </motion.h3>
+                          <div className={hasVisual ? 'order-2 md:order-1' : ''}>
+                            {/* Title */}
+                            <motion.h3
+                              variants={itemVariants}
+                              className="relative mt-8 text-3xl font-black tracking-[-0.03em] text-white md:text-6xl"
+                            >
+                              {current.item.title}
+                            </motion.h3>
 
-                        {/* Company */}
-                        <motion.p
-                          variants={itemVariants}
-                          className="relative mt-3 text-lg text-gray-500 md:text-xl"
-                        >
-                          {current.item.company}
-                        </motion.p>
+                            {/* Company */}
+                            <motion.p
+                              variants={itemVariants}
+                              className="relative mt-3 text-lg text-white/60 md:text-xl"
+                            >
+                              {current.item.company}
+                            </motion.p>
 
-                        {/* Description */}
-                        <motion.p
-                          variants={itemVariants}
-                          className="relative mt-8 max-w-3xl text-base leading-relaxed text-gray-600 md:text-xl"
-                        >
-                          {current.item.desc}
-                        </motion.p>
+                            {/* Description — the quote replaces it on small
+                                screens, so it is hidden there */}
+                            <motion.p
+                              variants={itemVariants}
+                              className={`relative mt-8 max-w-3xl text-base leading-relaxed text-white/70 md:text-xl ${
+                                quote ? 'hidden md:block' : ''
+                              }`}
+                            >
+                              {current.item.desc}
+                            </motion.p>
+
+                            {/* Quote */}
+                            {quote && (
+                              <motion.blockquote
+                                variants={itemVariants}
+                                className="relative mt-6 max-w-2xl border-l-2 border-[#C19ADD] pl-5 text-base leading-relaxed text-white/80 italic md:mt-8 md:text-lg"
+                              >
+                                <span
+                                  aria-hidden="true"
+                                  className="absolute -top-4 -left-1 font-black text-4xl text-[#C19ADD]"
+                                >
+                                  &ldquo;
+                                </span>
+
+                                {splitEmphasis(quote, emphasis)}
+                              </motion.blockquote>
+                            )}
+                          </div>
+
+                          {/* Visual — above the text on mobile, beside it on md */}
+                          {hasVisual && (
+                            <motion.div
+                              variants={visualVariants}
+                              className="order-1 mb-6 md:order-2 md:mb-0"
+                            >
+                              {/* A photo wins over an illustration */}
+                              {image ? (
+                                <img
+                                  src={image}
+                                  alt=""
+                                  className="h-28 w-28 rounded-2xl border border-white/15 object-cover shadow-md md:h-56 md:w-56"
+                                />
+                              ) : (
+                                Illustration && (
+                                  <div className="flex h-28 w-28 flex-col items-center justify-center gap-2 rounded-2xl border border-[#C19ADD]/30 bg-[#C19ADD]/10 md:h-56 md:w-56">
+                                    <Illustration.Main
+                                      size={48}
+                                      strokeWidth={1.5}
+                                      className="h-12 w-12 text-[#C19ADD] md:h-16 md:w-16"
+                                    />
+
+                                    <div className={SUB_ICON_ROW}>
+                                      {Illustration.sub}
+
+                                      <ArrowRight size={14} />
+
+                                      {Illustration.subAfter}
+                                    </div>
+                                  </div>
+                                )
+                              )}
+                            </motion.div>
+                          )}
+                        </div>
                       </>
                     )}
                   </motion.div>
@@ -473,7 +756,7 @@ export default function JourneySection() {
             {/* --------------------------------------------
                 CONTROLS
             -------------------------------------------- */}
-            <div className="absolute inset-x-0 bottom-0 flex items-center justify-between border-t border-gray-100 bg-white/80 px-6 py-4 backdrop-blur-sm">
+            <div className="absolute inset-x-0 bottom-0 flex items-center justify-between border-t border-white/10 bg-[#07070D]/60 px-6 py-4 backdrop-blur-sm">
               <div className="flex items-center gap-2">
                 <button
                   type="button"
@@ -494,7 +777,7 @@ export default function JourneySection() {
                 </button>
               </div>
 
-              <span className="font-mono text-xs text-gray-500">
+              <span className="font-mono text-xs text-white/50">
                 {pad(index + 1)} / {pad(slides.length)}
               </span>
 
@@ -510,9 +793,10 @@ export default function JourneySection() {
           </div>
         </div>
 
-        <p className="mt-16 text-center font-mono text-[11px] tracking-[0.2em] text-gray-400 uppercase">
-          Still building · still learning · still shipping
-        </p>
+        {/* --------------------------------------------
+            MOTTO — driven by the player's playback state
+        -------------------------------------------- */}
+        <Motto playing={isPlaying} />
       </div>
     </section>
   )

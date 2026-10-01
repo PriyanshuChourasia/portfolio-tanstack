@@ -24,13 +24,21 @@
       "period": "2017 - 2020",
       "title": "Diploma",
       "company": "Kingston Polytechnic College",
-      "desc": "Diploma in Mechanical Engineering."
+      "desc": "Diploma in Mechanical Engineering.",
+      "quote": "An unexpected chapter — one that changed the course of my life towards engineering.",
+      "emphasis": "changed the course of my life",
+      "icon": "cog",
+      "image": ""
     },
     {
       "period": "2006 - 2017",
       "title": "10th Grade",
       "company": "Guru Gobind Singh Public School (GGPS)",
-      "desc": "Secondary School Education."
+      "desc": "Secondary School Education.",
+      "quote": "Small steps toward the mysteries of the world — full of curiosity about evolution, and most importantly, shifting from pencil to pen.",
+      "emphasis": "pencil to pen",
+      "icon": "school",
+      "image": ""
     }
   ],
   "codingSkills": [

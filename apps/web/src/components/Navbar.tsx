@@ -42,13 +42,14 @@ type NavItem = {
   to?: '/projects'
 }
 
+// Page order — one entry per section that actually exists
 const navItems: Array<NavItem> = [
   { label: 'Home', id: 'home', icon: Home },
+  { label: 'Projects', id: 'projects', icon: FolderKanban },
   { label: 'About', id: 'about', icon: FileText },
   { label: 'Journey', id: 'journey', icon: Milestone },
-  { label: 'Experience', id: 'workplaces', icon: Building2 },
+  { label: 'Workplaces', id: 'workplaces', icon: Building2 },
   { label: 'Stack', id: 'stack', icon: Layers },
-  { label: 'Projects', id: 'projects', icon: FolderKanban },
   { label: 'Contact', id: 'contact', icon: Mail },
 ]
 
@@ -68,6 +69,18 @@ export function Navbar() {
 
   // Close mobile menu on nav click
   const handleNavClick = () => setMobileOpen(false)
+
+  // Stop the page scrolling behind the open mobile menu
+  useEffect(() => {
+    if (!mobileOpen) return
+
+    const previous = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+
+    return () => {
+      document.body.style.overflow = previous
+    }
+  }, [mobileOpen])
 
   const { scrollY } = useScroll()
   const yStart = 80

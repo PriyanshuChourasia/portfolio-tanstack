@@ -5,6 +5,14 @@ const DEEP = '#441573'
 const ACCENT = '#8353AD'
 const SOFT = '#C19ADD'
 
+// Light palette is the default; the dark one sits on the near-black player card
+const TONES = {
+  light: { deep: DEEP, accent: ACCENT, soft: SOFT, glowPeak: 0.5 },
+  dark: { deep: '#E9D9F5', accent: '#C19ADD', soft: '#8353AD', glowPeak: 0.6 },
+} as const
+
+type Tone = keyof typeof TONES
+
 /* =========================================================
     GEAR GEOMETRY — 8 teeth around (0, 0)
 ========================================================= */
@@ -60,11 +68,15 @@ const stroke = {
 
 export default function GearToCodeAnimation({
   className = '',
+  tone = 'light',
 }: {
   className?: string
+  tone?: Tone
 }) {
   const reducedMotion = Boolean(useReducedMotion())
   const [scope, animate] = useAnimate<SVGSVGElement>()
+
+  const { deep, accent, soft, glowPeak } = TONES[tone]
 
   useEffect(() => {
     if (reducedMotion) return
@@ -77,7 +89,7 @@ export default function GearToCodeAnimation({
       // 0.0 – 1.2s: gear fades in and turns
       animate(
         '.glow',
-        { opacity: [0, 0.5, 0.3], scale: [0.8, 1.1, 1] },
+        { opacity: [0, glowPeak, glowPeak * 0.6], scale: [0.8, 1.1, 1] },
         { duration: 1.2, ease: 'easeInOut' },
       )
       await animate(
@@ -156,7 +168,7 @@ export default function GearToCodeAnimation({
         cx={100}
         cy={63}
         r={42}
-        fill={SOFT}
+        fill={soft}
         initial={{ opacity: 0 }}
       />
 
@@ -167,10 +179,10 @@ export default function GearToCodeAnimation({
             <motion.path
               className="teeth"
               d={GEAR_PATH}
-              stroke={DEEP}
+              stroke={deep}
               {...stroke}
             />
-            <circle r={10} stroke={ACCENT} {...stroke} />
+            <circle r={10} stroke={accent} {...stroke} />
           </motion.g>
         </g>
       )}
@@ -183,14 +195,14 @@ export default function GearToCodeAnimation({
         width={110}
         height={72}
         rx={8}
-        stroke={DEEP}
+        stroke={deep}
         {...stroke}
         initial={{ pathLength: hidden, opacity: hidden }}
       />
       <motion.path
         className="frame"
         d="M100 97 L100 108 M78 112 L122 112"
-        stroke={DEEP}
+        stroke={deep}
         {...stroke}
         initial={{ pathLength: hidden, opacity: hidden }}
       />
@@ -201,7 +213,7 @@ export default function GearToCodeAnimation({
         cx={146}
         cy={90}
         r={2.5}
-        fill={ACCENT}
+        fill={accent}
         initial={{ opacity: hidden, scale: hidden }}
       />
 
@@ -209,7 +221,7 @@ export default function GearToCodeAnimation({
       <motion.path
         className="code"
         d={GLYPH_PATH}
-        stroke={ACCENT}
+        stroke={accent}
         {...stroke}
         strokeWidth={2.5}
         initial={{ pathLength: hidden, opacity: hidden }}
@@ -219,7 +231,7 @@ export default function GearToCodeAnimation({
           key={line.y}
           className="code"
           d={`M${line.x1} ${line.y} L${line.x2} ${line.y}`}
-          stroke={i % 2 === 0 ? DEEP : SOFT}
+          stroke={i % 2 === 0 ? deep : soft}
           {...stroke}
           initial={{ pathLength: hidden, opacity: hidden }}
         />
@@ -233,7 +245,7 @@ export default function GearToCodeAnimation({
         width={5}
         height={10}
         rx={1}
-        fill={ACCENT}
+        fill={accent}
         initial={{ opacity: hidden }}
       />
     </svg>
