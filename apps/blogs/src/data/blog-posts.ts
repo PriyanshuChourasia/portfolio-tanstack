@@ -5,6 +5,7 @@ export interface BlogPost {
   date: string
   author: string
   title: string
+  highlight?: string
   category: string
   image: string
   desc: string

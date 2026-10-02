@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 360" role="img" aria-labelledby="t">
+  <title id="t">An event stream: events ordered by time are processed one at a time to update a live dashboard</title>
+  <style>
+    .pulse { transform-box: fill-box; transform-origin: center; animation: pulse 1.6s ease-in-out infinite; }
+    .flow { animation: flow 1.2s linear infinite; }
+    .pop { transform-box: fill-box; transform-origin: center; animation: pop 3s ease-out infinite both; }
+    .glow { animation: glow 2s ease-in-out infinite; }
+    .grow { transform-box: fill-box; transform-origin: bottom; animation: grow 3s ease-out infinite; }
+    .rise { animation: rise 4s ease-out infinite both; }
+    @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.15); } }
+    @keyframes flow { to { stroke-dashoffset: -22; } }
+    @keyframes pop { 0% { opacity: 0; transform: scale(0.3); } 25%, 85% { opacity: 1; transform: scale(1); } 100% { opacity: 0; transform: scale(1); } }
+    @keyframes glow { 0%, 100% { opacity: 1; } 50% { opacity: 0.45; } }
+    @keyframes grow { 0% { transform: scaleY(0.2); } 40%, 100% { transform: scaleY(1); } }
+    @keyframes rise { 0% { opacity: 0; transform: translateY(12px); } 15%, 85% { opacity: 1; transform: translateY(0); } 100% { opacity: 0; transform: translateY(0); } }
+    @media (prefers-reduced-motion: reduce) { * { animation: none !important; } }
+  </style>
+  <defs>
+    <marker id="a" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#2563eb"/></marker>
+    <marker id="g" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#a3a3a3"/></marker>
+  </defs>
+  <rect width="800" height="360" fill="#ffffff"/>
+  <g font-family="ui-sans-serif, system-ui, sans-serif" fill="#404040">
+    <text x="40" y="45" font-size="12" fill="#a3a3a3" letter-spacing="2">EVENT STREAM · ORDERED BY TIME</text>
+
+    <!-- time axis -->
+    <path d="M40,175 L500,175" stroke="#a3a3a3" stroke-width="2" marker-end="url(#g)"/>
+    <text x="505" y="195" font-size="12" fill="#a3a3a3" text-anchor="end">time</text>
+
+    <!-- events -->
+    <g font-size="13">
+      <g class="rise"><rect x="40" y="70" width="130" height="70" rx="12" fill="#eff6ff" stroke="#2563eb" stroke-width="2"/>
+      <text x="105" y="98" text-anchor="middle" font-weight="600" fill="#1e3a8a">Opened article</text>
+      <text x="105" y="120" text-anchor="middle" font-size="12" fill="#737373">10:02:15</text>
+      <line x1="105" y1="140" x2="105" y2="175" stroke="#2563eb" stroke-width="2"/><circle cx="105" cy="175" r="6" fill="#2563eb"/></g>
+
+      <g class="rise" style="animation-delay:0.8s"><rect x="200" y="70" width="130" height="70" rx="12" fill="#eff6ff" stroke="#2563eb" stroke-width="2"/>
+      <text x="265" y="98" text-anchor="middle" font-weight="600" fill="#1e3a8a">Upvoted</text>
+      <text x="265" y="120" text-anchor="middle" font-size="12" fill="#737373">10:04:40</text>
+      <line x1="265" y1="140" x2="265" y2="175" stroke="#2563eb" stroke-width="2"/><circle cx="265" cy="175" r="6" fill="#2563eb"/></g>
+
+      <g class="glow"><rect x="360" y="70" width="130" height="70" rx="12" fill="#ffffff" stroke="#d4d4d4" stroke-width="2" stroke-dasharray="6 5"/>
+      <text x="425" y="98" text-anchor="middle" font-weight="600" fill="#a3a3a3">Next event…</text>
+      <text x="425" y="120" text-anchor="middle" font-size="12" fill="#a3a3a3">as it happens</text></g>
+    </g>
+
+    <!-- processing -->
+    <path d="M265,190 Q265,270 330,270 L540,270" stroke="#2563eb" stroke-width="2" fill="none" marker-end="url(#a)"/>
+    <text x="400" y="258" text-anchor="middle" font-size="13" font-weight="700" fill="#2563eb">processed one at a time</text>
+    <text x="400" y="292" text-anchor="middle" font-size="12" fill="#737373">not waiting for a batch</text>
+
+    <!-- dashboard -->
+    <rect x="550" y="70" width="210" height="250" rx="14" fill="#f5f5f5" stroke="#d4d4d4" stroke-width="2"/>
+    <text x="655" y="100" text-anchor="middle" font-size="15" font-weight="700">Live dashboard</text>
+    <g font-size="12" fill="#737373">
+      <text x="575" y="135">Clicks</text>
+      <text x="575" y="215">Likes</text>
+    </g>
+    <g fill="#93c5fd">
+      <rect x="575" y="175" width="22" height="20" rx="3"/><rect x="605" y="160" width="22" height="35" rx="3"/><rect x="635" y="150" width="22" height="45" rx="3"/><rect x="665" y="165" width="22" height="30" rx="3"/>
+      <rect x="575" y="275" width="22" height="20" rx="3"/><rect x="605" y="265" width="22" height="30" rx="3"/><rect x="635" y="255" width="22" height="40" rx="3"/>
+    </g>
+    <g fill="#2563eb">
+      <rect x="695" y="140" width="22" height="55" rx="3" class="grow"/>
+      <rect x="665" y="245" width="22" height="50" rx="3" class="grow" style="animation-delay:0.4s"/>
+    </g>
+  <circle r="6" fill="#2563eb" opacity="0"><animateMotion dur="2s" begin="0.8s" repeatCount="indefinite" path="M265,190 Q265,270 330,270 L540,270"/><animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.1;0.85;1" dur="2s" begin="0.8s" repeatCount="indefinite"/></circle>
+      </g>
+</svg>

@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 380" role="img" aria-labelledby="t">
+  <title id="t">Two independent toy factories, near Delhi and in Maharashtra; when one goes down, the other keeps serving</title>
+  <style>
+    .pulse { transform-box: fill-box; transform-origin: center; animation: pulse 1.6s ease-in-out infinite; }
+    .flow { animation: flow 1.2s linear infinite; }
+    .pop { transform-box: fill-box; transform-origin: center; animation: pop 3s ease-out infinite both; }
+    .glow { animation: glow 2s ease-in-out infinite; }
+    .grow { transform-box: fill-box; transform-origin: bottom; animation: grow 3s ease-out infinite; }
+    .rise { animation: rise 4s ease-out infinite both; }
+    @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.15); } }
+    @keyframes flow { to { stroke-dashoffset: -22; } }
+    @keyframes pop { 0% { opacity: 0; transform: scale(0.3); } 25%, 85% { opacity: 1; transform: scale(1); } 100% { opacity: 0; transform: scale(1); } }
+    @keyframes glow { 0%, 100% { opacity: 1; } 50% { opacity: 0.45; } }
+    @keyframes grow { 0% { transform: scaleY(0.2); } 40%, 100% { transform: scaleY(1); } }
+    @keyframes rise { 0% { opacity: 0; transform: translateY(12px); } 15%, 85% { opacity: 1; transform: translateY(0); } 100% { opacity: 0; transform: translateY(0); } }
+    @media (prefers-reduced-motion: reduce) { * { animation: none !important; } }
+  </style>
+  <defs>
+    <marker id="a" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#2563eb"/></marker>
+    <marker id="g" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#d4d4d4"/></marker>
+    <g id="factory">
+      <path d="M0,90 L0,40 L40,60 L40,40 L80,60 L80,40 L120,60 L120,10 L140,10 L140,90 Z" stroke-width="2" stroke-linejoin="round"/>
+      <rect x="15" y="65" width="16" height="14" rx="2" fill="#ffffff"/>
+      <rect x="50" y="65" width="16" height="14" rx="2" fill="#ffffff"/>
+      <rect x="85" y="65" width="16" height="14" rx="2" fill="#ffffff"/>
+    </g>
+  </defs>
+  <rect width="800" height="380" fill="#ffffff"/>
+  <g font-family="ui-sans-serif, system-ui, sans-serif" fill="#404040">
+    <!-- Delhi: down -->
+    <use href="#factory" x="80" y="50" fill="#e5e5e5" stroke="#a3a3a3"/>
+    <g class="pulse"><circle cx="225" cy="62" r="18" fill="#dc2626"/>
+    <path d="M217,54 L233,70 M233,54 L217,70" stroke="#ffffff" stroke-width="4" stroke-linecap="round"/></g>
+    <text x="150" y="165" text-anchor="middle" font-size="15" font-weight="600">Factory near Delhi</text>
+    <text x="150" y="183" text-anchor="middle" font-size="12" fill="#dc2626">technical fault · down</text>
+
+    <!-- Maharashtra: up -->
+    <use href="#factory" x="80" y="210" fill="#dbeafe" stroke="#2563eb"/>
+    <text x="150" y="325" text-anchor="middle" font-size="15" font-weight="600">Factory in Maharashtra</text>
+    <text x="150" y="343" text-anchor="middle" font-size="12" fill="#2563eb">running</text>
+
+    <!-- routes -->
+    <path d="M250,100 L550,100" stroke="#d4d4d4" stroke-width="2" stroke-dasharray="6 5" fill="none" marker-end="url(#g)"/>
+    <path d="M250,260 L550,260" stroke="#2563eb" stroke-width="2" fill="none" marker-end="url(#a)"/>
+    <path d="M250,248 L550,114" stroke="#2563eb" stroke-width="2" stroke-dasharray="6 5" fill="none" marker-end="url(#a)" class="flow"/>
+    <text x="400" y="160" text-anchor="middle" font-size="13" font-weight="700" fill="#2563eb" transform="rotate(-24 400 160)">keeps serving</text>
+
+    <!-- states -->
+    <g font-size="13">
+      <rect x="560" y="80" width="190" height="40" rx="10" fill="#f5f5f5" stroke="#d4d4d4"/><text x="655" y="105" text-anchor="middle">Nearby northern states</text>
+      <rect x="560" y="240" width="190" height="40" rx="10" fill="#f5f5f5" stroke="#d4d4d4"/><text x="655" y="265" text-anchor="middle">Nearby western states</text>
+    </g>
+
+    <text x="400" y="372" text-anchor="middle" font-size="13" fill="#737373">Each factory has its own CPU, memory and processes — nothing is shared</text>
+  <circle r="5" fill="#2563eb" opacity="0"><animateMotion dur="1.8s" begin="0s" repeatCount="indefinite" path="M250,260 L550,260"/><animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.1;0.85;1" dur="1.8s" begin="0s" repeatCount="indefinite"/></circle>
+    <circle r="5" fill="#2563eb" opacity="0"><animateMotion dur="2s" begin="0.6s" repeatCount="indefinite" path="M250,248 L550,114"/><animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.1;0.85;1" dur="2s" begin="0.6s" repeatCount="indefinite"/></circle>
+      </g>
+</svg>

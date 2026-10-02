@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 340" role="img" aria-labelledby="t">
+  <title id="t">Horizontal scaling: splitting 600 guests across several fields, like spreading load across several machines</title>
+  <style>
+    .pulse { transform-box: fill-box; transform-origin: center; animation: pulse 1.6s ease-in-out infinite; }
+    .flow { animation: flow 1.2s linear infinite; }
+    .pop { transform-box: fill-box; transform-origin: center; animation: pop 3s ease-out infinite both; }
+    .glow { animation: glow 2s ease-in-out infinite; }
+    .grow { transform-box: fill-box; transform-origin: bottom; animation: grow 3s ease-out infinite; }
+    .rise { animation: rise 4s ease-out infinite both; }
+    @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.15); } }
+    @keyframes flow { to { stroke-dashoffset: -22; } }
+    @keyframes pop { 0% { opacity: 0; transform: scale(0.3); } 25%, 85% { opacity: 1; transform: scale(1); } 100% { opacity: 0; transform: scale(1); } }
+    @keyframes glow { 0%, 100% { opacity: 1; } 50% { opacity: 0.45; } }
+    @keyframes grow { 0% { transform: scaleY(0.2); } 40%, 100% { transform: scaleY(1); } }
+    @keyframes rise { 0% { opacity: 0; transform: translateY(12px); } 15%, 85% { opacity: 1; transform: translateY(0); } 100% { opacity: 0; transform: translateY(0); } }
+    @media (prefers-reduced-motion: reduce) { * { animation: none !important; } }
+  </style>
+  <defs>
+    <marker id="a" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#2563eb"/></marker>
+    <g id="field">
+      <rect x="0" y="0" width="170" height="80" rx="12" fill="#eff6ff" stroke="#2563eb" stroke-width="2"/>
+      <g fill="#93c5fd">
+        <circle cx="30" cy="28" r="6"/><circle cx="55" cy="28" r="6"/><circle cx="80" cy="28" r="6"/><circle cx="105" cy="28" r="6"/><circle cx="130" cy="28" r="6"/>
+        <circle cx="30" cy="54" r="6"/><circle cx="55" cy="54" r="6"/><circle cx="80" cy="54" r="6"/><circle cx="105" cy="54" r="6"/><circle cx="130" cy="54" r="6"/>
+      </g>
+    </g>
+  </defs>
+  <rect width="800" height="340" fill="#ffffff"/>
+  <g font-family="ui-sans-serif, system-ui, sans-serif" fill="#404040">
+    <rect x="40" y="125" width="170" height="90" rx="14" fill="#f5f5f5" stroke="#d4d4d4" stroke-width="2"/>
+    <text x="125" y="165" text-anchor="middle" font-size="26" font-weight="700">600</text>
+    <text x="125" y="190" text-anchor="middle" font-size="13" fill="#737373">guests · requests</text>
+
+    <g stroke="#2563eb" stroke-width="2" fill="none" marker-end="url(#a)">
+      <path d="M210,155 L440,75"/>
+      <path d="M210,170 L440,170"/>
+      <path d="M210,185 L440,265"/>
+    </g>
+    <text x="320" y="105" text-anchor="middle" font-size="14" font-weight="700" fill="#2563eb" transform="rotate(-19 320 105)">SCALE OUT</text>
+
+    <use href="#field" x="450" y="35" class="glow"/>
+    <use href="#field" x="450" y="130" class="glow" style="animation-delay:0.5s"/>
+    <use href="#field" x="450" y="225" class="glow" style="animation-delay:1s"/>
+    <g font-size="14" font-weight="600">
+      <text x="635" y="80">Field 1</text>
+      <text x="635" y="175">Field 2</text>
+      <text x="635" y="270">Field 3</text>
+    </g>
+    <g font-size="12" fill="#737373">
+      <text x="635" y="97">machine 1</text>
+      <text x="635" y="192">machine 2</text>
+      <text x="635" y="287">machine 3</text>
+    </g>
+    <text x="400" y="330" text-anchor="middle" font-size="13" fill="#737373">Add more places instead of making one place bigger</text>
+  <circle r="5" fill="#2563eb" opacity="0"><animateMotion dur="1.5s" begin="0s" repeatCount="indefinite" path="M210,155 L440,75"/><animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.1;0.85;1" dur="1.5s" begin="0s" repeatCount="indefinite"/></circle>
+    <circle r="5" fill="#2563eb" opacity="0"><animateMotion dur="1.5s" begin="0.5s" repeatCount="indefinite" path="M210,170 L440,170"/><animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.1;0.85;1" dur="1.5s" begin="0.5s" repeatCount="indefinite"/></circle>
+    <circle r="5" fill="#2563eb" opacity="0"><animateMotion dur="1.5s" begin="1s" repeatCount="indefinite" path="M210,185 L440,265"/><animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.1;0.85;1" dur="1.5s" begin="1s" repeatCount="indefinite"/></circle>
+      </g>
+</svg>
