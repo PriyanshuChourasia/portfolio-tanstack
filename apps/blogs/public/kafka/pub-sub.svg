@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 360" role="img" aria-labelledby="t">
+  <title id="t">Publish–subscribe: publishers send events to topics on a message broker, and subscribers receive them; publishers and subscribers never talk directly</title>
+  <style>
+    .glow { animation: glow 2s ease-in-out infinite; }
+    @keyframes glow { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
+    @media (prefers-reduced-motion: reduce) { * { animation: none !important; } }
+  </style>
+  <defs>
+    <marker id="a" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#2563eb"/></marker>
+  </defs>
+  <rect width="800" height="360" fill="#ffffff"/>
+  <g font-family="ui-sans-serif, system-ui, sans-serif" fill="#404040">
+    <!-- publishers -->
+    <text x="115" y="70" text-anchor="middle" font-size="12" fill="#a3a3a3" letter-spacing="2">PUBLISHERS</text>
+    <g fill="#f5f5f5" stroke="#d4d4d4">
+      <rect x="40" y="90" width="150" height="50" rx="10"/>
+      <rect x="40" y="200" width="150" height="50" rx="10"/>
+    </g>
+    <g font-size="14" text-anchor="middle">
+      <text x="115" y="120">Publisher A</text>
+      <text x="115" y="230">Publisher B</text>
+    </g>
+
+    <!-- broker -->
+    <rect x="290" y="55" width="220" height="245" rx="16" fill="#eff6ff" stroke="#2563eb" stroke-width="2"/>
+    <text x="400" y="88" text-anchor="middle" font-size="17" font-weight="700" fill="#2563eb">Message broker</text>
+    <g font-size="13" fill="#1e3a8a">
+      <rect x="310" y="112" width="180" height="56" rx="10" fill="#dbeafe"/>
+      <text x="325" y="145">Topic A</text>
+      <rect x="310" y="202" width="180" height="56" rx="10" fill="#dbeafe"/>
+      <text x="325" y="235">Topic B</text>
+    </g>
+    <g fill="#93c5fd">
+      <rect x="395" y="128" width="16" height="24" rx="3"/><rect x="415" y="128" width="16" height="24" rx="3"/><rect x="435" y="128" width="16" height="24" rx="3"/>
+      <rect x="395" y="218" width="16" height="24" rx="3"/><rect x="415" y="218" width="16" height="24" rx="3"/>
+    </g>
+    <g fill="#2563eb">
+      <rect x="455" y="128" width="16" height="24" rx="3" class="glow"/>
+      <rect x="435" y="218" width="16" height="24" rx="3" class="glow" style="animation-delay:1s"/>
+    </g>
+
+    <!-- subscribers -->
+    <text x="685" y="50" text-anchor="middle" font-size="12" fill="#a3a3a3" letter-spacing="2">SUBSCRIBERS</text>
+    <g fill="#f5f5f5" stroke="#d4d4d4">
+      <rect x="610" y="65" width="150" height="50" rx="10"/>
+      <rect x="610" y="150" width="150" height="50" rx="10"/>
+      <rect x="610" y="235" width="150" height="50" rx="10"/>
+    </g>
+    <g font-size="14" text-anchor="middle">
+      <text x="685" y="95">Subscriber 1</text>
+      <text x="685" y="180">Subscriber 2</text>
+      <text x="685" y="265">Subscriber 3</text>
+    </g>
+
+    <!-- links -->
+    <g stroke="#2563eb" stroke-width="2" fill="none" marker-end="url(#a)">
+      <path d="M190,115 L300,140"/>
+      <path d="M190,225 L300,230"/>
+      <path d="M490,140 L605,90"/>
+      <path d="M490,140 L605,175"/>
+      <path d="M490,230 L605,260"/>
+    </g>
+    <g font-size="12" font-weight="700" fill="#2563eb" text-anchor="middle">
+      <text x="245" y="112" transform="rotate(13 245 112)">publish</text>
+      <text x="545" y="106" transform="rotate(-23 545 106)">subscribe</text>
+    </g>
+
+    <text x="400" y="340" text-anchor="middle" font-size="13" fill="#737373">Publishers and subscribers never talk directly — the broker sits in between, so they are decoupled</text>
+
+    <!-- moving events -->
+    <circle r="5" fill="#2563eb" opacity="0"><animateMotion dur="1.6s" begin="0s" repeatCount="indefinite" path="M190,115 L300,140"/><animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.1;0.85;1" dur="1.6s" begin="0s" repeatCount="indefinite"/></circle>
+    <circle r="5" fill="#2563eb" opacity="0"><animateMotion dur="1.6s" begin="0.8s" repeatCount="indefinite" path="M190,225 L300,230"/><animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.1;0.85;1" dur="1.6s" begin="0.8s" repeatCount="indefinite"/></circle>
+    <circle r="5" fill="#2563eb" opacity="0"><animateMotion dur="1.6s" begin="1.6s" repeatCount="indefinite" path="M490,140 L605,90"/><animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.1;0.85;1" dur="1.6s" begin="1.6s" repeatCount="indefinite"/></circle>
+    <circle r="5" fill="#2563eb" opacity="0"><animateMotion dur="1.6s" begin="1.6s" repeatCount="indefinite" path="M490,140 L605,175"/><animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.1;0.85;1" dur="1.6s" begin="1.6s" repeatCount="indefinite"/></circle>
+    <circle r="5" fill="#2563eb" opacity="0"><animateMotion dur="1.6s" begin="2.4s" repeatCount="indefinite" path="M490,230 L605,260"/><animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.1;0.85;1" dur="1.6s" begin="2.4s" repeatCount="indefinite"/></circle>
+  </g>
+</svg>
