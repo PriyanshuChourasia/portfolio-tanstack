@@ -2,6 +2,7 @@ import blogData from '@/data/blog-data.json'
 
 export interface BlogPost {
   id: number
+  visible?: boolean
   date: string
   author: string
   title: string
@@ -100,7 +101,9 @@ function writeStoredPosts(posts: Array<BlogPost>) {
 
 export function getBlogPosts() {
   const storedPosts = readStoredPosts()
-  const mergedPosts = [...storedPosts, ...seedPosts]
+  const mergedPosts = [...storedPosts, ...seedPosts].filter(
+    (post) => post.visible !== false,
+  )
 
   return mergedPosts.sort((left, right) => right.id - left.id)
 }

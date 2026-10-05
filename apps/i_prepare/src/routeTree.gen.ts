@@ -9,10 +9,16 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as MlMentorRouteImport } from './routes/ml-mentor'
 import { Route as JavaExamRouteImport } from './routes/java-exam'
 import { Route as IPrepareRouteImport } from './routes/i-prepare'
 import { Route as IndexRouteImport } from './routes/index'
 
+const MlMentorRoute = MlMentorRouteImport.update({
+  id: '/ml-mentor',
+  path: '/ml-mentor',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const JavaExamRoute = JavaExamRouteImport.update({
   id: '/java-exam',
   path: '/java-exam',
@@ -33,34 +39,45 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/i-prepare': typeof IPrepareRoute
   '/java-exam': typeof JavaExamRoute
+  '/ml-mentor': typeof MlMentorRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/i-prepare': typeof IPrepareRoute
   '/java-exam': typeof JavaExamRoute
+  '/ml-mentor': typeof MlMentorRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/i-prepare': typeof IPrepareRoute
   '/java-exam': typeof JavaExamRoute
+  '/ml-mentor': typeof MlMentorRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/i-prepare' | '/java-exam'
+  fullPaths: '/' | '/i-prepare' | '/java-exam' | '/ml-mentor'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/i-prepare' | '/java-exam'
-  id: '__root__' | '/' | '/i-prepare' | '/java-exam'
+  to: '/' | '/i-prepare' | '/java-exam' | '/ml-mentor'
+  id: '__root__' | '/' | '/i-prepare' | '/java-exam' | '/ml-mentor'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   IPrepareRoute: typeof IPrepareRoute
   JavaExamRoute: typeof JavaExamRoute
+  MlMentorRoute: typeof MlMentorRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/ml-mentor': {
+      id: '/ml-mentor'
+      path: '/ml-mentor'
+      fullPath: '/ml-mentor'
+      preLoaderRoute: typeof MlMentorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/java-exam': {
       id: '/java-exam'
       path: '/java-exam'
@@ -89,6 +106,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   IPrepareRoute: IPrepareRoute,
   JavaExamRoute: JavaExamRoute,
+  MlMentorRoute: MlMentorRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
