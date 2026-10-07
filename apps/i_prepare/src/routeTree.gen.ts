@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as MlMentorRouteImport } from './routes/ml-mentor'
 import { Route as JavaExamRouteImport } from './routes/java-exam'
 import { Route as IPrepareRouteImport } from './routes/i-prepare'
+import { Route as GoDsaRouteImport } from './routes/go-dsa'
 import { Route as IndexRouteImport } from './routes/index'
 
 const MlMentorRoute = MlMentorRouteImport.update({
@@ -29,6 +30,11 @@ const IPrepareRoute = IPrepareRouteImport.update({
   path: '/i-prepare',
   getParentRoute: () => rootRouteImport,
 } as any)
+const GoDsaRoute = GoDsaRouteImport.update({
+  id: '/go-dsa',
+  path: '/go-dsa',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -37,12 +43,14 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/go-dsa': typeof GoDsaRoute
   '/i-prepare': typeof IPrepareRoute
   '/java-exam': typeof JavaExamRoute
   '/ml-mentor': typeof MlMentorRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/go-dsa': typeof GoDsaRoute
   '/i-prepare': typeof IPrepareRoute
   '/java-exam': typeof JavaExamRoute
   '/ml-mentor': typeof MlMentorRoute
@@ -50,20 +58,22 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/go-dsa': typeof GoDsaRoute
   '/i-prepare': typeof IPrepareRoute
   '/java-exam': typeof JavaExamRoute
   '/ml-mentor': typeof MlMentorRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/i-prepare' | '/java-exam' | '/ml-mentor'
+  fullPaths: '/' | '/go-dsa' | '/i-prepare' | '/java-exam' | '/ml-mentor'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/i-prepare' | '/java-exam' | '/ml-mentor'
-  id: '__root__' | '/' | '/i-prepare' | '/java-exam' | '/ml-mentor'
+  to: '/' | '/go-dsa' | '/i-prepare' | '/java-exam' | '/ml-mentor'
+  id: '__root__' | '/' | '/go-dsa' | '/i-prepare' | '/java-exam' | '/ml-mentor'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  GoDsaRoute: typeof GoDsaRoute
   IPrepareRoute: typeof IPrepareRoute
   JavaExamRoute: typeof JavaExamRoute
   MlMentorRoute: typeof MlMentorRoute
@@ -92,6 +102,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IPrepareRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/go-dsa': {
+      id: '/go-dsa'
+      path: '/go-dsa'
+      fullPath: '/go-dsa'
+      preLoaderRoute: typeof GoDsaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -104,6 +121,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  GoDsaRoute: GoDsaRoute,
   IPrepareRoute: IPrepareRoute,
   JavaExamRoute: JavaExamRoute,
   MlMentorRoute: MlMentorRoute,

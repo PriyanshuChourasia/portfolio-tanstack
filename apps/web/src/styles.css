@@ -147,6 +147,23 @@
   --blue-950: #3C0100;
 }
 
+/* SkillUP theme — violet/purple gradient accent brand (#7C3AED, #8B5CF6, #A78BFA).
+   Overrides the design tokens for the page subtree. */
+.theme-skillup {
+  --background: #0f0a1a;
+  --foreground: #f3e8ff;
+  --primary: #7c3aed;
+  --primary-accent: #a78bfa;
+  --card: #1a1128;
+  --card-dark: #0f0a1a;
+  --border: rgba(167, 139, 250, 0.3);
+  --border-light: rgba(167, 139, 250, 0.15);
+  --muted-foreground: rgba(167, 139, 250, 0.7);
+  --secondary-bg: rgba(124, 58, 237, 0.1);
+  background: linear-gradient(180deg, #0f0a1a 0%, #1a1128 100%);
+  color: var(--foreground);
+}
+
 /* OPD ERP project page — teal clinic theme (#028390, #26A69B, #81CCC4, #DFF2F0).
    Overrides the design tokens for the page subtree, plus the hardcoded slate
    utilities in project-detail-page.tsx, which would otherwise win over the tokens. */
@@ -262,6 +279,13 @@
   --color-chart-3: var(--chart-3);
   --color-chart-4: var(--chart-4);
   --color-chart-5: var(--chart-5);
+
+  /* SkillUP brand colors */
+  --color-skillup-violet: #7c3aed;
+  --color-skillup-purple: #8b5cf6;
+  --color-skillup-light-purple: #a78bfa;
+  --color-skillup-bg: #0f0a1a;
+  --color-skillup-card: #1a1128;
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);

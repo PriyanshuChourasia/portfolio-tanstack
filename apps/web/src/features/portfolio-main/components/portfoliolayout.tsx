@@ -1,5 +1,5 @@
-import HomePage from './HomePage'
+import { LandingPage } from './skillup-landing'
 
 export function PortfolioLayout() {
-  return <HomePage />
+  return <LandingPage />
 }

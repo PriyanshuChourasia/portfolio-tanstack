@@ -1,7 +1,7 @@
 import { Outlet, createRootRoute, Link, useRouterState } from '@tanstack/react-router'
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Menu, X, Brain, Home, ClipboardList, Coffee, Sparkles, Moon, Sun } from 'lucide-react'
+import { Menu, X, Brain, Home, ClipboardList, Coffee, Sparkles, Moon, Sun, Binary } from 'lucide-react'
 import { TooltipProvider } from '@/components/ui/tooltip'
 import { Button } from '@/components/ui/button'
 import { useTheme } from '@/lib/theme'
@@ -31,6 +31,7 @@ const NAV_ITEMS = [
   { to: '/i-prepare', label: 'Mock Tests', icon: ClipboardList },
   { to: '/java-exam', label: 'Java Exams', icon: Coffee },
   { to: '/ml-mentor', label: 'ML Mentor', icon: Sparkles },
+  { to: '/go-dsa', label: 'Go + DSA', icon: Binary },
 ] as const
 
 function RootComponent() {
