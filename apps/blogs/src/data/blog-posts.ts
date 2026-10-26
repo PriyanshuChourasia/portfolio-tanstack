@@ -1,5 +1,10 @@
 import blogData from '@/data/blog-data.json'
 
+export interface BlogPage {
+  title: string
+  content: string
+}
+
 export interface BlogPost {
   id: number
   visible?: boolean
@@ -12,6 +17,7 @@ export interface BlogPost {
   desc: string
   intro: string
   content: string
+  pages?: Array<BlogPage>
   codeSnippet?: string
   footer?: string
   tags?: Array<string>

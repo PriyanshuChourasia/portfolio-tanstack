@@ -16,7 +16,7 @@
     },
     {
       "id": 8,
-      "visible": true,
+      "visible": false,
       "date": "02 OCT 2026",
       "author": "Priyanshu Chourasia",
       "title": "Kafka: My journey from what it is to how it works",
@@ -30,7 +30,7 @@
     },
     {
       "id": 7,
-      "visible": true,
+      "visible": false,
       "date": "01 OCT 2026",
       "author": "Priyanshu Chourasia",
       "title": "How to buy a CPU: what questions must be asked?",
@@ -51,7 +51,7 @@
     },
     {
       "id": 6,
-      "visible": true,
+      "visible": false,
       "date": "16 SEP 2026",
       "author": "Priyanshu Chourasia",
       "title": "GoRoutine : A way towards virtual threads.",
@@ -74,7 +74,7 @@
     },
     {
       "id": 5,
-      "visible": true,
+      "visible": false,
       "date": "14 SEP 2026",
       "author": "Priyanshu Chourasia",
       "title": "TCP: What is it and how does it work?",
@@ -97,7 +97,7 @@
     },
     {
       "id": 4,
-      "visible": true,
+      "visible": false,
       "date": "24 AUG 2026",
       "author": "Priyanshu Chourasia",
       "title": "Why I built a clinic ERP for single-doctor practices — and what it taught me about rebuilding software right the second time",
@@ -125,10 +125,16 @@
       "author": "Priyanshu Chourasia",
       "title": "Account ERP Project",
       "category": "ERP, Accounting, Full Stack",
-      "image": "/opderp.png",
+      "image": "/account_erp.png",
       "desc": "An accounting and finance ERP module — part of the same product suite as OPD ERP and CodyERP. Ledgers, invoicing, and financial reporting, currently in active development.",
       "intro": "Accounting & finance ERP — in active development",
-      "content": "<p><b class=\"text-lg font-bold\">Why another ERP module?</b>. OPD ERP handles the clinical side of the CodyMitra suite — registration, queues, consultations, pharmacy. Money still needed a home. <b>Account ERP</b> is the accounting and finance module for the same product family: ledgers, invoicing, expense tracking, and financial reporting that the other apps in the suite can eventually plug into.</p> </br> <p class=\"py-4\">It's a standalone repo right now, deliberately scoped small so I can get the core accounting primitives — chart of accounts, journal entries, double-entry balancing — right before wiring it into OPD ERP's billing data or CodyERP's restaurant POS.</p> </br> <p class=\"py-4\"><b class=\"text-lg font-bold\">What's being built</b></p> <ul class=\"list-disc pl-6 py-2\"><li><b>Chart of accounts</b> — configurable account hierarchy per business type.</li><li><b>Journal entries</b> — double-entry bookkeeping with automatic balancing checks.</li><li><b>Invoicing</b> — generate, send, and track invoice status.</li><li><b>Reports</b> — P&amp;L, balance sheet, and cash flow rolled up from the ledger.</li></ul> </br> <p class=\"py-4\">Same stack discipline as the rest of the suite — TypeScript end to end, Postgres as the source of truth, and a schema I'm trying hard not to have to migrate twice.</p>",
+      "content": "<p class=\"py-4\"><b class=\"text-lg font-bold\">Introduction</b></p> <p class=\"py-4\">I am building this software as open source to handle accounting, inventory and payroll. It will be fully free to download and access, and to understand what this project is all about.</p> <p class=\"py-4\">Hi, I am Priyanshu Chourasia. I am interested in building software that solves end users' problems, and of course, I love building software and getting involved in real-life projects.</p>",
+      "pages": [
+        {
+          "title": "Types of Account",
+          "content": "<img src=\"/account-erp/ledger.png\" alt=\"An old handwritten accounting ledger book\" /> <p class=\"py-4\">There are two types of accounts:</p> <ol class=\"list-decimal pl-6\"><li>Personal Account</li><li>Impersonal Account</li></ol> <p class=\"py-4\">The software I am building will revolve around these two kinds of accounts and the transactions surrounding them. We will not go into much depth here, but we will explore enough to understand what this accounting software does.</p> <!--widget:account-types--> <p class=\"py-4\"><b class=\"text-lg font-bold\">Personal Account</b></p> <p class=\"py-4\">This account involves:</p> <ol class=\"list-decimal pl-6\"><li>Natural Person</li><li>Artificial Person</li><li>Representative Person</li></ol> <p class=\"py-4\">Here, understanding this is not very difficult. A <b>natural person</b> means a human being who is alive, who can talk and walk, and who has a biological body made by nature — named Rahul, John, Mike, Rashi or Sonam. So transactions involving these people will move into the personal account book.</p> <p class=\"py-4\">Now here is something special which I was also not aware of: the business and the owner are two different entities. The business is a totally different entity, made by law, and can be called an <b>artificial person</b>. It is not real but has its own identity, and this will also move into the personal account record-keeping book.</p> <!--widget:personal-account--> <p class=\"py-4\">Personal accounts are always transferred to the balance sheet. The personal account rules are:</p> <ul class=\"list-disc pl-6\"><li><b>Debit:</b> the receiver</li><li><b>Credit:</b> the giver</li></ul> <!--widget:personal-account-rule--> <p class=\"py-4\"><b class=\"text-lg font-bold\">Impersonal Account</b></p> <p class=\"py-4\">There are two types of impersonal accounts:</p> <ol class=\"list-decimal pl-6\"><li>Real A/C</li><li>Nominal A/C</li></ol> <p class=\"py-4\">Now we will learn about the Real account.</p> <p class=\"py-4\"><b class=\"text-lg font-bold\">What is a Real Account?</b></p> <p class=\"py-4\">Here, we can think of a Real A/C as a bucket which holds those types of accounts that are permanent. Permanent here means it cannot go to zero when the books open for the next financial year; it will carry forward. Some of its examples are:</p> <p class=\"py-4\"><b>Assets</b> (what the business owns), which are further divided into:</p> <ul class=\"list-disc pl-6\"><li><b>Tangible</b> — which is in real form and can be touched. The difference between the two is whether you can touch it physically or not, like cash in our bank, furniture in our office, buildings and land.<div class=\"grid grid-cols-2 gap-4\"><img src=\"/account-erp/cash.jpg\" alt=\"A hand holding a stack of cash\" /><img src=\"/account-erp/office-building.jpg\" alt=\"A modern office building\" /></div></li><li><b>Intangible</b> — assets that are non-physical things but have long-term value. They do not go to zero just because a new book starts for the next year, just like brand reputation. Yes, this also comes under the real account, which is why the real account is involved in those areas of accounting which reflect in the balance sheet and are real — they can be touched or felt. Trademarks or logos are intangible assets, but they come under the real account umbrella.<img class=\"mx-auto !w-32\" src=\"/account-erp/trademark.png\" alt=\"Registered trademark symbol\" /></li></ul> <p class=\"py-4\">So from here, we can take a lesson that accounting happens on the balance sheet with these accounts in the record.</p> <p class=\"py-4\">Now, here the Real account has a rule:</p> <ul class=\"list-disc pl-6\"><li><b>Debit:</b> what comes in</li><li><b>Credit:</b> what goes out</li></ul> <p class=\"py-4\">Now we can use an example of it, like furniture purchased for Rs 5,000 in cash. Here, furniture is also a real account — it can be physically touched and cannot go to zero in just the next financial year. So the entry will be made keeping the real account rules in mind: debit what comes in, so furniture will be recorded on the debit side of the book, and cash is moving out, so cash will be recorded on the credit side.</p> <p class=\"py-4\"><b>Always remember: debit is on the left side and credit is on the right.</b></p> <!--widget:real-account--> <p class=\"py-4\"><b class=\"text-lg font-bold\">Nominal Account</b></p> <p class=\"py-4\">A Nominal account has two parts: <b>Expense</b> and <b>Income</b>.</p> <p class=\"py-4\">A nominal account is a temporary general ledger account used to record a company's revenues, expenses, gains and losses over a single financial year. Nominal accounts have a temporary nature; they do not carry over from one year's book to another.</p> <p class=\"py-4\">Here, the rules work like this:</p> <ul class=\"list-disc pl-6\"><li><b>Debit:</b> all expenses and losses</li><li><b>Credit:</b> all income and gains</li></ul> <p class=\"py-4\">A nominal account will always go to the Profit and Loss A/C.</p> <!--widget:nominal-account--> <p class=\"py-4\"><b class=\"text-lg font-bold\">Why does a nominal account not end up in the balance sheet?</b></p> <p class=\"py-4\">That is indeed a question in my mind: why is it not recorded in the balance sheet, and why does it go to the Profit and Loss A/C? More questions I have: salary is an expense and it goes to a nominal account, but it affects the business, right? So why does it not end up in the balance sheet?</p> <p class=\"py-4\">So now, here we have to understand: what is a balance sheet?</p> <p class=\"py-4\"><b class=\"text-lg font-bold\">What is a Balance Sheet?</b></p> <p class=\"py-4\">A balance sheet is a core financial statement that provides a snapshot of a company's financial position at a specific point in time, detailing what it owns, what it owes, and the amount invested by its owners.</p> <p class=\"py-4\">The fundamental equation of the balance sheet is:</p> <p class=\"py-4 text-center text-lg\"><b>Total Assets = Liabilities + Shareholders' Equity</b></p> <p class=\"py-4\">A balance sheet is built upon a basic accounting equation that must always balance. It is called a balance sheet because the two sides of the core accounting equation must always perfectly balance.</p> <p class=\"py-4\"><b class=\"text-lg font-bold\">Why It Is Required</b></p> <div class=\"my-4 overflow-x-auto\"><table class=\"w-full border-collapse text-left text-sm\"><thead><tr class=\"bg-neutral-100 text-neutral-900\"><th class=\"border border-neutral-200 px-3 py-2 align-top font-semibold\">User</th><th class=\"border border-neutral-200 px-3 py-2 align-top font-semibold\">Why They Require It</th></tr></thead><tbody><tr><td class=\"border border-neutral-200 px-3 py-2 align-top font-medium text-neutral-900\">Banks &amp; Lenders</td><td class=\"border border-neutral-200 px-3 py-2 align-top\">To check creditworthiness and liquidity. They must verify if you have enough cash or short-term assets to pay back loans.</td></tr><tr><td class=\"border border-neutral-200 px-3 py-2 align-top font-medium text-neutral-900\">Investors</td><td class=\"border border-neutral-200 px-3 py-2 align-top\">To calculate the business's true net worth and financial leverage. It helps them determine if a company relies too heavily on debt.</td></tr><tr><td class=\"border border-neutral-200 px-3 py-2 align-top font-medium text-neutral-900\">Management</td><td class=\"border border-neutral-200 px-3 py-2 align-top\">To track working capital and asset efficiency. It tells leadership if they have too much money tied up in unsold inventory or unpaid invoices.</td></tr><tr><td class=\"border border-neutral-200 px-3 py-2 align-top font-medium text-neutral-900\">Governments &amp; Regulators</td><td class=\"border border-neutral-200 px-3 py-2 align-top\">To enforce legal and tax compliance. Publicly traded companies are legally mandated to publish balance sheets to protect the investing public.</td></tr></tbody></table></div>"
+        }
+      ],
       "codeSnippet": "function assertBalanced(entries) {\n  const total = entries.reduce(\n    (sum, e) => sum + (e.type === 'DEBIT' ? e.amount : -e.amount),\n    0,\n  )\n  if (total !== 0) throw new Error('Journal entry is not balanced')\n}",
       "footer": "<p>Account ERP is in active development — code and progress live on <a href=\"https://github.com/PriyanshuChourasia/account_erp\" target=\"_blank\" rel=\"noopener noreferrer\" className=\"text-primary\">GitHub</a>.</p>",
       "tags": [
@@ -141,7 +147,7 @@
     },
     {
       "id": 1,
-      "visible": true,
+      "visible": false,
       "date": "20 JUL 2026",
       "author": "Priyanshu Chourasia",
       "title": "ERP: What is it? What do I understand of it.",
