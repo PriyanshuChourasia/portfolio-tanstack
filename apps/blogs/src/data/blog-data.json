@@ -1,6 +1,27 @@
 {
   "posts": [
     {
+      "id": 10,
+      "visible": true,
+      "date": "01 NOV 2026",
+      "author": "Priyanshu Chourasia",
+      "title": "Chain of Thought: A prompting technique (विचार शृंखला)",
+      "highlight": "Chain of Thought",
+      "category": "AI, Prompt Engineering, Computer Science",
+      "image": "",
+      "desc": "Chain of Thought (CoT) prompting encourages LLMs to break complex problems into smaller, sequential intermediate reasoning steps before generating a final answer.",
+      "intro": "Chain of Thought prompting helps LLMs solve complex problems by breaking them into intermediate reasoning steps before a final answer.",
+      "content": "<p class=\"py-2 text-sm text-neutral-500\">Reference paper: <a href=\"https://arxiv.org/pdf/2201.11903\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-primary underline\">Chain-of-Thought Prompting Elicits Reasoning in Large Language Models</a> (Wei et al., 2022)</p> <p class=\"py-4\"><b class=\"text-lg font-bold\">What is Chain of Thought (CoT) Prompting?</b></p> <p class=\"py-4\">Chain of Thought (CoT) prompting is a prompting technique that encourages Large Language Models (LLMs) to break complex problems into smaller, sequential intermediate reasoning steps before generating a final answer. It can significantly improve a model's ability to solve complex problems involving mathematical, commonsense, logical, and symbolic reasoning.</p> <p class=\"py-4\">The main idea behind CoT prompting is to encourage the model to generate intermediate steps that explain how it approaches a problem and arrives at its conclusion. These steps make the solution easier to inspect, understand, and verify. If an error occurs in one of the intermediate steps, we can identify where the reasoning went wrong and introduce additional validation or correction mechanisms.</p> <p class=\"py-4\">There are two commonly discussed approaches: <b>Standard Prompting and Chain of Thought Prompting.</b></p> <p class=\"py-4\">In <b>Standard Prompting</b>, we provide the model with a question or instruction and expect it to generate a direct answer without explicitly requesting intermediate reasoning steps. The model still performs internal computations to generate the answer, but those steps are not necessarily included in its response.</p> <p class=\"py-4\">In <b>Chain of Thought Prompting</b>, we explicitly encourage the model to break the problem into smaller steps and explain its approach before providing the final answer. This makes the problem-solving process more transparent and helps us identify potential errors in intermediate calculations or logical steps.</p> <figure class=\"py-4\"><img src=\"/chain-of-thought/standard-vs-cot.png\" alt=\"Standard prompting vs Chain-of-Thought prompting: the CoT example shows the reasoning steps and reaches the correct answer\" /><figcaption class=\"pt-2 text-sm text-neutral-500\">Standard Prompting vs Chain-of-Thought Prompting. Source: Wei et al., 2022 (<a href=\"https://arxiv.org/pdf/2201.11903\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-primary underline\">arXiv:2201.11903</a>)</figcaption></figure> <p class=\"py-4\">However, generating intermediate reasoning steps does not guarantee correctness. Additional verification mechanisms may still be required to validate the final result.</p>",
+      "footer": "",
+      "tags": [
+        "Chain of Thought",
+        "Prompt Engineering",
+        "LLM",
+        "Reasoning",
+        "AI"
+      ]
+    },
+    {
       "id": 9,
       "visible": false,
       "date": "04 OCT 2026",

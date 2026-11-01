@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import {
   
   motion,
@@ -9,8 +9,6 @@ import {
 } from 'framer-motion'
 import { Link } from '@tanstack/react-router'
 import {
-  ArrowUpRight,
-  Brain,
   Building2,
   Folder,
   Github,
@@ -21,7 +19,6 @@ import {
   Mail,
   Milestone,
   Phone,
-  Rocket,
   Send,
   Twitter,
   User,
@@ -36,7 +33,6 @@ import {
   SiHtml5,
   SiJavascript,
   SiLaravel,
-  SiLinux,
   SiMongodb,
   SiMysql,
   SiNextdotjs,
@@ -48,12 +44,10 @@ import {
   SiSpringboot,
   SiTailwindcss,
   SiTypescript,
-  SiUbuntu,
 } from 'react-icons/si'
 import { FaJava } from 'react-icons/fa6'
 
 import socialLinks from '../data/social-link.json'
-import resumeData from '../data/resume-data.json'
 import { HaveAnIdeaModal } from './HaveAnIdeaModal'
 import type {MotionValue} from 'framer-motion';
 
@@ -376,313 +370,6 @@ function DockIconFace({
   )
 }
 
-/* =========================================================
-    MACOS-STYLE EXPERIENCE WIDGET
-========================================================= */
-
-// Earliest start year across all roles, e.g. "2022 - Present" -> 2022
-const careerStartYear = Math.min(
-  ...resumeData.experience.map((e) =>
-    parseInt(e.period, 10),
-  ),
-)
-const yearsOfExperience =
-  new Date().getFullYear() - careerStartYear
-
-const RING_RADIUS = 34
-const RING_CIRCUMFERENCE = 2 * Math.PI * RING_RADIUS
-
-// Glass card with a gradient border that sweeps around it continuously
-function AnimatedBorderCard({
-  children,
-  delay = 0,
-}: {
-  children: React.ReactNode
-  delay?: number
-}) {
-  return (
-    <div className="relative overflow-hidden rounded-[22px] bg-white/10 p-[1.5px] shadow-[0_16px_48px_rgba(0,0,0,0.55)]">
-      <span
-        aria-hidden="true"
-        className="pointer-events-none absolute left-1/2 top-1/2 aspect-square w-[250%] -translate-x-1/2 -translate-y-1/2 animate-[spin_4s_linear_infinite] bg-[conic-gradient(from_0deg,transparent_0%,#BE2ED6_12%,#EF1D25_25%,transparent_40%,transparent_60%,#7C41A8_75%,#BE2ED6_88%,transparent_100%)] motion-reduce:animate-none"
-        style={{ animationDelay: `${delay}s` }}
-      />
-      <div className="relative h-full rounded-[20.5px] bg-[#0c0a10]/95 backdrop-blur-xl">
-        {children}
-      </div>
-    </div>
-  )
-}
-
-function ExperienceWidget({
-  reduced,
-}: {
-  reduced: boolean | null
-}) {
-  return (
-    <div className="flex w-32 flex-col items-center gap-1.5 h-full p-3 sm:w-40 sm:p-4">
-      <span className="self-start font-mono text-[9px] font-semibold uppercase tracking-[0.2em] text-white/60">
-        Experience
-      </span>
-
-      <div className="relative h-20 w-20 sm:h-24 sm:w-24">
-        <svg
-          viewBox="0 0 80 80"
-          className="h-full w-full -rotate-90"
-          aria-hidden="true"
-        >
-          <defs>
-            <linearGradient id="exp-ring" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stopColor="#BE2ED6" />
-              <stop offset="100%" stopColor="#EF1D25" />
-            </linearGradient>
-          </defs>
-          <circle
-            cx="40"
-            cy="40"
-            r={RING_RADIUS}
-            fill="none"
-            stroke="rgba(255,255,255,0.1)"
-            strokeWidth="7"
-          />
-          <motion.circle
-            cx="40"
-            cy="40"
-            r={RING_RADIUS}
-            fill="none"
-            stroke="url(#exp-ring)"
-            strokeWidth="7"
-            strokeLinecap="round"
-            strokeDasharray={RING_CIRCUMFERENCE}
-            initial={{
-              strokeDashoffset: reduced ? 0 : RING_CIRCUMFERENCE,
-            }}
-            animate={{ strokeDashoffset: 0 }}
-            transition={{ duration: 1.6, ease: 'easeOut', delay: 0.3 }}
-          />
-        </svg>
-
-        <div className="absolute inset-0 flex flex-col items-center justify-center">
-          <span className="text-2xl font-bold leading-none text-white sm:text-3xl">
-            {yearsOfExperience}+
-          </span>
-          <span className="mt-0.5 font-mono text-[8px] uppercase tracking-[0.2em] text-white/60">
-            Years
-          </span>
-        </div>
-      </div>
-
-      <span className="font-mono text-[9px] uppercase tracking-[0.15em] text-white/45">
-        Since {careerStartYear}
-      </span>
-    </div>
-  )
-}
-
-function ClockWidget() {
-  const [now, setNow] = useState(() => new Date())
-
-  useEffect(() => {
-    const id = setInterval(() => setNow(new Date()), 1000)
-    return () => clearInterval(id)
-  }, [])
-
-  const timeZone = 'Asia/Kolkata'
-
-  const timeParts = new Intl.DateTimeFormat('en-US', {
-    timeZone,
-    hour: 'numeric',
-    minute: '2-digit',
-  }).formatToParts(now)
-  const time = timeParts
-    .filter((p) => p.type !== 'dayPeriod')
-    .map((p) => p.value)
-    .join('')
-    .trim()
-  const meridiem = timeParts.find(
-    (p) => p.type === 'dayPeriod',
-  )?.value
-
-  return (
-    <div className="flex w-32 flex-col h-full p-3 sm:w-40 sm:p-4">
-      <div className="flex items-center justify-between gap-2">
-        <span className="font-mono text-[9px] font-semibold uppercase tracking-[0.2em] text-[#EF1D25]">
-          {now.toLocaleDateString('en-US', { timeZone, weekday: 'long' })}
-        </span>
-        <span className="font-mono text-[11px] font-extrabold uppercase tracking-[0.1em] text-white sm:text-xs">
-          India
-        </span>
-      </div>
-
-      <div className="flex flex-1 items-center">
-        <span className="text-3xl font-bold leading-none tabular-nums text-white sm:text-4xl">
-          {time}
-        </span>
-        <span className="ml-1 self-end pb-2 font-mono text-[9px] uppercase tracking-[0.15em] text-white/60 sm:pb-3">
-          {meridiem}
-        </span>
-      </div>
-
-      <span className="font-mono text-[9px] uppercase tracking-[0.15em] text-white/45">
-        {now.toLocaleDateString('en-US', {
-          timeZone,
-          day: 'numeric',
-          month: 'short',
-          year: 'numeric',
-        })}
-      </span>
-    </div>
-  )
-}
-
-/* =========================================================
-    SERVER WIDGET — DevOps rack + what I'm learning now
-========================================================= */
-
-// Each rack unit: two status LEDs that blink on their own rhythm
-const RACK_UNITS = [
-  { y: 4, leds: ['#34D399', '#BE2ED6'], delay: 0 },
-  { y: 26, leds: ['#34D399', '#22D3EE'], delay: 0.4 },
-  { y: 48, leds: ['#FACC15', '#34D399'], delay: 0.8 },
-]
-
-// The ops tools shown on the DevOps card
-const DEVOPS_TOOLS = [
-  { name: 'Ubuntu', Icon: SiUbuntu, color: '#E95420' },
-  { name: 'Linux', Icon: SiLinux, color: '#FCC624' },
-  { name: 'Docker', Icon: SiDocker, color: '#2496ED' },
-]
-
-function ServerWidget({ reduced }: { reduced: boolean | null }) {
-  return (
-    <div className="flex h-full w-60 flex-col gap-3 p-5">
-      <div className="flex items-center justify-between">
-        <span className="font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-white/60">
-          DevOps
-        </span>
-        <span className="font-mono text-[9px] uppercase tracking-[0.15em] text-[#34D399]">
-          Online
-        </span>
-      </div>
-
-      {/* Server rack */}
-      <svg
-        viewBox="0 0 120 70"
-        className="h-24 w-full"
-        role="img"
-        aria-label="Server rack with blinking status lights"
-      >
-        {RACK_UNITS.map((unit) => (
-          <g key={unit.y}>
-            <rect
-              x="2"
-              y={unit.y}
-              width="116"
-              height="18"
-              rx="4"
-              fill="rgba(255,255,255,0.04)"
-              stroke="rgba(190,46,214,0.45)"
-              strokeWidth="1.5"
-            />
-            {/* Drive bays */}
-            {[0, 1, 2, 3].map((bay) => (
-              <rect
-                key={bay}
-                x={10 + bay * 14}
-                y={unit.y + 6}
-                width="10"
-                height="6"
-                rx="1.5"
-                fill="rgba(255,255,255,0.12)"
-              />
-            ))}
-            {unit.leds.map((color, i) => (
-              <motion.circle
-                key={color + i}
-                cx={98 + i * 10}
-                cy={unit.y + 9}
-                r="2.6"
-                fill={color}
-                style={{ filter: `drop-shadow(0 0 3px ${color})` }}
-                animate={reduced ? undefined : { opacity: [1, 0.25, 1] }}
-                transition={{
-                  duration: 1.1 + i * 0.5,
-                  delay: unit.delay + i * 0.3,
-                  repeat: Infinity,
-                  ease: 'easeInOut',
-                }}
-              />
-            ))}
-          </g>
-        ))}
-      </svg>
-
-      {/* Tools */}
-      <ul className="flex flex-wrap gap-1.5">
-        {DEVOPS_TOOLS.map(({ name, Icon, color }) => (
-          <li
-            key={name}
-            className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.05] px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.1em] text-white/80"
-          >
-            <Icon className="h-3 w-3" style={{ color }} aria-hidden="true" />
-            {name}
-          </li>
-        ))}
-      </ul>
-
-      {/* Service */}
-      <div className="flex items-start gap-2 rounded-xl border border-[#BE2ED6]/30 bg-[#BE2ED6]/10 px-3 py-2">
-        <Rocket className="mt-0.5 h-4 w-4 shrink-0 text-[#BE2ED6]" strokeWidth={1.75} />
-        <div className="flex flex-col">
-          <span className="text-xs font-semibold text-white">
-            Deployment as a service
-          </span>
-          <span className="text-[11px] leading-snug text-white/55">
-            Servers set up, apps shipped and kept running.
-          </span>
-        </div>
-      </div>
-
-      <div className="mt-auto flex flex-col gap-1 border-t border-white/10 pt-3">
-        <span className="font-mono text-[9px] uppercase tracking-[0.15em] text-white/45">
-          Currently learning
-        </span>
-        <span className="flex items-center gap-1.5 text-sm font-semibold text-white">
-          <Brain className="h-4 w-4 shrink-0 text-[#BE2ED6]" strokeWidth={1.75} />
-          Machine Learning
-        </span>
-      </div>
-    </div>
-  )
-}
-
-/* =========================================================
-    WORK WITH ME — pill with a spinning gradient border
-========================================================= */
-
-function WorkWithMeButton() {
-  return (
-    <a
-      href="#contact"
-      className="group relative mt-2 inline-flex overflow-hidden rounded-full p-[1.5px] shadow-[0_0_32px_rgba(190,46,214,0.25)] outline-none focus-visible:ring-2 focus-visible:ring-white/40"
-    >
-      <span
-        aria-hidden="true"
-        className="pointer-events-none absolute left-1/2 top-1/2 aspect-square w-[250%] -translate-x-1/2 -translate-y-1/2 animate-[spin_3s_linear_infinite] bg-[conic-gradient(from_0deg,transparent_0%,#BE2ED6_12%,#EF1D25_25%,transparent_40%,transparent_60%,#7C41A8_75%,#BE2ED6_88%,transparent_100%)] motion-reduce:animate-none"
-      />
-      <span className="relative inline-flex items-center gap-2.5 rounded-full bg-white px-6 py-3 font-mono text-xs font-semibold uppercase tracking-[0.2em] text-[#EF1D25] transition-colors duration-200 group-hover:bg-[#FFF1F2]">
-        {/* Available for work */}
-        <span className="relative flex h-2 w-2">
-          <span className="absolute inset-0 animate-ping rounded-full bg-[#34D399] opacity-60 motion-reduce:animate-none" />
-          <span className="relative h-2 w-2 rounded-full bg-[#34D399]" />
-        </span>
-        Work with me
-        <ArrowUpRight className="h-4 w-4 transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-      </span>
-    </a>
-  )
-}
-
 export function HeroSection() {
   const mouseX = useMotionValue(
     Number.POSITIVE_INFINITY,
@@ -921,28 +608,6 @@ export function HeroSection() {
       </div>
 
       {/* =====================================================
-          TOP-LEFT WIDGETS — EXPERIENCE + CLOCK
-      ===================================================== */}
-      <div className="absolute left-4 top-4 z-20 flex items-stretch gap-3 sm:left-6 sm:top-6">
-        <AnimatedBorderCard>
-          <ExperienceWidget reduced={reducedMotion} />
-        </AnimatedBorderCard>
-        <AnimatedBorderCard delay={-2}>
-          <ClockWidget />
-        </AnimatedBorderCard>
-      </div>
-
-      {/* =====================================================
-          LEFT-SIDE WIDGET — DEVOPS SERVER + LEARNING
-          Only on wide screens, where it clears the centred name
-      ===================================================== */}
-      <div className="absolute left-6 top-1/2 z-20 hidden -translate-y-1/2 xl:flex">
-        <AnimatedBorderCard delay={-1}>
-          <ServerWidget reduced={reducedMotion} />
-        </AnimatedBorderCard>
-      </div>
-
-      {/* =====================================================
           CENTER IDENTITY
       ===================================================== */}
       <div className="relative z-10 flex flex-1 flex-col items-center justify-center gap-5 px-4 pb-10 pt-24 text-center">
@@ -988,8 +653,6 @@ export function HeroSection() {
         <p className="max-w-md text-sm leading-relaxed text-white/65 sm:text-base">
           Building scalable software and thoughtful digital products.
         </p>
-
-        <WorkWithMeButton />
       </div>
 
       {/* =====================================================

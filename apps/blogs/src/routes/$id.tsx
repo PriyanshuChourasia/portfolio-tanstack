@@ -24,7 +24,7 @@ function RouteComponent() {
 
   return (
     <div className="min-h-screen bg-white text-neutral-900">
-      <article className="mx-auto max-w-3xl px-6 py-16">
+      <article className="mx-auto max-w-5xl px-6 py-16">
         <h1 className="text-3xl font-bold tracking-tight md:text-4xl">
           {post ? (
             <HighlightedTitle title={post.title} highlight={post.highlight} />
