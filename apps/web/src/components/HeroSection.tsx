@@ -535,12 +535,21 @@ export function HeroSection() {
         className="pointer-events-none absolute inset-0"
         aria-hidden="true"
       >
+        {/* Aurora washes — soft colour pools so the black never feels flat */}
+        <div className="absolute -left-[15%] -top-[20%] h-[70vh] w-[60vw] rounded-full bg-[#5D328E]/25 blur-[140px]" />
+        <div className="absolute -bottom-[25%] -right-[10%] h-[65vh] w-[55vw] rounded-full bg-[#EF1D25]/[0.12] blur-[150px]" />
+
+        {/* Grid — fades out toward the edges instead of tiling hard */}
         <div
-          className="absolute inset-0 opacity-70"
+          className="absolute inset-0"
           style={{
             backgroundImage:
-              'linear-gradient(rgba(225, 29, 36, 0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(225, 29, 36, 0.06) 1px, transparent 1px)',
-            backgroundSize: '48px 48px',
+              'linear-gradient(rgba(190, 46, 214, 0.07) 1px, transparent 1px), linear-gradient(90deg, rgba(190, 46, 214, 0.07) 1px, transparent 1px)',
+            backgroundSize: '56px 56px',
+            maskImage:
+              'radial-gradient(ellipse 70% 60% at 50% 45%, black 20%, transparent 80%)',
+            WebkitMaskImage:
+              'radial-gradient(ellipse 70% 60% at 50% 45%, black 20%, transparent 80%)',
           }}
         />
 
@@ -564,95 +573,150 @@ export function HeroSection() {
           />
         ))}
 
-        {/* Tech / role icon-words watermark — outline only, no fills */}
-        {bgDecorItems.map((item, i) => {
-          const layout = bgDecorLayout[i]
+        {/* Tech / role icon-words watermark — outline only, no fills.
+            Masked so the centre stays clear for the name, and each badge
+            drifts slowly so the field feels alive rather than busy. */}
+        <div
+          className="absolute inset-0"
+          style={{
+            maskImage:
+              'radial-gradient(ellipse 48% 42% at 50% 46%, transparent 35%, rgba(0,0,0,0.55) 70%, black 100%)',
+            WebkitMaskImage:
+              'radial-gradient(ellipse 48% 42% at 50% 46%, transparent 35%, rgba(0,0,0,0.55) 70%, black 100%)',
+          }}
+        >
+          {bgDecorItems.map((item, i) => {
+            const layout = bgDecorLayout[i]
 
-          return (
-            <div
-              key={i}
-              className="absolute"
-              style={{
-                left: `${layout.x}%`,
-                top: `${layout.y}%`,
-                transform: `translate(-50%, -50%) rotate(${layout.rotate}deg) scale(${layout.scale})`,
-              }}
-            >
-              {item.type === 'icon' ? (
-                <span
-                  className={`flex h-11 w-11 items-center justify-center rounded-full border-2 bg-transparent ${layout.accent
-                    ? 'border-[#EF1D25]/25'
-                    : 'border-[#5D328E]/40'
-                    }`}
+            return (
+              <div
+                key={i}
+                className="absolute"
+                style={{
+                  left: `${layout.x}%`,
+                  top: `${layout.y}%`,
+                  transform: `translate(-50%, -50%) rotate(${layout.rotate}deg) scale(${layout.scale})`,
+                }}
+              >
+                <div
+                  className="hero-drift motion-reduce:animate-none"
+                  style={{
+                    animationDuration: `${9 + (i % 7) * 1.7}s`,
+                    animationDelay: `-${(i * 1.3) % 9}s`,
+                  }}
                 >
-                  <item.Icon
-                    className={`h-5 w-5 ${layout.accent
-                      ? 'text-[#EF1D25]/30'
-                      : 'text-[#5D328E]/55'
-                      }`}
-                  />
-                </span>
-              ) : (
-                <span
-                  className={`whitespace-nowrap rounded-full border-2 bg-transparent px-3.5 py-1.5 font-mono text-[11px] font-semibold uppercase tracking-[0.2em] ${layout.accent
-                    ? 'border-[#EF1D25]/25 text-[#EF1D25]/30'
-                    : 'border-[#5D328E]/40 text-[#5D328E]/55'
-                    }`}
-                >
-                  {item.label}
-                </span>
-              )}
-            </div>
-          )
-        })}
+                  {item.type === 'icon' ? (
+                    <span
+                      className={`flex h-11 w-11 items-center justify-center rounded-full border bg-white/[0.015] ${layout.accent
+                        ? 'border-[#EF1D25]/20'
+                        : 'border-[#8B5CC9]/25'
+                        }`}
+                    >
+                      <item.Icon
+                        className={`h-5 w-5 ${layout.accent
+                          ? 'text-[#EF1D25]/30'
+                          : 'text-[#8B5CC9]/40'
+                          }`}
+                      />
+                    </span>
+                  ) : (
+                    <span
+                      className={`whitespace-nowrap rounded-full border px-3.5 py-1.5 font-mono text-[10px] font-medium uppercase tracking-[0.28em] ${layout.accent
+                        ? 'border-[#EF1D25]/20 text-[#EF1D25]/35'
+                        : 'border-[#8B5CC9]/25 text-[#8B5CC9]/45'
+                        }`}
+                    >
+                      {item.label}
+                    </span>
+                  )}
+                </div>
+              </div>
+            )
+          })}
+        </div>
+
+        {/* Edge vignette + bottom fade so the dock sits on calm ground */}
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_55%,rgba(0,0,0,0.65)_100%)]" />
+        <div className="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-[#070707] via-[#070707]/70 to-transparent" />
       </div>
 
       {/* =====================================================
           CENTER IDENTITY
       ===================================================== */}
-      <div className="relative z-10 flex flex-1 flex-col items-center justify-center gap-5 px-4 pb-10 pt-24 text-center">
-        <h1 aria-label="Priyanshu Chourasia" className="relative mb-[0.35em] mt-[0.2em] flex items-center justify-center gap-[0.35em] text-3xl font-bold leading-tight tracking-tight text-white sm:text-5xl md:text-6xl">
+      <div className="relative z-10 flex flex-1 flex-col items-center justify-center gap-6 px-4 pb-10 pt-24 text-center">
+        <h1 aria-label="Priyanshu Chourasia" className="relative mb-[0.35em] mt-[0.1em] flex items-center justify-center gap-[0.4em] text-[2rem] font-bold leading-none tracking-[-0.03em] text-white sm:text-6xl md:text-7xl">
           {/* Purple reflection split along the slant — light on the left,
-              dark on the right — fading out to the black edges */}
-          <span
+              dark on the right — fading softly to black on every side */}
+          <motion.span
             aria-hidden="true"
-            className="pointer-events-none absolute left-1/2 top-1/2 -z-10 h-[600px] w-[min(1050px,130vw)] -translate-x-1/2 -translate-y-1/2 opacity-80"
+            initial={reducedMotion ? false : { opacity: 0, scale: 0.92 }}
+            animate={{ opacity: 0.75, scale: 1 }}
+            transition={{ duration: 1.4, ease: [0.22, 1, 0.36, 1] }}
+            className="pointer-events-none absolute left-1/2 top-1/2 -z-10 h-[620px] w-[min(1100px,140vw)] blur-[2px]"
             style={{
+              x: '-50%',
+              y: '-50%',
               backgroundImage:
-                'linear-gradient(110deg, #7F4EA8 0%, #BE2ED6 49.8%, #5D328E 50.2%, #42156F 100%)',
+                'linear-gradient(110deg, #7F4EA8 0%, #BE2ED6 49.8%, #5D328E 50.2%, #2A0E4A 100%)',
               maskImage:
-                'radial-gradient(ellipse at center, black 0%, rgba(0,0,0,0.6) 45%, transparent 75%)',
+                'radial-gradient(closest-side, black 0%, rgba(0,0,0,0.55) 45%, rgba(0,0,0,0.15) 75%, transparent 100%)',
               WebkitMaskImage:
-                'radial-gradient(ellipse at center, black 0%, rgba(0,0,0,0.6) 45%, transparent 75%)',
+                'radial-gradient(closest-side, black 0%, rgba(0,0,0,0.55) 45%, rgba(0,0,0,0.15) 75%, transparent 100%)',
             }}
           />
 
-          <span className="flex -translate-y-[0.2em] flex-col items-center">
-            PRIYANSHU
-            <span aria-hidden="true" className="mt-[0.15em] text-[0.4em] tracking-[0.2em]">
+          <motion.span
+            initial={reducedMotion ? false : { opacity: 0, x: -24 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+            className="flex flex-col items-center"
+            style={{ y: '-0.25em' }}
+          >
+            <span className="bg-gradient-to-b from-white via-white to-[#D9C6F0] bg-clip-text text-transparent drop-shadow-[0_4px_24px_rgba(190,46,214,0.35)]">
+              PRIYANSHU
+            </span>
+            <span aria-hidden="true" className="mt-[0.45em] font-mono text-[0.22em] font-medium tracking-[0.55em] text-white/75">
               SOFTWARE
             </span>
-          </span>
+          </motion.span>
 
           {/* Big slanted divider between first and last name */}
-          <span
+          <motion.span
             aria-hidden="true"
-            className="pointer-events-none absolute left-1/2 top-1/2 -z-10 h-[min(70vh,560px)] w-[3px] -translate-x-1/2 -translate-y-1/2 rotate-[20deg] rounded-full bg-[linear-gradient(to_bottom,transparent,#BE2ED6_20%,#7C41A8_50%,#42156F_80%,transparent)] shadow-[0_0_18px_#BE2ED6]"
+            initial={reducedMotion ? false : { scaleY: 0, opacity: 0 }}
+            animate={{ scaleY: 1, opacity: 1 }}
+            transition={{ duration: 1, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
+            className="pointer-events-none absolute left-1/2 top-1/2 -z-10 h-[min(70vh,560px)] w-[2px] origin-center rounded-full bg-[linear-gradient(to_bottom,transparent,#E879F9_20%,#BE2ED6_50%,#42156F_80%,transparent)] shadow-[0_0_14px_#BE2ED6,0_0_40px_rgba(190,46,214,0.5)]"
+            style={{ x: '-50%', y: '-50%', rotate: 20 }}
           />
 
-          <span className="flex translate-y-[0.35em] flex-col items-center text-[#EF1D25]">
-            CHOURASIA
-            <span aria-hidden="true" className="mt-[0.15em] text-[0.4em] tracking-[0.2em]">
+          <motion.span
+            initial={reducedMotion ? false : { opacity: 0, x: 24 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
+            className="flex flex-col items-center"
+            style={{ y: '0.35em' }}
+          >
+            <span className="bg-gradient-to-b from-[#FF5A61] via-[#EF1D25] to-[#B3121A] bg-clip-text text-transparent drop-shadow-[0_4px_24px_rgba(239,29,37,0.35)]">
+              CHOURASIA
+            </span>
+            <span aria-hidden="true" className="mt-[0.45em] font-mono text-[0.22em] font-medium tracking-[0.55em] text-[#FF6B71]/85">
               ENGINEER
             </span>
-          </span>
+          </motion.span>
         </h1>
 
         <p className="sr-only">Software Engineer</p>
 
-        <p className="max-w-md text-sm leading-relaxed text-white/65 sm:text-base">
-          Building scalable software and thoughtful digital products.
-        </p>
+        <motion.p
+          initial={reducedMotion ? false : { opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
+          className="max-w-md text-balance text-sm leading-relaxed text-white/60 sm:text-base"
+        >
+          Building <span className="text-white/90">scalable software</span> and{' '}
+          <span className="text-white/90">thoughtful digital products</span>.
+        </motion.p>
       </div>
 
       {/* =====================================================
@@ -664,11 +728,14 @@ export function HeroSection() {
           onMouseLeave={() =>
             mouseX.set(Number.POSITIVE_INFINITY)
           }
-          className="flex max-w-full flex-wrap items-end justify-center gap-2 rounded-2xl border border-[#BE2ED6]/30 px-2.5 pb-3.5 pt-2.5 shadow-[0_16px_48px_rgba(0,0,0,0.55),0_0_32px_rgba(190,46,214,0.25)] backdrop-blur-xl sm:flex-nowrap"
+          initial={reducedMotion ? false : { opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.65, ease: [0.22, 1, 0.36, 1] }}
+          className="flex max-w-full flex-wrap items-end justify-center gap-2 rounded-[22px] border border-white/10 px-2.5 pb-3.5 pt-2.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_20px_60px_rgba(0,0,0,0.6),0_0_40px_rgba(190,46,214,0.18)] backdrop-blur-2xl sm:flex-nowrap"
           style={{
-            // Same slant split as the hero glow — light on the left, dark on the right
+            // Same slant split as the hero glow, toned down to frosted glass
             backgroundImage:
-              'linear-gradient(110deg, rgba(127,78,168,0.35) 0%, rgba(190,46,214,0.35) 49.8%, rgba(93,50,142,0.4) 50.2%, rgba(66,21,111,0.5) 100%)',
+              'linear-gradient(110deg, rgba(127,78,168,0.18) 0%, rgba(190,46,214,0.16) 49.8%, rgba(93,50,142,0.2) 50.2%, rgba(42,14,74,0.35) 100%)',
           }}
         >
           {dockEntries.map((entry) =>

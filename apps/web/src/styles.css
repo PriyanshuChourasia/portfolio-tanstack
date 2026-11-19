@@ -806,3 +806,15 @@
     animation: sectionFadeIn 0.8s ease-out;
   }
 }
+/* Hero watermark badges — slow, gentle drift */
+@keyframes hero-drift {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50% { transform: translate3d(0, -10px, 0); }
+}
+.hero-drift {
+  animation: hero-drift 12s ease-in-out infinite;
+  will-change: transform;
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-drift { animation: none; }
+}
