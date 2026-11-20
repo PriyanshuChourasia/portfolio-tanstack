@@ -137,7 +137,7 @@ export function ElegantTemplate({ data, theme = data.theme }: ResumeTemplateProp
 
   return (
     <main
-      className="mx-auto max-w-[850px] bg-white px-14 py-12 font-serif text-[13.5px] leading-relaxed shadow-sm print:p-0 print:shadow-none"
+      className="mx-auto max-w-[850px] bg-white px-14 py-12 font-serif lining-nums text-[13.5px] leading-relaxed shadow-sm print:p-0 print:shadow-none"
       style={{ color: theme.text, backgroundColor: theme.background }}
     >
       <header className="text-center">

@@ -19,7 +19,10 @@
   margin: 32px auto 64px;
   background: #ffffff;
   color: #111111;
-  font-family: Georgia, 'Times New Roman', Times, serif;
+  /* Georgia uses old-style figures (uneven digit heights); these fonts use
+     uniform lining figures so numbers match the cap height of the text. */
+  font-family: Charter, 'Bitstream Charter', Cambria, 'Times New Roman', Times, serif;
+  font-variant-numeric: lining-nums;
   font-size: 13.5px;
   line-height: 1.4;
   padding: 48px 56px 64px;
