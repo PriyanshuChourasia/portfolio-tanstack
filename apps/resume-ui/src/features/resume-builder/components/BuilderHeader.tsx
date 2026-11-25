@@ -75,6 +75,13 @@ export function BuilderHeader({
         <div className="flex min-w-0 items-center gap-2 sm:gap-3">
           {/* Logo — links to landing page */}
           <Link to="/" className="flex items-center gap-1.5 rounded-lg px-1.5 py-1 transition-colors hover:bg-muted/50 sm:gap-2">
+            {personalInfo.logoUrl && (
+              <img
+                src={personalInfo.logoUrl}
+                alt="Resume logo"
+                className="w-5 h-5 rounded-sm shrink-0"
+              />
+            )}
             <FileText className="size-4 shrink-0 text-primary sm:size-5" />
             <h1 className="hidden text-sm font-bold tracking-tight sm:inline sm:text-base">
               Resume Builder

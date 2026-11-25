@@ -7,6 +7,7 @@ export interface PersonalInfo {
   linkedin: string
   website: string
   photoUrl: string
+  logoUrl: string
 }
 
 export interface ExperienceEntry {
@@ -211,6 +212,18 @@ export const DEFAULT_THEME: ResumeTheme = {
   muted: '#57534e',
   background: '#ffffff',
   sidebar: '#111827',
+}
+
+export const DEFAULT_PERSONAL_INFO: PersonalInfo = {
+  fullName: '',
+  title: '',
+  email: '',
+  phone: '',
+  location: '',
+  linkedin: '',
+  website: '',
+  photoUrl: '',
+  logoUrl: '/resume_logo.png',
 }
 
 export const DEFAULT_SETTINGS: ResumeSettings = {

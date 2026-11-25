@@ -122,12 +122,21 @@ export function MinimalTemplate({ data, theme = data.theme }: ResumeTemplateProp
       style={{ color: theme.text, backgroundColor: theme.background }}
     >
       <header>
-        <h1
-          className="text-3xl font-bold"
-          style={{ color: theme.primary }}
-        >
-          {personalInfo.fullName || 'First Last'}
-        </h1>
+        <div className="flex items-center gap-3">
+          {personalInfo.logoUrl && (
+            <img
+              src={personalInfo.logoUrl}
+              alt="Resume logo"
+              className="w-6 h-6 rounded-sm"
+            />
+          )}
+          <h1
+            className="text-3xl font-bold"
+            style={{ color: theme.primary }}
+          >
+            {personalInfo.fullName || 'First Last'}
+          </h1>
+        </div>
         {contactLine && <p className="mt-1" style={{ color: theme.muted }}>{contactLine}</p>}
       </header>
 

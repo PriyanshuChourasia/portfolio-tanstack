@@ -33,6 +33,7 @@ export function createEmptyResumeData(): ResumeData {
       linkedin: '',
       website: '',
       photoUrl: '',
+      logoUrl: '/resume_logo.png',
     },
     summary: '',
     experience: [],
@@ -150,6 +151,7 @@ export function createSampleResumeData(): ResumeData {
       linkedin: 'https://linkedin.com/in/priyanshu-chourasia-17833120a/',
       website: 'https://codymitra.com',
       photoUrl: '',
+      logoUrl: '/resume_logo.png',
     },
     summary:
       'Software Engineer with 2+ years building full-stack systems across web and mobile using React, TypeScript, Flutter, Java, and Spring Boot. Built production-grade real-time GPS tracking, a multi-threaded on-demand reporting pipeline serving 2,000+ devices, and internal dashboards used in daily operations. Designs REST APIs, works across MySQL/MongoDB data layers, and deploys Spring Boot services with Docker and GitHub Actions CI/CD. Builds Model Context Protocol (MCP) servers to expose internal APIs as tools for AI agents.',

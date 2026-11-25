@@ -1,7 +1,6 @@
 import { HeadContent, Outlet, createRootRoute } from '@tanstack/react-router'
 
 import '../styles.css'
-
 export const Route = createRootRoute({
   head: () => ({
     meta: [
@@ -15,6 +14,12 @@ export const Route = createRootRoute({
         content:
           'Build a professional, ATS-friendly resume for free. Pick from multiple recruiter-tested templates, fill in your details, and export straight to PDF — no sign-up required.',
       },
+    ],
+    link: [
+      { rel: 'icon', type: 'image/png', sizes: '32x32', href: '/resume_logo.png' },
+      { rel: 'icon', type: 'image/png', sizes: '16x16', href: '/resume_logo.png' },
+      { rel: 'apple-touch-icon', href: '/resume_logo.png' },
+      { rel: 'manifest', href: '/manifest.json' },
     ],
   }),
   component: RootComponent,
