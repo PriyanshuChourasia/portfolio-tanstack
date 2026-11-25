@@ -58,7 +58,7 @@
           "price": "0",
           "priceCurrency": "USD"
         },
-        "description": "Build a professional, ATS-friendly resume for free. Pick from multiple recruiter-tested templates, fill in your details, and export straight to PDF."
+        "description": "Build a professional, ATS-friendly resume for free. Pick from multiple recruiter-tested templates, and export straight to PDF."
       }
     </script>
 
@@ -66,14 +66,14 @@
     <script>
       (function () {
         try {
-          var t = localStorage.getItem('resume-ui:theme');
+          var t = localStorage.getItem('resume-ui:theme')
           if (t === 'dark' || t === 'light') {
-            document.documentElement.classList.add(t);
+            document.documentElement.classList.add(t)
           } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-            document.documentElement.classList.add('dark');
+            document.documentElement.classList.add('dark')
           }
         } catch (e) {}
-      })();
+      })()
     </script>
     <style>
       /* Prevent flash of unstyled content — body gets background immediately */
@@ -81,10 +81,29 @@
       html.dark body  { background: #0a0a0a; color: #fafafa; }
       /* Fallback before class is set */
       body { background: #fafafa; color: #18181b; }
+      /* Boot splash styling */
+      #boot-splash {
+        position: fixed;
+        inset: 0;
+        display: grid;
+        place-items: center;
+        z-index: 100;
+      }
+      html.light #boot-splash,
+      #boot-splash {
+        background: #fafafa;
+      }
+      html.dark #boot-splash {
+        background: #0a0a0a;
+      }
     </style>
   </head>
   <body>
-    <div id="app"></div>
+    <div id="app">
+      <div id="boot-splash" aria-hidden="true">
+        <img src="/resume_logo.png" alt="" width="56" height="56" />
+      </div>
+    </div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

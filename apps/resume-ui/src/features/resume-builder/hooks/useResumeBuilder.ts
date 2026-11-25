@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { createEmptyResumeData, createSampleResumeData, STORAGE_KEY } from '../constants'
+import { DEFAULT_PERSONAL_INFO } from '../types'
 import { useListField } from './useListField'
 import type {
   CertificationEntry,
@@ -31,10 +32,15 @@ function loadInitialData(): ResumeData {
       return createSampleResumeData()
     }
     const parsed = { ...createEmptyResumeData(), ...JSON.parse(raw) }
+    // Merge in defaults so missing fields (like logoUrl) are filled
+    const data = {
+      ...parsed,
+      personalInfo: { ...DEFAULT_PERSONAL_INFO, ...parsed.personalInfo },
+    }
     // Saved state from before sample data existed (or a manual Reset) can
     // look like a real save but has nothing in it — treat that the same
     // as a first visit so the template never renders blank.
-    return isEffectivelyEmpty(parsed) ? createSampleResumeData() : parsed
+    return isEffectivelyEmpty(data) ? createSampleResumeData() : data
   } catch {
     return createSampleResumeData()
   }

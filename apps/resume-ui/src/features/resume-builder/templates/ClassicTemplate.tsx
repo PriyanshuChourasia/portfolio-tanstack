@@ -173,16 +173,7 @@ export function ClassicTemplate({ data, theme = data.theme }: ResumeTemplateProp
       }}
     >
       <header className="ats-header">
-        <div className="flex items-center gap-3">
-          <h1 className="ats-name">{personalInfo.fullName || 'Your Name'}</h1>
-          {personalInfo.logoUrl && (
-            <img
-              src={personalInfo.logoUrl}
-              alt="Resume logo"
-              className="w-6 h-6 rounded-sm"
-            />
-          )}
-        </div>
+        <h1 className="ats-name">{personalInfo.fullName || 'Your Name'}</h1>
         {personalInfo.title && (
           <p
             className="ats-contact"

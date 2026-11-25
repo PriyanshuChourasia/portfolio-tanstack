@@ -1,13 +1,14 @@
+import { StrictMode } from 'react'
 import ReactDOM from 'react-dom/client'
 import { RouterProvider, createRouter } from '@tanstack/react-router'
 import { routeTree } from './routeTree.gen'
 import { ThemeProvider } from './features/resume-builder/components/ThemeProvider'
-import { SplashScreen } from './components/SplashScreen'
+import { SplashGate } from './components/splash'
 
 const router = createRouter({
   routeTree,
   defaultPreload: 'intent',
-  scrollRestoration: true,
+  scrollRestoration: true
 })
 
 declare module '@tanstack/react-router' {
@@ -17,22 +18,11 @@ declare module '@tanstack/react-router' {
 }
 
 const rootElement = document.getElementById('app')!
-
-if (!rootElement.innerHTML) {
-  const root = ReactDOM.createRoot(rootElement)
-  let splashCompleted = false
-  root.render(
-    <>
-      <ThemeProvider>
-        <RouterProvider router={router} />
-      </ThemeProvider>
-      <SplashScreen onComplete={() => { splashCompleted = true }} />
-    </>
-  )
-  // Hide splash screen after router is ready
-  router.getRoot().ready.then(() => {
-    if (!splashCompleted) {
-      splashCompleted = true
-    }
-  })
-}
+ReactDOM.createRoot(rootElement).render(
+  <StrictMode>
+    <ThemeProvider>
+      <RouterProvider router={router} />
+      <SplashGate router={router} />
+    </ThemeProvider>
+  </StrictMode>
+)

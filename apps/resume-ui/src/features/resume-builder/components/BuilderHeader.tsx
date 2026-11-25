@@ -48,6 +48,7 @@ export function BuilderHeader({
   const redo = useResumeStore((s) => s.redo)
   const canUndo = useResumeStore((s) => s.canUndo)
   const canRedo = useResumeStore((s) => s.canRedo)
+  const logoUrl = useResumeStore((s) => s.document.data.personalInfo?.logoUrl)
 
   const { theme, toggle } = useTheme()
 
@@ -75,11 +76,11 @@ export function BuilderHeader({
         <div className="flex min-w-0 items-center gap-2 sm:gap-3">
           {/* Logo — links to landing page */}
           <Link to="/" className="flex items-center gap-1.5 rounded-lg px-1.5 py-1 transition-colors hover:bg-muted/50 sm:gap-2">
-            {personalInfo.logoUrl && (
+            {logoUrl && (
               <img
-                src={personalInfo.logoUrl}
+                src={logoUrl}
                 alt="Resume logo"
-                className="w-5 h-5 rounded-sm shrink-0"
+                className="size-5 shrink-0 rounded-sm"
               />
             )}
             <FileText className="size-4 shrink-0 text-primary sm:size-5" />

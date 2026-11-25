@@ -1,5 +1,6 @@
 import { useCallback, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
+import { useSearch } from '@tanstack/react-router'
 import { Pencil, Eye } from 'lucide-react'
 import { useShallow } from 'zustand/react/shallow'
 import { useResumeStore } from '../store'
@@ -19,8 +20,11 @@ import type { PageLayout } from './ResumePagination'
 import { ResumePreview } from './ResumePreview'
 
 export function BuilderLayout() {
+  const { template: requestedTemplate } = useSearch({ strict: false }) as { template?: string }
   const [templateId, setTemplateId] = useState(
-    resumeTemplates.find((t) => t.id === 'mech')?.id ?? resumeTemplates[0].id,
+    resumeTemplates.find((t) => t.id === requestedTemplate)?.id ??
+      resumeTemplates.find((t) => t.id === 'mech')?.id ??
+      resumeTemplates[0].id,
   )
   const [importing, setImporting] = useState(false)
   const [exporting, setExporting] = useState<'pdf' | 'word' | null>(null)

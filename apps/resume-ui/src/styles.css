@@ -174,3 +174,53 @@ body {
     display: none !important;
   }
 }
+
+/* Splash screen blob animations */
+@keyframes blobDance_6s {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(30px, -30px) scale(1.1); }
+  66% { transform: translate(-20px, 20px) scale(0.9); }
+}
+
+@keyframes blobDance_8s {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(40px, 40px) scale(1.15); }
+}
+
+@keyframes scaleIn {
+  from { transform: scaleX(0); opacity: 0; }
+  to { transform: scaleX(1); opacity: 1; }
+}
+
+/* Reduced motion fallback - just fade */
+@media (prefers-reduced-motion: reduce) {
+  .no-blob-animation * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* Splash screen blob animations */
+@keyframes blobDance_6s {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(30px, -30px) scale(1.1); }
+  66% { transform: translate(-20px, 20px) scale(0.9); }
+}
+
+@keyframes blobDance_8s {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(40px, 40px) scale(1.15); }
+}
+
+@keyframes scaleIn {
+  from { transform: scaleX(0); opacity: 0; }
+  to { transform: scaleX(1); opacity: 1; }
+}
+
+/* Reduced motion fallback */
+@media (prefers-reduced-motion: reduce) {
+  .no-blob-animation * {
+    animation: none !important;
+    transition: none !important;
+  }
+}

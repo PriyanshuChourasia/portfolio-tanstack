@@ -234,30 +234,21 @@ export function ModernTemplate({ data, theme = data.theme }: ResumeTemplateProps
       style={{ color: theme.text, backgroundColor: theme.background }}
     >
       <header className="flex items-start justify-between gap-4 border-b border-neutral-200 pb-4">
-        <div className="flex items-center gap-3">
-          {personalInfo.logoUrl && (
-            <img
-              src={personalInfo.logoUrl}
-              alt="Resume logo"
-              className="w-6 h-6 rounded-sm"
-            />
-          )}
-          <div>
-            <h1
-              className="text-3xl font-bold tracking-tight"
-              style={{ color: theme.primary }}
+        <div>
+          <h1
+            className="text-3xl font-bold tracking-tight"
+            style={{ color: theme.primary }}
+          >
+            {personalInfo.fullName || 'Your Name'}
+          </h1>
+          {personalInfo.title && (
+            <p
+              className="mt-1 text-sm"
+              style={{ color: theme.muted }}
             >
-              {personalInfo.fullName || 'Your Name'}
-            </h1>
-            {personalInfo.title && (
-              <p
-                className="mt-1 text-sm"
-                style={{ color: theme.muted }}
-              >
-                {personalInfo.title}
-              </p>
-            )}
-          </div>
+              {personalInfo.title}
+            </p>
+          )}
         </div>
         <div
           className="shrink-0 space-y-0.5 text-right text-xs"

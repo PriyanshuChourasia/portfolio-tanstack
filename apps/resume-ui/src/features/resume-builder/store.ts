@@ -24,6 +24,7 @@ import {
   DEFAULT_SETTINGS,
   DEFAULT_SECTION_ORDER,
   DEFAULT_THEME,
+  DEFAULT_PERSONAL_INFO,
 } from './types'
 import {
   createEmptyResumeData,
@@ -67,7 +68,11 @@ function loadResumeData(id: string): ResumeData | null {
     const raw = localStorage.getItem(`${STORAGE_KEY}:${id}`)
     if (!raw) return null
     const parsed = JSON.parse(raw)
-    return { ...createEmptyResumeData(), ...parsed }
+    const data = {
+      ...parsed,
+      personalInfo: { ...DEFAULT_PERSONAL_INFO, ...parsed.personalInfo },
+    }
+    return { ...createEmptyResumeData(), ...data }
   } catch {
     return null
   }
@@ -108,8 +113,12 @@ function createInitialDocument(): ResumeDocument {
     const legacy = localStorage.getItem(STORAGE_KEY)
     if (legacy) {
       const parsed = { ...createEmptyResumeData(), ...JSON.parse(legacy) }
-      if (!isEffectivelyEmpty(parsed)) {
-        return { meta, data: parsed }
+      const data = {
+        ...parsed,
+        personalInfo: { ...DEFAULT_PERSONAL_INFO, ...parsed.personalInfo },
+      }
+      if (!isEffectivelyEmpty(data)) {
+        return { meta, data }
       }
     }
   } catch {}

@@ -15,6 +15,7 @@ import { Route as ReasoningMockRouteImport } from './routes/reasoning-mock'
 import { Route as PortfolioRouteImport } from './routes/portfolio'
 import { Route as PhotofolioRouteImport } from './routes/photofolio'
 import { Route as InterviewRouteImport } from './routes/interview'
+import { Route as FdeRouteImport } from './routes/fde'
 import { Route as ClassicRouteImport } from './routes/classic'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as PhotofolioIndexRouteImport } from './routes/photofolio.index'
@@ -51,6 +52,11 @@ const PhotofolioRoute = PhotofolioRouteImport.update({
 const InterviewRoute = InterviewRouteImport.update({
   id: '/interview',
   path: '/interview',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FdeRoute = FdeRouteImport.update({
+  id: '/fde',
+  path: '/fde',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ClassicRoute = ClassicRouteImport.update({
@@ -92,6 +98,7 @@ const GermanyBackendRoute = GermanyBackendRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/classic': typeof ClassicRoute
+  '/fde': typeof FdeRoute
   '/interview': typeof InterviewRoute
   '/photofolio': typeof PhotofolioRouteWithChildren
   '/portfolio': typeof PortfolioRoute
@@ -107,6 +114,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/classic': typeof ClassicRoute
+  '/fde': typeof FdeRoute
   '/interview': typeof InterviewRoute
   '/portfolio': typeof PortfolioRoute
   '/reasoning-mock': typeof ReasoningMockRoute
@@ -122,6 +130,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/classic': typeof ClassicRoute
+  '/fde': typeof FdeRoute
   '/interview': typeof InterviewRoute
   '/photofolio': typeof PhotofolioRouteWithChildren
   '/portfolio': typeof PortfolioRoute
@@ -139,6 +148,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/classic'
+    | '/fde'
     | '/interview'
     | '/photofolio'
     | '/portfolio'
@@ -154,6 +164,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/classic'
+    | '/fde'
     | '/interview'
     | '/portfolio'
     | '/reasoning-mock'
@@ -168,6 +179,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/classic'
+    | '/fde'
     | '/interview'
     | '/photofolio'
     | '/portfolio'
@@ -184,6 +196,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ClassicRoute: typeof ClassicRoute
+  FdeRoute: typeof FdeRoute
   InterviewRoute: typeof InterviewRoute
   PhotofolioRoute: typeof PhotofolioRouteWithChildren
   PortfolioRoute: typeof PortfolioRoute
@@ -237,6 +250,13 @@ declare module '@tanstack/react-router' {
       path: '/interview'
       fullPath: '/interview'
       preLoaderRoute: typeof InterviewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/fde': {
+      id: '/fde'
+      path: '/fde'
+      fullPath: '/fde'
+      preLoaderRoute: typeof FdeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/classic': {
@@ -308,6 +328,7 @@ const PhotofolioRouteWithChildren = PhotofolioRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ClassicRoute: ClassicRoute,
+  FdeRoute: FdeRoute,
   InterviewRoute: InterviewRoute,
   PhotofolioRoute: PhotofolioRouteWithChildren,
   PortfolioRoute: PortfolioRoute,

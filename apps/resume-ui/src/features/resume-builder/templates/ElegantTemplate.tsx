@@ -141,31 +141,20 @@ export function ElegantTemplate({ data, theme = data.theme }: ResumeTemplateProp
       style={{ color: theme.text, backgroundColor: theme.background }}
     >
       <header className="text-center">
-        <div className="flex flex-col sm:flex-row items-center gap-4">
-          {personalInfo.logoUrl && (
-            <img
-              src={personalInfo.logoUrl}
-              alt="Resume logo"
-              className="w-8 h-8 rounded-sm sm:w-10 sm:h-10 object-cover"
-            />
-          )}
-          <div>
-            <h1
-              className="text-3xl font-bold tracking-wide"
-              style={{ color: theme.primary }}
-            >
-              {personalInfo.fullName || 'Your Name'}
-            </h1>
-            {personalInfo.title && (
-              <p
-                className="mt-1 text-base font-bold"
-                style={{ color: theme.primary }}
-              >
-                {personalInfo.title}
-              </p>
-            )}
-          </div>
-        </div>
+        <h1
+          className="text-3xl font-bold tracking-wide"
+          style={{ color: theme.primary }}
+        >
+          {personalInfo.fullName || 'Your Name'}
+        </h1>
+        {personalInfo.title && (
+          <p
+            className="mt-1 text-base font-bold"
+            style={{ color: theme.primary }}
+          >
+            {personalInfo.title}
+          </p>
+        )}
         {personalInfo.location && (
           <p className="mt-1" style={{ color: theme.muted }}>
             {personalInfo.location}

@@ -3,6 +3,7 @@ import { BoldTemplate } from './BoldTemplate'
 import { ClassicTemplate } from './ClassicTemplate'
 import { ElegantTemplate } from './ElegantTemplate'
 import { ExecutiveTemplate } from './ExecutiveTemplate'
+import { FdeTemplate } from './FdeTemplate'
 import { FreshTemplate } from './FreshTemplate'
 import { MechTemplate } from './MechTemplate'
 import { MinimalTemplate } from './MinimalTemplate'
@@ -110,5 +111,12 @@ export const resumeTemplates: Array<ResumeTemplateDefinition> = [
     description:
       'Single-column layout with a photo, icon contact bar, LinkedIn/website links, and a dedicated certificates section.',
     component: ExecutiveTemplate,
+  },
+  {
+    id: 'fde',
+    name: 'AI Engineer / FDE',
+    description:
+      'Outcome-first, ATS-safe layout for Forward Deployed and AI engineering roles: core competencies up top, metrics highlighted in every bullet, and a "Selected AI Builds" section.',
+    component: FdeTemplate,
   },
 ]
